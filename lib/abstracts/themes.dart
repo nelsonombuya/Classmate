@@ -7,13 +7,15 @@ abstract class Themes {
   static final light = ThemeData.light();
 
   // # Dark Mode Settings
-  static final dark = ThemeData.dark().copyWith(accentColor: Colors.blue);
+  static final dark = ThemeData.dark().copyWith(
+    accentColor: Colors.lightBlue,
+  );
 
   // # Black Mode Settings
   static final black = ThemeData.dark().copyWith(
       scaffoldBackgroundColor: Colors.black,
       canvasColor: Colors.black,
-      accentColor: Colors.blue);
+      accentColor: Colors.lightBlue);
 
   // * Returns
   static darkMode({darkModeSetting = 'black'}) =>
