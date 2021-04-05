@@ -37,8 +37,8 @@ class LoadingPage extends StatelessWidget {
             Align(
                 alignment: Alignment.center,
                 child: Container(
-                    width: 200,
-                    height: 200,
+                    width: 125,
+                    height: 125,
                     child: Image.asset(
                       'assets/images/logo/$logo.png',
                       fit: BoxFit.contain,

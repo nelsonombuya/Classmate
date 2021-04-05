@@ -43,10 +43,10 @@ flutter_native_splash:
     # To restore defaults: flutter pub run flutter_native_splash:remove
     # Only one parameter can be used, color and background_image cannot both be set.
     color: '#ffffff'
-    image: assets/images/logo/black_plain.png
+    image: assets/images/logo/black_500px.png
     #background_image: "assets/background.png"
     color_dark: '#000000'
-    image_dark: assets/images/logo/white_plain.png
+    image_dark: assets/images/logo/white_500px.png
     #background_image_dark: "assets/dark-background.png"
 
 flutter_icons:

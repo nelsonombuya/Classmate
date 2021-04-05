@@ -1,6 +1,6 @@
 // # Imports
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:classmate/constants/enums.dart';
+import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,11 +12,13 @@ class LoadingAnimatedText extends StatefulWidget {
   LoadingAnimatedText({
     @required this.titleStart,
     @required this.titleEnd,
+    this.fontSize = 32.0,
     this.titleEndColor = Colors.blue,
   });
 
   final String titleStart;
   final String titleEnd;
+  final double fontSize;
   final Color titleEndColor;
 
   @override
@@ -24,53 +26,31 @@ class LoadingAnimatedText extends StatefulWidget {
 }
 
 class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
-  final double fontSize = 62.0;
-  WritingAnimationStyles writingAnimationStyle = WritingAnimationStyles.Normal;
+  // # Styles
+  dynamic textStyle({FontWeight fontWeight, Color color}) {
+    return GoogleFonts.poppins(
+        textStyle: TextStyle(
+            color: color, fontSize: widget.fontSize, fontWeight: fontWeight));
+  }
 
   // # Easter Egg Tings
   int eggCounter = 0;
-  activateEasterEgg() => true;
 
   // # Templates
   AnimatedText fadeText(
-      {@required String text, Color color, FontWeight fontWeight}) {
+      {@required String text, FontWeight fontWeight, Color color}) {
     return FadeAnimatedText(text,
+        textStyle: textStyle(fontWeight: fontWeight, color: color),
         textAlign: TextAlign.center,
-        textStyle: GoogleFonts.poppins(
-            textStyle: TextStyle(
-          color: color,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-        )),
         duration: Duration(seconds: 5),
         fadeInEnd: 0.2,
         fadeOutBegin: 0.8);
   }
 
-  AnimatedText typeWriterText({
-    @required String text,
-    Color color = Colors.blue,
-  }) {
-    switch (writingAnimationStyle) {
-      case WritingAnimationStyles.Normal:
-        return TyperAnimatedText(text,
-            textAlign: TextAlign.center,
-            textStyle: GoogleFonts.poppins(
-                textStyle: TextStyle(color: color, fontSize: 32.0)),
-            speed: Duration(milliseconds: 400));
-      default:
-        return TypewriterAnimatedText(text,
-            textAlign: TextAlign.center,
-            textStyle: GoogleFonts.poppins(
-                textStyle: TextStyle(color: color, fontSize: 32.0)),
-            speed: Duration(milliseconds: 200));
-    }
-  }
-
   // # Main App Title Widget
   Widget title() {
     if (eggCounter >= 5) {
-      return asciiAnimatedText();
+      return ASCIImoji(textStyle: textStyle(color: widget.titleEndColor));
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +63,7 @@ class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
             animatedTexts: [
               fadeText(
                   text: widget.titleEnd,
-                  color: Colors.blue,
+                  color: widget.titleEndColor,
                   fontWeight: FontWeight.w600)
             ],
             isRepeatingAnimation: false,
@@ -96,28 +76,6 @@ class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
         ],
       );
     }
-  }
-
-  // # ASCII Easter Egg Widget
-  Widget asciiAnimatedText() {
-    return AnimatedTextKit(
-      animatedTexts: [
-        typeWriterText(text: ':-)'),
-        typeWriterText(text: ':-D'),
-        typeWriterText(text: ':-O'),
-        typeWriterText(text: 'ʕ·͡ᴥ·ʔ'),
-        typeWriterText(text: '•͡˘㇁•͡˘'),
-        typeWriterText(text: '(◕ᴥ◕ʋ)'),
-        typeWriterText(text: '(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
-        typeWriterText(text: 'ʕっ•ᴥ•ʔっ'),
-        typeWriterText(text: '(͡ ° ͜ʖ ͡ °)'),
-        typeWriterText(text: '(｡◕‿‿◕｡)'),
-        typeWriterText(text: '( 0 _ 0 )'),
-        typeWriterText(text: '(˵ ͡° ͜ʖ ͡°˵)'),
-        typeWriterText(text: '¯\\(°_o)/¯'),
-      ],
-      repeatForever: true,
-    );
   }
 
   // # Main Widget Build
