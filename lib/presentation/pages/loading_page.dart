@@ -1,6 +1,6 @@
 // # Imports
 import 'package:classmate/logic/bloc/loading_bloc.dart';
-import 'package:classmate/presentation/pages/welcome_page.dart';
+import 'package:classmate/presentation/pages/sign_in_page.dart';
 import 'package:classmate/presentation/widgets/loading_animated_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +15,10 @@ class LoadingPage extends StatelessWidget {
     Bloc loadingBLoC = BlocProvider.of<LoadingBloc>(context);
     loadingBLoC.add(LoadingStarted());
 
+    // * Setting the Logo's Colors
+    var brightness = MediaQuery.of(context).platformBrightness;
+    String logo = brightness == Brightness.dark ? 'white_plain' : 'black_plain';
+
     // * Returning the View
     return BlocListener<LoadingBloc, LoadingState>(
       listener: (context, state) {
@@ -22,7 +26,7 @@ class LoadingPage extends StatelessWidget {
           // TODO Include Routes and Page Transitions
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (BuildContext context) {
-            return WelcomePage();
+            return SignInPage();
           }));
         }
       },
@@ -36,7 +40,7 @@ class LoadingPage extends StatelessWidget {
                     width: 200,
                     height: 200,
                     child: Image.asset(
-                      'assets/images/logo.png',
+                      'assets/images/logo/$logo.png',
                       fit: BoxFit.contain,
                     ))),
 
@@ -44,12 +48,10 @@ class LoadingPage extends StatelessWidget {
             Positioned(
                 right: 0.0,
                 left: 0.0,
-                bottom: 150.0,
+                bottom: 220.0,
                 child: LoadingAnimatedText(
                   titleStart: 'Class',
                   titleEnd: 'Mate',
-                  // ? For easter eggs, set showLoadingText to true
-                  showLoadingText: false,
                 )),
           ],
         ),
