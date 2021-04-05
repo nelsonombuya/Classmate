@@ -31,7 +31,7 @@ class _CustomDividerState extends State<CustomDivider> {
         ),
 
         // # Text
-        Text(widget.text, style: Theme.of(context).textTheme.subtitle1),
+        Text(widget.text, style: Theme.of(context).textTheme.subtitle2),
 
         // # Blank Space Between line & Text
         VerticalDivider(

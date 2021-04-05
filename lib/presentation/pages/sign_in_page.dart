@@ -56,7 +56,7 @@ class SignInPage extends StatelessWidget {
                         'Forgot Password?',
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle2
+                            .subtitle1
                             .copyWith(color: Colors.blue),
                       )),
                 ],

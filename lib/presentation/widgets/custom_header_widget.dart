@@ -18,7 +18,7 @@ class CustomHeader extends StatelessWidget {
         Text('$heading      ', style: Theme.of(context).textTheme.headline4),
 
         // Sub-heading
-        Text('$subheading', style: Theme.of(context).textTheme.subtitle1),
+        Text('$subheading', style: Theme.of(context).textTheme.subtitle2),
       ],
     );
   }
