@@ -2,111 +2,125 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:classmate/constants/enums.dart';
 import 'package:flutter/material.dart';
-
-/// TASKS
-/// TODO Refactor Animated Text Widget to include given states
+import 'package:google_fonts/google_fonts.dart';
 
 /// * Loading Animator Text
-/// Used during the splash screen
-/// Animates the initial text, followed by asciimoji animation
-class LoadingAnimatedText extends StatelessWidget {
+/// Used during the secondary splash screen
+/// Animates the initial text, followed by asciimoji animation easter egg on tap
+class LoadingAnimatedText extends StatefulWidget {
   // # Functions
-  LoadingAnimatedText(
-      {@required this.titleStart,
-      @required this.titleEnd,
-      this.showLoadingText = true,
-      this.titleEndColor = Colors.blue,
-      this.writingAnimationStyle = WritingAnimationStyles.Console});
+  LoadingAnimatedText({
+    @required this.titleStart,
+    @required this.titleEnd,
+    this.titleEndColor = Colors.blue,
+  });
 
-  final bool showLoadingText;
   final String titleStart;
   final String titleEnd;
   final Color titleEndColor;
-  final WritingAnimationStyles writingAnimationStyle;
+
+  @override
+  _LoadingAnimatedTextState createState() => _LoadingAnimatedTextState();
+}
+
+class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
+  final double fontSize = 62.0;
+  WritingAnimationStyles writingAnimationStyle = WritingAnimationStyles.Normal;
+
+  // # Easter Egg Tings
+  int eggCounter = 0;
+  activateEasterEgg() => true;
 
   // # Templates
-  // * Normal Title Text
-  AnimatedText fadeText({@required String text, Color color}) {
+  AnimatedText fadeText(
+      {@required String text, Color color, FontWeight fontWeight}) {
     return FadeAnimatedText(text,
         textAlign: TextAlign.center,
-        textStyle: TextStyle(color: color, fontSize: 32.0),
+        textStyle: GoogleFonts.poppins(
+            textStyle: TextStyle(
+          color: color,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+        )),
         duration: Duration(seconds: 5),
         fadeInEnd: 0.2,
         fadeOutBegin: 0.8);
   }
 
-  // * Typed Out Text
-  AnimatedText typeWriterText({@required String text, Color color}) {
+  AnimatedText typeWriterText({
+    @required String text,
+    Color color = Colors.blue,
+  }) {
     switch (writingAnimationStyle) {
       case WritingAnimationStyles.Normal:
         return TyperAnimatedText(text,
             textAlign: TextAlign.center,
-            textStyle: TextStyle(color: color, fontSize: 32.0),
+            textStyle: GoogleFonts.poppins(
+                textStyle: TextStyle(color: color, fontSize: 32.0)),
             speed: Duration(milliseconds: 400));
       default:
         return TypewriterAnimatedText(text,
             textAlign: TextAlign.center,
-            textStyle: TextStyle(color: color, fontSize: 32.0),
+            textStyle: GoogleFonts.poppins(
+                textStyle: TextStyle(color: color, fontSize: 32.0)),
             speed: Duration(milliseconds: 200));
     }
   }
 
-  // # Widgets for each state
-  // * Title State
+  // # Main App Title Widget
   Widget title() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AnimatedTextKit(
-          animatedTexts: [fadeText(text: titleStart)],
-          isRepeatingAnimation: false,
-        ),
-        AnimatedTextKit(
-          animatedTexts: [fadeText(text: titleEnd, color: Colors.blue)],
-          isRepeatingAnimation: false,
-        ),
-      ],
-    );
-  }
-
-  // * Loading State
-  Future<Widget> loading() async {
-    await Future.delayed(Duration(seconds: 5));
-    if (showLoadingText) {
-      return AnimatedTextKit(
-        animatedTexts: [
-          typeWriterText(text: ':-)', color: Colors.blue),
-          typeWriterText(text: ':-D', color: Colors.blue),
-          typeWriterText(text: ':-O', color: Colors.blue),
-          typeWriterText(text: '•͡˘㇁•͡˘', color: Colors.blue),
-          typeWriterText(text: 'ʕ·͡ᴥ·ʔ', color: Colors.blue),
-          typeWriterText(text: 'ʕっ•ᴥ•ʔっ', color: Colors.blue),
-          typeWriterText(text: '(͡ ° ͜ʖ ͡ °)', color: Colors.blue),
-          typeWriterText(text: '(˵ ͡° ͜ʖ ͡°˵)', color: Colors.blue),
-          typeWriterText(text: '( 0 _ 0 )', color: Colors.blue),
-          typeWriterText(text: '(｡◕‿‿◕｡)', color: Colors.blue),
-          typeWriterText(text: '(◕ᴥ◕ʋ)', color: Colors.blue),
-          typeWriterText(text: '(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄', color: Colors.blue),
-          typeWriterText(text: '¯\\(°_o)/¯', color: Colors.blue),
-        ],
-        repeatForever: true,
-      );
+    if (eggCounter >= 5) {
+      return asciiAnimatedText();
     } else {
-      return title();
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedTextKit(
+            animatedTexts: [fadeText(text: widget.titleStart)],
+            isRepeatingAnimation: false,
+          ),
+          AnimatedTextKit(
+            animatedTexts: [
+              fadeText(
+                  text: widget.titleEnd,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w600)
+            ],
+            isRepeatingAnimation: false,
+            onTap: () {
+              setState(() {
+                eggCounter += 1;
+              });
+            },
+          ),
+        ],
+      );
     }
   }
 
-  // * Widget Builder
-  @override
-  Widget build(context) {
-    return FutureBuilder<Widget>(
-        future: loading(),
-        builder: (context, AsyncSnapshot<Widget> snapshot) {
-          if (snapshot.hasData) {
-            return snapshot.data;
-          } else {
-            return title();
-          }
-        });
+  // # ASCII Easter Egg Widget
+  Widget asciiAnimatedText() {
+    return AnimatedTextKit(
+      animatedTexts: [
+        typeWriterText(text: ':-)'),
+        typeWriterText(text: ':-D'),
+        typeWriterText(text: ':-O'),
+        typeWriterText(text: 'ʕ·͡ᴥ·ʔ'),
+        typeWriterText(text: '•͡˘㇁•͡˘'),
+        typeWriterText(text: '(◕ᴥ◕ʋ)'),
+        typeWriterText(text: '(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
+        typeWriterText(text: 'ʕっ•ᴥ•ʔっ'),
+        typeWriterText(text: '(͡ ° ͜ʖ ͡ °)'),
+        typeWriterText(text: '(｡◕‿‿◕｡)'),
+        typeWriterText(text: '( 0 _ 0 )'),
+        typeWriterText(text: '(˵ ͡° ͜ʖ ͡°˵)'),
+        typeWriterText(text: '¯\\(°_o)/¯'),
+      ],
+      repeatForever: true,
+    );
   }
+
+  // # Main Widget Build
+  @override
+  Widget build(context) => title();
 }

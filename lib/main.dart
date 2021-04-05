@@ -12,6 +12,7 @@ import 'logic/bloc/loading_bloc.dart';
 void main() => runApp(ClassMate());
 
 /// TODO IMPLEMENT SPLASH SCREEN
+/// TODO IMPLEMENT ROUTING
 
 // # Main App Settings
 class ClassMate extends StatelessWidget {
