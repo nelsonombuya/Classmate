@@ -4,10 +4,9 @@ import 'package:classmate/presentation/pages/sign_in_page.dart';
 import 'package:classmate/presentation/widgets/loading_animated_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-/// TODO Check for the position of the logo in the splash screen
-/// TODO Match Loading Page Logo to logo in Splash Screen
-/// TODO Transition into Welcome Page
+// # Loading Page
 class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,9 +14,10 @@ class LoadingPage extends StatelessWidget {
     Bloc loadingBLoC = BlocProvider.of<LoadingBloc>(context);
     loadingBLoC.add(LoadingStarted());
 
-    // * Setting the Logo's Colors
-    var brightness = MediaQuery.of(context).platformBrightness;
-    String logo = brightness == Brightness.dark ? 'white_plain' : 'black_plain';
+    // * Setting the Splash Logo's Colors according to Dark or Light Modes
+    String logo = MediaQuery.of(context).platformBrightness == Brightness.dark
+        ? 'white_plain'
+        : 'black_plain';
 
     // * Returning the View
     return BlocListener<LoadingBloc, LoadingState>(
@@ -51,7 +51,12 @@ class LoadingPage extends StatelessWidget {
                 bottom: 220.0,
                 child: LoadingAnimatedText(
                   titleStart: 'Class',
+                  titleStartTextStyle: GoogleFonts.poppins(fontSize: 32.0),
                   titleEnd: 'Mate',
+                  titleEndTextStyle: GoogleFonts.poppins(
+                      fontSize: 32.0,
+                      textStyle: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.w600)),
                 )),
           ],
         ),

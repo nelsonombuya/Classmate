@@ -18,6 +18,7 @@ class ASCIImoji extends StatelessWidget {
       {this.writingAnimationStyle = WritingAnimationStyles.Normal,
       this.textStyle});
 
+  // # Templates
   AnimatedText typeWriterText({@required String text}) {
     switch (writingAnimationStyle) {
       case WritingAnimationStyles.Normal:
@@ -33,6 +34,7 @@ class ASCIImoji extends StatelessWidget {
     }
   }
 
+  // # Main Widget
   @override
   Widget build(BuildContext context) {
     return AnimatedTextKit(
