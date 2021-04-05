@@ -1,4 +1,4 @@
-import 'package:classmate/presentation/widgets/transparent_appbar_widget.dart';
+import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
 
 /// * View Widget
@@ -11,7 +11,7 @@ class View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: TransparentAppBar(),
+        appBar: CustomAppBar(),
         body: SingleChildScrollView(
             child: Material(
                 child: SafeArea(

@@ -4,39 +4,75 @@ import 'package:flutter/material.dart';
 // # Class used for the overall app theme
 abstract class Themes {
   // # Light Mode Settings
-  static final light = ThemeData.light().copyWith(
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-  );
-
-  // # Dark Mode Settings
-  static final dark = ThemeData.dark().copyWith(
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    accentColor: Colors.blue,
-  );
-
-  // # Black Mode Settings
-  static final black = ThemeData.dark().copyWith(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: Colors.black,
-      canvasColor: Colors.black,
-      accentColor: Colors.blue);
-
-  // # Text Themes
-  static textTheme({bool darkMode = true}) {
-    if (darkMode) {
-      return ThemeData.dark().textTheme.copyWith(
-            bodyText2: TextStyle(fontFamily: "Averta"),
-          );
-    } else {
-      return ThemeData.light().textTheme.copyWith(
-            headline1: TextStyle(fontFamily: "Averta"),
-          );
-    }
+  static ThemeData get lightTheme {
+    return ThemeData.light().copyWith(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        // * Text Themes
+        // ! KEEP MATCHED WITH DARK THEME
+        textTheme: ThemeData.light().textTheme.copyWith(
+              //////////////////////////////////////////////////////////////////
+              headline4: TextStyle(
+                  fontFamily: 'Averta',
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.dotted,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54),
+              subtitle1: TextStyle(
+                fontFamily: "Averta",
+                fontWeight: FontWeight.bold,
+                color: Colors.black45,
+              ),
+              subtitle2: TextStyle(fontFamily: "Averta", color: Colors.black45),
+              bodyText1: TextStyle(fontFamily: "Averta", color: Colors.black45),
+              bodyText2: TextStyle(fontFamily: "Averta", color: Colors.black45),
+              button: TextStyle(
+                  fontFamily: "Averta",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 15.0),
+              caption: TextStyle(
+                  fontFamily: "Averta", color: Colors.black38, fontSize: 14.0),
+              //////////////////////////////////////////////////////////////////
+            ));
   }
 
-  // # Returns
-  static darkMode({darkModeSetting = 'black'}) =>
-      darkModeSetting == 'black' ? black : dark;
+////////////////////////////////////////////////////////////////////////////////
+  // # Dark Mode Settings
+  static ThemeData get darkTheme {
+    return ThemeData.dark().copyWith(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Colors.black,
+        canvasColor: Colors.black,
+        accentColor: Colors.blue,
 
-  static lightMode() => light;
+        // * Text Themes
+        // ! KEEP MATCHED WITH LIGHT THEME
+        textTheme: ThemeData.dark().textTheme.copyWith(
+              //////////////////////////////////////////////////////////////////
+              headline4: TextStyle(
+                  fontFamily: 'Averta',
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.dotted,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70),
+              subtitle1: TextStyle(
+                fontFamily: "Averta",
+                fontWeight: FontWeight.bold,
+                color: Colors.white70,
+              ),
+              subtitle2: TextStyle(fontFamily: "Averta", color: Colors.white60),
+              bodyText1: TextStyle(fontFamily: "Averta", color: Colors.white60),
+              bodyText2: TextStyle(fontFamily: "Averta", color: Colors.white60),
+              button: TextStyle(
+                  fontFamily: "Averta",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 15.0),
+              caption: TextStyle(
+                  fontFamily: "Averta", color: Colors.white70, fontSize: 14.0),
+              //////////////////////////////////////////////////////////////////
+            ));
+  }
 }

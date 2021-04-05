@@ -21,6 +21,7 @@ dependencies:
     hydrated_bloc: ^7.0.0
     logger: ^1.0.0
     path_provider: ^2.0.1
+    rounded_loading_button: ^1.0.18
 
 dev_dependencies:
     flutter_test:
@@ -37,7 +38,24 @@ flutter:
               - asset: assets/custom_fonts/Averta/AvertaDemoPE-Regular.ttf
               - asset: assets/custom_fonts/Averta/AvertaDemoPE-ExtraboldItalic.ttf
                 weight: 800
+        - family: Akrobat
+          fonts:
+              - asset: assets/custom_fonts/Akrobat/Akrobat-Thin.otf
+                weight: 100
+              - asset: assets/custom_fonts/Akrobat/Akrobat-ExtraLight.otf
+                weight: 200
+              - asset: assets/custom_fonts/Akrobat/Akrobat-Regular.otf
+                weight: 400
+              - asset: assets/custom_fonts/Akrobat/Akrobat-Bold.otf
+                weight: 500
+              - asset: assets/custom_fonts/Akrobat/Akrobat-SemiBold.otf
+                weight: 600
+              - asset: assets/custom_fonts/Akrobat/Akrobat-ExtraBold.otf
+                weight: 800
+              - asset: assets/custom_fonts/Akrobat/Akrobat-Black.otf
+                weight: 900
 
+# Native Splash Screen When Opening The App
 flutter_native_splash:
     # Install using: flutter pub run flutter_native_splash:create
     # To restore defaults: flutter pub run flutter_native_splash:remove

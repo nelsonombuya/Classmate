@@ -1,7 +1,7 @@
 // # Imports
 import 'package:classmate/logic/bloc/loading_bloc.dart';
 import 'package:classmate/presentation/pages/sign_in_page.dart';
-import 'package:classmate/presentation/widgets/loading_animated_text_widget.dart';
+import 'package:classmate/presentation/widgets/custom_loading_animated_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';

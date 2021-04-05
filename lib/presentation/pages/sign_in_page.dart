@@ -1,6 +1,10 @@
 // # Dart Imports
-import 'package:classmate/presentation/widgets/sign_in_header_widget.dart';
-import 'package:classmate/presentation/widgets/view_widget.dart';
+import 'package:classmate/presentation/widgets/custom_divider_widget.dart';
+import 'package:classmate/presentation/widgets/custom_elevatedButton_widget.dart';
+import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
+import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
+import 'package:classmate/presentation/widgets/custom_header_widget.dart';
+import 'package:classmate/presentation/widgets/custom_view_widget.dart';
 import 'package:flutter/Material.dart';
 
 // # Sign In Page
@@ -12,7 +16,7 @@ class SignInPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // # Welcome Header Text
-        SignInHeader(
+        CustomHeader(
           heading: 'SIGN IN',
           subheading: 'Sign in to continue',
         ),
@@ -23,102 +27,93 @@ class SignInPage extends StatelessWidget {
         ),
 
         // # Form
-        // Form(
-        //   child: Column(
-        //     children: [
-        //       // # Email
-        //       ThemedTextField(
-        //           label: 'Email Address',
-        //           onSubmitted: signIn,
-        //           keyboardType: TextInputType.emailAddress),
+        Form(
+          child: Column(
+            children: [
+              // # Email
+              CustomTextFormField(
+                  label: 'Email Address',
+                  keyboardType: TextInputType.emailAddress),
 
-        //       // # Sized Box for spacing
-        //       SizedBox(
-        //         height: 25.0,
-        //       ),
+              // # Sized Box for spacing
+              SizedBox(
+                height: 25.0,
+              ),
 
-        //       // # Password
-        //       ThemedTextField(
-        //           label: 'Password',
-        //           onSubmitted: signIn,
-        //           keyboardType: TextInputType.visiblePassword,
-        //           obscureText: true),
+              // # Password
+              CustomTextFormField(
+                  label: 'Password',
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true),
 
-        //       // # Forgot Password
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.end,
-        //         children: [
-        //           TextButton(
-        //               onPressed: () {},
-        //               child: Text(
-        //                 'Forgot Password?',
-        //                 style: GoogleFonts.montserrat(),
-        //               )),
-        //         ],
-        //       ),
+              // # Forgot Password
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Forgot Password?',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            .copyWith(color: Colors.blue),
+                      )),
+                ],
+              ),
 
-        //       // # Sized Box for spacing
-        //       SizedBox(
-        //         height: 40.0,
-        //       ),
+              // # Sized Box for spacing
+              SizedBox(
+                height: 40.0,
+              ),
 
-        //       // # Sign In Button
-        //       Center(
-        //         child: LoadingElevatedButton(
-        //             onPressed: signIn,
-        //             onSuccess: () {},
-        //             onFailure: () {},
-        //             child: Text('Sign In',
-        //                 style: GoogleFonts.montserrat(
-        //                     textStyle: TextStyle(
-        //                         fontWeight: FontWeight.bold,
-        //                         color: Colors.white)))),
-        //       ),
-        //     ],
-        //   ),
-        // ),
+              // # Sign In Button
+              Center(
+                child: CustomLoadingElevatedButton(
+                    onPressed: () => true,
+                    onSuccess: () {},
+                    onFailure: () {},
+                    child: Text('Sign In',
+                        style: Theme.of(context).textTheme.button)),
+              ),
+            ],
+          ),
+        ),
 
-        // // # Sized Box for spacing
-        // SizedBox(
-        //   height: 70.0,
-        // ),
+        // # Sized Box for spacing
+        SizedBox(
+          height: 70.0,
+        ),
 
-        // // # Divider for Coolness
-        // OrDivider(),
+        // # Divider for Coolness
+        CustomDivider(text: 'OR'),
 
-        // // # Sized Box for spacing
-        // SizedBox(
-        //   height: 60.0,
-        // ),
+        /// TODO Add Sign In With Google Button
+        // # Sized Box for spacing
+        SizedBox(
+          height: 60.0,
+        ),
 
-        // // # Sign Up Button
-        // Center(
-        //   child: Column(
-        //     children: [
-        //       SecondaryElevatedButton(
-        //         onPressed: () {
-        //           Navigator.pushReplacementNamed(context, '/sign_up');
-        //         },
-        //         child: Text(
-        //           'Sign Up',
-        //           style: GoogleFonts.montserrat(
-        //               textStyle: TextStyle(fontWeight: FontWeight.bold)),
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         height: 20,
-        //       ),
+        // # Sign Up Button
+        Center(
+          child: Column(
+            children: [
+              CustomElevatedButton(
+                onPressed: () {},
+                child:
+                    Text('Sign Up', style: Theme.of(context).textTheme.button),
+              ),
+              SizedBox(
+                height: 20,
+              ),
 
-        //       // Some Text
-        //       Text(
-        //         'To create a new account.',
-        //         textAlign: TextAlign.center,
-        //         style:
-        //             GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 12)),
-        //       )
-        // ],
-        // ),
-        // ),
+              // Some Text
+              Text('To create a new account.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.caption)
+            ],
+          ),
+        ),
       ],
     ));
   }

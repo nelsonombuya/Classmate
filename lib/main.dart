@@ -20,8 +20,8 @@ class ClassMate extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ClassMate',
-      theme: Themes.lightMode(),
-      darkTheme: Themes.darkMode(),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
       home: BlocProvider(
         create: (context) => LoadingBloc(),
         child: LoadingPage(),
