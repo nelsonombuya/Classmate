@@ -12,12 +12,20 @@ class View extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(),
-        body: SingleChildScrollView(
-            child: Material(
-                child: SafeArea(
-                    child: Padding(
-          padding: const EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 20.0),
-          child: child,
-        )))));
+        body: GestureDetector(
+          onTap: () {
+            /// * This method here will hide the soft keyboard.
+            /// * Whe the user taps outside a text box
+            /// Thanks Ali Hussam
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SingleChildScrollView(
+              child: Material(
+                  child: SafeArea(
+                      child: Padding(
+            padding: const EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 20.0),
+            child: child,
+          )))),
+        ));
   }
 }

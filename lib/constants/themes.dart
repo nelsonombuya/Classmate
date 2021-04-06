@@ -1,4 +1,6 @@
 // # Imports
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,12 +19,11 @@ abstract class Themes {
                   decoration: TextDecoration.underline,
                   color: Colors.black87),
 
-              subtitle1: TextStyle(
-                fontFamily: "Averta",
+              subtitle1: GoogleFonts.montserrat(
                 color: Colors.black38,
               ),
 
-              subtitle2: GoogleFonts.workSans(
+              subtitle2: GoogleFonts.montserrat(
                   color: Colors.black38, fontWeight: FontWeight.w300),
 
               bodyText1: TextStyle(fontFamily: "Averta", color: Colors.black54),
@@ -31,8 +32,8 @@ abstract class Themes {
 
               button: GoogleFonts.montserrat(color: Colors.white),
 
-              caption: TextStyle(
-                  fontFamily: "Averta", color: Colors.black38, fontSize: 13.0),
+              caption:
+                  GoogleFonts.montserrat(fontSize: 13.0, color: Colors.black38),
 
               //////////////////////////////////////////////////////////////////
             ));
@@ -56,22 +57,21 @@ abstract class Themes {
                   decoration: TextDecoration.underline,
                   color: Colors.white70),
 
-              subtitle1: TextStyle(
-                fontFamily: "Averta",
+              subtitle1: GoogleFonts.montserrat(
                 color: Colors.white38,
               ),
 
-              subtitle2: GoogleFonts.workSans(
-                  color: Colors.white38, fontWeight: FontWeight.w300),
+              subtitle2: GoogleFonts.montserrat(color: Colors.white38),
 
               bodyText1: TextStyle(fontFamily: "Averta", color: Colors.white60),
 
               bodyText2: TextStyle(fontFamily: "Averta", color: Colors.white60),
 
-              button: GoogleFonts.montserrat(color: Colors.white),
+              button: GoogleFonts.montserrat(
+                  color: Colors.white, fontWeight: FontWeight.w500),
 
-              caption: TextStyle(
-                  fontFamily: "Averta", color: Colors.white38, fontSize: 13.0),
+              caption:
+                  GoogleFonts.montserrat(fontSize: 13.0, color: Colors.white38),
               //////////////////////////////////////////////////////////////////
             ));
   }
