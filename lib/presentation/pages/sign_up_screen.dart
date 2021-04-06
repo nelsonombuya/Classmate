@@ -5,7 +5,30 @@ import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart'
 import 'package:classmate/presentation/widgets/custom_view_widget.dart';
 import 'package:flutter/Material.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+
+  // # Useful Functions
+  // * Sign Up
+  Future<bool> signUp() async {
+    await Future.delayed(Duration(seconds: 5));
+    return false;
+  }
+
+  // * Sign Up Successful
+  // Sends user to the sign in page
+  signUpSuccessful() {}
+
+  // * Sign Up Failed
+  // Does stuff when sign up failed
+  signUpFailed() {}
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  // * Used to disable Fields and Buttons during Sign In
+  bool areThingsEnabled = true;
+
   @override
   Widget build(BuildContext context) {
     return View(
@@ -21,17 +44,19 @@ class SignUpPage extends StatelessWidget {
         height: 25.0,
       ),
 
-      // # Names
       Form(
         child: Column(
           children: [
+            // # Names
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // First Name
                 Expanded(
                     child: CustomTextFormField(
-                        label: 'First Name', keyboardType: TextInputType.name)),
+                        label: 'First Name',
+                        isEnabled: areThingsEnabled,
+                        keyboardType: TextInputType.name)),
 
                 // Spacing Between Fields
                 SizedBox(
@@ -41,7 +66,9 @@ class SignUpPage extends StatelessWidget {
                 // Last Name
                 Expanded(
                   child: CustomTextFormField(
-                      label: 'Last Name', keyboardType: TextInputType.name),
+                      label: 'Last Name',
+                      isEnabled: areThingsEnabled,
+                      keyboardType: TextInputType.name),
                 ),
               ],
             ),
@@ -54,6 +81,7 @@ class SignUpPage extends StatelessWidget {
             // # Email
             CustomTextFormField(
                 label: 'Email Address',
+                isEnabled: areThingsEnabled,
                 keyboardType: TextInputType.emailAddress),
 
             // # Sized Box for spacing
@@ -64,20 +92,22 @@ class SignUpPage extends StatelessWidget {
             // # Password
             CustomTextFormField(
               label: 'Password',
-              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
+              isEnabled: areThingsEnabled,
+              keyboardType: TextInputType.visiblePassword,
             ),
 
             // # Sized Box for spacing
             SizedBox(
               height: 25.0,
             ),
-            // # Password Confirmation
 
+            // # Password Confirmation
             CustomTextFormField(
               label: 'Confirm Password',
-              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
+              isEnabled: areThingsEnabled,
+              keyboardType: TextInputType.visiblePassword,
             ),
 
             // # Sized Box for spacing
@@ -87,12 +117,23 @@ class SignUpPage extends StatelessWidget {
 
             // # Sign Up Button
             Center(
-                child: CustomLoadingElevatedButton(
-                    onPressed: () {},
-                    onSuccess: () {},
-                    onFailure: () {},
-                    child: Text('Sign Up',
-                        style: Theme.of(context).textTheme.button))),
+              child: CustomLoadingElevatedButton(
+                child: Text('Sign In'),
+                onPressed: () {
+                  setState(() {
+                    areThingsEnabled = false;
+                  });
+                  return widget.signUp();
+                },
+                onSuccess: widget.signUpSuccessful,
+                onFailure: () {
+                  setState(() {
+                    areThingsEnabled = true;
+                  });
+                  return widget.signUpFailed;
+                },
+              ),
+            ),
           ],
         ),
       )

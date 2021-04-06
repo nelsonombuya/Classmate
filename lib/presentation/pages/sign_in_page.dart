@@ -8,14 +8,45 @@ import 'package:classmate/presentation/widgets/custom_view_widget.dart';
 import 'package:flutter/Material.dart';
 
 // # Sign In Page
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+
+  // # Useful Functions
+  // * Sign In
+  Future<bool> signIn() async {
+    await Future.delayed(Duration(seconds: 5));
+    return false;
+  }
+
+  // * Sign Up
+  // Sends the user to the Sign Up Page
+  signUp() {}
+
+  // * Forgot Password
+  // Sends user to forgot password page
+  forgotPassword() {}
+
+  // * Sign In Successful
+  // Sends user to the dashboard
+  signInSuccessful() {}
+
+  // * Sign In Failed
+  // Does stuff when sign in failed
+  signInFailed() {}
+}
+
+class _SignInPageState extends State<SignInPage> {
+  // * Used to disable Fields and Buttons during Sign In
+  bool areThingsEnabled = true;
+
   @override
   Widget build(BuildContext context) {
     return View(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // # Welcome Header Text
+        // # Sign In Header Text
         CustomHeader(
           heading: 'SIGN IN',
           subheading: 'Sign in to continue',
@@ -33,6 +64,7 @@ class SignInPage extends StatelessWidget {
               // # Email
               CustomTextFormField(
                   label: 'Email Address',
+                  isEnabled: areThingsEnabled,
                   keyboardType: TextInputType.emailAddress),
 
               // # Sized Box for spacing
@@ -43,6 +75,7 @@ class SignInPage extends StatelessWidget {
               // # Password
               CustomTextFormField(
                   label: 'Password',
+                  isEnabled: areThingsEnabled,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true),
 
@@ -51,13 +84,10 @@ class SignInPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      onPressed: () {},
+                      onPressed:
+                          areThingsEnabled ? widget.forgotPassword : null,
                       child: Text(
                         'Forgot Password?',
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            .copyWith(color: Colors.blue),
                       )),
                 ],
               ),
@@ -70,11 +100,21 @@ class SignInPage extends StatelessWidget {
               // # Sign In Button
               Center(
                 child: CustomLoadingElevatedButton(
-                    onPressed: () => true,
-                    onSuccess: () {},
-                    onFailure: () {},
-                    child: Text('Sign In',
-                        style: Theme.of(context).textTheme.button)),
+                  child: Text('Sign In'),
+                  onPressed: () {
+                    setState(() {
+                      areThingsEnabled = false;
+                    });
+                    return widget.signIn();
+                  },
+                  onSuccess: widget.signInSuccessful,
+                  onFailure: () {
+                    setState(() {
+                      areThingsEnabled = true;
+                    });
+                    return widget.signInFailed;
+                  },
+                ),
               ),
             ],
           ),
@@ -99,10 +139,11 @@ class SignInPage extends StatelessWidget {
           child: Column(
             children: [
               CustomElevatedButton(
-                onPressed: () {},
+                onPressed: areThingsEnabled ? widget.signUp : null,
                 child:
                     Text('Sign Up', style: Theme.of(context).textTheme.button),
               ),
+
               SizedBox(
                 height: 20,
               ),
