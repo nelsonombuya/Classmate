@@ -34,7 +34,8 @@ abstract class Themes {
 
             bodyText2: TextStyle(
               color: Colors.black54,
-              fontFamily: "Averta",
+              fontWeight: FontWeight.bold,
+              fontFamily: "Akrobat",
             ),
 
             button: GoogleFonts.montserrat(
@@ -84,8 +85,9 @@ abstract class Themes {
             ),
 
             bodyText2: TextStyle(
+              fontWeight: FontWeight.bold,
               color: Colors.white60,
-              fontFamily: "Averta",
+              fontFamily: "Akrobat",
             ),
 
             button: GoogleFonts.montserrat(

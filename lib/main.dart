@@ -1,6 +1,6 @@
 // # Imports
-import 'package:classmate/presentation/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:classmate/app.dart';
 
 // # Launching the App
 void main() {
