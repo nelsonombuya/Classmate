@@ -13,6 +13,10 @@ abstract class Themes {
       // ! KEEP MATCHED WITH DARK THEME
       textTheme: ThemeData.light().textTheme.copyWith(
             //////////////////////////////////////////////////////////////////
+            headline2: GoogleFonts.poppins(
+              color: Colors.black54,
+            ),
+
             headline4: GoogleFonts.montserrat(
               decorationStyle: TextDecorationStyle.dotted,
               decoration: TextDecoration.underline,

@@ -126,7 +126,9 @@ class _SignInPageState extends State<SignInPage> {
                     'Sign Up',
                     style: Theme.of(context).textTheme.button,
                   ),
-                  onPressed: _areThingsEnabled ? () {} : null,
+                  onPressed: _areThingsEnabled
+                      ? () => Navigator.pushNamed(context, '/sign_up')
+                      : null,
                 ),
                 SizedBox(height: 20),
                 Text(
