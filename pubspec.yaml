@@ -30,6 +30,7 @@ flutter:
     uses-material-design: true
     assets:
         - assets/images/logo/
+        - assets/gifs/
         - google_fonts/
     fonts:
         - family: Averta

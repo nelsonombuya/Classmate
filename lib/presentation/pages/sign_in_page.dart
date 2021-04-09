@@ -95,7 +95,10 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          setState(() => _areThingsEnabled = false);
+                          setState(() {
+                            _areThingsEnabled = false;
+                            _showPassword = false;
+                          });
                           return widget.signIn();
                         }
                         return false;
