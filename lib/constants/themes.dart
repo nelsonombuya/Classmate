@@ -28,13 +28,13 @@ abstract class Themes {
             ),
 
             bodyText1: TextStyle(
-              fontFamily: "Averta",
               color: Colors.black54,
+              fontFamily: "Averta",
             ),
 
             bodyText2: TextStyle(
-              fontFamily: "Averta",
               color: Colors.black54,
+              fontFamily: "Averta",
             ),
 
             button: GoogleFonts.montserrat(
@@ -42,8 +42,8 @@ abstract class Themes {
             ),
 
             caption: GoogleFonts.montserrat(
-              fontSize: 13.0,
               color: Colors.black38,
+              fontSize: 13.0,
             ),
 
             //////////////////////////////////////////////////////////////////
@@ -79,13 +79,13 @@ abstract class Themes {
             ),
 
             bodyText1: TextStyle(
-              fontFamily: "Averta",
               color: Colors.white60,
+              fontFamily: "Averta",
             ),
 
             bodyText2: TextStyle(
-              fontFamily: "Averta",
               color: Colors.white60,
+              fontFamily: "Averta",
             ),
 
             button: GoogleFonts.montserrat(
@@ -93,8 +93,8 @@ abstract class Themes {
             ),
 
             caption: GoogleFonts.montserrat(
-              fontSize: 13.0,
               color: Colors.white38,
+              fontSize: 13.0,
             ),
             //////////////////////////////////////////////////////////////////
           ),

@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
+import 'package:classmate/constants/animated_text_styles.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -29,60 +30,36 @@ class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
   // # Easter Egg Tings
   int eggCounter = 0;
 
-  // # Templates
-  AnimatedText fadeText({@required String text, TextStyle textStyle}) {
-    return FadeAnimatedText(
-      text,
-      textStyle: textStyle,
-      textAlign: TextAlign.center,
-      duration: Duration(seconds: 5),
-      fadeInEnd: 0.2,
-      fadeOutBegin: 0.8,
-    );
-  }
-
-  // ! Used for errors
-  AnimatedText colorizeText({@required String text, TextStyle textStyle}) {
-    return ColorizeAnimatedText(
-      text,
-      textStyle: textStyle,
-      textAlign: TextAlign.center,
-      colors: [
-        Colors.red,
-        Colors.pink,
-        Colors.redAccent,
-      ],
-    );
-  }
-
   // # Widget to return
   List<AnimatedText> animatedText(
       {bool errorState, @required bool titleStart}) {
+    // ! When an error occurs
     if (errorState) {
       return titleStart
           ? [
-              colorizeText(
+              AnimatedTextStyle.colorizeText(
                 text: widget.titleStart,
                 textStyle: widget.titleStartTextStyle,
               )
             ]
           : [
-              colorizeText(
+              AnimatedTextStyle.colorizeText(
                 text: widget.titleEnd,
                 textStyle: widget.titleEndTextStyle,
               )
             ];
     }
 
+    // * When everything's okay so far
     return titleStart
         ? [
-            fadeText(
+            AnimatedTextStyle.fadeText(
               text: widget.titleStart,
               textStyle: widget.titleStartTextStyle,
             )
           ]
         : [
-            fadeText(
+            AnimatedTextStyle.fadeText(
               text: widget.titleEnd,
               textStyle: widget.titleEndTextStyle,
             )
@@ -92,7 +69,12 @@ class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
   // # Main Widget Build
   @override
   Widget build(context) {
-    if (eggCounter >= 5) return ASCIImoji(textStyle: widget.titleEndTextStyle);
+    // # For the Easter Egg
+    if (eggCounter >= 5)
+      return ASCIImoji(animatedTextStyle: AnimatedTextStyle.typerText);
+
+    // # Main animated text
+    // Shows both the logo and the error text (when necessary)
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -101,17 +83,22 @@ class _LoadingAnimatedTextState extends State<LoadingAnimatedText> {
             titleStart: true,
             errorState: widget.errorState,
           ),
-          isRepeatingAnimation: false,
+          pause: Duration(seconds: 10),
+
+          // HACK Used to show the "Error:" text after the main title
+          isRepeatingAnimation: widget.errorState,
+          totalRepeatCount: widget.errorState ? 2 : 0,
         ),
         AnimatedTextKit(
           animatedTexts: animatedText(
             titleStart: false,
             errorState: widget.errorState,
           ),
-          isRepeatingAnimation: false,
-          onTap: widget.errorState == false
-              ? () => setState(() => eggCounter += 1)
-              : null,
+          pause: Duration(seconds: 10),
+          repeatForever: widget.errorState,
+          isRepeatingAnimation: widget.errorState,
+          onTap:
+              widget.errorState ? null : () => setState(() => eggCounter += 1),
         ),
       ],
     );

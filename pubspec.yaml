@@ -10,18 +10,17 @@ dependencies:
     flutter:
         sdk: flutter
     animated_text_kit: ^4.1.1
-    bloc_test: ^8.0.0
-    connectivity_plus: ^1.0.0
+    cloud_firestore: ^1.0.4
     cupertino_icons: ^1.0.2
     equatable: ^2.0.0
+    firebase_core: ^1.0.3
     flutter_bloc: ^7.0.0
     flutter_launcher_icons: ^0.9.0
     flutter_native_splash: ^1.1.7+1
     google_fonts: ^2.0.0
     hydrated_bloc: ^7.0.0
-    logger: ^1.0.0
-    path_provider: ^2.0.1
     rounded_loading_button: ^1.0.18
+    string_validator: ^0.3.0
 
 dev_dependencies:
     flutter_test:
@@ -71,6 +70,7 @@ flutter_icons:
     # Install using: flutter pub run flutter_launcher_icons:main
     adaptive_icon_foreground: assets/images/logo/black_plain.png
     image_path: assets/images/logo/black_plain.png
-    adaptive_icon_background: '#000000'
+    adaptive_icon_background: '#ffffff'
+    remove_alpha_ios: true
     android: true
     ios: true
