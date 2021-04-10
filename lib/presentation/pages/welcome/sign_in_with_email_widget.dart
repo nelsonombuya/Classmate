@@ -1,5 +1,6 @@
 // # Imports
 import 'package:flutter/material.dart';
+import 'package:relative_scale/relative_scale.dart';
 
 /// # Sign In With Email
 /// Button for signing in with e-mail address on Welcome Page.
@@ -7,15 +8,20 @@ import 'package:flutter/material.dart';
 class SignInWithEmailButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints.tightFor(width: 250, height: 50),
-      child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, '/sign_in'),
-        child: Text(
-          'SIGN IN WITH E-MAIL',
-          style: Theme.of(context).textTheme.button,
-        ),
-      ),
+    return RelativeBuilder(
+      builder: (context, height, width, sy, sx) {
+        return ConstrainedBox(
+          constraints: BoxConstraints.tightFor(width: sx(340), height: sy(32)),
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/sign_in'),
+            child: Text(
+              'Sign In With E-Mail',
+              style:
+                  Theme.of(context).textTheme.button.copyWith(fontSize: sy(9)),
+            ),
+          ),
+        );
+      },
     );
   }
 }

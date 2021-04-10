@@ -48,7 +48,6 @@ abstract class Themes {
 
             caption: GoogleFonts.montserrat(
               color: Colors.black38,
-              fontSize: 13.0,
             ),
 
             //////////////////////////////////////////////////////////////////
@@ -100,7 +99,6 @@ abstract class Themes {
 
             caption: GoogleFonts.montserrat(
               color: Colors.white38,
-              fontSize: 13.0,
             ),
             //////////////////////////////////////////////////////////////////
           ),

@@ -5,32 +5,45 @@ import 'package:flutter/material.dart';
 /// # ASCIImoji
 /// Displays an animated list of ASCIImoji
 class ASCIImoji extends StatelessWidget {
-  // # Parameters
-  final Function animatedTextStyle;
+  ASCIImoji({this.fontSize, this.color});
+  final double fontSize;
+  final Color color;
 
-  // # Constructor
-  ASCIImoji({@required this.animatedTextStyle});
+  // # Template
+  AnimatedText _template(String text) {
+    return TyperAnimatedText(
+      text,
+      textAlign: TextAlign.center,
+      speed: Duration(milliseconds: 400),
+      textStyle: TextStyle(
+        color: color,
+        fontFamily: "Noto",
+        fontSize: fontSize,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
 
-  // # Main Widget
   @override
   Widget build(BuildContext context) {
     return AnimatedTextKit(
       animatedTexts: [
-        animatedTextStyle(text: ':-)'),
-        animatedTextStyle(text: ':-D'),
-        animatedTextStyle(text: ':-O'),
-        animatedTextStyle(text: 'ʕ·͡ᴥ·ʔ'),
-        animatedTextStyle(text: '•͡˘㇁•͡˘'),
-        animatedTextStyle(text: '(◕ᴥ◕ʋ)'),
-        animatedTextStyle(text: '(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
-        animatedTextStyle(text: 'ʕっ•ᴥ•ʔっ'),
-        animatedTextStyle(text: '(͡ ° ͜ʖ ͡ °)'),
-        animatedTextStyle(text: '(｡◕‿‿◕｡)'),
-        animatedTextStyle(text: '( 0 _ 0 )'),
-        animatedTextStyle(text: '(˵ ͡° ͜ʖ ͡°˵)'),
-        animatedTextStyle(text: '¯\\(°_o)/¯'),
+        _template(':-)'),
+        _template(':-D'),
+        _template(':-O'),
+        _template('ʕ·͡ᴥ·ʔ'),
+        _template('•͡˘㇁•͡˘'),
+        _template('(◕ᴥ◕ʋ)'),
+        _template('(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
+        _template('ʕっ•ᴥ•ʔっ'),
+        _template('(͡ ° ͜ʖ ͡ °)'),
+        _template('(｡◕‿‿◕｡)'),
+        _template('( 0 _ 0 )'),
+        _template('(˵ ͡° ͜ʖ ͡°˵)'),
+        _template('¯\\(°_o)/¯'),
       ],
       repeatForever: true,
+      pause: Duration(seconds: 2),
     );
   }
 }

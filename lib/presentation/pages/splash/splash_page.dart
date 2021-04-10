@@ -1,8 +1,7 @@
 // # Imports
 import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
+import 'package:relative_scale/relative_scale.dart';
 import 'package:flutter/material.dart';
-
-// TODO Add Easter Egg
 
 // # Splash Page
 class SplashPage extends StatelessWidget {
@@ -37,36 +36,40 @@ class SplashPage extends StatelessWidget {
     }
 
     // * Returning the view
-    return Scaffold(
-      body: Stack(
-        children: [
-          // # Logo
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: 125.0,
-              height: 125.0,
-              child: Image.asset(
-                'assets/images/logo/$_logo.png',
-                fit: BoxFit.contain,
+    return RelativeBuilder(
+      builder: (context, height, width, sy, sx) {
+        return Scaffold(
+          body: Stack(
+            children: [
+              // # Logo
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: sx(170.0),
+                  height: sy(170.0),
+                  child: Image.asset(
+                    'assets/images/logo/$_logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          // # Animated Text
-          Positioned(
-            bottom: 220.0,
-            right: 0.0,
-            left: 0.0,
-            child: SplashScreenTextSelector(
-              error: error != null,
-              firstString: _firstString,
-              secondString: _secondString,
-              secondStringColor: _secondStringColor,
-            ),
+              // # Animated Text
+              Positioned(
+                bottom: sy(140.0),
+                right: sx(0.0),
+                left: sx(0.0),
+                child: SplashScreenTextSelector(
+                  error: error != null,
+                  firstString: _firstString,
+                  secondString: _secondString,
+                  secondStringColor: _secondStringColor,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

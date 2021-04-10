@@ -6,12 +6,9 @@ import 'package:flutter/material.dart';
 /// Used to play a video background on any screen
 /// ? Can be extended to include network images as well
 class BackgroundVideoPlayer extends StatefulWidget {
-  BackgroundVideoPlayer({
-    @required this.video,
-    this.placeholder,
-  });
-  final String video;
+  BackgroundVideoPlayer({@required this.video, @required this.placeholder});
   final String placeholder;
+  final String video;
 
   @override
   _BackgroundVideoPlayerState createState() => _BackgroundVideoPlayerState();
@@ -53,40 +50,14 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
                   child: VideoPlayer(_controller),
                 )
               // Shows an image while the video is initializing
-              : widget.placeholder != null
-                  ? Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(widget.placeholder),
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ),
-                    )
-                  // Shows the Class Mate Text when initializing
-                  : Center(
-                      child: Row(
-                        children: [
-                          Text(
-                            "Class",
-                            textAlign: TextAlign.left,
-                            style:
-                                Theme.of(context).textTheme.headline2.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                          ),
-                          Text(
-                            "Mate",
-                            textAlign: TextAlign.left,
-                            style:
-                                Theme.of(context).textTheme.headline2.copyWith(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ],
-                      ),
+              : Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(widget.placeholder),
+                      fit: BoxFit.cover,
                     ),
+                  ),
+                ),
         ),
       ),
     );
