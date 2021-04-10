@@ -19,6 +19,8 @@ dependencies:
     flutter_native_splash: ^1.1.7+1
     google_fonts: ^2.0.0
     hydrated_bloc: ^7.0.0
+    relative_scale: ^2.0.0
+    replay_bloc: ^0.0.1
     rounded_loading_button: ^1.0.18
     string_validator: ^0.3.0
     video_player: ^2.1.1

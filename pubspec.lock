@@ -345,6 +345,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  relative_scale:
+    dependency: "direct main"
+    description:
+      name: relative_scale
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  replay_bloc:
+    dependency: "direct main"
+    description:
+      name: replay_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   rounded_loading_button:
     dependency: "direct main"
     description:
