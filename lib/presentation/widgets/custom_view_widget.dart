@@ -1,4 +1,4 @@
-import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
+import 'custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
 
 /// * View Widget
