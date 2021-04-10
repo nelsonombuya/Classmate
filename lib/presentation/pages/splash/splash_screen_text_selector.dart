@@ -1,6 +1,6 @@
 // # Imports
-import 'package:classmate/presentation/widgets/error_splash_text_widget.dart';
-import 'package:classmate/presentation/widgets/splash_text_widget.dart';
+import 'package:classmate/presentation/pages/splash/error_splash_text_widget.dart';
+import 'package:classmate/presentation/pages/splash/splash_text_widget.dart';
 import 'package:flutter/material.dart';
 
 /// # Splash Screen Text

@@ -1,8 +1,11 @@
 // # Imports
-import 'package:classmate/presentation/widgets/background_video_player_widget.dart';
+import 'package:classmate/presentation/pages/welcome/background_video_player_widget.dart';
+import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
+import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
+import 'package:classmate/presentation/pages/welcome/video_credits_widget.dart';
 import 'package:flutter/material.dart';
 
-// # Welcome Page
+/// # Welcome Page
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -97,39 +100,15 @@ class WelcomePage extends StatelessWidget {
                     // # Some Space
                     SizedBox(height: 300.0),
 
-                    // # Button to Sign In
+                    // # Sign In & Sign Up Buttons
                     Center(
                       child: Column(
                         children: [
-                          ConstrainedBox(
-                            constraints:
-                                BoxConstraints.tightFor(width: 250, height: 50),
-                            child: ElevatedButton(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, '/sign_in'),
-                              child: Text(
-                                'SIGN IN WITH E-MAIL',
-                                style: Theme.of(context).textTheme.button,
-                              ),
-                            ),
-                          ),
+                          SignInWithEmailButton(),
                           SizedBox(height: 20.0),
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/sign_up'),
-                            child: Text(
-                              'CREATE A NEW ACCOUNT',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .button
-                                  .copyWith(color: _buttonColor),
-                            ),
-                          ),
+                          CreateANewAccountButton(buttonColor: _buttonColor),
                           SizedBox(height: 100.0),
-                          Text(
-                            _videoCredits,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
+                          VideoCreditsWidget(videoCredits: _videoCredits),
                         ],
                       ),
                     )

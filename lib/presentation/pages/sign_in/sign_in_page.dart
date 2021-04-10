@@ -1,6 +1,7 @@
 // # Dart Imports
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
-import 'package:classmate/presentation/widgets/custom_elevatedButton_widget.dart';
+import 'package:classmate/presentation/pages/sign_in/forgot_password_widget.dart';
+import 'package:classmate/presentation/pages/sign_in/sign_up_button_widget.dart';
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:classmate/presentation/widgets/custom_divider_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
@@ -63,6 +64,7 @@ class _SignInPageState extends State<SignInPage> {
                 SizedBox(height: 25.0),
 
                 // # Password Field
+                // FIXME Extract me please
                 CustomTextFormField(
                   label: 'Password',
                   enabled: _areThingsEnabled,
@@ -77,16 +79,13 @@ class _SignInPageState extends State<SignInPage> {
                 ),
 
                 // # Forgot Password
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  TextButton(
-                      onPressed: _areThingsEnabled ? () {} : null,
-                      child: Text('Forgot Password?'))
-                ]),
+                ForgotPasswordWidget(areThingsEnabled: _areThingsEnabled),
 
                 // # Sized Box for spacing
                 SizedBox(height: 40.0),
 
                 // # Sign In Button
+                // ! Can't be extracted
                 Center(
                   child: CustomLoadingElevatedButton(
                       child: Text(
@@ -121,27 +120,7 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: 60.0),
 
           // # Sign Up Button
-          Center(
-            child: Column(
-              children: [
-                CustomElevatedButton(
-                  child: Text(
-                    'Sign Up',
-                    style: Theme.of(context).textTheme.button,
-                  ),
-                  onPressed: _areThingsEnabled
-                      ? () => Navigator.pushNamed(context, '/sign_up')
-                      : null,
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'To create a new account.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ],
-            ),
-          ),
+          SignUpButton(areThingsEnabled: _areThingsEnabled),
         ],
       ),
     );

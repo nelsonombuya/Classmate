@@ -1,6 +1,6 @@
 // # Main App Initialization
-import 'package:classmate/presentation/pages/splash_page.dart';
-import 'package:classmate/presentation/pages/welcome_page.dart';
+import 'package:classmate/presentation/pages/splash/splash_page.dart';
+import 'package:classmate/presentation/pages/welcome/welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

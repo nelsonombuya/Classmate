@@ -3,8 +3,9 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 
-// # Splash Text
-// Widget used to show the Splash text on the splash screen
+/// # Splash Text
+/// Widget used to show the Splash text on the splash screen
+/// ! Depends on Google Fonts
 class SplashText extends StatelessWidget {
   SplashText({this.firstString, this.secondString, this.secondStringColor});
   final String firstString;

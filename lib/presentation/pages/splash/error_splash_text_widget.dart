@@ -2,8 +2,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-// # Error Splash Text
-// Widget used to show error text on splash screen
+/// # Error Splash Text
+/// Widget used to show error text on splash screen.
+/// ! Depends on Animated Text Kit Widget.
 class ErrorSplashText extends StatelessWidget {
   ErrorSplashText({this.errorString});
   final String errorString;

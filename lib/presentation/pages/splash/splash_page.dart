@@ -1,6 +1,8 @@
 // # Imports
-import 'package:classmate/presentation/widgets/splash_screen_text_selector.dart';
+import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
 import 'package:flutter/material.dart';
+
+// TODO Add Easter Egg
 
 // # Splash Page
 class SplashPage extends StatelessWidget {
@@ -16,6 +18,8 @@ class SplashPage extends StatelessWidget {
 
     // ! In case of error during loading
     if (error != null) {
+      // * First String in this case will be Error
+      // * First & Second Screen Colors will be Red
       _logo = 'red_plain';
       _secondString = '$error';
     }

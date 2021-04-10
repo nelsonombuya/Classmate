@@ -1,11 +1,13 @@
 import 'custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
 
-/// * View Widget
-/// A collection of Widgets standardly used in the app
-/// Helps reduce code length and repetition
-class View extends StatelessWidget {
-  View({@required this.child});
+/// # Form View Widget
+/// A collection of Widgets standardly used in the app's forms.
+/// Helps reduce code length and repetition.
+/// Adds functionality to tap outside of form fields to
+/// remove focus from form fields
+class FormView extends StatelessWidget {
+  FormView({@required this.child});
   final child;
 
   @override
