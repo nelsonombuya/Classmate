@@ -21,6 +21,7 @@ dependencies:
     hydrated_bloc: ^7.0.0
     rounded_loading_button: ^1.0.18
     string_validator: ^0.3.0
+    video_player: ^2.1.1
 
 dev_dependencies:
     flutter_test:
@@ -30,8 +31,9 @@ flutter:
     uses-material-design: true
     assets:
         - assets/images/logo/
-        - assets/gifs/
+        - assets/videos/
         - google_fonts/
+        - assets/gifs/
     fonts:
         - family: Averta
           fonts:
@@ -69,9 +71,7 @@ flutter_native_splash:
 
 flutter_icons:
     # Install using: flutter pub run flutter_launcher_icons:main
-    adaptive_icon_foreground: assets/images/logo/black_plain.png
-    image_path: assets/images/logo/black_plain.png
-    adaptive_icon_background: '#ffffff'
+    image_path: assets/images/logo/CM.png
     remove_alpha_ios: true
     android: true
     ios: true
