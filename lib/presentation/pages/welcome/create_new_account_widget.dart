@@ -5,9 +5,6 @@ import 'package:relative_scale/relative_scale.dart';
 /// Button used in the Welcome Page.
 /// Goes to the Sign Up Page.
 class CreateANewAccountButton extends StatelessWidget {
-  CreateANewAccountButton({@required this.buttonColor});
-  final Color buttonColor;
-
   @override
   Widget build(BuildContext context) {
     return RelativeBuilder(
@@ -19,7 +16,7 @@ class CreateANewAccountButton extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .button
-                .copyWith(color: buttonColor, fontSize: sy(9)),
+                .copyWith(color: Colors.white, fontSize: sy(9)),
           ),
         );
       },

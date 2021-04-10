@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 /// Used on the Sign In Page to transition to the Sign Up Page.
 /// It's accompanied by a caption below it.
 class SignUpButton extends StatelessWidget {
-  SignUpButton({@required this.areThingsEnabled});
-  final bool areThingsEnabled;
+  SignUpButton({@required this.enabled});
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,8 @@ class SignUpButton extends StatelessWidget {
               'Sign Up',
               style: Theme.of(context).textTheme.button,
             ),
-            onPressed: areThingsEnabled
-                ? () => Navigator.pushNamed(context, '/sign_up')
-                : null,
+            onPressed:
+                enabled ? () => Navigator.pushNamed(context, '/sign_up') : null,
           ),
           SizedBox(height: 20),
           Text(

@@ -1,5 +1,6 @@
 // # Dart Imports
 import 'package:flutter/material.dart';
+import 'package:relative_scale/relative_scale.dart';
 
 /// * Custom Header Widget
 /// Header used on the sign in and sign up pages
@@ -11,15 +12,29 @@ class CustomHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Heading
-        Text('$heading      ', style: Theme.of(context).textTheme.headline4),
+    return RelativeBuilder(
+      builder: (context, height, width, sy, sx) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Heading
+            Text(
+              '$heading      ',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(fontSize: sy(23)),
+            ),
 
-        // Sub-heading
-        Text('$subheading', style: Theme.of(context).textTheme.subtitle2),
-      ],
+            // Sub-heading
+            Text('$subheading',
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    .copyWith(fontSize: sy(9))),
+          ],
+        );
+      },
     );
   }
 }

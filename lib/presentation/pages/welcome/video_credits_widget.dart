@@ -16,10 +16,10 @@ class VideoCreditsWidget extends StatelessWidget {
       builder: (context, height, width, sy, sx) {
         return Text(
           videoCredits,
-          style: Theme.of(context).textTheme.caption.copyWith(
-                color: color,
-                fontSize: sx(8),
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .caption
+              .copyWith(color: color, fontSize: sy(7)),
         );
       },
     );

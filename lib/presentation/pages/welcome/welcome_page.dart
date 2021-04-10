@@ -3,7 +3,6 @@ import 'package:classmate/presentation/pages/welcome/background_video_player_wid
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
 import 'package:classmate/presentation/pages/welcome/video_credits_widget.dart';
-import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
 import 'package:relative_scale/relative_scale.dart';
 import 'package:flutter/material.dart';
 
@@ -13,18 +12,16 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Properties
     String _video;
-    Color _buttonColor;
-    Color _captionColor;
     String _videoCredits;
+    Color _captionColor;
 
     // Setting properties according to Dark or Light Modes
     if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
       _video = 'dark';
-      _buttonColor = Colors.white70;
+      _captionColor = Colors.white70;
       _videoCredits = 'Video by Tima Miroshnichenko from Pexels';
     } else {
       _video = 'light';
-      _buttonColor = Colors.white;
       _captionColor = Colors.white;
       _videoCredits = 'Video by Pavel Danilyuk from Pexels';
     }
@@ -40,6 +37,7 @@ class WelcomePage extends StatelessWidget {
                 // FIXME Placeholder Image Jumps before image loads
                 // FIXME Doesn't scale well on some devices
                 // FIXME Crashes after too many re-initializations
+                // ! OOM Crash, video doesn't dispose properly
                 // # Background Video
                 BackgroundVideoPlayer(
                   video: 'assets/videos/welcome_screen_$_video.mp4',
@@ -117,8 +115,7 @@ class WelcomePage extends StatelessWidget {
                             children: [
                               SignInWithEmailButton(),
                               SizedBox(height: sy(20.0)),
-                              CreateANewAccountButton(
-                                  buttonColor: _buttonColor),
+                              CreateANewAccountButton(),
                               SizedBox(height: sy(40.0)),
                               VideoCreditsWidget(
                                 videoCredits: _videoCredits,

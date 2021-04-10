@@ -1,6 +1,7 @@
+// # Imports
 import 'package:flutter/material.dart';
 
-/// * Transparent App Bar Widget
+/// # Transparent App Bar Widget
 /// An extension of the App Bar Widget
 /// Completely flat
 /// With Blue Buttons

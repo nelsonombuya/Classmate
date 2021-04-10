@@ -6,12 +6,16 @@ class Validator {
       isEmail(value) ? null : 'Please enter valid email address';
 
   // * Name Validation Rules
-  static String nameValidator(String value) =>
-      isAlpha(value) ? null : 'Please don\'t input a number';
+  static String nameValidator(String value) {
+    if (value.isEmpty) return 'Please input a name';
+    return isAlpha(value) ? null : 'Please don\'t input a number';
+  }
 
   // * Validation for simple passwords
-  static String passwordValidator(String value) =>
-      (value.length > 8) ? null : 'Password is too short';
+  static String passwordValidator(String value) {
+    if (value.isEmpty) return 'Please input a password';
+    return (value.length > 8) ? null : 'Password is too short';
+  }
 
   // * Validation for more secure passwords
   static String securePasswordValidator(String value) {
