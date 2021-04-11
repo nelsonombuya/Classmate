@@ -37,8 +37,8 @@ abstract class Themes {
             ),
 
             bodyText2: TextStyle(
-              color: Colors.black54,
               fontWeight: FontWeight.bold,
+              color: Colors.black54,
               fontFamily: "Akrobat",
             ),
 
@@ -68,6 +68,10 @@ abstract class Themes {
       // ! KEEP MATCHED WITH LIGHT THEME
       textTheme: ThemeData.dark().textTheme.copyWith(
             //////////////////////////////////////////////////////////////////
+            headline2: GoogleFonts.poppins(
+              color: Colors.white54,
+            ),
+
             headline4: GoogleFonts.montserrat(
               decorationStyle: TextDecorationStyle.dotted,
               decoration: TextDecoration.underline,

@@ -43,4 +43,6 @@ class Device {
 
   static double width(double width) => safeBlockHorizontal * width;
   static double height(double height) => safeBlockVertical * height;
+  static double absoluteWidth(double width) => blockSizeHorizontal * width;
+  static double absoluteHeight(double height) => blockSizeVertical * height;
 }
