@@ -1,5 +1,4 @@
 // # Imports
-import 'package:relative_scale/relative_scale.dart';
 import 'package:flutter/material.dart';
 
 /// # Video Credits Widget
@@ -12,16 +11,9 @@ class VideoCreditsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RelativeBuilder(
-      builder: (context, height, width, sy, sx) {
-        return Text(
-          videoCredits,
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              .copyWith(color: color, fontSize: sy(7)),
-        );
-      },
+    return Text(
+      videoCredits,
+      style: Theme.of(context).textTheme.caption.copyWith(color: color),
     );
   }
 }
