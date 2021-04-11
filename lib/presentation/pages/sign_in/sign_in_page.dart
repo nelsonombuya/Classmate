@@ -1,5 +1,4 @@
 // # Dart Imports
-import 'package:classmate/constants/device.dart';
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
 import 'package:classmate/presentation/pages/sign_in/forgot_password_widget.dart';
 import 'package:classmate/presentation/pages/sign_in/sign_up_button_widget.dart';
@@ -8,6 +7,7 @@ import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart'
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/constants/validators.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/Material.dart';
 
 // # Sign In Page
