@@ -1,10 +1,9 @@
 // # Dart Imports
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
-import 'package:relative_scale/relative_scale.dart';
 
-/// * Custom Header Widget
+/// # Custom Header Widget
 /// Header used on the sign in and sign up pages
-/// Stateful due to changes in dark and light mode
 class CustomHeader extends StatelessWidget {
   CustomHeader({@required this.heading, @required this.subheading});
   final String heading;
@@ -12,29 +11,24 @@ class CustomHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RelativeBuilder(
-      builder: (context, height, width, sy, sx) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Heading
-            Text(
-              '$heading      ',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  .copyWith(fontSize: sy(23)),
-            ),
+    Device().init(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Heading
+        Text('$heading      ',
+            style: Theme.of(context)
+                .textTheme
+                .headline4
+                .copyWith(fontSize: Device.height(4.2))),
 
-            // Sub-heading
-            Text('$subheading',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2
-                    .copyWith(fontSize: sy(9))),
-          ],
-        );
-      },
+        // Sub-heading
+        Text('$subheading',
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2
+                .copyWith(fontSize: Device.height(1.6))),
+      ],
     );
   }
 }

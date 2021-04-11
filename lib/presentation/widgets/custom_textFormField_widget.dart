@@ -1,4 +1,5 @@
 // # Imports
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 /// # Custom Text Field
@@ -26,18 +27,22 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Device().init(context);
     return TextFormField(
       onChanged: onChanged,
       enabled: enabled,
       validator: validator,
       obscureText: obscureText,
       keyboardType: keyboardType,
-      style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 16.0),
+      style: Theme.of(context)
+          .textTheme
+          .bodyText1
+          .copyWith(fontSize: Device.height(2)),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(fontWeight: FontWeight.bold),
         suffixIcon: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: Device.height(1.8)),
           child: IconButton(
             icon: Icon(suffixIcon),
             onPressed: suffixIconAction,

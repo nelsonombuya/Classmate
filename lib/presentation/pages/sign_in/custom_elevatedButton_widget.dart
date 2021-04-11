@@ -1,4 +1,5 @@
 // # Imports
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 // # Custom Elevated Button
@@ -10,15 +11,18 @@ class CustomElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Device().init(context);
+
     // Defining colors of disabled button based on dark/light modes
     Color _disabledButtonColor =
-        MediaQuery.of(context).platformBrightness == Brightness.light
-            ? Colors.black38
-            : Colors.white12;
+        Device.brightness == Brightness.light ? Colors.black38 : Colors.white12;
 
     // Returning the widget
     return ConstrainedBox(
-      constraints: BoxConstraints.tightFor(width: 250, height: 50),
+      constraints: BoxConstraints.tightFor(
+        width: Device.width(64.0),
+        height: Device.height(6.2),
+      ),
       child: ElevatedButton(
         child: child,
         onPressed: onPressed,

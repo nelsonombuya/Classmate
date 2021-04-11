@@ -1,4 +1,5 @@
 // # Imports
+import 'package:classmate/constants/device.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -10,13 +11,13 @@ import 'dart:async';
 class CustomLoadingElevatedButton extends StatefulWidget {
   CustomLoadingElevatedButton({
     @required this.onPressed,
-    @required this.onSuccess,
-    @required this.onFailure,
+    this.onSuccess,
+    this.onFailure,
     this.child,
     this.successWaitingTime = const Duration(seconds: 3),
     this.failureWaitingTime = const Duration(seconds: 3),
   });
-  final dynamic child;
+  final Widget child;
   final Function onPressed;
   final Function onSuccess;
   final Function onFailure;
@@ -77,8 +78,12 @@ class _CustomLoadingElevatedButtonState
 
   @override
   Widget build(BuildContext context) {
+    Device().init(context);
     return ConstrainedBox(
-      constraints: BoxConstraints.tightFor(width: 250, height: 50),
+      constraints: BoxConstraints.tightFor(
+        width: Device.width(64.0),
+        height: Device.height(6.2),
+      ),
       child: RoundedLoadingButton(
         onPressed: widget.onPressed == null ? null : onPressedExtended,
         controller: _btnController,

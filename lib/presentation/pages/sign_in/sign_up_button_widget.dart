@@ -1,5 +1,6 @@
 // # Imports
-import 'package:classmate/presentation/widgets/custom_elevatedButton_widget.dart';
+import 'package:classmate/presentation/pages/sign_in/custom_elevatedButton_widget.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 /// # Sign Up Button
@@ -11,6 +12,7 @@ class SignUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Device().init(context);
     return Center(
       child: Column(
         children: [
@@ -22,7 +24,7 @@ class SignUpButton extends StatelessWidget {
             onPressed:
                 enabled ? () => Navigator.pushNamed(context, '/sign_up') : null,
           ),
-          SizedBox(height: 20),
+          SizedBox(height: Device.height(3)),
           Text(
             'To create a new account.',
             textAlign: TextAlign.center,
