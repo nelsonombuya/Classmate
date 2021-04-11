@@ -345,13 +345,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  relative_scale:
-    dependency: "direct main"
-    description:
-      name: relative_scale
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   replay_bloc:
     dependency: "direct main"
     description:
