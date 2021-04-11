@@ -33,8 +33,6 @@ class WelcomePage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // FIXME Placeholder Image Jumps before image loads
-            // FIXME Doesn't scale well on some devices
             // FIXME Crashes after too many re-initializations
             // ! OOM Crash, comment lines out when testing
             // # Background Video
@@ -115,9 +113,9 @@ class WelcomePage extends StatelessWidget {
                       child: Column(
                         children: [
                           SignInWithEmailButton(),
-                          SizedBox(height: Device.height(4.0)),
+                          SizedBox(height: Device.height(2.0)),
                           CreateANewAccountButton(),
-                          SizedBox(height: Device.height(8.0)),
+                          SizedBox(height: Device.height(3.0)),
                           VideoCreditsWidget(
                             videoCredits: _videoCredits,
                             color: _captionColor,

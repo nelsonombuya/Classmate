@@ -22,12 +22,10 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.asset(widget.video)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _controller.setLooping(true);
-        _controller.setVolume(0.0);
-      });
+      ..initialize().then((_) => setState(() {}));
+    _controller.setLooping(true);
+    _controller.setVolume(0.0);
+    _controller.play();
   }
 
   @override
@@ -38,28 +36,33 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: _controller.value.aspectRatio /
-          MediaQuery.of(context).size.aspectRatio,
-      child: Center(
-        child: Container(
-          child: _controller.value.isInitialized
-              // Shows the video once it has been initialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                )
-              // Shows an image while the video is initializing
-              : Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(widget.placeholder),
-                      fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(),
+      child: _controller.value.isInitialized
+          // Shows the video once it has been initialized
+          ? Stack(
+              children: <Widget>[
+                SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      height: _controller.value.size?.height ?? 0,
+                      width: _controller.value.size?.width ?? 0,
+                      child: VideoPlayer(_controller),
                     ),
                   ),
                 ),
-        ),
-      ),
+              ],
+            )
+          // Shows an image while the video is initializing
+          : Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(widget.placeholder),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
     );
   }
 }

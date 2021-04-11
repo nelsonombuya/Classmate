@@ -29,11 +29,9 @@ class FormView extends StatelessWidget {
           child: Material(
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  Device.width(7.0),
-                  Device.height(4.0),
-                  Device.width(7.0),
-                  Device.height(3.0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Device.width(7.0),
+                  vertical: Device.height(2.0),
                 ),
                 child: child,
               ),
