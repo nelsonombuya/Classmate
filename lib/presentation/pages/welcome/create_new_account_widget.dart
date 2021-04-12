@@ -1,4 +1,5 @@
 // # Imports
+import 'package:classmate/constants/routes.dart';
 import 'package:flutter/material.dart';
 
 /// # Create a new account button
@@ -8,7 +9,7 @@ class CreateANewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.pushNamed(context, '/sign_up'),
+      onPressed: () => Routes.sailor('/sign_up'),
       child: Text(
         'CREATE A NEW ACCOUNT',
         style: Theme.of(context).textTheme.button.copyWith(color: Colors.white),

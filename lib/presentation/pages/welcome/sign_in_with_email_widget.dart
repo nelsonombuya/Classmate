@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/routes.dart';
 import 'package:flutter/material.dart';
 
 /// # Sign In With Email
@@ -15,7 +16,7 @@ class SignInWithEmailButton extends StatelessWidget {
         height: Device.height(6.2),
       ),
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, '/sign_in'),
+        onPressed: () => Routes.sailor('/sign_in'),
         child: Text(
           'Sign In With E-Mail',
           style: Theme.of(context).textTheme.button,
