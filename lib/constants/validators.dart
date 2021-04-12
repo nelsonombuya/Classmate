@@ -1,20 +1,20 @@
 import 'package:string_validator/string_validator.dart';
 
-class Validator {
+abstract class Validator {
   // * E-Mail Validation Rules
   static String emailValidator(String value) =>
       isEmail(value) ? null : 'Please enter valid email address';
 
   // * Name Validation Rules
   static String nameValidator(String value) {
-    if (value.isEmpty) return 'Please input a name';
+    if (value.length < 1) return 'Please input a name';
     return isAlpha(value) ? null : 'Please don\'t input a number';
   }
 
   // * Validation for simple passwords
   static String passwordValidator(String value) {
     if (value.isEmpty) return 'Please input a password';
-    return (value.length > 8) ? null : 'Password is too short';
+    return (value.length >= 8) ? null : 'Password is too short';
   }
 
   // * Validation for more secure passwords
@@ -31,5 +31,21 @@ class Validator {
           Minimum 1 Numeric Number
           Minimum 1 Special Character
           Common Allow Character ( ! @ # \$ & * ~ )''';
+  }
+}
+
+class PasswordConfirmationValidator extends Validator {
+  String temp;
+
+  String confirmPasswordValidator(password) {
+    // Normal Password Validation
+    String initialValidation = Validator.passwordValidator(password);
+
+    // If initial validation succeeded, check whether the passwords match
+    if (initialValidation == null)
+      return password == temp ? null : 'Password do not match';
+
+    // If initial validation failed, return that state
+    return initialValidation;
   }
 }

@@ -28,7 +28,7 @@ class ErrorSplashText extends StatelessWidget {
           AnimatedTextKit(
             animatedTexts: [
               ColorizeAnimatedText(
-                'Error',
+                'Something went wrong...',
                 colors: _errorStringColors,
                 textAlign: TextAlign.center,
                 textStyle: Theme.of(context)
