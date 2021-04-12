@@ -18,3 +18,11 @@ class Authenticated extends AuthState {
   @override
   List<Object> get props => [user];
 }
+
+class AuthenticationError extends AuthState {
+  AuthenticationError(this.message);
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}

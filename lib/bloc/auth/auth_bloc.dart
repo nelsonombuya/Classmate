@@ -9,9 +9,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  UserRepository _userRepository;
+  UserRepository _userRepository = UserRepository();
 
-  AuthBloc(this._userRepository) : super(AuthInitial());
+  AuthBloc() : super(AuthInitial());
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
@@ -25,8 +25,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           yield Unauthenticated();
         }
       } catch (e) {
-        print(e.toString()); // TODO Add Logging
         yield Unauthenticated();
+        yield AuthenticationError(e.toString());
       }
     }
   }

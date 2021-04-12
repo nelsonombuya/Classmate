@@ -6,31 +6,34 @@ import 'package:flutter/material.dart';
 /// Made to reduce code length for repetitive text boxes
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
-    this.obscureText = false,
-    this.enabled = true,
     this.label,
+    this.onSaved,
     this.validator,
-    this.keyboardType,
-    this.suffixIcon,
-    this.suffixIconAction,
     this.onChanged,
+    this.suffixIcon,
+    this.keyboardType,
+    this.enabled = true,
+    this.suffixIconAction,
+    this.obscureText = false,
   });
 
-  final TextInputType keyboardType;
-  final Function validator;
-  final bool obscureText;
-  final bool enabled;
   final String label;
+  final bool enabled;
+  final Function onSaved;
+  final bool obscureText;
+  final Function validator;
+  final Function onChanged;
   final IconData suffixIcon;
   final Function suffixIconAction;
-  final Function onChanged;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     Device().init(context);
     return TextFormField(
-      onChanged: onChanged,
       enabled: enabled,
+      onSaved: onSaved,
+      onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
       keyboardType: keyboardType,
