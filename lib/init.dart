@@ -1,4 +1,5 @@
 // # Main App Initialization
+import 'package:classmate/presentation/pages/dashboard/dashboard_page_arguments.dart';
 import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/welcome/welcome_page.dart';
 import 'package:classmate/presentation/pages/splash/splash_page.dart';

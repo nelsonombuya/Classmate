@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:classmate/init.dart';
 import 'package:sailor/sailor.dart';
 
+// * Older Routes (Just in Case)
 dynamic customRoutes = <String, WidgetBuilder>{
   '/': (context) => Init(),
   '/welcome': (context) => WelcomePage(),
@@ -15,6 +16,7 @@ dynamic customRoutes = <String, WidgetBuilder>{
 };
 
 // # Sailor Routes
+// TODO Add Transitions
 class Routes {
   static final sailor = Sailor();
 
