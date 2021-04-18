@@ -1,4 +1,5 @@
 // # Dart Imports
+import 'package:another_flushbar/flushbar.dart';
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
@@ -49,7 +50,14 @@ class _SignUpState extends State<SignUp> {
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
         if (state is RegistrationSuccess) setState(() => _proceed = true);
-        if (state is RegistrationFailure) setState(() => _proceed = false);
+        if (state is RegistrationFailure) {
+          setState(() => _proceed = false);
+          Flushbar(
+            title: "Sign In Failed",
+            message: state.message,
+            duration: Duration(seconds: 5),
+          )..show(context);
+        }
       },
       child: FormView(
         child: Column(

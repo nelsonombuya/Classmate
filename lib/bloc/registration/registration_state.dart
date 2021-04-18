@@ -20,9 +20,9 @@ class RegistrationSuccess extends RegistrationState {
 }
 
 class RegistrationFailure extends RegistrationState {
-  RegistrationFailure({this.errorMessage});
-  final String errorMessage;
+  RegistrationFailure({this.message});
+  final String message;
 
   @override
-  List<Object> get props => [errorMessage];
+  List<Object> get props => [message];
 }

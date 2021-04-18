@@ -1,4 +1,5 @@
 import 'package:classmate/data/repositories/user_repository.dart';
+import 'package:classmate/constants/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
@@ -23,7 +24,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         yield RegistrationSuccess(user: user);
       }
     } catch (e) {
-      yield RegistrationFailure(errorMessage: e.toString());
+      yield RegistrationFailure(message: ErrorHandler(e).message);
     }
   }
 }

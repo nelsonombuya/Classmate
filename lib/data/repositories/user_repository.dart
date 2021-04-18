@@ -4,15 +4,11 @@ class UserRepository {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future createUser(String email, String password) async {
-    try {
-      var result = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return result.user;
-    } catch (e) {
-      throw Exception(e.toString());
-    }
+    var result = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return result.user;
   }
 
   Future<User> signIn(String email, String password) async {
