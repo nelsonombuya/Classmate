@@ -14,9 +14,6 @@ class Unauthenticated extends AuthState {}
 class Authenticated extends AuthState {
   Authenticated({@required this.user});
   final User user;
-
-  @override
-  List<Object> get props => [user];
 }
 
 class AuthenticationError extends AuthState {

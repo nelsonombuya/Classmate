@@ -158,6 +158,7 @@ class _SignUpState extends State<SignUp> {
                       builder: (context, state) {
                         return CustomLoadingElevatedButton(
                           onPressed: () async {
+                            // Validating the form input
                             if (_formKey.currentState.validate()) {
                               setState(
                                 // Locking the fields
@@ -167,8 +168,10 @@ class _SignUpState extends State<SignUp> {
                                 },
                               );
 
+                              // Saving the form information for use during sign up
                               _formKey.currentState.save();
 
+                              // Running the registration started event
                               _registrationBloc.add(
                                 RegistrationStarted(
                                   email: _email,
@@ -176,11 +179,8 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               );
 
-                              /// HACK Checking for State Externally
-                              /// Using BlocListener to check for change in state
-                              /// Then when state is successful or not
-                              /// Changes _proceed to true/false respectively
-                              /// Which sets the button animations that come after
+                              /// HACK Used to sync the current states
+                              /// With the sign up button animations
                               while (_proceed == null)
                                 await Future.delayed(Duration(seconds: 3));
 
