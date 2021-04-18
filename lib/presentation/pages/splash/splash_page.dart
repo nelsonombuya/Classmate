@@ -1,12 +1,13 @@
 // # Imports
-import 'package:classmate/constants/device.dart';
 import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 // # Splash Page
 class SplashPage extends StatelessWidget {
-  SplashPage({this.error});
-  final String error;
+  SplashPage({this.error, this.hold = false});
+  final bool hold; // * Just shows the app logo without the text
+  final String error; // * Holds the error message
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +52,18 @@ class SplashPage extends StatelessWidget {
           ),
 
           // # Animated Text
-          Positioned(
-            top: Device.height(65.0),
-            left: Device.width(4.0),
-            right: Device.width(4.0),
-            child: SplashScreenTextSelector(
-              error: error != null,
-              firstString: _firstString,
-              secondString: _secondString,
-              secondStringColor: _secondStringColor,
+          if (hold == false)
+            Positioned(
+              top: Device.height(65.0),
+              left: Device.width(4.0),
+              right: Device.width(4.0),
+              child: SplashScreenTextSelector(
+                error: error != null,
+                firstString: _firstString,
+                secondString: _secondString,
+                secondStringColor: _secondStringColor,
+              ),
             ),
-          ),
         ],
       ),
     );

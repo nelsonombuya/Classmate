@@ -28,23 +28,27 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Hey User'),
-            Text('Your e-mail is ${user.email}'),
-            TextButton(
-              onPressed: () => auth.add(AuthRemoved()),
-              child: Text(
-                'Sign Out',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(color: Colors.red),
-              ),
-            )
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              Text('Hey User'),
+              Text('Your e-mail is ${user.email}'),
+              TextButton(
+                onPressed: () {
+                  auth.add(AuthRemoved());
+                  // Navigator.of(context).pushNamedAndRemoveUntil(
+                  //     '/', (Route<dynamic> route) => false);
+                },
+                child: Text(
+                  'Sign Out',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(color: Colors.red),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

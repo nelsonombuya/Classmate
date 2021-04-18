@@ -9,6 +9,7 @@ class ErrorHandler {
 
   final Map<String, String> _errorList = {
     // TODO Add more error messages
-    'user-not-found': "The user doesn't exist.\nThe user may have been deleted"
+    'user-not-found': "The user doesn't exist.",
+    'wrong-password': "Password is incorrect.",
   };
 }

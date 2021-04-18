@@ -8,6 +8,7 @@ import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
 import 'package:classmate/bloc/login/login_bloc.dart';
 import 'package:classmate/constants/validators.dart';
+import 'package:classmate/bloc/auth/auth_bloc.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,11 +44,16 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
+    AuthBloc _authBloc = BlocProvider.of<AuthBloc>(context);
     Device().init(context);
 
     return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state is LoginSuccess) setState(() => _proceed = true);
+      listener: (context, state) async {
+        if (state is LoginSuccess) {
+          setState(() => _proceed = true);
+          _authBloc.add(AuthStarted());
+        }
+
         if (state is LoginFailure) {
           setState(() => _proceed = false);
           Flushbar(
@@ -117,40 +123,44 @@ class _SignInViewState extends State<SignInView> {
                   // ! Can't be extracted
                   Center(
                     child: CustomLoadingElevatedButton(
-                        child: Text(
-                          'Sign In',
-                          style: Theme.of(context).textTheme.button,
-                        ),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            setState(() {
-                              _showPassword = false;
-                              _areThingsEnabled = false;
-                            });
+                      child: Text(
+                        'Sign In',
+                        style: Theme.of(context).textTheme.button,
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            _showPassword = false;
+                            _areThingsEnabled = false;
+                          });
 
-                            // Saving the form information for use during sign up
-                            _formKey.currentState.save();
+                          // Saving the form information for use during sign up
+                          _formKey.currentState.save();
 
-                            // Running the registration started event
-                            _loginBloc.add(
-                              LoginStarted(
-                                email: _email,
-                                password: _password,
-                              ),
-                            );
+                          // Running the registration started event
+                          _loginBloc.add(
+                            LoginStarted(
+                              email: _email,
+                              password: _password,
+                            ),
+                          );
 
-                            /// HACK Used to sync the current states
-                            /// With the sign in button animations
-                            while (_proceed == null)
-                              await Future.delayed(Duration(seconds: 3));
+                          /// HACK Used to sync the current states
+                          /// With the sign in button animations
+                          while (_proceed == null)
+                            await Future.delayed(Duration(seconds: 3));
 
-                            bool result = _proceed;
-                            setState(() => _proceed = null);
+                          bool result = _proceed;
+                          setState(() => _proceed = null);
 
-                            return result;
-                          }
-                        },
-                        onEnd: () => setState(() => _areThingsEnabled = true)),
+                          return result;
+                        }
+                      },
+                      onEnd: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', (Route<dynamic> route) => false);
+                      },
+                    ),
                   ),
                 ],
               ),

@@ -13,33 +13,28 @@ import 'package:flutter/material.dart';
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc()..add(AuthStarted()),
-      child: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          // * IF firebase initializes correctly
-          if (snapshot.connectionState == ConnectionState.done)
-            return BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                if (state is AuthInitial) return SplashPage();
+    return FutureBuilder(
+      future: Firebase.initializeApp(),
+      builder: (context, snapshot) {
+        // # If firebase initializes correctly
+        if (snapshot.connectionState == ConnectionState.done)
+          return BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is Authenticated)
+                return DashboardPage(DashboardArgs(user: state.user));
 
-                if (state is Authenticated)
-                  return DashboardPage(DashboardArgs(user: state.user));
+              if (state is Unauthenticated) return WelcomePage();
 
-                if (state is Unauthenticated) return WelcomePage();
+              return SplashPage();
+            },
+          );
 
-                return SplashPage();
-              },
-            );
+        // ! In case of error while starting up Firebase
+        if (snapshot.hasError) return SplashPage(error: snapshot.error);
 
-          // ! In case of error
-          if (snapshot.hasError) return SplashPage(error: snapshot.error);
-
-          // * Showing the splash page in the meantime
-          return SplashPage();
-        },
-      ),
+        // * Showing the splash page in the meantime
+        return SplashPage(hold: true);
+      },
     );
   }
 }

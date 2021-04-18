@@ -1,12 +1,13 @@
 // # Dart Imports
-import 'package:another_flushbar/flushbar.dart';
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
 import 'package:classmate/bloc/registration/registration_bloc.dart';
 import 'package:classmate/constants/validators.dart';
+import 'package:classmate/bloc/auth/auth_bloc.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/Material.dart';
 import 'dart:async';
@@ -46,10 +47,15 @@ class _SignUpState extends State<SignUp> {
     Device().init(context);
     RegistrationBloc _registrationBloc =
         BlocProvider.of<RegistrationBloc>(context);
+    AuthBloc _authBloc = BlocProvider.of<AuthBloc>(context);
 
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
-        if (state is RegistrationSuccess) setState(() => _proceed = true);
+        if (state is RegistrationSuccess) {
+          setState(() => _proceed = true);
+          _authBloc.add(AuthStarted());
+        }
+
         if (state is RegistrationFailure) {
           setState(() => _proceed = false);
           Flushbar(
@@ -198,7 +204,10 @@ class _SignUpState extends State<SignUp> {
                               return result;
                             }
                           },
-                          onEnd: () => setState(() => _areThingsEnabled = true),
+                          onEnd: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/', (Route<dynamic> route) => false);
+                          },
                           child: Text(
                             'Sign Up',
                             style: Theme.of(context).textTheme.button,
