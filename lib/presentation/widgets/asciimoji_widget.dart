@@ -4,40 +4,36 @@ import 'package:flutter/material.dart';
 
 /// # ASCIImoji
 /// Displays an animated list of ASCIImoji
-/// Has 2 Animation Styles
-///   Typed [Default]
-///   Console
 class ASCIImoji extends StatelessWidget {
-  // # Parameters
   final textStyle;
+  ASCIImoji({this.textStyle});
 
-  // # Constructor
-  ASCIImoji(this.textStyle);
-
-  AnimatedText typeWriterText({@required String text}) {
-    return TyperAnimatedText(text,
-        textAlign: TextAlign.center,
-        textStyle: textStyle,
-        speed: Duration(milliseconds: 250));
+  AnimatedText typerAnimationTemplate(text) {
+    return TyperAnimatedText(
+      text,
+      textAlign: TextAlign.center,
+      textStyle: textStyle,
+      speed: Duration(milliseconds: 250),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedTextKit(
       animatedTexts: [
-        typeWriterText(text: ':-)'),
-        typeWriterText(text: ':-D'),
-        typeWriterText(text: ':-O'),
-        typeWriterText(text: 'ʕ·͡ᴥ·ʔ'),
-        typeWriterText(text: '•͡˘㇁•͡˘'),
-        typeWriterText(text: '(◕ᴥ◕ʋ)'),
-        typeWriterText(text: '(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
-        typeWriterText(text: 'ʕっ•ᴥ•ʔっ'),
-        typeWriterText(text: '(͡ ° ͜ʖ ͡ °)'),
-        typeWriterText(text: '(｡◕‿‿◕｡)'),
-        typeWriterText(text: '( 0 _ 0 )'),
-        typeWriterText(text: '(˵ ͡° ͜ʖ ͡°˵)'),
-        typeWriterText(text: '¯\\(°_o)/¯'),
+        typerAnimationTemplate(':-)'),
+        typerAnimationTemplate(':-D'),
+        typerAnimationTemplate(':-O'),
+        typerAnimationTemplate('ʕ·͡ᴥ·ʔ'),
+        typerAnimationTemplate('•͡˘㇁•͡˘'),
+        typerAnimationTemplate('(◕ᴥ◕ʋ)'),
+        typerAnimationTemplate('(̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄'),
+        typerAnimationTemplate('ʕっ•ᴥ•ʔっ'),
+        typerAnimationTemplate('(͡ ° ͜ʖ ͡ °)'),
+        typerAnimationTemplate('(｡◕‿‿◕｡)'),
+        typerAnimationTemplate('( 0 _ 0 )'),
+        typerAnimationTemplate('(˵ ͡° ͜ʖ ͡°˵)'),
+        typerAnimationTemplate('¯\\(°_o)/¯'),
       ],
       repeatForever: true,
     );

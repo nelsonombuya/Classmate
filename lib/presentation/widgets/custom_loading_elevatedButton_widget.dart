@@ -1,6 +1,6 @@
 // # Imports
-import 'package:classmate/constants/device.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -9,20 +9,11 @@ import 'dart:async';
 /// Customised to look like a regular elevated button
 /// But still shows animations for each state it's in
 class CustomLoadingElevatedButton extends StatefulWidget {
-  CustomLoadingElevatedButton({
-    @required this.onPressed,
-    this.onSuccess,
-    this.onFailure,
-    this.child,
-    this.successWaitingTime = const Duration(seconds: 3),
-    this.failureWaitingTime = const Duration(seconds: 3),
-  });
-  final Widget child;
+  CustomLoadingElevatedButton(
+      {@required this.onPressed, this.child, this.onEnd});
   final Function onPressed;
-  final Function onSuccess;
-  final Function onFailure;
-  final Duration successWaitingTime;
-  final Duration failureWaitingTime;
+  final Function onEnd;
+  final Widget child;
 
   @override
   _CustomLoadingElevatedButtonState createState() =>
@@ -37,29 +28,14 @@ class _CustomLoadingElevatedButtonState
   // * Extending the onPressed Functionality
   void onPressedExtended() async {
     try {
-      if (await widget.onPressed()) {
-        // If the function returns true
-        _btnController.success();
+      await widget.onPressed()
+          ? _btnController.success()
+          : _btnController.error();
 
-        // Wait a little before resetting
-        Timer(widget.successWaitingTime, () {
-          _btnController.reset();
-
-          // Do what should be done after success
-          widget.onSuccess();
-        });
-      } else {
-        // If the function returns an false
-        _btnController.error();
-
-        // Wait a little before resetting
-        Timer(widget.failureWaitingTime, () {
-          _btnController.reset();
-
-          // Do what should be done after failure
-          widget.onFailure();
-        });
-      }
+      // Wait a little before resetting
+      await Future.delayed(Duration(seconds: 3));
+      _btnController.reset();
+      if (widget.onEnd != null) widget.onEnd();
     } catch (e) {
       // If there was an error in function return type
       _btnController.error();
@@ -67,12 +43,9 @@ class _CustomLoadingElevatedButtonState
       print('Error Message: $e');
 
       // Wait a little before resetting
-      Timer(Duration(seconds: 5), () {
-        _btnController.reset();
-
-        // Do what should be done after failure
-        widget.onFailure();
-      });
+      await Future.delayed(Duration(seconds: 5));
+      _btnController.reset();
+      if (widget.onEnd != null) widget.onEnd();
     }
   }
 
