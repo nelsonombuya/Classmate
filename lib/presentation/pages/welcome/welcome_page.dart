@@ -3,11 +3,17 @@ import 'package:classmate/presentation/pages/welcome/background_video_player_wid
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
 import 'package:classmate/presentation/pages/welcome/video_credits_widget.dart';
+import 'package:classmate/presentation/pages/splash/asciimoji_widget.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 /// # Welcome Page
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     // Properties
@@ -15,6 +21,9 @@ class WelcomePage extends StatelessWidget {
     String _videoCredits;
     Color _captionColor;
     Device().init(context);
+
+    // For Lulz 😆
+    int _eggCounter = 0;
 
     // Setting properties according to Dark or Light Modes
     if (Device.brightness == Brightness.dark) {
@@ -72,33 +81,41 @@ class WelcomePage extends StatelessWidget {
                             ),
 
                             // # ClassMate Text
-                            Row(
-                              children: [
-                                Text(
-                                  "Class",
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: Device.height(7),
-                                        color: Colors.white,
-                                      ),
-                                ),
-                                Text(
-                                  "Mate",
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Device.height(7),
-                                        color: Colors.blue,
-                                      ),
-                                ),
-                              ],
+                            GestureDetector(
+                              onTap: () => setState(() => _eggCounter++),
+                              child: (_eggCounter >= 5)
+                                  ? ASCIImoji(
+                                      fontSize: Device.height(7),
+                                      color: Colors.blue,
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text(
+                                          "Class",
+                                          textAlign: TextAlign.left,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2
+                                              .copyWith(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: Device.height(7),
+                                                color: Colors.white,
+                                              ),
+                                        ),
+                                        Text(
+                                          "Mate",
+                                          textAlign: TextAlign.left,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: Device.height(7),
+                                                color: Colors.blue,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
                             ),
                           ],
                         ),
