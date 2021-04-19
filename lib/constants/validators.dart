@@ -1,5 +1,7 @@
 import 'package:string_validator/string_validator.dart';
 
+/// # Validator
+/// Used during form validations
 abstract class Validator {
   // * E-Mail Validation Rules
   static String emailValidator(String value) =>
@@ -34,6 +36,9 @@ abstract class Validator {
   }
 }
 
+/// # Confirm Password Validator
+/// Extends the Validator Class
+/// Used when you want to confirm the user's input password
 class PasswordConfirmationValidator extends Validator {
   String temp;
 
@@ -43,7 +48,7 @@ class PasswordConfirmationValidator extends Validator {
 
     // If initial validation succeeded, check whether the passwords match
     if (initialValidation == null)
-      return password == temp ? null : 'Password do not match';
+      return password == temp ? null : 'Passwords do not match';
 
     // If initial validation failed, return that state
     return initialValidation;

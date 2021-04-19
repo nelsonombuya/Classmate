@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 /// # ASCIImoji
 /// Displays an animated list of ASCIImoji
 class ASCIImoji extends StatelessWidget {
-  final textStyle;
   ASCIImoji({this.textStyle});
+  final textStyle;
 
   AnimatedText typerAnimationTemplate(text) {
     return TyperAnimatedText(
       text,
-      textAlign: TextAlign.center,
       textStyle: textStyle,
+      textAlign: TextAlign.center,
       speed: Duration(milliseconds: 250),
     );
   }
@@ -20,6 +20,7 @@ class ASCIImoji extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedTextKit(
+      /// If you see this, add an asciimoji 😂
       animatedTexts: [
         typerAnimationTemplate(':-)'),
         typerAnimationTemplate(':-D'),

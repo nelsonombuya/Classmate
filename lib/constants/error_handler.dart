@@ -1,3 +1,5 @@
+/// # Error Handler
+/// Class used for context-sensitive error messages
 class ErrorHandler {
   ErrorHandler(this.error) {
     this.message = _errorList.containsKey(error.code)

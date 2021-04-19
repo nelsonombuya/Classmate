@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+/// # User Repository
+/// Mostly has Firebase Code and General User Data
+/// Has all the relevant functions used during Authentication
 class UserRepository {
   FirebaseAuth _auth = FirebaseAuth.instance;
 

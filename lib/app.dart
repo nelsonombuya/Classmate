@@ -13,9 +13,9 @@ class ClassMate extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthBloc()..add(AuthStarted()),
       child: MaterialApp(
-        navigatorObservers: [SailorLoggingObserver()], // * Important (For Logs)
-        onGenerateRoute: Routes.sailor.generator(), // * Important
-        navigatorKey: Routes.sailor.navigatorKey, // * Important
+        navigatorObservers: [SailorLoggingObserver()], // * For Navigation Logs
+        onGenerateRoute: Routes.sailor.generator(), // * For Routes (Sailor)
+        navigatorKey: Routes.sailor.navigatorKey, // * For Routes (Sailor)
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,
         title: 'ClassMate',

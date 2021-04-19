@@ -3,8 +3,8 @@ import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/welcome/welcome_page.dart';
 import 'package:classmate/presentation/pages/sign_in/sign_in_page.dart';
 import 'package:classmate/presentation/pages/sign_up/sign_up_page.dart';
+import 'package:classmate/presentation/init.dart';
 import 'package:flutter/material.dart';
-import 'package:classmate/init.dart';
 import 'package:sailor/sailor.dart';
 
 // * Older Routes (Just in Case)
