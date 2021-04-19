@@ -17,10 +17,9 @@ class ErrorSplashText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // * For scaling
     Device().init(context);
     final double _fontSize = Device.height(3.0);
-    final double _headingFontSize = Device.height(4.5);
+    final double _headingFontSize = Device.height(3.5);
 
     return Container(
       child: Column(

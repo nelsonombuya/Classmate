@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 // # Splash Page
 class SplashPage extends StatelessWidget {
   SplashPage({this.error, this.hold = false});
+  final String error; // * For showing the error message screen instead
   final bool hold; // * Just shows the app logo without the text
-  final String error; // * Holds the error message
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,9 @@ class SplashPage extends StatelessWidget {
 
     // ! In case of error during loading
     if (error != null) {
-      // * First String in this case will be Error
-      // * First & Second Screen Colors will be Red
+      // First String in this case will be "Something went wrong..."
+      // Second String will be the error message
+      // Both colours will be Red
       _logo = 'red_plain';
       _secondString = '$error';
     }
@@ -57,6 +58,8 @@ class SplashPage extends StatelessWidget {
               top: Device.height(65.0),
               left: Device.width(4.0),
               right: Device.width(4.0),
+
+              // * Selects between the error and the normal splash screens
               child: SplashScreenTextSelector(
                 error: error != null,
                 firstString: _firstString,
