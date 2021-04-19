@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/presentation/pages/sign_in/custom_elevatedButton_widget.dart';
+import 'package:classmate/constants/routes.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,11 @@ class SignUpButton extends StatelessWidget {
       child: Column(
         children: [
           CustomElevatedButton(
+            onPressed: enabled ? () => Routes.sailor('/sign_up') : null,
             child: Text(
               'Sign Up',
               style: Theme.of(context).textTheme.button,
             ),
-            onPressed:
-                enabled ? () => Navigator.pushNamed(context, '/sign_up') : null,
           ),
           SizedBox(height: Device.height(3)),
           Text(

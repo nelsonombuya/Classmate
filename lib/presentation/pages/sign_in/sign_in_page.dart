@@ -6,9 +6,8 @@ import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart'
 import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
-import 'package:classmate/bloc/login/login_bloc.dart';
+import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
 import 'package:classmate/constants/validators.dart';
-import 'package:classmate/bloc/auth/auth_bloc.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +17,8 @@ import 'package:flutter/Material.dart';
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(),
+    return BlocProvider<SignInBloc>(
+      create: (context) => SignInBloc(),
       child: SignInView(),
     );
   }
@@ -43,23 +42,20 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
-    AuthBloc _authBloc = BlocProvider.of<AuthBloc>(context);
+    SignInBloc _signInBloc = BlocProvider.of<SignInBloc>(context);
     Device().init(context);
 
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) async {
-        if (state is LoginSuccess) {
-          setState(() => _proceed = true);
-          _authBloc.add(AuthStarted());
-        }
+        if (state is SignInSuccess) setState(() => _proceed = true);
 
-        if (state is LoginFailure) {
+        if (state is SignInFailure) {
           setState(() => _proceed = false);
           Flushbar(
             title: "Sign In Failed",
             message: state.message,
             duration: Duration(seconds: 5),
+            backgroundColor: Colors.red[300],
           )..show(context);
         }
       },
@@ -138,8 +134,8 @@ class _SignInViewState extends State<SignInView> {
                           _formKey.currentState.save();
 
                           // Running the registration started event
-                          _loginBloc.add(
-                            LoginStarted(
+                          _signInBloc.add(
+                            SignInStarted(
                               email: _email,
                               password: _password,
                             ),
