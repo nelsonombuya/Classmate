@@ -157,8 +157,9 @@ class _SignInViewState extends State<SignInView> {
                         }
                       },
                       onEnd: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/', (Route<dynamic> route) => false);
+                        if (_proceed == true)
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/', (Route<dynamic> route) => false);
                       },
                     ),
                   ),

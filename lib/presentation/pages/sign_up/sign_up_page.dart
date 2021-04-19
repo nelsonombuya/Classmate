@@ -205,8 +205,9 @@ class _SignUpState extends State<SignUp> {
                             }
                           },
                           onEnd: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/', (Route<dynamic> route) => false);
+                            if (_proceed == true)
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/', (Route<dynamic> route) => false);
                           },
                           child: Text(
                             'Sign Up',
