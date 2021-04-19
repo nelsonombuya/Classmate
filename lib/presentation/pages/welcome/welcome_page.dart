@@ -2,7 +2,6 @@
 import 'package:classmate/presentation/pages/welcome/background_video_player_widget.dart';
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
-import 'package:classmate/presentation/pages/welcome/video_credits_widget.dart';
 import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
@@ -17,26 +16,13 @@ class _WelcomePageState extends State<WelcomePage> {
   // For Lulz 😆
   int _eggCounter = 0;
 
-  // Properties
-  String _video;
-  String _videoCredits;
-  Color _captionColor;
-
   @override
   Widget build(BuildContext context) {
     // Used for scaling and theme mode detection
     Device().init(context);
 
     // Setting properties according to Dark or Light Modes
-    if (Device.brightness == Brightness.dark) {
-      _video = 'dark';
-      _captionColor = Colors.white70;
-      _videoCredits = 'Video by Tima Miroshnichenko from Pexels';
-    } else {
-      _video = 'light';
-      _captionColor = Colors.white;
-      _videoCredits = 'Video by Pavel Danilyuk from Pexels';
-    }
+    String _video = (Device.brightness == Brightness.dark) ? 'dark' : 'light';
 
     // Returning the view
     return Scaffold(
@@ -126,26 +112,17 @@ class _WelcomePageState extends State<WelcomePage> {
                       child: Column(
                         children: [
                           SignInWithEmailButton(),
-                          SizedBox(height: Device.height(2.0)),
+                          SizedBox(height: Device.height(3.0)),
                           CreateANewAccountButton(),
                           SizedBox(height: Device.height(3.0)),
-                          VideoCreditsWidget(
-                            videoCredits: _videoCredits,
-                            color: _captionColor,
-                          ),
+                          if (_eggCounter >= 5)
+                            ASCIImoji(
+                              color: Colors.white,
+                              fontSize: Device.height(3.0),
+                            ),
                         ],
                       ),
                     ),
-
-                    // For Lulz 😄
-                    if (_eggCounter >= 5)
-                      Padding(
-                        padding: EdgeInsets.only(top: Device.height(2.0)),
-                        child: ASCIImoji(
-                          fontSize: Device.height(4.0),
-                          color: Colors.white,
-                        ),
-                      ),
                   ],
                 ),
               ),
