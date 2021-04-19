@@ -22,16 +22,21 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.asset(widget.video)
-      ..initialize().then((_) => setState(() {}));
-    _controller.setLooping(true);
-    _controller.setVolume(0.0);
-    _controller.play();
+      ..initialize().then(
+        (_) => setState(
+          () {
+            _controller.setLooping(true);
+            _controller.setVolume(0.0);
+            _controller.play();
+          },
+        ),
+      );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.pause();
+    setState(() => _controller.pause());
   }
 
   @override
