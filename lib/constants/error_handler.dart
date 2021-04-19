@@ -11,5 +11,7 @@ class ErrorHandler {
 
   // * Use this to specify messages for particular error codes
   // The key for the error code, the value for the error message
-  final Map<String, String> _errorList = {};
+  final Map<String, String> _errorList = {
+    'user-not-found': "The user does not exist."
+  };
 }
