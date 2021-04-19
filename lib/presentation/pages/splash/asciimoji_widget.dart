@@ -28,6 +28,7 @@ class ASCIImoji extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedTextKit(
       animatedTexts: [
+        _template('❤'),
         _template(':-)'),
         _template(':-D'),
         _template(':-O'),

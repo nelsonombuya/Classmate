@@ -14,16 +14,18 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  // For Lulz 😆
+  int _eggCounter = 0;
+
+  // Properties
+  String _video;
+  String _videoCredits;
+  Color _captionColor;
+
   @override
   Widget build(BuildContext context) {
-    // Properties
-    String _video;
-    String _videoCredits;
-    Color _captionColor;
+    // Used for scaling and theme mode detection
     Device().init(context);
-
-    // For Lulz 😆
-    int _eggCounter = 0;
 
     // Setting properties according to Dark or Light Modes
     if (Device.brightness == Brightness.dark) {
@@ -63,9 +65,8 @@ class _WelcomePageState extends State<WelcomePage> {
                     Opacity(
                       opacity: 0.8,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Device.width(5.0),
-                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Device.width(5.0)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -81,41 +82,36 @@ class _WelcomePageState extends State<WelcomePage> {
                             ),
 
                             // # ClassMate Text
-                            GestureDetector(
+                            InkWell(
                               onTap: () => setState(() => _eggCounter++),
-                              child: (_eggCounter >= 5)
-                                  ? ASCIImoji(
-                                      fontSize: Device.height(7),
-                                      color: Colors.blue,
-                                    )
-                                  : Row(
-                                      children: [
-                                        Text(
-                                          "Class",
-                                          textAlign: TextAlign.left,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2
-                                              .copyWith(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: Device.height(7),
-                                                color: Colors.white,
-                                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Class",
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: Device.height(7),
+                                          color: Colors.white,
                                         ),
-                                        Text(
-                                          "Mate",
-                                          textAlign: TextAlign.left,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2
-                                              .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Device.height(7),
-                                                color: Colors.blue,
-                                              ),
+                                  ),
+                                  Text(
+                                    "Mate",
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Device.height(7),
+                                          color: Colors.blue,
                                         ),
-                                      ],
-                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -139,7 +135,17 @@ class _WelcomePageState extends State<WelcomePage> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+
+                    // For Lulz 😄
+                    if (_eggCounter >= 5)
+                      Padding(
+                        padding: EdgeInsets.only(top: Device.height(2.0)),
+                        child: ASCIImoji(
+                          fontSize: Device.height(4.0),
+                          color: Colors.white,
+                        ),
+                      ),
                   ],
                 ),
               ),

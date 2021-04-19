@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// # Background Video Player
 /// Used to play a video background on any screen
-/// ? Can be extended to include network images as well
+/// ? Can be extended to include network videos/images as well
 class BackgroundVideoPlayer extends StatefulWidget {
   BackgroundVideoPlayer({@required this.video, @required this.placeholder});
   final String placeholder;
