@@ -1,5 +1,5 @@
 // # Imports
-import 'package:classmate/presentation/pages/splash/asciimoji_widget.dart';
+import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';

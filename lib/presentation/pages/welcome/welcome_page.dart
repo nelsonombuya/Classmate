@@ -3,7 +3,7 @@ import 'package:classmate/presentation/pages/welcome/background_video_player_wid
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
 import 'package:classmate/presentation/pages/welcome/video_credits_widget.dart';
-import 'package:classmate/presentation/pages/splash/asciimoji_widget.dart';
+import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
