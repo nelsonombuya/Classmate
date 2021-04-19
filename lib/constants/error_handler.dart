@@ -9,9 +9,7 @@ class ErrorHandler {
   final error;
   String message;
 
-  final Map<String, String> _errorList = {
-    // TODO Add more error messages
-    'user-not-found': "The user doesn't exist.",
-    'wrong-password': "Password is incorrect.",
-  };
+  // * Use this to specify messages for particular error codes
+  // The key for the error code, the value for the error message
+  final Map<String, String> _errorList = {};
 }

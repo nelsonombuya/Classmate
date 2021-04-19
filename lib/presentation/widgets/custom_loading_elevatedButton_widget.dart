@@ -9,8 +9,12 @@ import 'dart:async';
 /// Customised to look like a regular elevated button
 /// But still shows animations for each state it's in
 class CustomLoadingElevatedButton extends StatefulWidget {
-  CustomLoadingElevatedButton(
-      {@required this.onPressed, this.child, this.onEnd});
+  CustomLoadingElevatedButton({
+    @required this.onPressed,
+    this.child,
+    this.onEnd,
+  });
+
   final Function onPressed;
   final Function onEnd;
   final Widget child;
