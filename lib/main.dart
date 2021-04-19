@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:classmate/app.dart';
+
 import 'constants/routes.dart';
 
 void main() {

@@ -1,10 +1,11 @@
-import 'package:classmate/presentation/pages/dashboard/dashboard_page_arguments.dart';
-import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
-import 'package:classmate/presentation/pages/welcome/welcome_page.dart';
-import 'package:classmate/presentation/pages/splash/splash_page.dart';
-import 'package:classmate/bloc/auth/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+
+import 'pages/dashboard/dashboard_page_arguments.dart';
+import 'pages/dashboard/dashboard_page.dart';
+import 'pages/welcome/welcome_page.dart';
+import 'pages/splash/splash_page.dart';
+import '../bloc/auth/auth_bloc.dart';
 
 /// # Init
 /// Does all the necessary initializations needed when the app starts

@@ -1,6 +1,8 @@
-import 'package:classmate/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'dart:async';
+
+import '../models/user_model.dart';
 
 /// # User Repository
 /// Mostly has Firebase Code and General User Data
