@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:sailor/sailor.dart';
 
-// # Flutter App Settings
+/// # Flutter App Settings
+/// * Best place to add global BLoC Providers
 class ClassMate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
