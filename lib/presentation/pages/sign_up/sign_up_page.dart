@@ -3,9 +3,8 @@ import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_wid
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
-import 'package:classmate/bloc/registration/registration_bloc.dart';
+import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
 import 'package:classmate/constants/validators.dart';
-import 'package:classmate/bloc/auth/auth_bloc.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +15,8 @@ import 'dart:async';
 class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RegistrationBloc>(
-      create: (context) => RegistrationBloc(),
+    return BlocProvider<SignUpBloc>(
+      create: (context) => SignUpBloc(),
       child: SignUp(),
     );
   }
@@ -32,6 +31,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String _firstName, _lastName, _email, _password;
 
+  // * Global Key for Form Validation
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // * Used to disable Fields and Buttons during Sign In
@@ -45,23 +45,19 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-    RegistrationBloc _registrationBloc =
-        BlocProvider.of<RegistrationBloc>(context);
-    AuthBloc _authBloc = BlocProvider.of<AuthBloc>(context);
+    SignUpBloc _signUpBloc = BlocProvider.of<SignUpBloc>(context);
 
-    return BlocListener<RegistrationBloc, RegistrationState>(
+    return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
-        if (state is RegistrationSuccess) {
-          setState(() => _proceed = true);
-          _authBloc.add(AuthStarted());
-        }
+        if (state is SignUpSuccess) setState(() => _proceed = true);
 
-        if (state is RegistrationFailure) {
+        if (state is SignUpFailure) {
           setState(() => _proceed = false);
           Flushbar(
-            title: "Sign In Failed",
+            title: "Sign Up Failed",
             message: state.message,
             duration: Duration(seconds: 5),
+            backgroundColor: Colors.red[300],
           )..show(context);
         }
       },
@@ -168,7 +164,7 @@ class _SignUpState extends State<SignUp> {
 
                   // # Sign Up Button
                   Center(
-                    child: BlocBuilder<RegistrationBloc, RegistrationState>(
+                    child: BlocBuilder<SignUpBloc, SignUpState>(
                       builder: (context, state) {
                         return CustomLoadingElevatedButton(
                           onPressed: () async {
@@ -185,9 +181,9 @@ class _SignUpState extends State<SignUp> {
                               // Saving the form information for use during sign up
                               _formKey.currentState.save();
 
-                              // Running the registration started event
-                              _registrationBloc.add(
-                                RegistrationStarted(
+                              // Running the SignUp started event
+                              _signUpBloc.add(
+                                SignUpStarted(
                                   email: _email,
                                   password: _password,
                                 ),
