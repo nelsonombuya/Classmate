@@ -150,19 +150,20 @@ class _SignInViewState extends State<SignInView> {
                           while (_proceed == null)
                             await Future.delayed(Duration(seconds: 3));
 
-                          bool result = _proceed;
-                          setState(() => _proceed = null);
-
-                          return result;
+                          return _proceed;
                         }
                       },
                       onEnd: () {
-                        if (_proceed == null)
-                          setState(() => _areThingsEnabled = true);
-
-                        if (_proceed == true)
+                        if (_proceed == true) {
+                          setState(() => _proceed = null);
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/', (Route<dynamic> route) => false);
+                        } else {
+                          setState(() {
+                            _proceed = null;
+                            _areThingsEnabled = true;
+                          });
+                        }
                       },
                     ),
                   ),
