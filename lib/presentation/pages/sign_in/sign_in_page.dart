@@ -157,6 +157,9 @@ class _SignInViewState extends State<SignInView> {
                         }
                       },
                       onEnd: () {
+                        if (_proceed == null)
+                          setState(() => _areThingsEnabled = true);
+
                         if (_proceed == true)
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/', (Route<dynamic> route) => false);
