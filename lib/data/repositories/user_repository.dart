@@ -12,16 +12,14 @@ class UserRepository {
 
   // # Parser
   UserModel _parseRawData(rawUser) {
-    UserModel user;
-
-    if (rawUser != null) {
-      user.uid = rawUser.user.uid;
-      user.email = rawUser.user.email;
-      user.displayName = rawUser.user.displayName;
-      user.isEmailVerified = rawUser.user.emailVerified;
-    }
-
-    return user;
+    return rawUser == null
+        ? null
+        : UserModel(
+            uid: rawUser.uid,
+            email: rawUser.email,
+            displayName: rawUser.displayName,
+            isEmailVerified: rawUser.emailVerified,
+          );
   }
 
   // # Streams
