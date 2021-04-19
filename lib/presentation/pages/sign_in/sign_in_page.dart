@@ -174,7 +174,7 @@ class _SignInViewState extends State<SignInView> {
             SizedBox(height: Device.height(8.0)),
 
             // # Divider for Coolness
-            CustomDivider(text: 'OR'),
+            CustomDivider(text: 'OR', enabled: _areThingsEnabled),
 
             // # Sized Box for spacing
             SizedBox(height: Device.height(8.0)),

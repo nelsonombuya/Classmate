@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 /// # Custom Divider Widget
 /// Used to create a divider with text in between
 class CustomDivider extends StatefulWidget {
-  CustomDivider({@required this.text});
+  CustomDivider({@required this.text, this.enabled = true});
+  final bool enabled;
   final String text;
 
   @override
@@ -21,13 +22,16 @@ class _CustomDividerState extends State<CustomDivider> {
     Color widgetColor =
         Device.brightness == Brightness.light ? Colors.black87 : Colors.white70;
 
+    Color widgetDisabledColor =
+        Device.brightness == Brightness.light ? Colors.black26 : Colors.white38;
+
     return Row(
       children: [
         // # Line Divider
         Expanded(
           child: Divider(
             thickness: Device.height(0.15),
-            color: widgetColor,
+            color: widget.enabled ? widgetColor : widgetDisabledColor,
           ),
         ),
 
@@ -37,10 +41,8 @@ class _CustomDividerState extends State<CustomDivider> {
         // # Text
         Text(
           widget.text,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2
-              .copyWith(color: widgetColor),
+          style: Theme.of(context).textTheme.subtitle2.copyWith(
+              color: widget.enabled ? widgetColor : widgetDisabledColor),
         ),
 
         // # Blank Space Between line & Text
@@ -50,7 +52,7 @@ class _CustomDividerState extends State<CustomDivider> {
         Expanded(
           child: Divider(
             thickness: Device.height(0.15),
-            color: widgetColor,
+            color: widget.enabled ? widgetColor : widgetDisabledColor,
           ),
         ),
       ],
