@@ -12,14 +12,16 @@ class UserRepository {
 
   // # Parser
   UserModel _parseRawData(rawUser) {
-    return rawUser == null
-        ? null
-        : UserModel(
-            uid: rawUser.uid,
-            email: rawUser.email,
-            displayName: rawUser.displayName,
-            isEmailVerified: rawUser.emailVerified,
-          );
+    if (rawUser == null) return null;
+
+    if (rawUser is UserCredential) rawUser = rawUser.user;
+
+    return UserModel(
+      uid: rawUser.uid,
+      email: rawUser.email,
+      displayName: rawUser.displayName,
+      isEmailVerified: rawUser.emailVerified,
+    );
   }
 
   // # Streams
@@ -50,4 +52,6 @@ class UserRepository {
   }
 
   Future<void> signOut() async => await _firebaseAuth.signOut();
+
+  UserModel currentUser() => _parseRawData(_firebaseAuth.currentUser);
 }

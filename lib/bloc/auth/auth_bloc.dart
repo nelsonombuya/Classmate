@@ -12,16 +12,31 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthInitial());
-
   UserRepository _userRepository = UserRepository();
+  StreamSubscription _authStateChangesStream;
+
+  AuthBloc() : super(AuthInitial()) {
+    // # Listening to Auth State Changes
+    _authStateChangesStream = _userRepository.authStateChanges.listen(
+      (user) => this.add(AuthChanged(user: user)),
+    );
+  }
+
+  // # For Disposing the Stream
+  @override
+  Future<void> close() {
+    _authStateChangesStream.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     // # Listening to Auth State Changes
-    await for (var user in _userRepository.authStateChanges) {
+    if (event is AuthChanged) {
       try {
-        yield (user == null) ? Unauthenticated() : Authenticated(user: user);
+        yield (event.user == null)
+            ? Unauthenticated()
+            : Authenticated(user: event.user);
       } catch (e) {
         yield Unauthenticated();
         yield AuthenticationError(message: ErrorHandler(e).message);
