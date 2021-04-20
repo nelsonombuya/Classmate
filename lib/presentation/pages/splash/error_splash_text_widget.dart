@@ -30,10 +30,10 @@ class ErrorSplashText extends StatelessWidget {
                 'Something went wrong...',
                 colors: _errorStringColors,
                 textAlign: TextAlign.center,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontSize: _headingFontSize),
+                textStyle: Theme.of(context).textTheme.bodyText2.copyWith(
+                      fontSize: _headingFontSize,
+                      fontFamily: "Akrobat",
+                    ),
               ),
             ],
             isRepeatingAnimation: false,
@@ -44,10 +44,11 @@ class ErrorSplashText extends StatelessWidget {
                 errorString,
                 colors: _errorStringColors,
                 textAlign: TextAlign.center,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontSize: _fontSize, fontWeight: FontWeight.w500),
+                textStyle: Theme.of(context).textTheme.bodyText2.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Akrobat",
+                      fontSize: _fontSize,
+                    ),
               ),
             ],
             isRepeatingAnimation: false,

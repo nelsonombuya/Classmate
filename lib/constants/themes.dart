@@ -23,6 +23,11 @@ abstract class Themes {
               color: Colors.black87,
             ),
 
+            headline5: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w400,
+              color: Colors.black87,
+            ),
+
             subtitle1: GoogleFonts.montserrat(
               color: Colors.black38,
             ),
@@ -39,7 +44,7 @@ abstract class Themes {
             bodyText2: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black54,
-              fontFamily: "Akrobat",
+              fontFamily: "Averta",
             ),
 
             button: GoogleFonts.montserrat(
@@ -75,6 +80,11 @@ abstract class Themes {
             headline4: GoogleFonts.montserrat(
               decorationStyle: TextDecorationStyle.dotted,
               decoration: TextDecoration.underline,
+              color: Colors.white70,
+            ),
+
+            headline5: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w400,
               color: Colors.white70,
             ),
 
