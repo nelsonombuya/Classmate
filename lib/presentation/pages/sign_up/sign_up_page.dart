@@ -3,10 +3,11 @@ import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_wid
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_header_widget.dart';
+import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
 import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
 import 'package:classmate/constants/validators.dart';
 import 'package:classmate/constants/device.dart';
-import 'package:another_flushbar/flushbar.dart';
+import 'package:classmate/constants/enums.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/Material.dart';
 import 'dart:async';
@@ -44,8 +45,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
     SignUpBloc _signUpBloc = BlocProvider.of<SignUpBloc>(context);
+    Device().init(context);
 
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
@@ -53,12 +54,12 @@ class _SignUpState extends State<SignUp> {
 
         if (state is SignUpFailure) {
           setState(() => _proceed = false);
-          Flushbar(
+          CustomSnackBar(
+            context,
             title: "Sign Up Failed",
             message: state.message,
-            duration: Duration(seconds: 5),
-            backgroundColor: Colors.red[300],
-          )..show(context);
+            type: NotificationType.Error,
+          );
         }
       },
       child: FormView(
