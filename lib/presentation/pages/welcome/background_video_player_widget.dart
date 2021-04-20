@@ -1,6 +1,6 @@
 // # Imports
-import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 /// # Background Video Player
 /// Used to play a video background on any screen
@@ -36,7 +36,7 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
   @override
   void dispose() {
     super.dispose();
-    setState(() => _controller.pause());
+    _controller.pause();
   }
 
   @override
