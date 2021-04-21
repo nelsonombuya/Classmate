@@ -7,7 +7,6 @@ import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
 import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
 import 'package:classmate/constants/validators.dart';
 import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/enums.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/Material.dart';
 import 'dart:async';

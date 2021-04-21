@@ -1,8 +1,10 @@
 // # Imports
-import 'package:classmate/constants/device.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:classmate/constants/enums.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
+
+/// # Notification Types
+enum NotificationType { Error, Info, Warning }
 
 /// # Custom Snack Bar
 /// Used to give snack bar notifications to the user
@@ -19,24 +21,35 @@ class CustomSnackBar {
     this.title,
     this.type,
   }) {
-    // Setting the Dimensions
     Device().init(context);
     _showSnackBar();
   }
 
-  /// # Template to be used by all Snack Bars
+  /// ## Template to be used by all Snack Bars
   /// Minimizes redundancy
-  Flushbar _template({IconData icon, Color iconColor, Color backgroundColor}) {
+  Flushbar _template({
+    IconData icon,
+    Color iconColor,
+    Color titleColor,
+    Color messageColor,
+    Color backgroundColor,
+    bool shouldIconPulse = false,
+  }) {
     return Flushbar(
       title: title,
       message: message,
+      titleColor: titleColor,
+      messageColor: messageColor,
+      duration: Duration(seconds: 5),
+      shouldIconPulse: shouldIconPulse,
       messageSize: Device.height(1.86),
+      positionOffset: Device.height(10.0),
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      backgroundColor: backgroundColor ?? Color(0xFF303030),
       margin: EdgeInsets.symmetric(
         horizontal: Device.width(3.0),
         vertical: Device.height(1.0),
       ),
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      backgroundColor: backgroundColor ?? Color(0xFF303030),
       icon: Padding(
         padding: EdgeInsets.only(left: Device.width(2.0)),
         child: Icon(
@@ -45,26 +58,31 @@ class CustomSnackBar {
           color: iconColor ?? Colors.white,
         ),
       ),
-      shouldIconPulse: false,
-      duration: Duration(seconds: 5),
     )..show(context);
   }
 
-  /// # Show Snack Bar
+  /// ## Show Snack Bar
   /// Shows the snackbar according to the predefined template
   void _showSnackBar() {
     switch (type) {
       case (NotificationType.Error):
         _template(
+          backgroundColor: Colors.red[600],
           icon: Icons.error_outline_rounded,
-          backgroundColor: Device.brightness == Brightness.light
-              ? Colors.red[400]
-              : Colors.red[600],
         );
         break;
 
       case (NotificationType.Info):
-        _template(icon: Icons.error_outline_rounded, iconColor: Colors.blue);
+        _template(icon: Icons.info_outline_rounded);
+        break;
+
+      case (NotificationType.Warning):
+        _template(
+          iconColor: Colors.black,
+          messageColor: Colors.black,
+          icon: Icons.warning_amber_rounded,
+          backgroundColor: Colors.amber[600],
+        );
         break;
 
       default:
