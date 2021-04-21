@@ -1,9 +1,9 @@
 // # Imports
+import 'package:classmate/constants/device.dart';
 import 'package:classmate/presentation/pages/welcome/background_video_player_widget.dart';
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
 import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
 
 /// # Welcome Page

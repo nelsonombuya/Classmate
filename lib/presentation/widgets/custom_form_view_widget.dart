@@ -1,8 +1,7 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'custom_appbar_widget.dart';
 
 /// # Form View Widget
 /// A collection of Widgets standardly used in the app's forms.
@@ -17,29 +16,30 @@ class FormView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-    return Scaffold(
-      appBar: CustomAppBar(),
-      body: GestureDetector(
-        onTap: () {
-          /// * This method here will hide the soft keyboard.
-          /// * Whe the user taps outside a text box
-          /// Thanks Ali Hussam
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: SingleChildScrollView(
-          child: Material(
-            child: SafeArea(
+
+    return CustomScrollView(
+      slivers: <Widget>[
+        CustomAppBar(title: title),
+        SliverFillRemaining(
+          child: GestureDetector(
+            onTap: () {
+              /// * This method here will hide the soft keyboard.
+              /// * Whe the user taps outside a text box
+              /// Thanks Ali Hussam
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Material(
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: Device.width(7.0),
                   vertical: Device.height(2.0),
                 ),
-                child: child,
+                child: SingleChildScrollView(child: child),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

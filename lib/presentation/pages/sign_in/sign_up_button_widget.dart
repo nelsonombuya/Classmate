@@ -1,7 +1,7 @@
 // # Imports
-import 'package:classmate/presentation/pages/sign_in/custom_elevatedButton_widget.dart';
-import 'package:classmate/constants/routes.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/routes.dart';
+import 'package:classmate/presentation/pages/sign_in/custom_elevatedButton_widget.dart';
 import 'package:flutter/material.dart';
 
 /// # Sign Up Button
@@ -14,6 +14,7 @@ class SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
+
     return Center(
       child: Column(
         children: [

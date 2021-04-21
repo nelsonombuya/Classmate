@@ -10,6 +10,7 @@ class SignInWithEmailButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
+
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(
         width: Device.width(64.0),
@@ -18,7 +19,7 @@ class SignInWithEmailButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => Routes.sailor('/sign_in'),
         child: Text(
-          'Sign In With E-Mail',
+          'Sign in with E-Mail',
           style: Theme.of(context).textTheme.button,
         ),
       ),

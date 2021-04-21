@@ -1,17 +1,16 @@
 // # Dart Imports
-import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
+import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
+import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/validators.dart';
+import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart';
 import 'package:classmate/presentation/pages/sign_in/forgot_password_widget.dart';
 import 'package:classmate/presentation/pages/sign_in/sign_up_button_widget.dart';
-import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
-import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
-import 'package:classmate/presentation/widgets/custom_header_widget.dart';
+import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
 import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
-import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
-import 'package:classmate/constants/validators.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:flutter/Material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // # Sign In Page
 class SignInPage extends StatelessWidget {
@@ -30,6 +29,7 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
+  // * Info collected from the Form
   String _email, _password;
 
   // * Used to disable Fields and Buttons during sign In
@@ -42,7 +42,6 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    SignInBloc _signInBloc = BlocProvider.of<SignInBloc>(context);
     Device().init(context);
 
     return BlocListener<SignInBloc, SignInState>(
@@ -53,22 +52,17 @@ class _SignInViewState extends State<SignInView> {
           setState(() => _proceed = false);
           CustomSnackBar(
             context,
-            title: "Sign In Failed",
             message: state.message,
+            title: "Sign In Failed",
             type: NotificationType.Error,
           );
         }
       },
       child: FormView(
+        title: "Sign In",
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // # Sign In Header Text
-            CustomHeader(
-              heading: 'SIGN IN',
-              subheading: 'Sign in to continue',
-            ),
-
             // # Sized Box for spacing
             SizedBox(height: Device.height(2.0)),
 
@@ -134,7 +128,7 @@ class _SignInViewState extends State<SignInView> {
                           _formKey.currentState.save();
 
                           // Running the registration started event
-                          _signInBloc.add(
+                          BlocProvider.of<SignInBloc>(context).add(
                             SignInStarted(
                               email: _email,
                               password: _password,

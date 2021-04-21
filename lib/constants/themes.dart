@@ -1,6 +1,6 @@
 // # Imports
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // # Class used for the overall app theme
 abstract class Themes {
@@ -17,23 +17,25 @@ abstract class Themes {
               color: Colors.black54,
             ),
 
-            headline4: GoogleFonts.montserrat(
-              decorationStyle: TextDecorationStyle.dotted,
-              decoration: TextDecoration.underline,
+            headline4: TextStyle(
               color: Colors.black87,
+              fontFamily: "Averta",
             ),
 
-            headline5: GoogleFonts.montserrat(
+            headline5: TextStyle(
               fontWeight: FontWeight.w400,
               color: Colors.black87,
+              fontFamily: "Averta",
             ),
 
-            subtitle1: GoogleFonts.montserrat(
+            subtitle1: TextStyle(
               color: Colors.black38,
+              fontFamily: "Averta",
             ),
 
-            subtitle2: GoogleFonts.montserrat(
+            subtitle2: TextStyle(
               color: Colors.black38,
+              fontFamily: "Averta",
             ),
 
             bodyText1: TextStyle(
@@ -49,6 +51,8 @@ abstract class Themes {
 
             button: GoogleFonts.montserrat(
               fontWeight: FontWeight.w500,
+              // fontFamily: "Averta",
+              // fontSize: 16,
             ),
 
             caption: GoogleFonts.montserrat(
@@ -77,23 +81,25 @@ abstract class Themes {
               color: Colors.white54,
             ),
 
-            headline4: GoogleFonts.montserrat(
-              decorationStyle: TextDecorationStyle.dotted,
-              decoration: TextDecoration.underline,
+            headline4: TextStyle(
               color: Colors.white70,
+              fontFamily: "Averta",
             ),
 
-            headline5: GoogleFonts.montserrat(
+            headline5: TextStyle(
               fontWeight: FontWeight.w400,
               color: Colors.white70,
+              fontFamily: "Averta",
             ),
 
-            subtitle1: GoogleFonts.montserrat(
+            subtitle1: TextStyle(
               color: Colors.white38,
+              fontFamily: "Averta",
             ),
 
-            subtitle2: GoogleFonts.montserrat(
+            subtitle2: TextStyle(
               color: Colors.white38,
+              fontFamily: "Averta",
             ),
 
             bodyText1: TextStyle(
@@ -109,6 +115,8 @@ abstract class Themes {
 
             button: GoogleFonts.montserrat(
               fontWeight: FontWeight.w500,
+              // fontFamily: "Averta",
+              // fontSize: 16,
             ),
 
             caption: GoogleFonts.montserrat(

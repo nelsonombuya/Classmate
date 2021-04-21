@@ -1,15 +1,15 @@
 // # Dart Imports
-import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
-import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
-import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
-import 'package:classmate/presentation/widgets/custom_header_widget.dart';
-import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
-import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
-import 'package:classmate/constants/validators.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/Material.dart';
 import 'dart:async';
+
+import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
+import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/validators.dart';
+import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
+import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
+import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
+import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
+import 'package:flutter/Material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // # BlocProvider for the Page
 class SignUpPage extends StatelessWidget {
@@ -29,6 +29,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  // * Info collected from the form
   String _firstName, _lastName, _email, _password;
 
   // * Global Key for Form Validation
@@ -44,7 +45,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    SignUpBloc _signUpBloc = BlocProvider.of<SignUpBloc>(context);
     Device().init(context);
 
     return BlocListener<SignUpBloc, SignUpState>(
@@ -62,22 +62,17 @@ class _SignUpState extends State<SignUp> {
         }
       },
       child: FormView(
+        title: "Sign Up",
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // # Sign Up Header Text
-            CustomHeader(
-              heading: 'SIGN UP',
-              subheading: 'Create a new account',
-            ),
-
             // # Sized Box for spacing
             SizedBox(height: Device.height(2.0)),
 
             // # Form
             Form(
-              key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: _formKey,
               child: Column(
                 children: [
                   // # Names
@@ -182,7 +177,7 @@ class _SignUpState extends State<SignUp> {
                               _formKey.currentState.save();
 
                               // Running the SignUp started event
-                              _signUpBloc.add(
+                              BlocProvider.of<SignUpBloc>(context).add(
                                 SignUpStarted(
                                   email: _email,
                                   password: _password,
