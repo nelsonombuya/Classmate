@@ -1,19 +1,10 @@
 // # Imports
-import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/welcome/welcome_page.dart';
 import 'package:classmate/presentation/pages/sign_in/sign_in_page.dart';
 import 'package:classmate/presentation/pages/sign_up/sign_up_page.dart';
+import 'package:classmate/presentation/pages/home/home.dart';
 import 'package:classmate/presentation/init.dart';
-import 'package:flutter/material.dart';
 import 'package:sailor/sailor.dart';
-
-// * Older Routes (Just in Case)
-dynamic customRoutes = <String, WidgetBuilder>{
-  '/': (context) => Init(),
-  '/welcome': (context) => WelcomePage(),
-  '/sign_in': (context) => SignInPage(),
-  '/sign_up': (context) => SignUpPage(),
-};
 
 // # Sailor Routes
 // TODO Add Transitions
@@ -38,8 +29,8 @@ class Routes {
     );
     sailor.addRoute(
       SailorRoute(
-        name: "/dashboard",
-        builder: (context, args, params) => DashboardPage(args),
+        name: "/home",
+        builder: (context, args, params) => Home(args),
       ),
     );
   }

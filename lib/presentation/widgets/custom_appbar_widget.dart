@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 /// Completely flat
 /// With Blue Buttons
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  CustomAppBar({this.title});
+  CustomAppBar({this.title, this.actions});
+  final List<Widget> actions;
   final String title;
 
   @override
@@ -17,8 +18,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0.0,
       backgroundColor: Colors.transparent,
-      title: title == null ? null : Text(title),
+      title: title == null
+          ? null
+          : Text(title, style: Theme.of(context).textTheme.headline5),
+      centerTitle: true,
       iconTheme: IconThemeData(color: Colors.blue),
+      actions: actions,
     );
   }
 }
