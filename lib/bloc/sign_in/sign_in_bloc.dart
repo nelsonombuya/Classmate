@@ -1,6 +1,7 @@
-import 'package:classmate/data/repositories/user_repository.dart';
-import 'package:classmate/constants/error_handler.dart';
-import 'package:classmate/data/models/user_model.dart';
+import '../../data/repositories/user_repository.dart';
+import '../../constants/error_handler.dart';
+import '../../data/models/user_model.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
