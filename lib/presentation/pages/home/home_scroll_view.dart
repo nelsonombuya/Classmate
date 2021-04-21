@@ -8,12 +8,14 @@ class HomeScrollView extends StatelessWidget {
     @required this.labels,
     @required this.pages,
     this.actions,
+    this.leading,
   });
 
   final List<Widget> actions;
   final List<String> labels;
   final List<Widget> pages;
   final int currentIndex;
+  final Widget leading;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class HomeScrollView extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
+          leading: leading,
           pinned: true,
           elevation: 0.0,
           actions: actions,

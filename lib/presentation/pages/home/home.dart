@@ -1,9 +1,12 @@
 // # Imports
 import 'package:classmate/bloc/auth/auth_bloc.dart';
+import 'package:classmate/constants/device.dart';
 import 'package:classmate/data/models/user_model.dart';
 import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
+import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:classmate/presentation/pages/home/home_arguments.dart';
 import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
+import 'package:classmate/presentation/widgets/avatar_widget.dart';
 import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:flutter/material.dart';
@@ -51,10 +54,13 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    // * For Measurements
+    Device().init(context);
+
     // * Pages
     final List<Widget> _pages = [
       DashboardPage(user: widget.user, authBloc: widget.auth),
-      Container(color: Colors.amber),
+      EventsPage(user: widget.user, authBloc: widget.auth),
       Container(color: Colors.green),
       Container(color: Colors.blue),
       Container(),
@@ -85,13 +91,12 @@ class _HomeViewState extends State<HomeView> {
     ];
 
     // * Page Actions
-    List<Widget> _commonActions = [NotificationsWidget()];
     Map<int, List<Widget>> _pageActions = {
-      0: List.from(_commonActions)..addAll([]),
-      1: List.from(_commonActions)..addAll([]),
-      2: List.from(_commonActions)..addAll([]),
-      3: List.from(_commonActions)..addAll([]),
-      4: List.from(_commonActions)..addAll([]),
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+      4: [],
     };
 
     return Scaffold(
@@ -100,7 +105,9 @@ class _HomeViewState extends State<HomeView> {
         pages: _pages,
         labels: _labels,
         currentIndex: _currentIndex,
-        actions: _pageActions[_currentIndex],
+        leading: Avatar(initials: widget.user.uid),
+        actions: List<Widget>.from(_pageActions[_currentIndex])
+          ..add(NotificationsWidget()),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
