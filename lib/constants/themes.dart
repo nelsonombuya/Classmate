@@ -65,8 +65,8 @@ abstract class Themes {
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: Colors.black,
-      canvasColor: Colors.black,
+      scaffoldBackgroundColor: Colors.black87,
+      canvasColor: Colors.black87,
       accentColor: Colors.blue,
 
       // * Text Themes
@@ -104,7 +104,7 @@ abstract class Themes {
             bodyText2: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white60,
-              fontFamily: "Akrobat",
+              fontFamily: "Averta",
             ),
 
             button: GoogleFonts.montserrat(

@@ -1,21 +1,18 @@
 // # Imports
-import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
 import 'package:classmate/bloc/auth/auth_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:classmate/constants/device.dart';
+import 'package:classmate/data/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'dashboard_page_arguments.dart';
 
 /// # Dashboard Page
 class DashboardPage extends StatelessWidget {
-  DashboardPage(this.args);
-  final DashboardArgs args;
+  DashboardPage({@required this.user, @required this.authBloc});
+  final AuthBloc authBloc;
+  final UserModel user;
 
   @override
-  Widget build(BuildContext context) {
-    var _user = args.user;
-    final AuthBloc _auth = BlocProvider.of<AuthBloc>(context);
-    return DashboardView(user: _user, auth: _auth);
-  }
+  Widget build(BuildContext context) =>
+      DashboardView(user: user, auth: authBloc);
 }
 
 class DashboardView extends StatelessWidget {
@@ -25,32 +22,7 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Text('Hey User'),
-              Text('Your e-mail is ${user.email}'),
-              TextButton(
-                onPressed: () {
-                  auth.add(AuthRemoved());
-                  // Navigator.of(context).pushNamedAndRemoveUntil(
-                  //     '/', (Route<dynamic> route) => false);
-                },
-                child: Text(
-                  'Sign Out',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(color: Colors.red),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+    Device().init(context);
+    return Container(color: Colors.redAccent);
   }
 }

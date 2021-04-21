@@ -1,12 +1,13 @@
 // # Imports
-import 'package:classmate/presentation/pages/home/custom_bottom_navigation_bar.dart';
-import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
-import 'package:classmate/presentation/pages/home/home_arguments.dart';
-import 'package:classmate/data/models/user_model.dart';
 import 'package:classmate/bloc/auth/auth_bloc.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:classmate/data/models/user_model.dart';
+import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
+import 'package:classmate/presentation/pages/home/home_arguments.dart';
+import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
+import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
+import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// # Home
 /// Acts as a wrapper around the other pages
@@ -26,9 +27,9 @@ class Home extends StatelessWidget {
 }
 
 class HomeView extends StatefulWidget {
-  HomeView({this.user, this.auth});
+  HomeView({@required this.user, @required this.auth});
+  final UserModel user;
   final AuthBloc auth;
-  final user;
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -39,64 +40,72 @@ class _HomeViewState extends State<HomeView> {
   void _onTabTapped(int index) => setState(() => _currentIndex = index);
   int _currentIndex = 0;
 
-  // * Pages
-  final List<Widget> _pages = [
-    Text("Dashboard Page"),
-    Text("Events Page"),
-    Text("Add Items Page"),
-    Text("Tasks Page"),
-    Text("More Page"),
-  ];
-
-  // * Bottom Navigation Bar Items
-  List<BottomNavigationBarItem> bottomNavBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.dashboard_rounded),
-      label: 'Dashboard',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.calendar_today_rounded),
-      label: 'Events',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.add_rounded),
-      label: "Add Items",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.check_circle_outline_rounded),
-      label: 'Tasks',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.more_horiz_rounded),
-      label: 'More',
-    )
+  // * Tab Labels and Page Titles
+  final List<String> _labels = [
+    "Dashboard",
+    "Events",
+    "Add Items",
+    "Tasks",
+    "More",
   ];
 
   @override
   Widget build(BuildContext context) {
+    // * Pages
+    final List<Widget> _pages = [
+      DashboardPage(user: widget.user, authBloc: widget.auth),
+      Container(color: Colors.amber),
+      Container(color: Colors.green),
+      Container(color: Colors.blue),
+      Container(),
+    ];
+
+    // * Bottom Navigation Bar Items
+    List<BottomNavigationBarItem> _bottomNavBarItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard_rounded),
+        label: _labels[0],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.calendar_today_rounded),
+        label: _labels[1],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.add_rounded),
+        label: _labels[2],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.check_circle_outline_rounded),
+        label: _labels[3],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.more_horiz_rounded),
+        label: _labels[4],
+      )
+    ];
+
+    // * Page Actions
+    List<Widget> _commonActions = [NotificationsWidget()];
+    Map<int, List<Widget>> _pageActions = {
+      0: List.from(_commonActions)..addAll([]),
+      1: List.from(_commonActions)..addAll([]),
+      2: List.from(_commonActions)..addAll([]),
+      3: List.from(_commonActions)..addAll([]),
+      4: List.from(_commonActions)..addAll([]),
+    };
+
     return Scaffold(
       extendBody: true,
-      body: _pages[_currentIndex],
+      body: HomeScrollView(
+        pages: _pages,
+        labels: _labels,
+        currentIndex: _currentIndex,
+        actions: _pageActions[_currentIndex],
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
-        items: bottomNavBarItems,
+        items: _bottomNavBarItems,
         onTap: _onTabTapped,
-      ),
-
-      // ! TO BE CHANGED
-      appBar: CustomAppBar(
-        title: 'DASHBOARD',
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notifications,
-              color: Device.brightness == Brightness.light
-                  ? Colors.black87
-                  : Colors.white70,
-            ),
-          ),
-        ],
       ),
     );
   }
