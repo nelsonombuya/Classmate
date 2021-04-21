@@ -105,9 +105,9 @@ class _HomeViewState extends State<HomeView> {
         pages: _pages,
         labels: _labels,
         currentIndex: _currentIndex,
-        leading: Avatar(initials: widget.user.uid),
         actions: List<Widget>.from(_pageActions[_currentIndex])
           ..add(NotificationsWidget()),
+        leading: Avatar(initials: widget.user.initials, authBloc: widget.auth),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,

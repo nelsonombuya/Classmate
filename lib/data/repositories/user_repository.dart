@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_model.dart';
 
@@ -17,6 +17,7 @@ class UserRepository {
     if (rawUser is UserCredential) rawUser = rawUser.user;
 
     return UserModel(
+      initials: "N/A",
       uid: rawUser.uid,
       email: rawUser.email,
       displayName: rawUser.displayName,
