@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
 
     // ### App Bar
     // * Leading Widget
-    Widget _leading = Avatar(initials: _user.initials, authBloc: _auth);
+    Widget _leading = Avatar(displayName: _user.displayName, authBloc: _auth);
 
     // * Page Actions
     List<Widget> _actions = [NotificationsWidget()];

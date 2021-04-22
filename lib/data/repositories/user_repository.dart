@@ -16,7 +16,6 @@ class UserRepository {
     if (rawUser is UserCredential) rawUser = rawUser.user;
 
     return UserModel(
-      initials: "N/A",
       uid: rawUser.uid,
       email: rawUser.email,
       displayName: rawUser.displayName,
@@ -52,9 +51,14 @@ class UserRepository {
     );
   }
 
+  Future<void> updateProfile({String displayName, String photoToURL}) async {
+    return await _firebaseAuth.currentUser
+        .updateProfile(displayName: displayName, photoURL: photoToURL);
+  }
+
   UserModel currentUser() => _parseRawData(_firebaseAuth.currentUser);
 
-  Future<void> signOut() async => await _firebaseAuth.signOut();
+  bool isUserSignedIn() => this._firebaseAuth.currentUser != null;
 
-  bool isUserSignedIn() => this.currentUser() != null;
+  Future<void> signOut() async => await _firebaseAuth.signOut();
 }

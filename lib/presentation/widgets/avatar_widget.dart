@@ -7,10 +7,10 @@ import '../../constants/device.dart';
 /// # Avatar Widget
 /// Used on the App Bar to allow the user to perform various account functions
 class Avatar extends StatelessWidget {
-  Avatar({this.image, this.initials, @required this.authBloc});
+  Avatar({this.image, this.displayName, @required this.authBloc});
   final ImageProvider image;
+  final String displayName;
   final AuthBloc authBloc; // * Used for Signing Out
-  final String initials;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class Avatar extends StatelessWidget {
       onPressed: () => _showAlertDialog(context),
       icon: CircleAvatar(
         backgroundColor: image != null ? null : Colors.white70,
-        child: image != null ? null : Text(initials),
+        child: image != null ? null : Text(displayName ?? "N/A"),
         backgroundImage: image,
         radius: 16.0,
       ),
