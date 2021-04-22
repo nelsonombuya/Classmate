@@ -1,7 +1,7 @@
 // # Imports
-import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
 /// # Custom Bottom Navigation Bar
 /// ! Depends on Snake Navigation Bar
@@ -35,12 +35,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     if (Device.brightness == Brightness.light) {
       // * Light Mode Settings
-      _backgroundColor = Colors.white70;
+      _backgroundColor = Colors.white;
       _selectedItemColor = Colors.black87;
       _unselectedItemColor = Colors.black38;
     } else {
       // * Dark Mode Settings
-      _backgroundColor = Colors.black87;
+      _backgroundColor = Colors.black;
       _selectedItemColor = Colors.white70;
       _unselectedItemColor = Colors.white38;
     }
@@ -48,19 +48,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return SnakeNavigationBar.color(
       onTap: onTap,
       items: items,
-      elevation: 2.0,
       height: Device.height(8),
       showSelectedLabels: true,
       showUnselectedLabels: true,
       currentIndex: currentIndex,
-      snakeShape: SnakeShape.indicator,
       selectedLabelStyle: _labelStyle,
       unselectedLabelStyle: _labelStyle,
       backgroundColor: _backgroundColor,
       snakeViewColor: _selectedItemColor,
       selectedItemColor: _selectedItemColor,
       unselectedItemColor: _unselectedItemColor,
-      behaviour: SnakeBarBehaviour.floating,
+      snakeShape: SnakeShape.indicator,
     );
   }
 }
