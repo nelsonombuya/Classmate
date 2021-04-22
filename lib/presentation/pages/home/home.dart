@@ -1,6 +1,5 @@
 // # Imports
 import 'package:classmate/bloc/auth/auth_bloc.dart';
-import 'package:classmate/constants/device.dart';
 import 'package:classmate/data/models/user_model.dart';
 import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/events/events_page.dart';
@@ -25,12 +24,85 @@ class Home extends StatelessWidget {
     final AuthBloc _auth = BlocProvider.of<AuthBloc>(context);
     final UserModel _user = args.user;
 
-    return HomeView(user: _user, auth: _auth);
+    // ### App Bar
+    // * Leading Widget
+    Widget _leading = Avatar(initials: _user.initials, authBloc: _auth);
+
+    // * Page Actions
+    List<Widget> _actions = [NotificationsWidget()];
+
+    // ### Content
+    // * Tab Labels and Page Titles
+    final List<String> _titles = [
+      "Dashboard",
+      "Events",
+      "Add Items",
+      "Tasks",
+      "More",
+    ];
+
+    // * Pages
+    final List<Widget> _pages = [
+      DashboardPage(user: _user, authBloc: _auth),
+      EventsPage(user: _user, authBloc: _auth),
+      Container(color: Colors.blue, child: Center(child: Text("ADD ITEMS"))),
+      Container(color: Colors.yellow, child: Center(child: Text("TASKS"))),
+      Container(color: Colors.green, child: Center(child: Text("MORE"))),
+    ];
+
+    // ### Bottom Navigation Bar
+    // * Bottom Navigation Bar Items
+    List<BottomNavigationBarItem> _bottomNavBarItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard_rounded),
+        label: _titles[0],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.calendar_today_rounded),
+        label: _titles[1],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.add_rounded),
+        label: _titles[2],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.check_circle_outline_rounded),
+        label: _titles[3],
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.more_horiz_rounded),
+        label: _titles[4],
+      )
+    ];
+
+    return HomeView(
+      user: _user,
+      auth: _auth,
+      pages: _pages,
+      titles: _titles,
+      actions: _actions,
+      leading: _leading,
+      bottomNavBarItems: _bottomNavBarItems,
+    );
   }
 }
 
 class HomeView extends StatefulWidget {
-  HomeView({@required this.user, @required this.auth});
+  HomeView({
+    @required this.user,
+    @required this.auth,
+    @required this.pages,
+    @required this.titles,
+    @required this.leading,
+    @required this.actions,
+    @required this.bottomNavBarItems,
+  });
+
+  final List<BottomNavigationBarItem> bottomNavBarItems;
+  final List<Widget> actions;
+  final List<String> titles;
+  final List<Widget> pages;
+  final Widget leading;
   final UserModel user;
   final AuthBloc auth;
 
@@ -43,75 +115,19 @@ class _HomeViewState extends State<HomeView> {
   void _onTabTapped(int index) => setState(() => _currentIndex = index);
   int _currentIndex = 0;
 
-  // * Tab Labels and Page Titles
-  final List<String> _labels = [
-    "Dashboard",
-    "Events",
-    "Add Items",
-    "Tasks",
-    "More",
-  ];
-
   @override
   Widget build(BuildContext context) {
-    // * For Measurements
-    Device().init(context);
-
-    // * Pages
-    final List<Widget> _pages = [
-      DashboardPage(user: widget.user, authBloc: widget.auth),
-      EventsPage(user: widget.user, authBloc: widget.auth),
-      Container(color: Colors.green),
-      Container(color: Colors.blue),
-      Container(),
-    ];
-
-    // * Bottom Navigation Bar Items
-    List<BottomNavigationBarItem> _bottomNavBarItems = [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.dashboard_rounded),
-        label: _labels[0],
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.calendar_today_rounded),
-        label: _labels[1],
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.add_rounded),
-        label: _labels[2],
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.check_circle_outline_rounded),
-        label: _labels[3],
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.more_horiz_rounded),
-        label: _labels[4],
-      )
-    ];
-
-    // * Page Actions
-    Map<int, List<Widget>> _pageActions = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-    };
-
     return Scaffold(
       extendBody: true,
       body: HomeScrollView(
-        pages: _pages,
-        labels: _labels,
-        currentIndex: _currentIndex,
-        actions: List<Widget>.from(_pageActions[_currentIndex])
-          ..add(NotificationsWidget()),
-        leading: Avatar(initials: widget.user.initials, authBloc: widget.auth),
+        actions: widget.actions,
+        leading: widget.leading,
+        child: widget.pages[_currentIndex],
+        title: widget.titles[_currentIndex],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
+        items: widget.bottomNavBarItems,
         currentIndex: _currentIndex,
-        items: _bottomNavBarItems,
         onTap: _onTabTapped,
       ),
     );

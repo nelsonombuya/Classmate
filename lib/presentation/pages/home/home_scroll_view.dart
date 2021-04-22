@@ -4,18 +4,16 @@ import '../../../constants/device.dart';
 
 class HomeScrollView extends StatelessWidget {
   HomeScrollView({
-    @required this.currentIndex,
-    @required this.labels,
-    @required this.pages,
+    this.title,
+    this.child,
     this.actions,
     this.leading,
   });
 
-  final List<Widget> actions;
-  final List<String> labels;
-  final List<Widget> pages;
-  final int currentIndex;
+  final String title;
+  final Widget child;
   final Widget leading;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -24,27 +22,20 @@ class HomeScrollView extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
-          leading: leading,
           pinned: true,
           elevation: 0.0,
           actions: actions,
-          centerTitle: true,
-          expandedHeight: kToolbarHeight * 2.0,
+          leading: leading,
+          expandedHeight: kToolbarHeight * 3.0,
           backgroundColor: Device.brightness == Brightness.light
               ? Colors.white70
               : Colors.black87,
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
-            title: Text(
-              labels[currentIndex],
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(fontFamily: "Averta"),
-            ),
+            title: Text(title, style: Theme.of(context).textTheme.headline5),
           ),
         ),
-        SliverFillRemaining(child: pages[currentIndex]),
+        SliverFillRemaining(child: child),
       ],
     );
   }
