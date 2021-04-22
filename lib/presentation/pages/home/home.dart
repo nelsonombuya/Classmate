@@ -8,6 +8,7 @@ import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
 import 'package:classmate/presentation/widgets/avatar_widget.dart';
 import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:classmate/presentation/widgets/notifications_widget.dart';
+import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +27,7 @@ class Home extends StatelessWidget {
 
     // ### App Bar
     // * Leading Widget
-    Widget _leading = Avatar(displayName: _user.displayName, authBloc: _auth);
+    Widget _leading = SignOutButton();
 
     // * Page Actions
     List<Widget> _actions = [NotificationsWidget()];
