@@ -26,11 +26,11 @@ class UserRepository {
   }
 
   // # Streams
-  Stream<UserModel> get authStateChanges async* {
-    /// * authStateChanges Returns a UserModel Object when the user is signed in
-    /// * And null when the user is not signed in
-    await for (var rawUser in _firebaseAuth.authStateChanges())
-      yield _parseRawData(rawUser);
+  Stream<UserModel> get authStateChanges {
+    /// authStateChanges Returns a UserModel Object when the user is signed in
+    /// And null when the user is not signed in
+    /// Has been set to only return distinct values
+    return _firebaseAuth.authStateChanges().distinct().map(_parseRawData);
   }
 
   // # Methods
@@ -52,7 +52,9 @@ class UserRepository {
     );
   }
 
+  UserModel currentUser() => _parseRawData(_firebaseAuth.currentUser);
+
   Future<void> signOut() async => await _firebaseAuth.signOut();
 
-  UserModel currentUser() => _parseRawData(_firebaseAuth.currentUser);
+  bool isUserSignedIn() => this.currentUser() != null;
 }
