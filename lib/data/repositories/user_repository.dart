@@ -13,7 +13,6 @@ class UserRepository {
   // # Parser
   UserModel _parseRawData(rawUser) {
     if (rawUser == null) return null;
-
     if (rawUser is UserCredential) rawUser = rawUser.user;
 
     return UserModel(
@@ -21,6 +20,7 @@ class UserRepository {
       uid: rawUser.uid,
       email: rawUser.email,
       displayName: rawUser.displayName,
+      updateProfile: rawUser.updateProfile,
       isEmailVerified: rawUser.emailVerified,
     );
   }

@@ -4,12 +4,14 @@ class UserModel {
   String initials;
   String displayName;
   bool isEmailVerified;
+  Function updateProfile;
 
   UserModel({
     this.uid,
     this.email,
     this.initials,
     this.displayName,
+    this.updateProfile,
     this.isEmailVerified,
   });
 }
