@@ -17,29 +17,35 @@ class FormView extends StatelessWidget {
   Widget build(BuildContext context) {
     Device().init(context);
 
-    return CustomScrollView(
-      slivers: <Widget>[
-        CustomAppBar(title: title),
-        SliverFillRemaining(
-          child: GestureDetector(
-            onTap: () {
-              /// * This method here will hide the soft keyboard.
-              /// * Whe the user taps outside a text box
-              /// Thanks Ali Hussam
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: Material(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Device.width(7.0),
-                  vertical: Device.height(2.0),
+    return GestureDetector(
+      onTap: () {
+        /// * This method here will hide the soft keyboard.
+        /// * Whe the user taps outside a text box
+        /// Thanks Ali Hussam
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          CustomAppBar(title: title),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: Device.height(8)),
+                child: Material(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Device.width(7.0),
+                      vertical: Device.height(2.0),
+                    ),
+                    child: SingleChildScrollView(child: child),
+                  ),
                 ),
-                child: SingleChildScrollView(child: child),
               ),
+              childCount: 1,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

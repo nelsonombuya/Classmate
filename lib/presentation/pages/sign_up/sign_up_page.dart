@@ -181,6 +181,8 @@ class _SignUpState extends State<SignUp> {
                                 SignUpStarted(
                                   email: _email,
                                   password: _password,
+                                  lastName: _lastName,
+                                  firstName: _firstName,
                                 ),
                               );
 
