@@ -35,7 +35,15 @@ class HomeScrollView extends StatelessWidget {
             title: Text(title, style: Theme.of(context).textTheme.headline5),
           ),
         ),
-        SliverFillRemaining(child: child),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: Device.height(8)),
+              child: child,
+            ),
+            childCount: 1,
+          ),
+        ),
       ],
     );
   }
