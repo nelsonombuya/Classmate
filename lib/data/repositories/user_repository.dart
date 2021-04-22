@@ -13,6 +13,13 @@ class UserRepository {
   // # Parser
   UserModel _parseRawData(rawUser) {
     if (rawUser == null) return null;
+
+    /// This is so as to use this function to parse data from all functions
+    ///
+    /// Since signUpWithEmail and signUpWithEmail return UserCredential Objects
+    /// Which has the User object at UserCredential.user
+    ///
+    /// While the rest either return void or User Objects directly
     if (rawUser is UserCredential) rawUser = rawUser.user;
 
     return UserModel(

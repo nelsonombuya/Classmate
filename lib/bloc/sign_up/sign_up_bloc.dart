@@ -36,12 +36,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           }
         };
 
-        String displayName =
-            "${event.firstName[0].toUpperCase()}. ${event.lastName[0].toUpperCase()}";
+        String displayName = "${event.firstName} ${event.lastName}";
 
         // Saving their data to the database
-        _userRepository.updateProfile(displayName: displayName);
-        _databaseRepository.updateUserData(user, userData);
+        await _userRepository.updateProfile(displayName: displayName);
+        await _databaseRepository.updateUserData(user, userData);
 
         // Yielding a final success
         yield SignUpSuccess(user: user);
