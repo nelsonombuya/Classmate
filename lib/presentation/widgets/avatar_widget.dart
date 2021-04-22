@@ -9,24 +9,25 @@ import '../../constants/device.dart';
 class Avatar extends StatelessWidget {
   Avatar({this.image, this.initials, @required this.authBloc});
   final ImageProvider image;
-  final AuthBloc authBloc; // Used for Signing Out
+  final AuthBloc authBloc; // * Used for Signing Out
   final String initials;
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
-
     return IconButton(
-      onPressed: () => showAlertDialog(context),
+      onPressed: () => _showAlertDialog(context),
       icon: CircleAvatar(
         backgroundColor: image != null ? null : Colors.white70,
         child: image != null ? null : Text(initials),
         backgroundImage: image,
+        radius: 16.0,
       ),
     );
   }
 
-  showAlertDialog(BuildContext context) {
+  _showAlertDialog(BuildContext context) {
+    Device().init(context);
+
     Widget signOutButton = TextButton(
       onPressed: () {
         Navigator.of(context).pop();
@@ -46,26 +47,21 @@ class Avatar extends StatelessWidget {
       child: Text(
         "CANCEL",
         style: TextStyle(
-          color: Colors.white,
           fontFamily: "Averta",
+          color: Device.brightness == Brightness.light
+              ? Colors.black
+              : Colors.white,
         ),
       ),
     );
 
     AlertDialog alert = AlertDialog(
-      titleTextStyle: Theme.of(context).textTheme.headline6,
-      contentTextStyle:
-          Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 17),
+      title: Text("SIGN OUT"),
       actions: [cancelButton, signOutButton],
-      backgroundColor: Colors.black54,
-      title: Text(
-        "SIGN OUT",
-        textAlign: TextAlign.center,
-      ),
-      content: Text(
-        "Are you sure you want to sign out?",
-        textAlign: TextAlign.center,
-      ),
+      content: Text("Are you sure you want to sign out?"),
+      backgroundColor: Device.brightness == Brightness.light
+          ? Colors.white.withOpacity(0.9)
+          : Colors.black.withOpacity(0.9),
     );
 
     showDialog(context: context, builder: (BuildContext context) => alert);
