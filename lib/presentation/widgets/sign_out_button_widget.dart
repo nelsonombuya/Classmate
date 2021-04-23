@@ -44,7 +44,7 @@ class SignOutButtonWidget extends StatelessWidget {
     Device().init(context);
 
     return IconButton(
-      onPressed: _showSignOutDialog(context, _auth),
+      onPressed: () => _showSignOutDialog(context, _auth),
       icon: Icon(
         Icons.logout,
         color: Device.brightness == Brightness.light
