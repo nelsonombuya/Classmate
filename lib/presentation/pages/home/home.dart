@@ -96,7 +96,21 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   // # Tab Navigation
-  void _onTabTapped(int index) => setState(() => _currentIndex = index);
+  void _onTabTapped(int index) {
+    return setState(() {
+      _currentIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 800),
+        curve: Curves.fastLinearToSlowEaseIn,
+      );
+    });
+  }
+
+  // # Page Swipe Navigation
+  void _onPageSwipe(int index) => setState(() => _currentIndex = index);
+
+  PageController _pageController = PageController();
   int _currentIndex = 0;
 
   @override
@@ -106,8 +120,12 @@ class _HomeViewState extends State<HomeView> {
       body: HomeScrollView(
         actions: widget.actions,
         leading: widget.leading,
-        child: widget.pages[_currentIndex],
         title: widget.titles[_currentIndex],
+        child: PageView(
+          onPageChanged: _onPageSwipe,
+          controller: _pageController,
+          children: widget.pages,
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         items: widget.bottomNavBarItems,
