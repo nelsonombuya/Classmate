@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// # Sign In With Email
 /// Button for signing in with e-mail address on Welcome Page.
 /// Sends the user to the sign in page.
-class SignInWithEmailButton extends StatelessWidget {
+class SignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
@@ -19,7 +19,7 @@ class SignInWithEmailButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => Routes.sailor('/sign_in'),
         child: Text(
-          'Sign in with E-Mail',
+          'SIGN IN',
           style: Theme.of(context).textTheme.button,
         ),
       ),

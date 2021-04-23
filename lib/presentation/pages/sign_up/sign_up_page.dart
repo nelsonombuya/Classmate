@@ -179,10 +179,10 @@ class _SignUpState extends State<SignUp> {
                               // Running the SignUp started event
                               BlocProvider.of<SignUpBloc>(context).add(
                                 SignUpStarted(
-                                  email: _email,
                                   password: _password,
-                                  lastName: _lastName,
-                                  firstName: _firstName,
+                                  email: _email.trim(),
+                                  lastName: _lastName.trim(),
+                                  firstName: _firstName.trim(),
                                 ),
                               );
 

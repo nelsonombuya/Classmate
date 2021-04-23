@@ -2,7 +2,7 @@
 import 'package:classmate/constants/device.dart';
 import 'package:classmate/presentation/pages/welcome/background_video_player_widget.dart';
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
-import 'package:classmate/presentation/pages/welcome/sign_in_with_email_widget.dart';
+import 'package:classmate/presentation/pages/welcome/sign_in_button_widget.dart';
 import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,6 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  // For Lulz 😆
   int _eggCounter = 0;
 
   @override
@@ -30,8 +29,8 @@ class _WelcomePageState extends State<WelcomePage> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // FIXME Crashes after too many re-initializations
-            // ! OOM Crash, comment lines out when testing
+            // FIXME Crashes after too many hot-reloads or hot-restarts
+            // ! OOM Crash, comment out BackgroundVideoPlayer widget when testing
             // # Background Video
             BackgroundVideoPlayer(
               video: 'assets/videos/welcome_screen_$_video.mp4',
@@ -111,7 +110,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     Center(
                       child: Column(
                         children: [
-                          SignInWithEmailButton(),
+                          SignInButton(),
                           SizedBox(height: Device.height(3.0)),
                           CreateANewAccountButton(),
                           SizedBox(height: Device.height(3.0)),

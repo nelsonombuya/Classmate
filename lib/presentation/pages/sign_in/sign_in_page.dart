@@ -130,7 +130,7 @@ class _SignInViewState extends State<SignInView> {
                           // Running the registration started event
                           BlocProvider.of<SignInBloc>(context).add(
                             SignInStarted(
-                              email: _email,
+                              email: _email.trim(),
                               password: _password,
                             ),
                           );

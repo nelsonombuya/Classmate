@@ -10,7 +10,13 @@ abstract class Validator {
   // * Name Validation Rules
   static String nameValidator(String value) {
     if (value.length < 1) return 'Please input a name';
-    return isAlpha(value) ? null : 'Please don\'t input a number';
+
+    if (value[0] == " ") return 'Remove the space before your name';
+
+    if (value[0] != value[0].toUpperCase())
+      return 'Please capitalize the first letter in your name.';
+
+    return isAlpha(value) ? null : "Please don't input a number";
   }
 
   // * Validation for simple passwords

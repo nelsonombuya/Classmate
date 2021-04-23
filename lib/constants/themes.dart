@@ -49,10 +49,10 @@ abstract class Themes {
               fontFamily: "Averta",
             ),
 
-            button: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
-              // fontFamily: "Averta",
-              // fontSize: 16,
+            button: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: "Averta",
+              fontSize: 15,
             ),
 
             caption: GoogleFonts.montserrat(
@@ -113,10 +113,10 @@ abstract class Themes {
               fontFamily: "Averta",
             ),
 
-            button: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
-              // fontFamily: "Averta",
-              // fontSize: 16,
+            button: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: "Averta",
+              fontSize: 15,
             ),
 
             caption: GoogleFonts.montserrat(
