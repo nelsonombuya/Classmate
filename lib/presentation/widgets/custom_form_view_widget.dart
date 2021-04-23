@@ -24,27 +24,29 @@ class FormView extends StatelessWidget {
         /// Thanks Ali Hussam
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: CustomScrollView(
-        slivers: <Widget>[
-          CustomAppBar(title: title),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => SingleChildScrollView(
-                padding: EdgeInsets.only(bottom: Device.height(8)),
-                child: Material(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Device.width(7.0),
-                      vertical: Device.height(2.0),
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            CustomAppBar(title: title),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => SingleChildScrollView(
+                  padding: EdgeInsets.only(bottom: Device.height(8)),
+                  child: Material(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Device.width(7.0),
+                        vertical: Device.height(2.0),
+                      ),
+                      child: SingleChildScrollView(child: child),
                     ),
-                    child: SingleChildScrollView(child: child),
                   ),
                 ),
+                childCount: 1,
               ),
-              childCount: 1,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

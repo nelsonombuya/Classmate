@@ -21,40 +21,42 @@ class HomeScrollView extends StatelessWidget {
     TextStyle _titleStyle = Theme.of(context).textTheme.headline5;
     Device().init(context);
 
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: FlexibleHeaderDelegate(
-            actions: actions,
-            leading: leading,
-            statusBarHeight: MediaQuery.of(context).padding.top,
-            backgroundColor: Device.brightness == Brightness.light
-                ? Colors.white70
-                : Colors.black87,
-            children: [
-              FlexibleTextItem(
-                text: title,
-                collapsedStyle: _titleStyle,
-                collapsedAlignment: Alignment.center,
-                expandedAlignment: Alignment.bottomLeft,
-                expandedStyle: _titleStyle.copyWith(
-                  fontSize: Device.height(7.0),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: FlexibleHeaderDelegate(
+              actions: actions,
+              leading: leading,
+              statusBarHeight: MediaQuery.of(context).padding.top,
+              backgroundColor: Device.brightness == Brightness.light
+                  ? Colors.white70
+                  : Colors.black87,
+              children: [
+                FlexibleTextItem(
+                  text: title,
+                  collapsedStyle: _titleStyle,
+                  collapsedAlignment: Alignment.center,
+                  expandedAlignment: Alignment.bottomLeft,
+                  expandedStyle: _titleStyle.copyWith(
+                    fontSize: Device.height(7.0),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: Device.height(8)),
-              child: child,
+              ],
             ),
-            childCount: 1,
           ),
-        ),
-      ],
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: Device.height(8)),
+                child: child,
+              ),
+              childCount: 1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

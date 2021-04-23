@@ -108,7 +108,7 @@ class _SignInViewState extends State<SignInView> {
                   ForgotPasswordWidget(enabled: _areThingsEnabled),
 
                   // # Sized Box for spacing
-                  SizedBox(height: Device.height(7.0)),
+                  SizedBox(height: Device.height(6.0)),
 
                   // # Sign In Button
                   // ! Can't be extracted
@@ -163,13 +163,13 @@ class _SignInViewState extends State<SignInView> {
             ),
 
             // # Sized Box for spacing
-            SizedBox(height: Device.height(8.0)),
+            SizedBox(height: Device.height(6.0)),
 
             // # Divider for Coolness
             CustomDivider(text: 'OR', enabled: _areThingsEnabled),
 
             // # Sized Box for spacing
-            SizedBox(height: Device.height(8.0)),
+            SizedBox(height: Device.height(6.0)),
 
             // # Sign Up Button
             SignUpButton(enabled: _areThingsEnabled),
