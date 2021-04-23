@@ -5,7 +5,6 @@ import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:classmate/presentation/pages/home/home_arguments.dart';
 import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
-import 'package:classmate/presentation/widgets/avatar_widget.dart';
 import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';

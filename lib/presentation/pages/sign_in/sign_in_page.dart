@@ -1,6 +1,7 @@
 // # Dart Imports
 import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/enums.dart';
 import 'package:classmate/constants/validators.dart';
 import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart';
 import 'package:classmate/presentation/pages/sign_in/forgot_password_widget.dart';
@@ -54,7 +55,7 @@ class _SignInViewState extends State<SignInView> {
             context,
             message: state.message,
             title: "Sign In Failed",
-            type: NotificationType.Error,
+            type: NotificationType.Danger,
           );
         }
       },

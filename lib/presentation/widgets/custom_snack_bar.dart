@@ -1,10 +1,8 @@
 // # Imports
 import 'package:another_flushbar/flushbar.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/enums.dart';
 import 'package:flutter/material.dart';
-
-/// # Notification Types
-enum NotificationType { Error, Info, Warning }
 
 /// # Custom Snack Bar
 /// Used to give snack bar notifications to the user
@@ -65,23 +63,30 @@ class CustomSnackBar {
   /// Shows the snackbar according to the predefined template
   void _showSnackBar() {
     switch (type) {
-      case (NotificationType.Error):
+      case NotificationType.Info:
+        _template(icon: Icons.info_outline_rounded);
+        break;
+
+      case NotificationType.Warning:
+        _template(
+          iconColor: Colors.black,
+          messageColor: Colors.black,
+          icon: Icons.warning_amber_rounded,
+          backgroundColor: Colors.amber[600],
+        );
+        break;
+
+      case NotificationType.Danger:
         _template(
           backgroundColor: Colors.red[600],
           icon: Icons.error_outline_rounded,
         );
         break;
 
-      case (NotificationType.Info):
-        _template(icon: Icons.info_outline_rounded);
-        break;
-
-      case (NotificationType.Warning):
+      case NotificationType.Success:
         _template(
-          iconColor: Colors.black,
-          messageColor: Colors.black,
-          icon: Icons.warning_amber_rounded,
-          backgroundColor: Colors.amber[600],
+          backgroundColor: Colors.green,
+          icon: Icons.error_outline_rounded,
         );
         break;
 

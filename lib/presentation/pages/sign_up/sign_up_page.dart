@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/constants/enums.dart';
 import 'package:classmate/constants/validators.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
@@ -57,7 +58,7 @@ class _SignUpState extends State<SignUp> {
             context,
             title: "Sign Up Failed",
             message: state.message,
-            type: NotificationType.Error,
+            type: NotificationType.Danger,
           );
         }
       },
