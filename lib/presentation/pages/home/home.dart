@@ -26,7 +26,6 @@ class Home extends StatelessWidget {
     final List<String> _titles = [
       "Dashboard",
       "Events",
-      "Add Items",
       "Tasks",
       "More",
     ];
@@ -35,7 +34,6 @@ class Home extends StatelessWidget {
     final List<Widget> _pages = [
       DashboardPage(),
       EventsPage(),
-      Container(color: Colors.blue, child: Center(child: Text("ADD ITEMS"))),
       Container(color: Colors.yellow, child: Center(child: Text("TASKS"))),
       Container(color: Colors.green, child: Center(child: Text("MORE"))),
     ];
@@ -52,16 +50,12 @@ class Home extends StatelessWidget {
         label: _titles[1],
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.add_rounded),
+        icon: Icon(Icons.check_circle_outline_rounded),
         label: _titles[2],
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.check_circle_outline_rounded),
-        label: _titles[3],
-      ),
-      BottomNavigationBarItem(
         icon: Icon(Icons.more_horiz_rounded),
-        label: _titles[4],
+        label: _titles[3],
       )
     ];
 
@@ -98,7 +92,6 @@ class _HomeViewState extends State<HomeView> {
   // # Tab Navigation
   void _onTabTapped(int index) {
     return setState(() {
-      _currentIndex = index;
       _pageController.animateToPage(
         index,
         duration: Duration(milliseconds: 800),
@@ -122,6 +115,7 @@ class _HomeViewState extends State<HomeView> {
         leading: widget.leading,
         title: widget.titles[_currentIndex],
         child: PageView(
+          physics: ClampingScrollPhysics(),
           onPageChanged: _onPageSwipe,
           controller: _pageController,
           children: widget.pages,
