@@ -1,4 +1,6 @@
 // # Imports
+import 'package:flutter/rendering.dart';
+import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/material.dart';
@@ -29,22 +31,33 @@ class _CustomLoadingElevatedButtonState
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
 
+  final Logger _logger = Logger();
+
   // * Extending the onPressed Functionality
   void onPressedExtended() async {
     try {
-      await widget.onPressed()
-          ? _btnController.success()
-          : _btnController.error();
+      // Running the onPressed Function
+      bool result = await widget.onPressed();
+      _logger.d("[Custom Loading Elevated Button]: onPressed returned $result");
 
-      // Wait a little before resetting
-      await Future.delayed(Duration(seconds: 3));
+      // Showing the success or failure state
+      if (result) {
+        _btnController.success();
+        await Future.delayed(Duration(seconds: 1));
+      } else {
+        _btnController.error();
+        await Future.delayed(Duration(seconds: 3));
+      }
+
+      // Resetting the Button's State
       _btnController.reset();
       if (widget.onEnd != null) widget.onEnd();
     } catch (e) {
       // If there was an error in function return type
       _btnController.error();
-      print('Error: onPressed function should only return bool!');
-      print('Error Message: $e');
+      _logger.e(
+          '[Custom Loading Elevated Button] onPressed function should only return bool!');
+      _logger.e('[Custom Loading Elevated Button] $e');
 
       // Wait a little before resetting
       await Future.delayed(Duration(seconds: 5));
