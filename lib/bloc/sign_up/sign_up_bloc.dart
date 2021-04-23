@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../../constants/error_handler.dart';
 import '../../data/models/user_model.dart';
-import '../../data/repositories/database_repository.dart';
 import '../../data/repositories/user_repository.dart';
 
 part 'sign_up_event.dart';
@@ -15,7 +14,6 @@ part 'sign_up_state.dart';
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   SignUpBloc() : super(SignUpInitial());
   UserRepository _userRepository = UserRepository();
-  DatabaseRepository _databaseRepository = DatabaseRepository();
 
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
@@ -36,11 +34,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           }
         };
 
-        String displayName = "${event.firstName} ${event.lastName}";
+        String displayName = "${event.firstName[0]}. ${event.lastName}";
 
         // Saving their data to the database
         await _userRepository.updateProfile(displayName: displayName);
-        await _databaseRepository.updateUserData(user, userData);
+        await _userRepository.updateUserData(user, userData);
 
         // Yielding a final success
         yield SignUpSuccess(user: user);

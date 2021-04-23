@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_model.dart';
@@ -8,6 +9,7 @@ import '../models/user_model.dart';
 /// Mostly has Firebase Code and General User Data
 /// Has all the relevant functions used during Authentication
 class UserRepository {
+  // _ AUTH
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   // # Parser
@@ -68,4 +70,18 @@ class UserRepository {
   bool isUserSignedIn() => this._firebaseAuth.currentUser != null;
 
   Future<void> signOut() async => await _firebaseAuth.signOut();
+
+  // _ FIRESTORE
+  final CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  // # Streams
+  Stream<QuerySnapshot> get userDataStream {
+    return _usersCollection.snapshots().distinct();
+  }
+
+  // # Methods
+  Future updateUserData(UserModel user, Map<String, dynamic> userData) async {
+    return await _usersCollection.doc(user.uid).set(userData);
+  }
 }
