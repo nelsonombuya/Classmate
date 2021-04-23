@@ -14,6 +14,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository = UserRepository();
   StreamSubscription _authStateChangesStream;
+  UserModel currentUser;
 
   AuthBloc() : super(AuthInitial()) {
     try {
@@ -39,7 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is AuthChanged) {
       yield (event.user == null)
           ? Unauthenticated()
-          : Authenticated(user: event.user);
+          : Authenticated(user: this.currentUser = event.user);
     }
 
     // # Useful when Signing Out

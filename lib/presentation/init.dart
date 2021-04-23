@@ -16,7 +16,7 @@ class Init extends StatelessWidget {
       builder: (context, state) {
         if (state is Unauthenticated) return WelcomePage();
 
-        if (state is Authenticated) return Home(HomeArgs(user: state.user));
+        if (state is Authenticated) return Home();
 
         if (state is AuthenticationError)
           return SplashPage(error: state.message);

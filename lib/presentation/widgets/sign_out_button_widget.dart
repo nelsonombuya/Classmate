@@ -10,16 +10,6 @@ import 'dialog_widget.dart';
 /// # Sign Out Widget
 /// Used to allow the user to sign out
 class SignOutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
-      child: SignOutButtonWidget(),
-    );
-  }
-}
-
-class SignOutButtonWidget extends StatelessWidget {
   _showSignOutDialog(BuildContext context, AuthBloc authBloc) {
     CustomDialog(
       context,
