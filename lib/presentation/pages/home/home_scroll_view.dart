@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sliver_header_delegate/sliver_header_delegate.dart';
 
 import '../../../constants/device.dart';
 
@@ -17,22 +18,31 @@ class HomeScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle _titleStyle = Theme.of(context).textTheme.headline5;
     Device().init(context);
 
     return CustomScrollView(
       slivers: <Widget>[
-        SliverAppBar(
+        SliverPersistentHeader(
           pinned: true,
-          elevation: 0.0,
-          actions: actions,
-          leading: leading,
-          expandedHeight: kToolbarHeight * 3.0,
-          backgroundColor: Device.brightness == Brightness.light
-              ? Colors.white70
-              : Colors.black87,
-          flexibleSpace: FlexibleSpaceBar(
-            centerTitle: true,
-            title: Text(title, style: Theme.of(context).textTheme.headline5),
+          delegate: FlexibleHeaderDelegate(
+            actions: actions,
+            leading: leading,
+            statusBarHeight: MediaQuery.of(context).padding.top,
+            backgroundColor: Device.brightness == Brightness.light
+                ? Colors.white70
+                : Colors.black87,
+            children: [
+              FlexibleTextItem(
+                text: title,
+                collapsedStyle: _titleStyle,
+                collapsedAlignment: Alignment.center,
+                expandedAlignment: Alignment.bottomLeft,
+                expandedStyle: _titleStyle.copyWith(
+                  fontSize: Device.height(7.0),
+                ),
+              ),
+            ],
           ),
         ),
         SliverList(
