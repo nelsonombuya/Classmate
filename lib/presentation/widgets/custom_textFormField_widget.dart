@@ -8,9 +8,11 @@ class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
     this.label,
     this.onSaved,
+    this.size = 2,
     this.validator,
     this.onChanged,
     this.suffixIcon,
+    this.maxLines = 1,
     this.keyboardType,
     this.enabled = true,
     this.suffixIconAction,
@@ -19,6 +21,8 @@ class CustomTextFormField extends StatelessWidget {
 
   final String label;
   final bool enabled;
+  final int maxLines;
+  final double size;
   final Function onSaved;
   final bool obscureText;
   final Function validator;
@@ -33,6 +37,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       enabled: enabled,
       onSaved: onSaved,
+      maxLines: maxLines,
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
@@ -40,7 +45,7 @@ class CustomTextFormField extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .bodyText1
-          .copyWith(fontSize: Device.height(2)),
+          .copyWith(fontSize: Device.height(size)),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(fontWeight: FontWeight.bold),

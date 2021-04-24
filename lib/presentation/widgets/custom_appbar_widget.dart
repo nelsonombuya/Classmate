@@ -31,6 +31,7 @@ class CustomAppBar extends StatelessWidget {
           : Colors.black87,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
+        titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),
         title: title == null
             ? null
             : Text(

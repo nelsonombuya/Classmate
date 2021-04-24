@@ -37,8 +37,12 @@ abstract class Validator {
           Minimum 1 Upper case
           Minimum 1 lowercase
           Minimum 1 Numeric Number
-          Minimum 1 Special Character
-          Common Allow Character ( ! @ # \$ & * ~ )''';
+          Minimum 1 Special Character ( ! @ # \$ & * ~ )''';
+  }
+
+  // * Title Validator
+  static String titleValidator(String value) {
+    return (value.isEmpty) ? 'Please input a title' : null;
   }
 }
 

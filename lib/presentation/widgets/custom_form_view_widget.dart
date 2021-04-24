@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 /// Adds functionality to tap outside of form fields to
 /// remove focus from form fields
 class FormView extends StatelessWidget {
-  FormView({@required this.child, this.title});
+  FormView({@required this.child, this.title, this.overridePadding = false});
+  final bool overridePadding;
   final Widget child;
   final String title;
 
@@ -24,25 +25,21 @@ class FormView extends StatelessWidget {
         /// Thanks Ali Hussam
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: Scaffold(
-        body: CustomScrollView(
+      child: Material(
+        child: CustomScrollView(
           slivers: <Widget>[
             CustomAppBar(title: title),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: Device.height(8)),
-                  child: Material(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Device.width(7.0),
-                        vertical: Device.height(2.0),
-                      ),
-                      child: SingleChildScrollView(child: child),
+              delegate: SliverChildListDelegate(
+                [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: overridePadding ? 0.0 : Device.width(7.0),
+                      vertical: overridePadding ? 0.0 : Device.height(2.0),
                     ),
+                    child: child,
                   ),
-                ),
-                childCount: 1,
+                ],
               ),
             ),
           ],
