@@ -1,11 +1,10 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'pages/welcome/welcome_page.dart';
-import 'pages/home/home_arguments.dart';
-import 'pages/splash/splash_page.dart';
 import '../bloc/auth/auth_bloc.dart';
 import 'pages/home/home.dart';
+import 'pages/splash/splash_page.dart';
+import 'pages/welcome/welcome_page.dart';
 
 /// # Init
 /// Does all the necessary initializations needed when the app starts
