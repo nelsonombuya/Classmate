@@ -54,25 +54,78 @@ class _DatePickerButtonState extends State<DatePickerButton> {
   DateTime _today = DateTime.now();
   DateTime _selectedDate = DateTime.now();
 
+  DatePickerTheme _lightTheme = DatePickerTheme(
+    backgroundColor: Colors.white,
+    itemStyle: TextStyle(color: Colors.blue),
+  );
+  DatePickerTheme _darkTheme = DatePickerTheme(
+    backgroundColor: Color(0xFF303030),
+    itemStyle: TextStyle(color: Colors.blue),
+    cancelStyle: TextStyle(color: Colors.white38),
+  );
+
   /// ### Extends the dev's onTap
   /// Helps with the text the Widget Prints
-  Future _onTapExtended(Function onTap) async {
-    DatePicker.showDateTimePicker(
-      context,
-      locale: LocaleType.en,
-      showTitleActions: true,
-      minTime: widget.firstSelectableDate ?? _today,
-      maxTime: widget.lastSelectableDate ??
-          DateTime(_today.year + 20, _today.month, _today.day),
+  Future _onTapExtended(Function onTap, DatePickerType type) async {
+    switch (type) {
+      case DatePickerType.Cupertino:
+        DatePicker.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          theme: MediaQuery.of(context).platformBrightness == Brightness.light
+              ? _lightTheme
+              : _darkTheme,
+          minTime: widget.firstSelectableDate ?? _today,
+          maxTime: widget.lastSelectableDate ??
+              DateTime(_today.year + 20, _today.month, _today.day),
 
-      // ! Change this if you want onTap to work when the user makes no change
-      onConfirm: (date) async {
-        if (date != null) {
-          setState(() => _selectedDate = date);
-          if (onTap != null) await onTap(date);
-        }
-      },
-    );
+          // ! Change this if you want onTap to work when the user makes no change
+          onConfirm: (date) async {
+            if (date != null) {
+              setState(() => _selectedDate = date);
+              if (onTap != null) await onTap(date);
+            }
+          },
+        );
+        break;
+      default:
+        DateTime date;
+        TimeOfDay time;
+
+        date = await showDatePicker(
+          context: context,
+          initialDate: widget.firstSelectableDate.isAfter(_selectedDate)
+              ? widget.firstSelectableDate
+              : _selectedDate,
+          firstDate: widget.firstSelectableDate ?? _today,
+          lastDate: widget.lastSelectableDate ??
+              DateTime(_today.year + 20, _today.month, _today.day),
+        );
+
+        // If the user didn't select a date, just exit
+        if (date == null) return;
+
+        // Else, let the user select a time
+        time = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(_selectedDate),
+        );
+
+        // IF the user selected a time as well as a date
+        if (time != null)
+          date = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            time.hour,
+            time.minute,
+          );
+
+        setState(() => _selectedDate = date);
+
+        if (onTap != null) await onTap(date);
+        break;
+    }
   }
 
   @override
@@ -86,8 +139,12 @@ class _DatePickerButtonState extends State<DatePickerButton> {
     return Material(
       child: InkWell(
         enableFeedback: true,
+        borderRadius: BorderRadius.circular(3.0),
         splashColor: widget.foregroundColor ?? Colors.blue,
-        onTap: () async => await _onTapExtended(widget.onTap),
+        onTap: () async =>
+            await _onTapExtended(widget.onTap, DatePickerType.Cupertino),
+        onLongPress: () async =>
+            await _onTapExtended(widget.onTap, DatePickerType.Material),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(3.0),
           child: Container(
@@ -185,3 +242,5 @@ class _DatePickerButtonState extends State<DatePickerButton> {
     );
   }
 }
+
+enum DatePickerType { Cupertino, Material }
