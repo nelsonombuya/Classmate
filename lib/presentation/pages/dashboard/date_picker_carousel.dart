@@ -32,7 +32,7 @@ class DatePickerCarousel extends StatelessWidget {
       _dayTextStyleColor = Colors.grey;
     } else {
       _dateTextStyleColor = Colors.white70;
-      _selectedDateColor = Colors.white38;
+      _selectedDateColor = Colors.grey[800].withOpacity(0.7);
       _dayTextStyleColor = Colors.white54;
     }
 

@@ -40,7 +40,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       _unselectedItemColor = Colors.black38;
     } else {
       // * Dark Mode Settings
-      _backgroundColor = Colors.black;
+      _backgroundColor = Color(0xFF121212);
       _selectedItemColor = Colors.white70;
       _unselectedItemColor = Colors.white38;
     }

@@ -55,12 +55,11 @@ class _DatePickerButtonState extends State<DatePickerButton> {
   DateTime _selectedDate = DateTime.now();
 
   DatePickerTheme _lightTheme = DatePickerTheme(
-    backgroundColor: Colors.white,
-    itemStyle: TextStyle(color: Colors.blue),
+    itemStyle: TextStyle(color: Colors.black87),
   );
   DatePickerTheme _darkTheme = DatePickerTheme(
-    backgroundColor: Color(0xFF303030),
-    itemStyle: TextStyle(color: Colors.blue),
+    backgroundColor: Color(0xFF121212),
+    itemStyle: TextStyle(color: Colors.white70),
     cancelStyle: TextStyle(color: Colors.white38),
   );
 

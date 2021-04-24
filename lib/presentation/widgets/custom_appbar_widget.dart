@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
       ),
       backgroundColor: Device.brightness == Brightness.light
           ? Colors.grey[50]
-          : Colors.black87,
+          : Color(0xFF121212),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),

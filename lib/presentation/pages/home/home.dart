@@ -1,4 +1,5 @@
 // # Imports
+import 'package:classmate/constants/device.dart';
 import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:classmate/presentation/pages/home/add_event_form.dart';
@@ -147,12 +148,16 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     _overrideFirstPage(widget.overrideFirstPage);
+    Device().init(context);
 
     return Scaffold(
       extendBody: true,
       floatingActionButton: SpeedDial(
         tooltip: "Add Items",
         animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: Device.brightness == Brightness.light
+            ? Colors.white.withOpacity(0.9)
+            : Colors.grey[800].withOpacity(0.8),
         curve: Curves.fastLinearToSlowEaseIn,
         children: [
           SpeedDialChild(

@@ -30,7 +30,7 @@ class HomeScrollView extends StatelessWidget {
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: Device.brightness == Brightness.light
                 ? Colors.white70
-                : Colors.black87,
+                : Color(0xFF121212).withOpacity(0.87),
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),
