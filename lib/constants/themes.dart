@@ -1,4 +1,5 @@
 // # Imports
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,43 +10,46 @@ abstract class Themes {
   static ThemeData get lightTheme {
     return ThemeData.light().copyWith(
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      primaryColor: CupertinoColors.systemBlue,
+      accentColor: CupertinoColors.systemBlue,
+
       // * Text Themes
       // ! KEEP MATCHED WITH DARK THEME
       textTheme: ThemeData.light().textTheme.copyWith(
             //////////////////////////////////////////////////////////////////
             headline2: GoogleFonts.poppins(
-              color: Colors.black54,
+              color: CupertinoColors.black,
             ),
 
             headline4: TextStyle(
-              color: Colors.black87,
+              color: CupertinoColors.black,
               fontFamily: "Averta",
             ),
 
             headline5: TextStyle(
+              color: CupertinoColors.black,
               fontWeight: FontWeight.w400,
-              color: Colors.black87,
               fontFamily: "Averta",
             ),
 
             subtitle1: TextStyle(
-              color: Colors.black38,
+              color: CupertinoColors.secondaryLabel,
               fontFamily: "Averta",
             ),
 
             subtitle2: TextStyle(
-              color: Colors.black38,
+              color: CupertinoColors.secondaryLabel,
               fontFamily: "Averta",
             ),
 
             bodyText1: TextStyle(
-              color: Colors.black54,
+              color: CupertinoColors.label,
               fontFamily: "Averta",
             ),
 
             bodyText2: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black54,
+              color: CupertinoColors.label,
               fontFamily: "Averta",
             ),
 
@@ -56,7 +60,7 @@ abstract class Themes {
             ),
 
             caption: GoogleFonts.montserrat(
-              color: Colors.black38,
+              color: CupertinoColors.inactiveGray,
             ),
 
             //////////////////////////////////////////////////////////////////
@@ -69,47 +73,48 @@ abstract class Themes {
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: Colors.black87,
-      canvasColor: Colors.black87,
-      accentColor: Colors.blue,
+      scaffoldBackgroundColor: CupertinoColors.black,
+      primaryColor: CupertinoColors.systemBlue,
+      accentColor: CupertinoColors.systemBlue,
+      canvasColor: CupertinoColors.black,
 
       // * Text Themes
       // ! KEEP MATCHED WITH LIGHT THEME
       textTheme: ThemeData.dark().textTheme.copyWith(
             //////////////////////////////////////////////////////////////////
             headline2: GoogleFonts.poppins(
-              color: Colors.white54,
+              color: CupertinoColors.white,
             ),
 
             headline4: TextStyle(
-              color: Colors.white70,
+              color: CupertinoColors.white,
               fontFamily: "Averta",
             ),
 
             headline5: TextStyle(
+              color: CupertinoColors.white,
               fontWeight: FontWeight.w400,
-              color: Colors.white70,
               fontFamily: "Averta",
             ),
 
             subtitle1: TextStyle(
-              color: Colors.white38,
+              color: CupertinoColors.systemGrey,
               fontFamily: "Averta",
             ),
 
             subtitle2: TextStyle(
-              color: Colors.white38,
+              color: CupertinoColors.systemGrey2,
               fontFamily: "Averta",
             ),
 
             bodyText1: TextStyle(
-              color: Colors.white60,
+              color: CupertinoColors.systemGrey,
               fontFamily: "Averta",
             ),
 
             bodyText2: TextStyle(
+              color: CupertinoColors.white,
               fontWeight: FontWeight.bold,
-              color: Colors.white60,
               fontFamily: "Averta",
             ),
 
@@ -120,7 +125,7 @@ abstract class Themes {
             ),
 
             caption: GoogleFonts.montserrat(
-              color: Colors.white38,
+              color: CupertinoColors.inactiveGray,
             ),
             //////////////////////////////////////////////////////////////////
           ),

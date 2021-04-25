@@ -8,6 +8,7 @@ import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
 import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -42,10 +43,22 @@ class Home extends StatelessWidget {
 
     // * Pages
     final List<Widget> _pages = [
-      DashboardPage(),
-      EventsPage(),
-      Container(color: Colors.yellow, child: Center(child: Text("TASKS"))),
-      Container(color: Colors.green, child: Center(child: Text("MORE"))),
+      Container(
+        color: CupertinoColors.systemBlue,
+        child: Center(child: Text("DASHBOARD")),
+      ),
+      Container(
+        color: CupertinoColors.systemIndigo,
+        child: Center(child: Text("EVENTS")),
+      ),
+      Container(
+        color: CupertinoColors.systemYellow,
+        child: Center(child: Text("TASKS")),
+      ),
+      Container(
+        color: CupertinoColors.systemGreen,
+        child: Center(child: Text("MORE")),
+      ),
     ];
 
     // ### Bottom Navigation Bar
@@ -156,8 +169,8 @@ class _HomeViewState extends State<HomeView> {
         tooltip: "Add Items",
         animatedIcon: AnimatedIcons.menu_close,
         backgroundColor: Device.brightness == Brightness.light
-            ? Colors.white.withOpacity(0.9)
-            : Colors.grey[800].withOpacity(0.8),
+            ? CupertinoColors.systemGroupedBackground
+            : CupertinoColors.darkBackgroundGray,
         curve: Curves.fastLinearToSlowEaseIn,
         children: [
           SpeedDialChild(

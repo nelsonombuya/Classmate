@@ -1,6 +1,7 @@
 // # Imports
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Error Splash Text
@@ -10,9 +11,9 @@ class ErrorSplashText extends StatelessWidget {
   ErrorSplashText({this.errorString});
   final String errorString;
   final List<Color> _errorStringColors = [
-    Colors.red,
-    Colors.pink,
-    Colors.white,
+    CupertinoColors.destructiveRed,
+    CupertinoColors.systemPink,
+    CupertinoColors.white,
   ];
 
   @override

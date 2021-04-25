@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
@@ -31,18 +32,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
     // Defining colours used in the widget
     Color _backgroundColor;
     Color _selectedItemColor;
-    Color _unselectedItemColor;
 
     if (Device.brightness == Brightness.light) {
       // * Light Mode Settings
-      _backgroundColor = Colors.white;
-      _selectedItemColor = Colors.black87;
-      _unselectedItemColor = Colors.black38;
+      _selectedItemColor = CupertinoColors.black;
+      _backgroundColor =
+          CupertinoColors.systemGroupedBackground.withOpacity(0.95);
     } else {
       // * Dark Mode Settings
-      _backgroundColor = Color(0xFF121212);
-      _selectedItemColor = Colors.white70;
-      _unselectedItemColor = Colors.white38;
+      _selectedItemColor = CupertinoColors.white;
+      _backgroundColor = CupertinoColors.darkBackgroundGray.withOpacity(0.95);
     }
 
     return SnakeNavigationBar.color(
@@ -57,7 +56,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       backgroundColor: _backgroundColor,
       snakeViewColor: _selectedItemColor,
       selectedItemColor: _selectedItemColor,
-      unselectedItemColor: _unselectedItemColor,
+      unselectedItemColor: CupertinoColors.inactiveGray,
       snakeShape: SnakeShape.indicator,
     );
   }

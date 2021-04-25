@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Custom Divider Widget
@@ -19,11 +20,11 @@ class _CustomDividerState extends State<CustomDivider> {
     Device().init(context);
 
     // Setting the widget colour according to light/dark modes
-    Color widgetColor =
-        Device.brightness == Brightness.light ? Colors.black87 : Colors.white70;
+    Color widgetColor = Device.brightness == Brightness.light
+        ? CupertinoColors.black
+        : CupertinoColors.systemGrey2;
 
-    Color widgetDisabledColor =
-        Device.brightness == Brightness.light ? Colors.black26 : Colors.white38;
+    Color widgetDisabledColor = CupertinoColors.inactiveGray;
 
     return Row(
       children: [

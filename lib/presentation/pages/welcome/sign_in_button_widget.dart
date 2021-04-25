@@ -1,6 +1,7 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
 import 'package:classmate/constants/routes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Sign In With Email
@@ -16,12 +17,9 @@ class SignInButton extends StatelessWidget {
         width: Device.width(64.0),
         height: Device.height(6.2),
       ),
-      child: ElevatedButton(
+      child: CupertinoButton.filled(
         onPressed: () => Routes.sailor('/sign_in'),
-        child: Text(
-          'SIGN IN',
-          style: Theme.of(context).textTheme.button,
-        ),
+        child: Text('SIGN IN'),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:classmate/presentation/pages/welcome/background_video_player_wid
 import 'package:classmate/presentation/pages/welcome/create_new_account_widget.dart';
 import 'package:classmate/presentation/pages/welcome/sign_in_button_widget.dart';
 import 'package:classmate/presentation/widgets/asciimoji_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Welcome Page
@@ -80,7 +81,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                         .copyWith(
                                           fontWeight: FontWeight.w300,
                                           fontSize: Device.height(7),
-                                          color: Colors.white,
+                                          color: CupertinoColors.white,
                                         ),
                                   ),
                                   Text(
@@ -92,7 +93,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                         .copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: Device.height(7),
-                                          color: Colors.blue,
+                                          color: CupertinoColors.systemBlue,
                                         ),
                                   ),
                                 ],
@@ -116,7 +117,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           SizedBox(height: Device.height(3.0)),
                           if (_eggCounter >= 5)
                             ASCIImoji(
-                              color: Colors.white,
+                              color: CupertinoColors.white,
                               fontSize: Device.height(3.0),
                             ),
                         ],

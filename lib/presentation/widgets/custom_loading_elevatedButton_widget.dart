@@ -1,10 +1,12 @@
 // # Imports
+import 'dart:async';
+
+import 'package:classmate/constants/device.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
 
 /// # Custom Loading Elevated Button
 /// Button adapted from Rounded Loading Button
@@ -15,11 +17,13 @@ class CustomLoadingElevatedButton extends StatefulWidget {
     @required this.onPressed,
     this.child,
     this.onEnd,
+    this.color,
   });
 
   final Function onPressed;
   final Function onEnd;
   final Widget child;
+  final Color color;
 
   @override
   _CustomLoadingElevatedButtonState createState() =>
@@ -75,9 +79,10 @@ class _CustomLoadingElevatedButtonState
         height: Device.height(6.2),
       ),
       child: RoundedLoadingButton(
+        color: widget.color ?? CupertinoColors.activeBlue,
         onPressed: widget.onPressed == null ? null : onPressedExtended,
         controller: _btnController,
-        successColor: Colors.green,
+        successColor: CupertinoColors.activeGreen,
         borderRadius: 3.0,
         child: widget.child,
       ),

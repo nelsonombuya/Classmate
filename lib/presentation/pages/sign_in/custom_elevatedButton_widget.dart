@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // # Custom Elevated Button
@@ -12,10 +13,6 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-
-    // Defining colors of disabled button based on dark/light modes
-    Color _disabledButtonColor =
-        Device.brightness == Brightness.light ? Colors.black38 : Colors.white12;
 
     // Returning the widget
     return ConstrainedBox(
@@ -30,8 +27,8 @@ class CustomElevatedButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) =>
                 states.contains(MaterialState.disabled)
-                    ? _disabledButtonColor
-                    : Colors.blueGrey[800],
+                    ? CupertinoColors.inactiveGray
+                    : CupertinoColors.systemIndigo,
           ),
         ),
       ),

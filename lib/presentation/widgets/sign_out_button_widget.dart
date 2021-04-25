@@ -18,9 +18,7 @@ class SignOutButton extends StatelessWidget {
       onPressed: () => _notifications.add(SignOutDialogBoxRequested(context)),
       icon: Icon(
         Icons.logout,
-        color: Device.brightness == Brightness.light
-            ? Colors.black87
-            : Colors.white70,
+        color: CupertinoColors.destructiveRed,
       ),
     );
   }

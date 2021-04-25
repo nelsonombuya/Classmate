@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Avatar Widget
@@ -14,7 +15,8 @@ class Avatar extends StatelessWidget {
       onPressed: onPressed,
       icon: CircleAvatar(
         backgroundImage: image,
-        backgroundColor: image != null ? null : Colors.white70,
+        backgroundColor:
+            image != null ? null : CupertinoColors.systemGroupedBackground,
         child:
             image != null ? null : Text(displayName[0].toUpperCase() ?? "N/A"),
       ),

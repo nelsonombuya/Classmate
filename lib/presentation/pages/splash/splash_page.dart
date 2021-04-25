@@ -1,6 +1,7 @@
 // # Imports
-import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
 import 'package:classmate/constants/device.dart';
+import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // # Splash Page
@@ -30,7 +31,7 @@ class SplashPage extends StatelessWidget {
     else {
       _firstString = 'Class';
       _secondString = 'Mate';
-      _secondStringColor = Colors.blue;
+      _secondStringColor = CupertinoColors.systemBlue;
       _logo =
           Device.brightness == Brightness.dark ? 'white_plain' : 'black_plain';
     }

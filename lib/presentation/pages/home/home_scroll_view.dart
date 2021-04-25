@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/device.dart';
@@ -29,8 +30,8 @@ class HomeScrollView extends StatelessWidget {
             leading: leading,
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: Device.brightness == Brightness.light
-                ? Colors.white70
-                : Color(0xFF121212).withOpacity(0.87),
+                ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
+                : CupertinoColors.darkBackgroundGray.withOpacity(0.7),
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -55,12 +56,12 @@ class _DatePickerButtonState extends State<DatePickerButton> {
   DateTime _selectedDate = DateTime.now();
 
   DatePickerTheme _lightTheme = DatePickerTheme(
-    itemStyle: TextStyle(color: Colors.black87),
+    itemStyle: TextStyle(color: CupertinoColors.label),
   );
   DatePickerTheme _darkTheme = DatePickerTheme(
-    backgroundColor: Color(0xFF121212),
-    itemStyle: TextStyle(color: Colors.white70),
-    cancelStyle: TextStyle(color: Colors.white38),
+    itemStyle: TextStyle(color: CupertinoColors.white),
+    backgroundColor: CupertinoColors.darkBackgroundGray,
+    cancelStyle: TextStyle(color: CupertinoColors.systemGrey),
   );
 
   /// ### Extends the dev's onTap
@@ -136,7 +137,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
       child: InkWell(
         enableFeedback: true,
         borderRadius: BorderRadius.circular(3.0),
-        splashColor: widget.foregroundColor ?? Colors.blue,
+        splashColor: widget.foregroundColor ?? CupertinoColors.systemBlue,
         onTap: () async => await _showCupertinoDateTimePicker(widget.onTap),
         onLongPress: () async =>
             await _showMaterialDateTimePicker(widget.onTap),
@@ -146,7 +147,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
             width: Device.width(42.0),
             height: Device.width(25.0),
             alignment: Alignment.centerLeft,
-            color: widget.backgroundColor ?? Colors.transparent,
+            color: widget.backgroundColor,
             child: Stack(
               children: [
                 // ### The Title
@@ -161,8 +162,8 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                               fontWeight: FontWeight.bold,
                               color: widget.titleColor ??
                                       Device.brightness == Brightness.light
-                                  ? Colors.black87
-                                  : Colors.white70,
+                                  ? CupertinoColors.black
+                                  : CupertinoColors.white,
                             ),
                   ),
                 ),
@@ -178,16 +179,15 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                     /// * To avoid any nulls
                     widget.date ??
                         DateFormat.yMMMEd().format(
-                            widget.initialSelectedDate ?? _selectedDate),
+                          widget.initialSelectedDate ?? _selectedDate,
+                        ),
 
                     style: widget.dateStyle ??
                         Theme.of(context).textTheme.bodyText1.copyWith(
                               fontSize: Device.height(1.9),
                               fontWeight: FontWeight.bold,
                               color: widget.dateColor ??
-                                      Device.brightness == Brightness.light
-                                  ? Colors.black54
-                                  : Colors.white54,
+                                  CupertinoColors.inactiveGray,
                             ),
                   ),
                 ),
@@ -201,16 +201,15 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                     /// * To avoid any nulls
                     widget.time ??
                         DateFormat.jm().format(
-                            widget.initialSelectedDate ?? _selectedDate),
+                          widget.initialSelectedDate ?? _selectedDate,
+                        ),
 
                     style: widget.timeStyle ??
                         Theme.of(context).textTheme.bodyText1.copyWith(
                               fontSize: Device.height(1.7),
                               fontWeight: FontWeight.bold,
                               color: widget.timeColor ??
-                                      Device.brightness == Brightness.light
-                                  ? Colors.black54
-                                  : Colors.white54,
+                                  CupertinoColors.inactiveGray,
                             ),
                   ),
                 ),
@@ -223,10 +222,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                     child: Icon(
                       widget.icon ?? Icons.today,
                       size: Device.height(2.4),
-                      color: widget.iconColor ??
-                              Device.brightness == Brightness.light
-                          ? Colors.black38
-                          : Colors.white38,
+                      color: widget.iconColor ?? CupertinoColors.systemGrey,
                     ),
                   ),
               ],

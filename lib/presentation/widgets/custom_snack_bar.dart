@@ -2,6 +2,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:classmate/constants/enums.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Custom Snack Bar
@@ -43,7 +44,7 @@ class CustomSnackBar {
       messageSize: Device.height(1.86),
       positionOffset: Device.height(10.0),
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      backgroundColor: backgroundColor ?? Color(0xFF303030),
+      backgroundColor: backgroundColor ?? CupertinoColors.darkBackgroundGray,
       margin: EdgeInsets.symmetric(
         horizontal: Device.width(3.0),
         vertical: Device.height(1.0),
@@ -53,7 +54,7 @@ class CustomSnackBar {
         child: Icon(
           icon,
           size: Device.height(3.0),
-          color: iconColor ?? Colors.white,
+          color: iconColor ?? CupertinoColors.white,
         ),
       ),
     )..show(context);
@@ -69,24 +70,24 @@ class CustomSnackBar {
 
       case NotificationType.Warning:
         _template(
-          iconColor: Colors.black,
-          messageColor: Colors.black,
+          iconColor: CupertinoColors.white,
+          messageColor: CupertinoColors.white,
           icon: Icons.warning_amber_rounded,
-          backgroundColor: Colors.amber[600],
+          backgroundColor: CupertinoColors.activeOrange,
         );
         break;
 
       case NotificationType.Danger:
         _template(
-          backgroundColor: Colors.red[600],
           icon: Icons.error_outline_rounded,
+          backgroundColor: CupertinoColors.destructiveRed,
         );
         break;
 
       case NotificationType.Success:
         _template(
-          backgroundColor: Colors.green,
           icon: Icons.error_outline_rounded,
+          backgroundColor: CupertinoColors.activeGreen,
         );
         break;
 

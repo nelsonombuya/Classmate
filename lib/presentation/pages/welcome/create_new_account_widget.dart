@@ -1,5 +1,6 @@
 // # Imports
 import 'package:classmate/constants/routes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// # Create a new account button
@@ -8,11 +9,11 @@ import 'package:flutter/material.dart';
 class CreateANewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return CupertinoButton(
       onPressed: () => Routes.sailor('/sign_up'),
       child: Text(
         'CREATE A NEW ACCOUNT',
-        style: Theme.of(context).textTheme.button.copyWith(color: Colors.white),
+        style: TextStyle(color: CupertinoColors.white),
       ),
     );
   }
