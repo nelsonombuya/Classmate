@@ -9,10 +9,18 @@ import 'package:flutter/material.dart';
 /// Adds functionality to tap outside of form fields to
 /// remove focus from form fields
 class FormView extends StatelessWidget {
-  FormView({@required this.child, this.title, this.overridePadding = false});
-  final bool overridePadding;
+  FormView({
+    @required this.child,
+    this.title,
+    this.actions,
+    this.overridePadding = false,
+    this.automaticallyImplyLeading,
+  });
   final Widget child;
   final String title;
+  final List<Widget> actions;
+  final bool overridePadding;
+  final bool automaticallyImplyLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,11 @@ class FormView extends StatelessWidget {
       child: Material(
         child: CustomScrollView(
           slivers: <Widget>[
-            CustomAppBar(title: title),
+            CustomAppBar(
+              title: title,
+              actions: actions,
+              automaticallyImplyLeading: automaticallyImplyLeading,
+            ),
             SliverList(
               delegate: SliverChildListDelegate(
                 [
