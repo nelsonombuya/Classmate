@@ -23,6 +23,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         title: event.title,
         notificationType: event.notificationType,
       );
+
+      // HACK To allow the Snack Bar to show Multiple Times
+      // Despite having the same message
+      // ! Might be unnecessary, but was helpful with testing
+      yield Reset();
     }
 
     // * Mostly used for testing and quick hacks

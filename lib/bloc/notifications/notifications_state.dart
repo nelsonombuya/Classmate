@@ -49,3 +49,5 @@ class ShowDialogBox extends NotificationsState {
         negativeActionOnPressed,
       ];
 }
+
+class Reset extends NotificationsState {}
