@@ -56,12 +56,34 @@ class _DatePickerButtonState extends State<DatePickerButton> {
   DateTime _selectedDate = DateTime.now();
 
   DatePickerTheme _lightTheme = DatePickerTheme(
-    itemStyle: TextStyle(color: CupertinoColors.label),
+    itemStyle: TextStyle(
+      color: CupertinoColors.black,
+      fontFamily: "Averta",
+    ),
+    cancelStyle: TextStyle(
+      color: CupertinoColors.inactiveGray,
+      fontFamily: "Averta",
+    ),
+    doneStyle: TextStyle(
+      color: CupertinoColors.activeBlue,
+      fontFamily: "Averta",
+    ),
   );
+
   DatePickerTheme _darkTheme = DatePickerTheme(
-    itemStyle: TextStyle(color: CupertinoColors.white),
     backgroundColor: CupertinoColors.darkBackgroundGray,
-    cancelStyle: TextStyle(color: CupertinoColors.systemGrey),
+    itemStyle: TextStyle(
+      color: CupertinoColors.white,
+      fontFamily: "Averta",
+    ),
+    cancelStyle: TextStyle(
+      color: CupertinoColors.inactiveGray,
+      fontFamily: "Averta",
+    ),
+    doneStyle: TextStyle(
+      color: CupertinoColors.activeBlue,
+      fontFamily: "Averta",
+    ),
   );
 
   /// ### Extends the dev's onTap

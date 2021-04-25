@@ -1,4 +1,5 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/device.dart';
@@ -59,9 +60,9 @@ class DatePickerCarousel extends StatelessWidget {
           dayTextStyle: _dayTextStyle,
           dateTextStyle: _dateTextStyle,
           monthTextStyle: _dayTextStyle,
-          selectedTextColor: Colors.white,
           selectionColor: _selectedDateColor,
           initialSelectedDate: DateTime.now(),
+          selectedTextColor: CupertinoColors.white,
         ),
       ],
     );

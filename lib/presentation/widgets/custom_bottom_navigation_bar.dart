@@ -35,13 +35,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     if (Device.brightness == Brightness.light) {
       // * Light Mode Settings
+      _backgroundColor = CupertinoColors.white;
       _selectedItemColor = CupertinoColors.black;
-      _backgroundColor =
-          CupertinoColors.systemGroupedBackground.withOpacity(0.95);
     } else {
       // * Dark Mode Settings
       _selectedItemColor = CupertinoColors.white;
-      _backgroundColor = CupertinoColors.darkBackgroundGray.withOpacity(0.95);
+      _backgroundColor = CupertinoColors.darkBackgroundGray;
     }
 
     return SnakeNavigationBar.color(

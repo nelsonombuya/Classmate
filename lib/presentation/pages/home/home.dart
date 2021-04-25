@@ -1,7 +1,5 @@
 // # Imports
 import 'package:classmate/constants/device.dart';
-import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
-import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:classmate/presentation/pages/home/add_event_form.dart';
 import 'package:classmate/presentation/pages/home/home_args.dart';
 import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
@@ -163,26 +161,35 @@ class _HomeViewState extends State<HomeView> {
     _overrideFirstPage(widget.overrideFirstPage);
     Device().init(context);
 
+    Color _fabColor = Device.brightness == Brightness.light
+        ? CupertinoColors.systemGroupedBackground
+        : CupertinoColors.darkBackgroundGray;
+
     return Scaffold(
       extendBody: true,
       floatingActionButton: SpeedDial(
         tooltip: "Add Items",
-        animatedIcon: AnimatedIcons.menu_close,
-        backgroundColor: Device.brightness == Brightness.light
-            ? CupertinoColors.systemGroupedBackground
-            : CupertinoColors.darkBackgroundGray,
+        backgroundColor: _fabColor,
         curve: Curves.fastLinearToSlowEaseIn,
+        animatedIcon: AnimatedIcons.menu_close,
         children: [
           SpeedDialChild(
-              label: "Add Event",
-              child: Icon(Icons.event),
-              onTap: () => showBarModalBottomSheet(
-                    context: context,
-                    builder: (context) => Container(child: AddEventForm()),
-                  )),
+            label: "Add Event",
+            child: Icon(Icons.event),
+            backgroundColor: _fabColor,
+            labelBackgroundColor: _fabColor,
+            onTap: () => showBarModalBottomSheet(
+              context: context,
+              builder: (context) => Container(child: AddEventForm()),
+            ),
+          ),
           SpeedDialChild(
             label: "Add Task",
-            child: Icon(Icons.check_circle_outline_rounded),
+            backgroundColor: _fabColor,
+            labelBackgroundColor: _fabColor,
+            child: Icon(
+              Icons.check_circle_outline_rounded,
+            ),
           ),
         ],
       ),
