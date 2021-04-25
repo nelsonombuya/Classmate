@@ -82,6 +82,8 @@ class UserRepository {
 
   // # Methods
   Future updateUserData(UserModel user, Map<String, dynamic> userData) async {
-    return await _usersCollection.doc(user.uid).set(userData);
+    return await _usersCollection
+        .doc(user.uid)
+        .set(userData, SetOptions(merge: true));
   }
 }
