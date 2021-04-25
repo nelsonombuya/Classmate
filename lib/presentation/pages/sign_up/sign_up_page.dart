@@ -1,13 +1,13 @@
 // # Dart Imports
 import 'dart:async';
 
+import 'package:classmate/bloc/notifications/notifications_bloc.dart';
 import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:classmate/constants/enums.dart';
 import 'package:classmate/constants/validators.dart';
 import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
 import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
-import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
 import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +47,8 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
+    NotificationsBloc _notifications =
+        BlocProvider.of<NotificationsBloc>(context);
 
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
@@ -54,11 +56,12 @@ class _SignUpState extends State<SignUp> {
 
         if (state is SignUpFailure) {
           setState(() => _proceed = false);
-          CustomSnackBar(
-            context,
-            title: "Sign Up Failed",
-            message: state.message,
-            type: NotificationType.Danger,
+          _notifications.add(
+            SnackBarRequested(
+              state.message,
+              title: "Sign Up Failed",
+              notificationType: NotificationType.Danger,
+            ),
           );
         }
       },

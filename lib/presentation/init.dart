@@ -6,6 +6,7 @@ import '../bloc/notifications/notifications_bloc.dart';
 import 'pages/home/home.dart';
 import 'pages/splash/splash_page.dart';
 import 'pages/welcome/welcome_page.dart';
+import 'widgets/custom_snack_bar.dart';
 import 'widgets/dialog_widget.dart';
 
 /// # Init
@@ -15,7 +16,13 @@ class Init extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<NotificationsBloc, NotificationsState>(
       listener: (context, state) {
-        if (state is ShowSnackBar) {}
+        if (state is ShowSnackBar) {
+          CustomSnackBar(
+            context,
+            message: state.message,
+            type: state.notificationType,
+          );
+        }
         if (state is ShowDialogBox) {
           CustomDialog(
             context,

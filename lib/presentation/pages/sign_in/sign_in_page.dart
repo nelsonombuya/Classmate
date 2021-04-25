@@ -1,4 +1,5 @@
 // # Dart Imports
+import 'package:classmate/bloc/notifications/notifications_bloc.dart';
 import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
 import 'package:classmate/constants/device.dart';
 import 'package:classmate/constants/enums.dart';
@@ -44,6 +45,8 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
+    NotificationsBloc _notifications =
+        BlocProvider.of<NotificationsBloc>(context);
 
     return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) async {
@@ -51,11 +54,12 @@ class _SignInViewState extends State<SignInView> {
 
         if (state is SignInFailure) {
           setState(() => _proceed = false);
-          CustomSnackBar(
-            context,
-            message: state.message,
-            title: "Sign In Failed",
-            type: NotificationType.Danger,
+          _notifications.add(
+            SnackBarRequested(
+              state.message,
+              title: "Sign In Failed",
+              notificationType: NotificationType.Danger,
+            ),
           );
         }
       },
