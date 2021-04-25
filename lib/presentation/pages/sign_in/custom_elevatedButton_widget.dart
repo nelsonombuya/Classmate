@@ -28,7 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
             (Set<MaterialState> states) =>
                 states.contains(MaterialState.disabled)
                     ? CupertinoColors.inactiveGray
-                    : CupertinoColors.systemIndigo,
+                    : Colors.blueGrey[800],
           ),
         ),
       ),

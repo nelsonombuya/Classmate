@@ -1,5 +1,6 @@
 // # Imports
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// # Forgot Password Widget
 /// Used on the sign in page to transition to the Forgot Password page.
@@ -12,9 +13,12 @@ class ForgotPasswordWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        CupertinoButton(
+        TextButton(
           onPressed: enabled ? () {} : null,
-          child: Text('Forgot Password?'),
+          child: Text(
+            'Forgot Password?',
+            style: TextStyle(color: CupertinoColors.activeBlue),
+          ),
         ),
       ],
     );
