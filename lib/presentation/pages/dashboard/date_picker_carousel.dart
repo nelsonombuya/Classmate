@@ -5,44 +5,46 @@ import 'package:flutter/material.dart';
 import '../../../constants/device.dart';
 
 class DatePickerCarousel extends StatelessWidget {
-  DatePickerCarousel({
-    Key key,
-    @required this.onDateChange,
-    @required this.selectedDate,
-  }) : super(key: key);
-
-  DateTime _getDate(DateTime d) => DateTime(d.year, d.month, d.day);
-
-  final DateTime _now = DateTime.now();
   final Function onDateChange;
   final DateTime selectedDate;
 
+  DatePickerCarousel({
+    @required this.onDateChange,
+    @required this.selectedDate,
+  });
+
+  DateTime _getBeginningOfWeek() {
+    DateTime now = DateTime.now();
+    DateTime endOfTheWeek = now.subtract(Duration(days: now.weekday - 1));
+    return DateTime(endOfTheWeek.year, endOfTheWeek.month, endOfTheWeek.day);
+  }
+
   @override
   Widget build(BuildContext context) {
+    Color _backgroundColor;
+    Color _dayTextStyleColor;
+    Color _dateTextStyleColor;
+    Color _selectedDateBackgroundColor;
+
     Device().init(context);
 
-    DateTime _beginningOfTheWeek =
-        _getDate(_now.subtract(Duration(days: _now.weekday - 1)));
-
-    // Setting text and button colors
-    Color _dateTextStyleColor, _dayTextStyleColor, _selectedDateColor;
-
     if (Device.brightness == Brightness.light) {
-      _dateTextStyleColor = Colors.black87;
-      _selectedDateColor = Colors.black87;
-      _dayTextStyleColor = Colors.grey;
+      _dateTextStyleColor = CupertinoColors.black;
+      _dayTextStyleColor = CupertinoColors.inactiveGray;
+      _selectedDateBackgroundColor = CupertinoColors.black;
+      _backgroundColor = CupertinoColors.systemGroupedBackground;
     } else {
-      _dateTextStyleColor = Colors.white70;
-      _selectedDateColor = Colors.grey[800].withOpacity(0.7);
-      _dayTextStyleColor = Colors.white54;
+      _dayTextStyleColor = CupertinoColors.systemGrey;
+      _dateTextStyleColor = CupertinoColors.white;
+      _selectedDateBackgroundColor = CupertinoColors.systemGrey;
+      _backgroundColor = CupertinoColors.darkBackgroundGray;
     }
 
-    // Setting Text Styles
     TextStyle _dateTextStyle = TextStyle(
-      fontWeight: FontWeight.w200,
-      color: _dateTextStyleColor,
-      fontFamily: "Averta",
       fontSize: 24,
+      fontFamily: "Averta",
+      color: _dateTextStyleColor,
+      fontWeight: FontWeight.w200,
     );
 
     TextStyle _dayTextStyle = _dateTextStyle.copyWith(
@@ -50,21 +52,19 @@ class DatePickerCarousel extends StatelessWidget {
       color: _dayTextStyleColor,
     );
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        DatePicker(
-          _beginningOfTheWeek,
-          daysCount: 7,
-          onDateChange: onDateChange,
-          dayTextStyle: _dayTextStyle,
-          dateTextStyle: _dateTextStyle,
-          monthTextStyle: _dayTextStyle,
-          selectionColor: _selectedDateColor,
-          initialSelectedDate: DateTime.now(),
-          selectedTextColor: CupertinoColors.white,
-        ),
-      ],
+    return Container(
+      color: _backgroundColor,
+      child: DatePicker(
+        _getBeginningOfWeek(),
+        daysCount: 7,
+        onDateChange: onDateChange,
+        dayTextStyle: _dayTextStyle,
+        dateTextStyle: _dateTextStyle,
+        monthTextStyle: _dayTextStyle,
+        initialSelectedDate: DateTime.now(),
+        selectedTextColor: CupertinoColors.white,
+        selectionColor: _selectedDateBackgroundColor,
+      ),
     );
   }
 }
