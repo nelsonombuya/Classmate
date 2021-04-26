@@ -143,15 +143,17 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       extendBody: true,
-      body: HomeScrollView(
-        actions: widget.actions,
-        leading: widget.leading,
-        title: widget.titles[_currentIndex],
-        child: PageView(
-          children: widget.pages,
-          controller: _pageController,
-          onPageChanged: _onPageSwiped,
-          physics: ClampingScrollPhysics(),
+      body: SafeArea(
+        child: HomeScrollView(
+          actions: widget.actions,
+          leading: widget.leading,
+          title: widget.titles[_currentIndex],
+          child: PageView(
+            children: widget.pages,
+            controller: _pageController,
+            onPageChanged: _onPageSwiped,
+            physics: ClampingScrollPhysics(),
+          ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
