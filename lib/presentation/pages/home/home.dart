@@ -1,4 +1,4 @@
-// # Imports
+import 'package:classmate/bloc/events/events_bloc.dart';
 import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:classmate/presentation/pages/home/custom_fab_widget.dart';
@@ -9,20 +9,21 @@ import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// # Home
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
-/// And also the BLoCs that may be needed to be provided among all pages
 class Home extends StatelessWidget {
-  Home({this.args});
   final HomeArgs args;
+
+  Home({this.args});
 
   @override
   Widget build(BuildContext context) {
-    Widget _leading = SignOutButton();
+    Widget _leading;
 
-    List<Widget> _actions = [NotificationsWidget()];
+    List<Widget> _actions = [NotificationsWidget(), SignOutButton()];
 
     final List<String> _titles = [
       "Dashboard",
@@ -63,14 +64,16 @@ class Home extends StatelessWidget {
       )
     ];
 
-    return HomeView(
-      pages: _pages,
-      titles: _titles,
-      actions: _actions,
-      leading: _leading,
-      bottomNavBarItems: _bottomNavBarItems,
-      overridePageShown:
-          args == null ? HomeSubPage.Null : args.pageToNavigateTo,
+    return BlocProvider(
+      create: (context) => EventsBloc(),
+      child: HomeView(
+        pages: _pages,
+        titles: _titles,
+        actions: _actions,
+        leading: _leading,
+        bottomNavBarItems: _bottomNavBarItems,
+        overridePageShown: args == null ? null : args.pageToNavigateTo,
+      ),
     );
   }
 }
