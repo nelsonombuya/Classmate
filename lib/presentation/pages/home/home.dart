@@ -1,6 +1,7 @@
 // # Imports
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/presentation/pages/home/add_event_form.dart';
+import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
+import 'package:classmate/presentation/pages/events/events_page.dart';
+import 'package:classmate/presentation/pages/home/custom_fab_widget.dart';
 import 'package:classmate/presentation/pages/home/home_args.dart';
 import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
 import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
@@ -8,30 +9,21 @@ import 'package:classmate/presentation/widgets/notifications_widget.dart';
 import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 /// # Home
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
 /// And also the BLoCs that may be needed to be provided among all pages
 class Home extends StatelessWidget {
-  // # Getting the subpage (if needed)
   Home({this.args});
   final HomeArgs args;
 
-  // # Use to provide BLoCs and variables to the rest of the app
   @override
   Widget build(BuildContext context) {
-    // ### App Bar
-    // * Leading Widget
     Widget _leading = SignOutButton();
 
-    // * Page Actions
     List<Widget> _actions = [NotificationsWidget()];
 
-    // ### Content
-    // * Tab Labels and Page Titles
     final List<String> _titles = [
       "Dashboard",
       "Events",
@@ -39,16 +31,9 @@ class Home extends StatelessWidget {
       "More",
     ];
 
-    // * Pages
     final List<Widget> _pages = [
-      Container(
-        color: CupertinoColors.systemBlue,
-        child: Center(child: Text("DASHBOARD")),
-      ),
-      Container(
-        color: CupertinoColors.systemIndigo,
-        child: Center(child: Text("EVENTS")),
-      ),
+      DashboardPage(),
+      EventsPage(),
       Container(
         color: CupertinoColors.systemYellow,
         child: Center(child: Text("TASKS")),
@@ -59,8 +44,6 @@ class Home extends StatelessWidget {
       ),
     ];
 
-    // ### Bottom Navigation Bar
-    // * Bottom Navigation Bar Items
     List<BottomNavigationBarItem> _bottomNavBarItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.dashboard_rounded),
@@ -71,7 +54,7 @@ class Home extends StatelessWidget {
         label: _titles[1],
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.check_circle_outline_rounded),
+        icon: Icon(Icons.list_rounded),
         label: _titles[2],
       ),
       BottomNavigationBarItem(
@@ -86,7 +69,7 @@ class Home extends StatelessWidget {
       actions: _actions,
       leading: _leading,
       bottomNavBarItems: _bottomNavBarItems,
-      overrideFirstPage:
+      overridePageShown:
           args == null ? HomeSubPage.Null : args.pageToNavigateTo,
     );
   }
@@ -94,7 +77,7 @@ class Home extends StatelessWidget {
 
 class HomeView extends StatefulWidget {
   HomeView({
-    this.overrideFirstPage,
+    this.overridePageShown,
     @required this.pages,
     @required this.titles,
     @required this.leading,
@@ -102,38 +85,34 @@ class HomeView extends StatefulWidget {
     @required this.bottomNavBarItems,
   });
 
-  final List<BottomNavigationBarItem> bottomNavBarItems;
-  final HomeSubPage overrideFirstPage;
-  final List<Widget> actions;
-  final List<String> titles;
-  final List<Widget> pages;
   final Widget leading;
+  final List<Widget> pages;
+  final List<String> titles;
+  final List<Widget> actions;
+  final HomeSubPage overridePageShown;
+  final List<BottomNavigationBarItem> bottomNavBarItems;
 
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  // # Page Management
+  PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  // # Tab Navigation
   void _onTabTapped(int index) {
     return setState(() {
       _pageController.animateToPage(
         index,
-        duration: Duration(milliseconds: 800),
         curve: Curves.fastLinearToSlowEaseIn,
+        duration: Duration(milliseconds: 800),
       );
     });
   }
 
-  // # Page Swipe Navigation
-  void _onPageSwipe(int index) => setState(() => _currentIndex = index);
-  PageController _pageController = PageController();
+  void _onPageSwiped(int index) => setState(() => _currentIndex = index);
 
-  // # In case we want to override the first page
-  void _overrideFirstPage(page) {
+  void _overridePageShown(page) {
     switch (page) {
       case HomeSubPage.Dashboard:
         setState(() => _currentIndex = 0);
@@ -158,57 +137,29 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    _overrideFirstPage(widget.overrideFirstPage);
-    Device().init(context);
-
-    Color _fabColor = Device.brightness == Brightness.light
-        ? CupertinoColors.systemGroupedBackground
-        : CupertinoColors.darkBackgroundGray;
+    // * Helps when using Sailor to navigate directly to a subpage
+    // * Whilst maintaining the Home Widget's overall functionality
+    _overridePageShown(widget.overridePageShown);
 
     return Scaffold(
       extendBody: true,
-      floatingActionButton: SpeedDial(
-        tooltip: "Add Items",
-        backgroundColor: _fabColor,
-        curve: Curves.fastLinearToSlowEaseIn,
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-            label: "Add Event",
-            child: Icon(Icons.event),
-            backgroundColor: _fabColor,
-            labelBackgroundColor: _fabColor,
-            onTap: () => showBarModalBottomSheet(
-              context: context,
-              builder: (context) => Container(child: AddEventForm()),
-            ),
-          ),
-          SpeedDialChild(
-            label: "Add Task",
-            backgroundColor: _fabColor,
-            labelBackgroundColor: _fabColor,
-            child: Icon(
-              Icons.check_circle_outline_rounded,
-            ),
-          ),
-        ],
-      ),
       body: HomeScrollView(
         actions: widget.actions,
         leading: widget.leading,
         title: widget.titles[_currentIndex],
         child: PageView(
-          physics: ClampingScrollPhysics(),
-          onPageChanged: _onPageSwipe,
-          controller: _pageController,
           children: widget.pages,
+          controller: _pageController,
+          onPageChanged: _onPageSwiped,
+          physics: ClampingScrollPhysics(),
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        items: widget.bottomNavBarItems,
-        currentIndex: _currentIndex,
         onTap: _onTabTapped,
+        currentIndex: _currentIndex,
+        items: widget.bottomNavBarItems,
       ),
+      floatingActionButton: CustomFloatingActionButton(),
     );
   }
 }
