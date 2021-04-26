@@ -12,8 +12,8 @@ class HomeScrollView extends StatelessWidget {
   });
 
   final String title;
-  final Widget child;
   final Widget leading;
+  final PageView child;
   final List<Widget> actions;
 
   @override
@@ -24,14 +24,14 @@ class HomeScrollView extends StatelessWidget {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            pinned: true,
+            floating: true,
             elevation: 0.0,
             actions: actions,
             leading: leading,
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: Device.brightness == Brightness.light
-                ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
-                : CupertinoColors.darkBackgroundGray.withOpacity(0.7),
+                ? CupertinoColors.systemGroupedBackground
+                : CupertinoColors.darkBackgroundGray,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),
