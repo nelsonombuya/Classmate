@@ -31,7 +31,7 @@ class DatePickerCarousel extends StatelessWidget {
     if (Device.brightness == Brightness.light) {
       _dateTextStyleColor = CupertinoColors.black;
       _dayTextStyleColor = CupertinoColors.inactiveGray;
-      _selectedDateBackgroundColor = CupertinoColors.black;
+      _selectedDateBackgroundColor = CupertinoColors.inactiveGray;
       _backgroundColor = CupertinoColors.systemGroupedBackground;
     } else {
       _dayTextStyleColor = CupertinoColors.systemGrey;
