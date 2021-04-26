@@ -10,6 +10,7 @@ import 'add_event_form.dart';
 /// Allows the user to view the following forms:
 ///   - Add New Event
 ///   - Add New Task
+///   - Show search modal page
 /// ! Depends on Speed Dial Package
 class CustomFloatingActionButton extends StatelessWidget {
   @override
@@ -21,13 +22,13 @@ class CustomFloatingActionButton extends StatelessWidget {
         : CupertinoColors.darkBackgroundGray;
 
     return SpeedDial(
-      tooltip: "Add Items",
+      tooltip: "Quick Actions",
       backgroundColor: _fabColor,
       curve: Curves.fastLinearToSlowEaseIn,
       animatedIcon: AnimatedIcons.menu_close,
       children: [
         SpeedDialChild(
-          label: "Add Event",
+          label: "New Event",
           child: Icon(Icons.event),
           backgroundColor: _fabColor,
           labelBackgroundColor: _fabColor,
@@ -37,12 +38,16 @@ class CustomFloatingActionButton extends StatelessWidget {
           ),
         ),
         SpeedDialChild(
-          label: "Add Task",
+          label: "New Task",
           backgroundColor: _fabColor,
           labelBackgroundColor: _fabColor,
-          child: Icon(
-            Icons.check_circle_outline_rounded,
-          ),
+          child: Icon(Icons.list_rounded),
+        ),
+        SpeedDialChild(
+          label: "Search",
+          backgroundColor: _fabColor,
+          labelBackgroundColor: _fabColor,
+          child: Icon(Icons.search_rounded),
         ),
       ],
     );
