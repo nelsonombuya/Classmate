@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/notifications/notifications_bloc.dart';
 import '../../constants/device.dart';
 
-/// # Sign Out Widget
-/// Used to allow the user to sign out
 class SignOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -1,22 +1,12 @@
-// # Imports
-import 'dart:ui';
-
 import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// # Custom App Bar Widget
-/// An extension of the App Bar Widget
-/// Modified for the sign up and sign in screens
 class CustomAppBar extends StatelessWidget {
-  CustomAppBar({
-    @required this.title,
-    this.actions,
-    this.automaticallyImplyLeading,
-  });
   final String title;
   final List<Widget> actions;
-  final bool automaticallyImplyLeading;
+
+  CustomAppBar({@required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +25,16 @@ class CustomAppBar extends StatelessWidget {
       backgroundColor: Device.brightness == Brightness.light
           ? CupertinoColors.systemGroupedBackground
           : CupertinoColors.darkBackgroundGray,
-      automaticallyImplyLeading: automaticallyImplyLeading ?? true,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: Device.height(1.6)),
-        title: title == null
-            ? null
-            : Text(
-                title.toUpperCase(),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(fontWeight: FontWeight.w600),
-              ),
+        title: Text(
+          title.toUpperCase(),
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
