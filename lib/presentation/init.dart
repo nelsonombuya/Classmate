@@ -10,7 +10,12 @@ import 'widgets/custom_snack_bar.dart';
 import 'widgets/dialog_widget.dart';
 
 /// # Init
-/// Does all the necessary initializations needed when the app starts
+/// * Holds the Notifications Listener:
+///   - Shows either a snack bar or a dialog box upon request
+///
+/// * Holds the Auth Builder:
+///   - Sends the user directly to the dashboard if they're authenticated
+///   - Kicks them back to the Welcome Page if they're not signed in
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,6 @@ class Init extends StatelessWidget {
           if (state is AuthenticationError)
             return SplashPage(error: state.message);
 
-          // * Return the splash page in the meantime
           return SplashPage();
         },
       ),

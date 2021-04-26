@@ -11,16 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'constants/routes.dart';
 
 void main() async {
-  // # Flutter
   WidgetsFlutterBinding.ensureInitialized();
 
-  // # Packages
-  EquatableConfig.stringify = kDebugMode; // Used by BLoC to compare states
-  await Firebase.initializeApp(); // For the database and services
-  Bloc.observer = Watchtower(); // For logging BLoCs
-  Routes.createRoutes(); // Setting up routes used by the Sailor Plugin
+  EquatableConfig.stringify = kDebugMode;
+  await Firebase.initializeApp();
+  Bloc.observer = Watchtower();
+  Routes.createRoutes();
 
-  // ! Locking Screen Orientation to Portrait for now
+  // TODO Restructure App for Landscape Orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(ClassMate()));
 }

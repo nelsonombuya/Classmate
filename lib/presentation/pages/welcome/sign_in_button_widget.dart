@@ -1,12 +1,9 @@
-// # Imports
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// # Sign In With Email
-/// Button for signing in with e-mail address on Welcome Page.
-/// Sends the user to the sign in page.
+import '../../../constants/device.dart';
+import '../../../constants/routes.dart';
+
 class SignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,17 +15,13 @@ class SignInButton extends StatelessWidget {
         height: Device.height(6.2),
       ),
       child: ElevatedButton(
+        child: Text('SIGN IN'),
+        onPressed: () => Routes.sailor('/sign_in'),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed))
-                return CupertinoColors.activeBlue;
-              return CupertinoColors.systemBlue;
-            },
+            (Set<MaterialState> states) => CupertinoColors.systemBlue,
           ),
         ),
-        onPressed: () => Routes.sailor('/sign_in'),
-        child: Text('SIGN IN'),
       ),
     );
   }

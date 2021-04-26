@@ -1,21 +1,17 @@
-// # Imports
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-/// # Background Video Player
-/// Used to play a video background on any screen
-/// ? Can be extended to include network videos/images as well
 class BackgroundVideoPlayer extends StatefulWidget {
-  BackgroundVideoPlayer({@required this.video, @required this.placeholder});
   final String placeholder;
   final String video;
+
+  BackgroundVideoPlayer({@required this.video, @required this.placeholder});
 
   @override
   _BackgroundVideoPlayerState createState() => _BackgroundVideoPlayerState();
 }
 
 class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
-  // # Video Controller
   VideoPlayerController _controller;
 
   @override
@@ -44,7 +40,6 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
     return Container(
       decoration: BoxDecoration(),
       child: _controller.value.isInitialized
-          // Shows the video once it has been initialized
           ? Stack(
               children: <Widget>[
                 SizedBox.expand(
@@ -59,7 +54,6 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
                 ),
               ],
             )
-          // Shows an image while the video is initializing
           : Container(
               decoration: BoxDecoration(
                 image: DecorationImage(

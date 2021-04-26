@@ -1,12 +1,12 @@
-// # Imports
 import 'package:flutter/material.dart';
 
 /// # Device
-/// ? Based on ScreenConfig by Daniel
-/// ? https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
-/// * Extended for more use cases
-/// After a long night of resizing things
-/// I realised this was the better option
+/// Based on ScreenConfig
+/// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
+/// - Used for scaling of widgets and text
+/// - Also acts as a way of getting media query data
+/// * Make sure to instantiate whenever you want to use it
+/// This is done by calling Device().init(context) in the build method
 class Device {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;
@@ -19,8 +19,6 @@ class Device {
   static double safeBlockHorizontal;
   static double safeBlockVertical;
 
-  // * My extensions
-  static Orientation orientation;
   static Brightness brightness;
 
   void init(BuildContext context) {
@@ -37,7 +35,6 @@ class Device {
     safeBlockHorizontal = (screenWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (screenHeight - _safeAreaVertical) / 100;
 
-    // * My Extensions
     brightness = _mediaQueryData.platformBrightness;
   }
 

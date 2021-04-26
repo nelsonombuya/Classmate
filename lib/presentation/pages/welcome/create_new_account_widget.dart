@@ -1,11 +1,8 @@
-// # Imports
-import 'package:classmate/constants/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// # Create a new account button
-/// Button used in the Welcome Page.
-/// Goes to the Sign Up Page.
+import '../../../constants/routes.dart';
+
 class CreateANewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
