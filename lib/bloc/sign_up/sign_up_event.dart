@@ -7,7 +7,6 @@ abstract class SignUpEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// # Events
 class SignUpStarted extends SignUpEvent {
   const SignUpStarted({
     @required this.password,
@@ -18,3 +17,7 @@ class SignUpStarted extends SignUpEvent {
 
   final String email, password, firstName, lastName;
 }
+
+class SignUpRequested extends SignUpEvent {}
+
+class SignUpValidationFailed extends SignUpEvent {}

@@ -5,10 +5,11 @@ abstract class SignUpState extends Equatable {
   List<Object> get props => [];
 }
 
-// # States
 class SignUpInitial extends SignUpState {}
 
 class SignUpLoading extends SignUpState {}
+
+class SignUpValidation extends SignUpState {}
 
 class SignUpSuccess extends SignUpState {
   SignUpSuccess({@required this.user});
