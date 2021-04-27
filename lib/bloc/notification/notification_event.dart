@@ -1,15 +1,23 @@
-part of 'notifications_bloc.dart';
+part of 'notification_bloc.dart';
 
-abstract class NotificationsEvent extends Equatable {
-  const NotificationsEvent();
+abstract class NotificationEvent extends Equatable {
+  const NotificationEvent({
+    @required this.message,
+    this.title,
+    this.notificationType,
+  });
+
+  final String title;
+  final String message;
+  final NotificationType notificationType;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [title, message, notificationType];
 }
 
-class NotificationsServiceStarted extends NotificationsEvent {}
+class NotificationsServiceStarted extends NotificationEvent {}
 
-class SnackBarRequested extends NotificationsEvent {
+class SnackBarRequested extends NotificationEvent {
   const SnackBarRequested(this.message, {this.title, this.notificationType});
   final NotificationType notificationType;
   final String message, title;
@@ -18,7 +26,7 @@ class SnackBarRequested extends NotificationsEvent {
   List<Object> get props => [title, message, notificationType];
 }
 
-class DialogBoxRequested extends NotificationsEvent {
+class DialogBoxRequested extends NotificationEvent {
   const DialogBoxRequested(
     this.message, {
     this.title,
@@ -31,10 +39,10 @@ class DialogBoxRequested extends NotificationsEvent {
     this.negativeActionOnPressed,
   });
 
-  final String message, title, positiveActionLabel, negativeActionLabel;
-  final Function positiveActionOnPressed, negativeActionOnPressed;
-  final IconData descriptionIcon, positiveActionIcon;
   final NotificationType notificationType;
+  final IconData descriptionIcon, positiveActionIcon;
+  final Function positiveActionOnPressed, negativeActionOnPressed;
+  final String message, title, positiveActionLabel, negativeActionLabel;
 
   @override
   List<Object> get props => [
@@ -50,7 +58,7 @@ class DialogBoxRequested extends NotificationsEvent {
       ];
 }
 
-class SignOutDialogBoxRequested extends NotificationsEvent {
+class SignOutDialogBoxRequested extends NotificationEvent {
   const SignOutDialogBoxRequested(this.context);
   final BuildContext context;
 

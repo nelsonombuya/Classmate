@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth/auth_bloc.dart';
-import '../bloc/notifications/notifications_bloc.dart';
+import '../bloc/notification/notification_bloc.dart';
 import 'pages/home/home.dart';
 import 'pages/splash/splash_page.dart';
 import 'pages/welcome/welcome_page.dart';
@@ -19,7 +19,7 @@ import 'widgets/dialog_widget.dart';
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NotificationsBloc, NotificationsState>(
+    return BlocListener<NotificationBloc, NotificationState>(
       listener: (context, state) {
         if (state is ShowSnackBar) {
           CustomSnackBar(

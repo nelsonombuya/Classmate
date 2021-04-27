@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sailor/sailor.dart';
 
 import 'bloc/auth/auth_bloc.dart';
-import 'bloc/notifications/notifications_bloc.dart';
+import 'bloc/notification/notification_bloc.dart';
 import 'constants/routes.dart';
 import 'constants/themes.dart';
 
@@ -17,9 +17,8 @@ class ClassMate extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc()..add(AuthStarted()),
         ),
-        BlocProvider<NotificationsBloc>(
-          create: (context) =>
-              NotificationsBloc()..add(NotificationsServiceStarted()),
+        BlocProvider<NotificationBloc>(
+          create: (context) => NotificationBloc(),
         ),
       ],
       child: MaterialApp(
