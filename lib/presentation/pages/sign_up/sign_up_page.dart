@@ -1,18 +1,15 @@
-// # Dart Imports
 import 'dart:async';
 
-import 'package:classmate/bloc/notifications/notifications_bloc.dart';
-import 'package:classmate/bloc/sign_up/sign_up_bloc.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/enums.dart';
-import 'package:classmate/constants/validators.dart';
-import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
-import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
-import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// # BlocProvider for the Page
+import '../../../bloc/sign_up/sign_up_bloc.dart';
+import '../../../constants/device.dart';
+import '../../../constants/validators.dart';
+import '../../widgets/custom_form_view_widget.dart';
+import '../../widgets/custom_loading_elevatedButton_widget.dart';
+import '../../widgets/custom_textFormField_widget.dart';
+
 class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,111 +20,127 @@ class SignUpPage extends StatelessWidget {
   }
 }
 
-// # Sign Up Page
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-  // * Info collected from the form
   String _firstName, _lastName, _email, _password;
 
-  // * Global Key for Form Validation
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  PasswordConfirmationValidator _passwordConfirmation =
+      PasswordConfirmationValidator();
 
-  // * Used to disable Fields and Buttons during Sign In
-  bool _areThingsEnabled = true;
-  bool _showPassword = false;
   bool _proceed;
-
-  // * Used during password confirmation validation
-  var _passwordConfirmation = PasswordConfirmationValidator();
+  bool _showPassword = false;
+  bool _isInputEnabled = true;
 
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-    NotificationsBloc _notifications =
-        BlocProvider.of<NotificationsBloc>(context);
+    SignUpBloc _signUpBloc = BlocProvider.of<SignUpBloc>(context);
+
+    Future<bool> _onSignUpButtonPressed() async {
+      _signUpBloc.add(SignUpRequested());
+
+      /// HACK Used to sync the current states
+      /// With the sign up button animations
+      while (_proceed == null) await Future.delayed(Duration(seconds: 3));
+      return _proceed;
+    }
+
+    void _onSignUpButtonAnimationEnd() {
+      if (_proceed == true) {
+        setState(() => _proceed = null);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      } else {
+        setState(() {
+          _proceed = null;
+          _isInputEnabled = true;
+        });
+      }
+    }
 
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
+        if (state is SignUpValidation) {
+          if (_formKey.currentState.validate()) {
+            setState(() {
+              _showPassword = false;
+              _isInputEnabled = false;
+            });
+
+            _formKey.currentState.save();
+
+            _signUpBloc.add(
+              SignUpStarted(
+                email: _email.trim(),
+                password: _password,
+                firstName: _firstName.trim(),
+                lastName: _lastName.trim(),
+              ),
+            );
+          } else {
+            _signUpBloc.add(SignUpValidationFailed());
+            setState(() {
+              _isInputEnabled = true;
+              _proceed = false;
+            });
+          }
+        }
+
         if (state is SignUpSuccess) setState(() => _proceed = true);
 
-        if (state is SignUpFailure) {
-          setState(() => _proceed = false);
-          _notifications.add(
-            SnackBarRequested(
-              state.message,
-              title: "Sign Up Failed",
-              notificationType: NotificationType.Danger,
-            ),
-          );
-        }
+        if (state is SignUpFailure) setState(() => _proceed = false);
       },
       child: FormView(
         title: "Sign Up",
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // # Sized Box for spacing
             SizedBox(height: Device.height(2.0)),
-
-            // # Form
             Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formKey,
               child: Column(
                 children: [
-                  // # Names
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // First Name
                       Expanded(
                         child: CustomTextFormField(
                           label: 'First Name',
-                          enabled: _areThingsEnabled,
+                          enabled: _isInputEnabled,
                           keyboardType: TextInputType.name,
                           validator: Validator.nameValidator,
                           onSaved: (value) => _firstName = value,
                         ),
                       ),
-
-                      // Spacing Between Fields
                       SizedBox(width: Device.width(4.0)),
-
-                      // Last Name
                       Expanded(
                           child: CustomTextFormField(
                         label: 'Last Name',
-                        enabled: _areThingsEnabled,
+                        enabled: _isInputEnabled,
                         keyboardType: TextInputType.name,
                         validator: Validator.nameValidator,
                         onSaved: (value) => _lastName = value,
                       )),
                     ],
                   ),
-
-                  // # Sized Box for spacing
                   SizedBox(height: Device.height(3.0)),
-
-                  // # Email
                   CustomTextFormField(
                     label: 'Email Address',
-                    enabled: _areThingsEnabled,
+                    enabled: _isInputEnabled,
                     onSaved: (value) => _email = value,
                     validator: Validator.emailValidator,
                     keyboardType: TextInputType.emailAddress,
                   ),
-
-                  // # Sized Box for spacing
                   SizedBox(height: Device.height(3.0)),
-
-                  // # Password
                   CustomTextFormField(
                     label: 'Password',
-                    enabled: _areThingsEnabled,
+                    enabled: _isInputEnabled,
                     obscureText: !_showPassword,
                     onSaved: (value) => _password = value,
                     validator: Validator.passwordValidator,
@@ -140,14 +153,10 @@ class _SignUpState extends State<SignUp> {
                     onChanged: (value) =>
                         setState(() => _passwordConfirmation.temp = value),
                   ),
-
-                  // # Sized Box for spacing
                   SizedBox(height: Device.height(3.0)),
-
-                  // # Password Confirmation
                   CustomTextFormField(
                     label: 'Confirm Password',
-                    enabled: _areThingsEnabled,
+                    enabled: _isInputEnabled,
                     obscureText: !_showPassword,
                     keyboardType: TextInputType.visiblePassword,
                     suffixIcon: _showPassword
@@ -157,65 +166,15 @@ class _SignUpState extends State<SignUp> {
                         setState(() => _showPassword = !_showPassword),
                     validator: _passwordConfirmation.confirmPasswordValidator,
                   ),
-
-                  // # Sized Box for spacing
                   SizedBox(height: Device.height(8.0)),
-
-                  // # Sign Up Button
                   Center(
-                    child: BlocBuilder<SignUpBloc, SignUpState>(
-                      builder: (context, state) {
-                        return CustomLoadingElevatedButton(
-                          onPressed: () async {
-                            // Validating the form input
-                            if (_formKey.currentState.validate()) {
-                              setState(
-                                // Locking the fields
-                                () {
-                                  _showPassword = false;
-                                  _areThingsEnabled = false;
-                                },
-                              );
-
-                              // Saving the form information for use during sign up
-                              _formKey.currentState.save();
-
-                              // Running the SignUp started event
-                              BlocProvider.of<SignUpBloc>(context).add(
-                                SignUpStarted(
-                                  password: _password,
-                                  email: _email.trim(),
-                                  lastName: _lastName.trim(),
-                                  firstName: _firstName.trim(),
-                                ),
-                              );
-
-                              /// HACK Used to sync the current states
-                              /// With the sign up button animations
-                              while (_proceed == null)
-                                await Future.delayed(Duration(seconds: 3));
-
-                              return _proceed;
-                            }
-                          },
-                          onEnd: () {
-                            if (_proceed == true) {
-                              setState(() => _proceed = null);
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/', (Route<dynamic> route) => false);
-                            } else {
-                              setState(() {
-                                _proceed = null;
-                                _areThingsEnabled = true;
-                              });
-                            }
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: Theme.of(context).textTheme.button,
-                          ),
-                        );
-                      },
+                    child: CustomLoadingElevatedButton(
+                      onPressed: _onSignUpButtonPressed,
+                      onEnd: _onSignUpButtonAnimationEnd,
+                      child: Text(
+                        'Sign Up',
+                        style: Theme.of(context).textTheme.button,
+                      ),
                     ),
                   ),
                 ],

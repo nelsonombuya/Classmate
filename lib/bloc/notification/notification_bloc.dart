@@ -5,11 +5,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/enums.dart';
 import '../auth/auth_bloc.dart';
 
 part 'notification_event.dart';
 part 'notification_state.dart';
+
+enum NotificationType { Danger, Info, Warning, Success }
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc() : super(NotificationsInitial());
