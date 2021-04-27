@@ -35,6 +35,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     Device().init(context);
     return TextFormField(
+      key: key,
       enabled: enabled,
       onSaved: onSaved,
       maxLines: maxLines,
@@ -51,10 +52,12 @@ class CustomTextFormField extends StatelessWidget {
         labelStyle: TextStyle(fontWeight: FontWeight.bold),
         suffixIcon: Padding(
           padding: EdgeInsets.only(top: Device.height(1.8)),
-          child: IconButton(
-            icon: Icon(suffixIcon),
-            onPressed: suffixIconAction,
-          ),
+          child: suffixIcon == null
+              ? null
+              : IconButton(
+                  icon: Icon(suffixIcon),
+                  onPressed: suffixIconAction,
+                ),
         ),
       ),
     );
