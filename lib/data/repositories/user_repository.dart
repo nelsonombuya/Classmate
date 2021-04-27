@@ -5,45 +5,45 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_model.dart';
 
-/// # User Repository
-/// Mostly has Firebase Code and General User Data
-/// Has all the relevant functions used during Authentication
 class UserRepository {
-  // _ AUTH
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
-  // # Parser
-  UserModel _parseRawData(rawUser) {
-    if (rawUser == null) return null;
-
-    /// This is so as to use this function to parse data from all functions
-    ///
-    /// Since signUpWithEmail and signUpWithEmail return UserCredential Objects
-    /// Which has the User object at UserCredential.user
-    ///
-    /// While the rest either return void or User Objects directly
-    if (rawUser is UserCredential) rawUser = rawUser.user;
-
-    return UserModel(
-      uid: rawUser.uid,
-      email: rawUser.email,
-      displayName: rawUser.displayName,
-      updateProfile: rawUser.updateProfile,
-      isEmailVerified: rawUser.emailVerified,
-    );
+  UserModel _parseUserToUserModel(User rawUser) {
+    return (rawUser == null)
+        ? null
+        : UserModel(
+            uid: rawUser.uid,
+            email: rawUser.email,
+            displayName: rawUser.displayName,
+            updateProfile: rawUser.updateProfile,
+            isEmailVerified: rawUser.emailVerified,
+          );
   }
 
-  // # Streams
+  UserModel _parseUserCredentialToUserModel(UserCredential rawUserCredential) {
+    return (rawUserCredential == null)
+        ? null
+        : UserModel(
+            uid: rawUserCredential.user.uid,
+            email: rawUserCredential.user.email,
+            displayName: rawUserCredential.user.displayName,
+            updateProfile: rawUserCredential.user.updateProfile,
+            isEmailVerified: rawUserCredential.user.emailVerified,
+          );
+  }
+
   Stream<UserModel> get authStateChanges {
-    /// authStateChanges Returns a UserModel Object when the user is signed in
-    /// And null when the user is not signed in
-    /// Has been set to only return distinct values
-    return _firebaseAuth.authStateChanges().distinct().map(_parseRawData);
+    return _firebaseAuth
+        .authStateChanges()
+        .distinct()
+        .map(_parseUserToUserModel);
   }
 
-  // # Methods
-  Future<UserModel> signUpWithEmail(String email, String password) async {
-    return _parseRawData(
+  Future<UserModel> createUserWithEmailAndPassword(
+      String email, String password) async {
+    return _parseUserCredentialToUserModel(
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -51,8 +51,9 @@ class UserRepository {
     );
   }
 
-  Future<UserModel> signInWithEmail(String email, String password) async {
-    return _parseRawData(
+  Future<UserModel> signInWithEmailAndPassword(
+      String email, String password) async {
+    return _parseUserCredentialToUserModel(
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -61,26 +62,22 @@ class UserRepository {
   }
 
   Future<void> updateProfile({String displayName, String photoToURL}) async {
-    return await _firebaseAuth.currentUser
-        .updateProfile(displayName: displayName, photoURL: photoToURL);
+    return await _firebaseAuth.currentUser.updateProfile(
+      displayName: displayName,
+      photoURL: photoToURL,
+    );
   }
-
-  UserModel currentUser() => _parseRawData(_firebaseAuth.currentUser);
-
-  bool isUserSignedIn() => this._firebaseAuth.currentUser != null;
 
   Future<void> signOut() async => await _firebaseAuth.signOut();
 
-  // _ FIRESTORE
-  final CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  bool isUserSignedIn() => this._firebaseAuth.currentUser != null;
 
-  // # Streams
+  UserModel currentUser() => _parseUserToUserModel(_firebaseAuth.currentUser);
+
   Stream<QuerySnapshot> get userDataStream {
     return _usersCollection.snapshots().distinct();
   }
 
-  // # Methods
   Future updateUserData(UserModel user, Map<String, dynamic> userData) async {
     return await _usersCollection
         .doc(user.uid)
