@@ -1,7 +1,9 @@
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+
+import '../../../constants/device.dart';
 
 class DatePickerButton extends StatefulWidget {
   final String title;
@@ -19,6 +21,8 @@ class DatePickerButton extends StatefulWidget {
   final Color timeColor;
   final Color splashColor;
   final Color backgroundColor;
+  final bool showDatePicker;
+  final bool showDateTimePicker;
 
   DatePickerButton({
     this.onTap,
@@ -36,6 +40,8 @@ class DatePickerButton extends StatefulWidget {
     this.selectedDate,
     this.firstSelectableDate,
     this.lastSelectableDate,
+    this.showDatePicker,
+    this.showDateTimePicker,
   });
 
   @override
@@ -43,13 +49,91 @@ class DatePickerButton extends StatefulWidget {
 }
 
 class _DatePickerButtonState extends State<DatePickerButton> {
+  DateTime _fiveHundredYearsFromNow = DateTime(
+    DateTime.now().year + 500,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+  DateTime _fiveHundredYearsBeforeNow = DateTime(
+    DateTime.now().year - 500,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
+  DatePickerTheme _lightTheme = DatePickerTheme(
+    itemStyle: TextStyle(
+      color: CupertinoColors.black,
+      fontFamily: "Averta",
+    ),
+    cancelStyle: TextStyle(
+      color: CupertinoColors.inactiveGray,
+      fontFamily: "Averta",
+    ),
+    doneStyle: TextStyle(
+      color: CupertinoColors.activeBlue,
+      fontFamily: "Averta",
+    ),
+  );
+
+  DatePickerTheme _darkTheme = DatePickerTheme(
+    backgroundColor: CupertinoColors.darkBackgroundGray,
+    itemStyle: TextStyle(
+      color: CupertinoColors.white,
+      fontFamily: "Averta",
+    ),
+    cancelStyle: TextStyle(
+      color: CupertinoColors.inactiveGray,
+      fontFamily: "Averta",
+    ),
+    doneStyle: TextStyle(
+      color: CupertinoColors.activeBlue,
+      fontFamily: "Averta",
+    ),
+  );
+
+  void _showCupertinoDateTimePicker() async {
+    DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      currentTime: widget.selectedDate,
+      maxTime: widget.lastSelectableDate ?? _fiveHundredYearsFromNow,
+      minTime: widget.firstSelectableDate ?? _fiveHundredYearsBeforeNow,
+      theme: Device.brightness == Brightness.light ? _lightTheme : _darkTheme,
+
+      // ! Change this if you want onTap to work when the user makes no change
+      onConfirm: (date) async {
+        if (date != null && widget.onTap != null) await widget.onTap(date);
+      },
+    );
+  }
+
+  void _showCupertinoDatePicker() async {
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      currentTime: widget.selectedDate,
+      maxTime: widget.lastSelectableDate ?? _fiveHundredYearsFromNow,
+      minTime: widget.firstSelectableDate ?? _fiveHundredYearsBeforeNow,
+      theme: Device.brightness == Brightness.light ? _lightTheme : _darkTheme,
+
+      // ! Change this if you want onTap to work when the user makes no change
+      onConfirm: (date) async {
+        if (date != null && widget.onTap != null) await widget.onTap(date);
+      },
+    );
+  }
+
+  Function _contextualDateTimePicker() {
+    if (widget.showDateTimePicker) return _showCupertinoDateTimePicker;
+
+    if (widget.showDatePicker) return _showCupertinoDatePicker;
+
+    return _showCupertinoDateTimePicker;
+  }
+
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-
-    void _dateTimePicker() {} // TODO Implement Date & Time Picker
-
-    void _datePicker() {} // TODO Implement All Day Function
 
     double _leftPadding =
         widget.icon == null ? Device.width(2) : Device.width(8);
@@ -79,10 +163,10 @@ class _DatePickerButtonState extends State<DatePickerButton> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: _datePicker,
             enableFeedback: true,
             splashColor: widget.splashColor ?? CupertinoColors.systemBlue,
             borderRadius: BorderRadius.circular(8.0),
+            onTap: _contextualDateTimePicker(),
             child: Stack(
               children: [
                 Positioned(
@@ -121,8 +205,8 @@ class _DatePickerButtonState extends State<DatePickerButton> {
                     ),
                     style: widget.timeStyle ??
                         Theme.of(context).textTheme.bodyText1.copyWith(
-                              fontSize: Device.height(1.7),
                               fontWeight: FontWeight.w100,
+                              fontSize: Device.height(1.7),
                               color: widget.timeColor ?? _timeColor,
                             ),
                   ),
