@@ -25,3 +25,5 @@ class SignInFailure extends SignInState {
   @override
   List<Object> get props => [message];
 }
+
+class SignInValidation extends SignInState {}

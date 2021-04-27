@@ -23,10 +23,10 @@ class SignInPage extends StatelessWidget {
 
 class SignInView extends StatefulWidget {
   @override
-  _SignInViewState createState() => _SignInViewState();
+  _SignInBlocViewState createState() => _SignInBlocViewState();
 }
 
-class _SignInViewState extends State<SignInView> {
+class _SignInBlocViewState extends State<SignInView> {
   String _email, _password;
 
   bool _isInputEnabled = true;
@@ -38,10 +38,10 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-    SignInBloc _signIn = BlocProvider.of<SignInBloc>(context);
+    SignInBloc _signInBloc = BlocProvider.of<SignInBloc>(context);
 
     Future<bool> _onSignInButtonPressed() async {
-      _signIn.add(SignInRequested());
+      _signInBloc.add(SignInRequested());
 
       /// HACK Used to sync the current states
       /// With the sign in button animations
@@ -70,14 +70,14 @@ class _SignInViewState extends State<SignInView> {
 
             _formKey.currentState.save();
 
-            _signIn.add(
+            _signInBloc.add(
               SignInStarted(
                 email: _email.trim(),
                 password: _password,
               ),
             );
           } else {
-            _signIn.add(SignInValidationFailed());
+            _signInBloc.add(SignInValidationFailed());
             setState(() {
               _isInputEnabled = true;
               _proceed = false;
