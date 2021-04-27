@@ -18,7 +18,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc() : super(AuthInitial()) {
     try {
-      // # Listening to Auth State Changes and adding events in response
       _authStateChangesStream = _userRepository.authStateChanges.listen(
         (user) => this.add(AuthChanged(user: user)),
       );
@@ -27,7 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  // # For disposing the stream when done
   @override
   Future<void> close() async {
     await _authStateChangesStream.cancel();
@@ -36,20 +34,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    // # Listening to Auth State Changes
     if (event is AuthChanged) {
       yield (event.user == null)
           ? Unauthenticated()
           : Authenticated(user: this.currentUser = event.user);
     }
 
-    // # Useful when Signing Out
     if (event is AuthRemoved) {
       _userRepository.signOut();
       yield Unauthenticated();
     }
 
-    // # Useful when an authentication error occurs
     if (event is AuthErrorOccurred) {
       if (_userRepository.isUserSignedIn()) _userRepository.signOut();
       yield Unauthenticated();

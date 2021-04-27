@@ -1,15 +1,14 @@
-import 'package:classmate/bloc/events/events_bloc.dart';
-import 'package:classmate/presentation/pages/dashboard/dashboard_page.dart';
-import 'package:classmate/presentation/pages/events/events_page.dart';
-import 'package:classmate/presentation/pages/home/custom_fab_widget.dart';
-import 'package:classmate/presentation/pages/home/home_args.dart';
-import 'package:classmate/presentation/pages/home/home_scroll_view.dart';
-import 'package:classmate/presentation/widgets/custom_bottom_navigation_bar.dart';
-import 'package:classmate/presentation/widgets/notifications_widget.dart';
-import 'package:classmate/presentation/widgets/sign_out_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../widgets/custom_bottom_navigation_bar.dart';
+import '../../widgets/notifications_widget.dart';
+import '../../widgets/sign_out_button_widget.dart';
+import '../dashboard/dashboard_page.dart';
+import '../events/events_page.dart';
+import 'custom_fab_widget.dart';
+import 'home_args.dart';
+import 'home_scroll_view.dart';
 
 /// # Home
 /// Acts as a wrapper around the other pages
@@ -64,16 +63,13 @@ class Home extends StatelessWidget {
       )
     ];
 
-    return BlocProvider(
-      create: (context) => EventsBloc(),
-      child: HomeView(
-        pages: _pages,
-        titles: _titles,
-        actions: _actions,
-        leading: _leading,
-        bottomNavBarItems: _bottomNavBarItems,
-        overridePageShown: args == null ? null : args.pageToNavigateTo,
-      ),
+    return HomeView(
+      pages: _pages,
+      titles: _titles,
+      actions: _actions,
+      leading: _leading,
+      bottomNavBarItems: _bottomNavBarItems,
+      overridePageShown: args == null ? null : args.pageToNavigateTo,
     );
   }
 }

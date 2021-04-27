@@ -1,6 +1,7 @@
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/presentation/pages/dashboard/date_picker_carousel.dart';
 import 'package:flutter/material.dart';
+
+import '../../../constants/device.dart';
+import 'date_picker_carousel.dart';
 
 class DashboardPage extends StatefulWidget {
   @override

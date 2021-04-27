@@ -1,7 +1,8 @@
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
+
+import '../../constants/device.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final List<BottomNavigationBarItem> items;

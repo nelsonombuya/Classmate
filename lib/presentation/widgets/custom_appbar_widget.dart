@@ -1,6 +1,7 @@
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../constants/device.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String title;

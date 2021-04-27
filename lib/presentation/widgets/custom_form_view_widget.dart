@@ -1,6 +1,7 @@
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/presentation/widgets/custom_appbar_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../constants/device.dart';
+import 'custom_appbar_widget.dart';
 
 class FormView extends StatelessWidget {
   FormView({
