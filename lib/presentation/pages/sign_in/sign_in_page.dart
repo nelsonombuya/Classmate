@@ -1,20 +1,16 @@
-// # Dart Imports
-import 'package:classmate/bloc/notifications/notifications_bloc.dart';
-import 'package:classmate/bloc/sign_in/sign_in_bloc.dart';
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/enums.dart';
-import 'package:classmate/constants/validators.dart';
-import 'package:classmate/presentation/pages/sign_in/custom_divider_widget.dart';
-import 'package:classmate/presentation/pages/sign_in/forgot_password_widget.dart';
-import 'package:classmate/presentation/pages/sign_in/sign_up_button_widget.dart';
-import 'package:classmate/presentation/widgets/custom_form_view_widget.dart';
-import 'package:classmate/presentation/widgets/custom_loading_elevatedButton_widget.dart';
-import 'package:classmate/presentation/widgets/custom_snack_bar.dart';
-import 'package:classmate/presentation/widgets/custom_textFormField_widget.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// # Sign In Page
+import '../../../bloc/sign_in/sign_in_bloc.dart';
+import '../../../constants/device.dart';
+import '../../../constants/validators.dart';
+import '../../widgets/custom_form_view_widget.dart';
+import '../../widgets/custom_loading_elevatedButton_widget.dart';
+import '../../widgets/custom_textFormField_widget.dart';
+import 'custom_divider_widget.dart';
+import 'forgot_password_widget.dart';
+import 'sign_up_button_widget.dart';
+
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,69 +27,90 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
-  // * Info collected from the Form
   String _email, _password;
 
-  // * Used to disable Fields and Buttons during sign In
-  bool _areThingsEnabled = true;
+  bool _isInputEnabled = true;
   bool _showPassword = false;
   bool _proceed;
 
-  // * Form Key for Form Validation
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     Device().init(context);
-    NotificationsBloc _notifications =
-        BlocProvider.of<NotificationsBloc>(context);
+    SignInBloc _signIn = BlocProvider.of<SignInBloc>(context);
+
+    Future<bool> _onSignInButtonPressed() async {
+      _signIn.add(SignInRequested());
+
+      /// HACK Used to sync the current states
+      /// With the sign in button animations
+      while (_proceed == null) await Future.delayed(Duration(seconds: 3));
+      return _proceed;
+    }
+
+    void _onSignInButtonAnimationEnd() {
+      if (_proceed == true) {
+        setState(() => _proceed = null);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      } else {
+        setState(() => _proceed = null);
+      }
+    }
 
     return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) async {
+        if (state is SignInValidation) {
+          if (_formKey.currentState.validate()) {
+            setState(() {
+              _showPassword = false;
+              _isInputEnabled = false;
+            });
+
+            _formKey.currentState.save();
+
+            _signIn.add(
+              SignInStarted(
+                email: _email.trim(),
+                password: _password,
+              ),
+            );
+          } else {
+            _signIn.add(SignInValidationFailed());
+            setState(() {
+              _isInputEnabled = true;
+              _proceed = false;
+            });
+          }
+        }
+
         if (state is SignInSuccess) setState(() => _proceed = true);
 
-        if (state is SignInFailure) {
-          setState(() => _proceed = false);
-          _notifications.add(
-            SnackBarRequested(
-              state.message,
-              title: "Sign In Failed",
-              notificationType: NotificationType.Danger,
-            ),
-          );
-        }
+        if (state is SignInFailure) setState(() => _proceed = false);
       },
       child: FormView(
         title: "Sign In",
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // # Sized Box for spacing
             SizedBox(height: Device.height(2.0)),
-
-            // # Form
             Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
-                  // # E-Mail Address Field
                   CustomTextFormField(
                     label: 'E-Mail Address',
-                    enabled: _areThingsEnabled,
+                    enabled: _isInputEnabled,
                     onSaved: (value) => _email = value,
                     validator: Validator.emailValidator,
                     keyboardType: TextInputType.emailAddress,
                   ),
-
-                  // # Sized Box for spacing
                   SizedBox(height: Device.height(3.0)),
-
-                  // # Password Field
-                  // ! Can't be extracted
                   CustomTextFormField(
                     label: 'Password',
-                    enabled: _areThingsEnabled,
+                    enabled: _isInputEnabled,
                     obscureText: !_showPassword,
                     onSaved: (value) => _password = value,
                     validator: Validator.passwordValidator,
@@ -104,79 +121,26 @@ class _SignInViewState extends State<SignInView> {
                     suffixIconAction: () =>
                         setState(() => _showPassword = !_showPassword),
                   ),
-
-                  // # Sized Box for spacing
-                  SizedBox(height: Device.height(1.0)),
-
-                  // # Forgot Password
-                  ForgotPasswordWidget(enabled: _areThingsEnabled),
-
-                  // # Sized Box for spacing
-                  SizedBox(height: Device.height(6.0)),
-
-                  // # Sign In Button
-                  // ! Can't be extracted
-                  Center(
-                    child: CustomLoadingElevatedButton(
-                      child: Text(
-                        'Sign In',
-                        style: Theme.of(context).textTheme.button,
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          setState(() {
-                            _showPassword = false;
-                            _areThingsEnabled = false;
-                          });
-
-                          // Saving the form information for use during sign up
-                          _formKey.currentState.save();
-
-                          // Running the registration started event
-                          BlocProvider.of<SignInBloc>(context).add(
-                            SignInStarted(
-                              email: _email.trim(),
-                              password: _password,
-                            ),
-                          );
-
-                          /// HACK Used to sync the current states
-                          /// With the sign in button animations
-                          while (_proceed == null)
-                            await Future.delayed(Duration(seconds: 3));
-
-                          return _proceed;
-                        }
-                      },
-                      onEnd: () {
-                        if (_proceed == true) {
-                          setState(() => _proceed = null);
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/', (Route<dynamic> route) => false);
-                        } else {
-                          setState(() {
-                            _proceed = null;
-                            _areThingsEnabled = true;
-                          });
-                        }
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),
-
-            // # Sized Box for spacing
+            SizedBox(height: Device.height(1.0)),
+            ForgotPasswordWidget(enabled: _isInputEnabled),
             SizedBox(height: Device.height(6.0)),
-
-            // # Divider for Coolness
-            CustomDivider(text: 'OR', enabled: _areThingsEnabled),
-
-            // # Sized Box for spacing
+            Center(
+              child: CustomLoadingElevatedButton(
+                onPressed: _onSignInButtonPressed,
+                onEnd: _onSignInButtonAnimationEnd,
+                child: Text(
+                  'Sign In',
+                  style: Theme.of(context).textTheme.button,
+                ),
+              ),
+            ),
             SizedBox(height: Device.height(6.0)),
-
-            // # Sign Up Button
-            SignUpButton(enabled: _areThingsEnabled),
+            CustomDivider(text: 'OR', enabled: _isInputEnabled),
+            SizedBox(height: Device.height(6.0)),
+            SignUpButton(enabled: _isInputEnabled),
           ],
         ),
       ),

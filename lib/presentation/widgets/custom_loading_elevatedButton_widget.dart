@@ -1,29 +1,27 @@
-// # Imports
 import 'dart:async';
 
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
+import '../../constants/device.dart';
+
 /// # Custom Loading Elevated Button
-/// Button adapted from Rounded Loading Button
-/// Customised to look like a regular elevated button
-/// But still shows animations for each state it's in
+/// ! Button adapted from Rounded Loading Button
+
 class CustomLoadingElevatedButton extends StatefulWidget {
+  final Color color;
+  final Widget child;
+  final Function onEnd;
+  final Function onPressed;
+
   CustomLoadingElevatedButton({
     @required this.onPressed,
     this.child,
     this.onEnd,
     this.color,
   });
-
-  final Function onPressed;
-  final Function onEnd;
-  final Widget child;
-  final Color color;
 
   @override
   _CustomLoadingElevatedButtonState createState() =>
@@ -35,16 +33,11 @@ class _CustomLoadingElevatedButtonState
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
 
-  final Logger _logger = Logger();
-
-  // * Extending the onPressed Functionality
+  /// * onPressed function should return bool to change between success and error states
   void onPressedExtended() async {
     try {
-      // Running the onPressed Function
       bool result = await widget.onPressed();
-      _logger.d("[Custom Loading Elevated Button]: onPressed returned $result");
 
-      // Showing the success or failure state
       if (result) {
         _btnController.success();
         await Future.delayed(Duration(seconds: 1));
@@ -53,19 +46,15 @@ class _CustomLoadingElevatedButtonState
         await Future.delayed(Duration(seconds: 3));
       }
 
-      // Resetting the Button's State
       _btnController.reset();
+
       if (widget.onEnd != null) widget.onEnd();
     } catch (e) {
-      // If there was an error in function return type
       _btnController.error();
-      _logger.e(
-          '[Custom Loading Elevated Button] onPressed function should only return bool!');
-      _logger.e('[Custom Loading Elevated Button] $e');
 
-      // Wait a little before resetting
       await Future.delayed(Duration(seconds: 5));
       _btnController.reset();
+
       if (widget.onEnd != null) widget.onEnd();
     }
   }
@@ -79,12 +68,12 @@ class _CustomLoadingElevatedButtonState
         height: Device.height(6.2),
       ),
       child: RoundedLoadingButton(
-        color: widget.color ?? CupertinoColors.activeBlue,
-        onPressed: widget.onPressed == null ? null : onPressedExtended,
-        controller: _btnController,
-        successColor: CupertinoColors.activeGreen,
         borderRadius: 3.0,
         child: widget.child,
+        controller: _btnController,
+        successColor: CupertinoColors.activeGreen,
+        color: widget.color ?? CupertinoColors.activeBlue,
+        onPressed: widget.onPressed == null ? null : onPressedExtended,
       ),
     );
   }

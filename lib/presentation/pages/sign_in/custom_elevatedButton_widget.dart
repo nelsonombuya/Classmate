@@ -1,20 +1,18 @@
-// # Imports
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// # Custom Elevated Button
-// Made in order to maintain a consistent button style
+import '../../../constants/device.dart';
+
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({@required this.child, this.onPressed});
   final Function onPressed;
   final child;
+
+  const CustomElevatedButton({@required this.child, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     Device().init(context);
 
-    // Returning the widget
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(
         width: Device.width(64.0),

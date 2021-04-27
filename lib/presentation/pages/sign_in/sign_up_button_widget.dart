@@ -1,15 +1,13 @@
-// # Imports
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/routes.dart';
-import 'package:classmate/presentation/pages/sign_in/custom_elevatedButton_widget.dart';
 import 'package:flutter/material.dart';
 
-/// # Sign Up Button
-/// Used on the Sign In Page to transition to the Sign Up Page.
-/// It's accompanied by a caption below it.
+import '../../../constants/device.dart';
+import '../../../constants/routes.dart';
+import 'custom_elevatedButton_widget.dart';
+
 class SignUpButton extends StatelessWidget {
-  SignUpButton({@required this.enabled});
   final bool enabled;
+
+  SignUpButton({@required this.enabled});
 
   @override
   Widget build(BuildContext context) {
