@@ -1,7 +1,6 @@
+import 'package:classmate/bloc/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:sweetsheet/sweetsheet.dart';
-
-import '../../constants/enums.dart';
 
 /// # Custom Dialog
 /// Used to show custom dialog boxes throughout the app

@@ -1,7 +1,7 @@
 // # Imports
 import 'package:another_flushbar/flushbar.dart';
+import 'package:classmate/bloc/notification/notification_bloc.dart';
 import 'package:classmate/constants/device.dart';
-import 'package:classmate/constants/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
