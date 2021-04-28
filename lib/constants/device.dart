@@ -1,45 +1,39 @@
 import 'package:flutter/material.dart';
 
-/// # Device
+/// # Device Query
 /// Based on ScreenConfig
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
 /// - Also acts as a way of getting media query data
-/// * Make sure to instantiate whenever you want to use it
-/// This is done by calling Device().init(context) in the build method
-class Device {
-  static MediaQueryData _mediaQueryData;
-  static double screenWidth;
-  static double screenHeight;
-  static double blockSizeHorizontal;
-  static double blockSizeVertical;
+class DeviceQuery extends InheritedWidget {
+  final double blockSizeHorizontal;
+  final double blockSizeVertical;
+  final double safeBlockHorizontal;
+  final double safeBlockVertical;
+  final Brightness brightness;
 
-  static double _safeAreaHorizontal;
-  static double _safeAreaVertical;
-  static double safeBlockHorizontal;
-  static double safeBlockVertical;
+  DeviceQuery(BuildContext context, Widget child)
+      : brightness = MediaQuery.of(context).platformBrightness,
+        blockSizeHorizontal = MediaQuery.of(context).size.width / 100,
+        blockSizeVertical = MediaQuery.of(context).size.height / 100,
+        safeBlockHorizontal = (MediaQuery.of(context).size.width -
+                (MediaQuery.of(context).padding.left +
+                    MediaQuery.of(context).padding.right)) /
+            100,
+        safeBlockVertical = (MediaQuery.of(context).size.height -
+                (MediaQuery.of(context).padding.top +
+                    MediaQuery.of(context).padding.bottom)) /
+            100,
+        super(child: child);
 
-  static Brightness brightness;
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  void init(BuildContext context) {
-    _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
-    blockSizeHorizontal = screenWidth / 100;
-    blockSizeVertical = screenHeight / 100;
+  static DeviceQuery? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DeviceQuery>();
 
-    _safeAreaHorizontal =
-        _mediaQueryData.padding.left + _mediaQueryData.padding.right;
-    _safeAreaVertical =
-        _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
-    safeBlockHorizontal = (screenWidth - _safeAreaHorizontal) / 100;
-    safeBlockVertical = (screenHeight - _safeAreaVertical) / 100;
-
-    brightness = _mediaQueryData.platformBrightness;
-  }
-
-  static double width(double width) => safeBlockHorizontal * width;
-  static double height(double height) => safeBlockVertical * height;
-  static double absoluteWidth(double width) => blockSizeHorizontal * width;
-  static double absoluteHeight(double height) => blockSizeVertical * height;
+  double safeWidth(double width) => safeBlockHorizontal * width;
+  double safeHeight(double height) => safeBlockVertical * height;
+  double absoluteWidth(double width) => blockSizeHorizontal * width;
+  double absoluteHeight(double height) => blockSizeVertical * height;
 }
