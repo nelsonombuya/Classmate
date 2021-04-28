@@ -40,8 +40,8 @@ class DatePickerButton extends StatefulWidget {
     this.selectedDate,
     this.firstSelectableDate,
     this.lastSelectableDate,
-    this.showDatePicker,
-    this.showDateTimePicker,
+    this.showDatePicker = false,
+    this.showDateTimePicker = true,
   });
 
   @override
