@@ -436,13 +436,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.25.0"
-  sailor:
-    dependency: "direct main"
-    description:
-      name: sailor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.1"
   simple_gesture_detector:
     dependency: transitive
     description:
