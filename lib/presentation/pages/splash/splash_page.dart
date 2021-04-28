@@ -1,73 +1,84 @@
-// # Imports
-import 'package:classmate/constants/device.dart';
-import 'package:classmate/presentation/pages/splash/splash_screen_text_selector.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// # Splash Page
+import '../../../constants/device.dart';
+
 class SplashPage extends StatelessWidget {
-  SplashPage({this.error, this.hold = false});
-  final String error; // * For showing the error message screen instead
-  final bool hold; // * Just shows the app logo without the text
+  final String _firstString = 'Class';
+  final String _secondString = 'Mate';
+  final Color _secondStringColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
-    String _logo;
-    String _firstString;
-    String _secondString;
-    Color _secondStringColor;
-    Device().init(context);
+    final DeviceQuery? _device = DeviceQuery.of(context);
+    final TextStyle? _splashTextStyle = Theme.of(context).textTheme.headline2;
 
-    // ! In case of error during loading
-    if (error != null) {
-      // First String in this case will be "Something went wrong..."
-      // Second String will be the error message
-      // Both colours will be Red
-      _logo = 'red_plain';
-      _secondString = '$error';
-    }
+    if (_device == null) throw Exception('DeviceQuery should not be null.');
+    if (_splashTextStyle == null)
+      throw Exception('Theme Inherited Widget should not be null.');
 
-    // * If everything's okay so far
-    else {
-      _firstString = 'Class';
-      _secondString = 'Mate';
-      _secondStringColor = CupertinoColors.systemBlue;
-      _logo =
-          Device.brightness == Brightness.dark ? 'white_plain' : 'black_plain';
-    }
+    final double _fontSize = _device.safeHeight(4.5);
+    final String _logo =
+        _device.brightness == Brightness.light ? 'black_plain' : 'white_plain';
 
-    // * Returning the view
     return Scaffold(
       body: Stack(
         children: [
-          // # Logo
           Align(
             alignment: Alignment.center,
             child: Container(
-              width: Device.height(32.0),
-              height: Device.width(32.0),
+              width: _device.safeHeight(32.0),
+              height: _device.safeWidth(32.0),
               child: Image.asset(
                 'assets/images/logo/$_logo.png',
                 fit: BoxFit.contain,
               ),
             ),
           ),
-
-          // # Animated Text
-          if (hold == false)
-            Positioned(
-              top: Device.height(65.0),
-              left: Device.width(4.0),
-              right: Device.width(4.0),
-
-              // * Selects between the error and the normal splash screens
-              child: SplashScreenTextSelector(
-                error: error != null,
-                firstString: _firstString,
-                secondString: _secondString,
-                secondStringColor: _secondStringColor,
-              ),
+          Positioned(
+            left: _device.safeWidth(4.0),
+            top: _device.safeHeight(65.0),
+            right: _device.safeWidth(4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    FadeAnimatedText(
+                      _firstString,
+                      fadeInEnd: 0.2,
+                      fadeOutBegin: 0.8,
+                      textAlign: TextAlign.center,
+                      duration: Duration(seconds: 5),
+                      textStyle: _splashTextStyle.copyWith(
+                        fontWeight: FontWeight.w300,
+                        fontSize: _fontSize,
+                      ),
+                    ),
+                  ],
+                ),
+                AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    FadeAnimatedText(
+                      _secondString,
+                      fadeInEnd: 0.2,
+                      fadeOutBegin: 0.8,
+                      textAlign: TextAlign.center,
+                      duration: Duration(seconds: 5),
+                      textStyle: _splashTextStyle.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: _secondStringColor,
+                        fontSize: _fontSize,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
