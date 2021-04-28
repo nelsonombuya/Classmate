@@ -1,133 +1,44 @@
-// # Imports
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-// # Class used for the overall app theme
+import 'theme_preset.dart';
+
 abstract class Themes {
-////////////////////////////////////////////////////////////////////////////////
-  // # Light Mode Settings
   static ThemeData get lightTheme {
+    ThemePreset _preset = ThemePreset(Brightness.light);
+
     return ThemeData.light().copyWith(
+      accentColor: _preset.primaryColor,
+      primaryColor: _preset.primaryColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      primaryColor: CupertinoColors.systemBlue,
-      accentColor: CupertinoColors.systemBlue,
-
-      // * Text Themes
-      // ! KEEP MATCHED WITH DARK THEME
       textTheme: ThemeData.light().textTheme.copyWith(
-            //////////////////////////////////////////////////////////////////
-            headline2: GoogleFonts.poppins(
-              color: CupertinoColors.black,
-            ),
-
-            headline4: TextStyle(
-              color: CupertinoColors.black,
-              fontFamily: "Averta",
-            ),
-
-            headline5: TextStyle(
-              color: CupertinoColors.black,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Averta",
-            ),
-
-            subtitle1: TextStyle(
-              color: CupertinoColors.secondaryLabel,
-              fontFamily: "Averta",
-            ),
-
-            subtitle2: TextStyle(
-              color: CupertinoColors.secondaryLabel,
-              fontFamily: "Averta",
-            ),
-
-            bodyText1: TextStyle(
-              color: CupertinoColors.label,
-              fontFamily: "Averta",
-            ),
-
-            bodyText2: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: CupertinoColors.label,
-              fontFamily: "Averta",
-            ),
-
-            button: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: "Averta",
-              fontSize: 15,
-            ),
-
-            caption: GoogleFonts.montserrat(
-              color: CupertinoColors.inactiveGray,
-            ),
-
-            //////////////////////////////////////////////////////////////////
+            headline2: _preset.title,
+            headline5: _preset.headline,
+            subtitle1: _preset.subHeadline,
+            bodyText1: _preset.body,
+            bodyText2: _preset.body2,
+            button: _preset.button,
+            caption: _preset.caption,
           ),
     );
   }
 
-////////////////////////////////////////////////////////////////////////////////
-  // # Dark Mode Settings
   static ThemeData get darkTheme {
+    ThemePreset _preset = ThemePreset(Brightness.dark);
+
     return ThemeData.dark().copyWith(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: CupertinoColors.black,
-      primaryColor: CupertinoColors.systemBlue,
-      accentColor: CupertinoColors.systemBlue,
-      canvasColor: CupertinoColors.black,
-
-      // * Text Themes
-      // ! KEEP MATCHED WITH LIGHT THEME
+      canvasColor: _preset.canvasColor,
+      accentColor: _preset.accentColor,
+      primaryColor: _preset.primaryColor,
+      visualDensity: _preset.visualDensity,
+      scaffoldBackgroundColor: _preset.scaffoldBackgroundColor,
       textTheme: ThemeData.dark().textTheme.copyWith(
-            //////////////////////////////////////////////////////////////////
-            headline2: GoogleFonts.poppins(
-              color: CupertinoColors.white,
-            ),
-
-            headline4: TextStyle(
-              color: CupertinoColors.white,
-              fontFamily: "Averta",
-            ),
-
-            headline5: TextStyle(
-              color: CupertinoColors.white,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Averta",
-            ),
-
-            subtitle1: TextStyle(
-              color: CupertinoColors.systemGrey,
-              fontFamily: "Averta",
-            ),
-
-            subtitle2: TextStyle(
-              color: CupertinoColors.systemGrey2,
-              fontFamily: "Averta",
-            ),
-
-            bodyText1: TextStyle(
-              color: CupertinoColors.systemGrey,
-              fontFamily: "Averta",
-            ),
-
-            bodyText2: TextStyle(
-              color: CupertinoColors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Averta",
-            ),
-
-            button: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: "Averta",
-              fontSize: 15,
-            ),
-
-            caption: GoogleFonts.montserrat(
-              color: CupertinoColors.inactiveGray,
-            ),
-            //////////////////////////////////////////////////////////////////
+            headline2: _preset.title,
+            headline5: _preset.headline,
+            subtitle1: _preset.subHeadline,
+            bodyText1: _preset.body,
+            bodyText2: _preset.body2,
+            button: _preset.button,
+            caption: _preset.caption,
           ),
     );
   }
