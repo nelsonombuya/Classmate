@@ -23,13 +23,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery? _device = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final TextStyle? _splashTextStyle = Theme.of(context).textTheme.headline2;
 
-    // TODO Implement Error Handler ❗
-    if (_device == null) {
-      throw Exception('DeviceQuery should not be null. ❗');
-    }
     // TODO Implement Error Handler ❗
     if (_splashTextStyle == null) {
       throw Exception('Theme Inherited Widget should not be null. ❗');
@@ -42,7 +38,7 @@ class _SplashPageState extends State<SplashPage> {
       _secondString = widget.message!;
       _secondStringColor = CupertinoColors.destructiveRed;
     } else {
-      _logo = _device.brightness == Brightness.light
+      _logo = _deviceQuery.brightness == Brightness.light
           ? 'black_plain'
           : 'white_plain';
       _firstString = 'Class';
@@ -50,7 +46,7 @@ class _SplashPageState extends State<SplashPage> {
       _secondString = 'mate';
       _secondStringColor = Colors.blue;
     }
-    _fontSize = _device.safeHeight(4.5);
+    _fontSize = _deviceQuery.safeHeight(4.5);
 
     // TODO Implement Loader Animation ✨
     double _opacity = 0.0;
@@ -67,8 +63,8 @@ class _SplashPageState extends State<SplashPage> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              width: _device.safeHeight(32.0),
-              height: _device.safeWidth(32.0),
+              width: _deviceQuery.safeHeight(32.0),
+              height: _deviceQuery.safeWidth(32.0),
               child: Image.asset(
                 'assets/images/logo/$_logo.png',
                 fit: BoxFit.contain,
@@ -76,9 +72,9 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
           Positioned(
-            left: _device.safeWidth(4.0),
-            top: _device.safeHeight(65.0),
-            right: _device.safeWidth(4.0),
+            left: _deviceQuery.safeWidth(4.0),
+            top: _deviceQuery.safeHeight(65.0),
+            right: _deviceQuery.safeWidth(4.0),
             child: AnimatedOpacity(
               opacity: _opacity,
               duration: Duration(seconds: 3),

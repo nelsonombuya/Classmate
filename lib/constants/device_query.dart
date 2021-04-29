@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
 /// - Also acts as a way of getting media query data
+/// * Make sure to add this inherited widget to the ROOT TREE
+/// ! Otherwise, funky things will happen
 class DeviceQuery extends InheritedWidget {
   final double blockSizeHorizontal;
   final double blockSizeVertical;
@@ -29,8 +31,8 @@ class DeviceQuery extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static DeviceQuery? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<DeviceQuery>();
+  static DeviceQuery of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DeviceQuery>()!;
 
   // * Calculate height and width with relation to the available safe area
   double safeWidth(double width) => safeBlockHorizontal * width;
