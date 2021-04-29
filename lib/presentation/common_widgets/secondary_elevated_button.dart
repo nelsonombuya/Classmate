@@ -1,22 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants/device.dart';
+import '../../constants/device_query.dart';
 
-class CustomElevatedButton extends StatelessWidget {
-  final Function onPressed;
+class SecondaryElevatedButton extends StatelessWidget {
   final child;
+  final void Function()? onPressed;
+  late final DeviceQuery _deviceQuery;
 
-  const CustomElevatedButton({@required this.child, this.onPressed});
+  SecondaryElevatedButton({required this.child, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
+    _deviceQuery = DeviceQuery.of(context);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(
-        width: Device.width(64.0),
-        height: Device.height(6.2),
+        width: _deviceQuery.safeWidth(64.0),
+        height: _deviceQuery.safeHeight(6.2),
       ),
       child: ElevatedButton(
         child: child,
@@ -25,8 +26,8 @@ class CustomElevatedButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) =>
                 states.contains(MaterialState.disabled)
-                    ? CupertinoColors.inactiveGray
-                    : Colors.blueGrey[800],
+                    ? Theme.of(context).disabledColor
+                    : Colors.blueGrey[800]!,
           ),
         ),
       ),

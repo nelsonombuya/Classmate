@@ -6,10 +6,10 @@ class ThemePreset {
   final primaryColor = CupertinoColors.systemBlue;
   final accentColor = Colors.blue;
   final activeColor = CupertinoColors.activeBlue;
-  final inactiveColor = CupertinoColors.inactiveGray;
   final buttonTextColor = CupertinoColors.white;
   final backgroundColor = CupertinoColors.white;
   final errorColor = CupertinoColors.destructiveRed;
+  final disabledColor = CupertinoColors.inactiveGray;
   final VisualDensity visualDensity = VisualDensity.adaptivePlatformDensity;
 
   var headlineTextColor;
@@ -18,6 +18,7 @@ class ThemePreset {
   var body2TextColor;
   var canvasColor;
   var scaffoldBackgroundColor;
+  var dividerColor;
 
   late final TextStyle title;
   late final TextStyle headline;
@@ -35,6 +36,7 @@ class ThemePreset {
       body2TextColor = CupertinoColors.secondaryLabel;
       scaffoldBackgroundColor = CupertinoColors.white;
       canvasColor = CupertinoColors.white;
+      dividerColor = CupertinoColors.black;
     } else {
       headlineTextColor = CupertinoColors.systemGrey6;
       subHeadlineTextColor = CupertinoColors.systemGrey;
@@ -42,6 +44,7 @@ class ThemePreset {
       body2TextColor = CupertinoColors.systemGrey;
       scaffoldBackgroundColor = CupertinoColors.darkBackgroundGray;
       canvasColor = CupertinoColors.darkBackgroundGray;
+      dividerColor = CupertinoColors.systemGrey2;
     }
 
     title = GoogleFonts.poppins(color: headlineTextColor);
@@ -49,7 +52,7 @@ class ThemePreset {
     subHeadline = TextStyle(fontFamily: 'Averta', color: subHeadlineTextColor);
     body = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
     body2 = TextStyle(fontFamily: 'Akrobat', color: body2TextColor);
-    caption = GoogleFonts.montserrat(color: inactiveColor);
+    caption = GoogleFonts.montserrat(color: disabledColor);
     button = TextStyle(
       fontWeight: FontWeight.w600,
       color: buttonTextColor,

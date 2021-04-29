@@ -10,7 +10,7 @@ abstract class SignInEvent extends Equatable {
 class SignInStarted extends SignInEvent {
   final String email, password;
 
-  SignInStarted({@required this.email, @required this.password});
+  SignInStarted({required this.email, required this.password});
 
   @override
   List<Object> get props => [];

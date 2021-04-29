@@ -10,6 +10,8 @@ abstract class Themes {
       errorColor: _preset.errorColor,
       accentColor: _preset.primaryColor,
       primaryColor: _preset.primaryColor,
+      dividerColor: _preset.dividerColor,
+      disabledColor: _preset.disabledColor,
       backgroundColor: _preset.backgroundColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: ThemeData.light().textTheme.copyWith(
@@ -31,7 +33,9 @@ abstract class Themes {
       errorColor: _preset.errorColor,
       canvasColor: _preset.canvasColor,
       accentColor: _preset.accentColor,
+      dividerColor: _preset.dividerColor,
       primaryColor: _preset.primaryColor,
+      disabledColor: _preset.disabledColor,
       visualDensity: _preset.visualDensity,
       backgroundColor: _preset.backgroundColor,
       scaffoldBackgroundColor: _preset.scaffoldBackgroundColor,

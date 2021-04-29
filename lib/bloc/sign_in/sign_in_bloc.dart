@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../data/models/user_model.dart';
 import '../../data/repositories/user_repository.dart';
@@ -12,15 +11,17 @@ part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  SignInBloc() : super(SignInInitial());
-
   final UserRepository _userRepository = UserRepository();
   final NotificationBloc _notificationBloc = NotificationBloc();
+
+  SignInBloc() : super(SignInInitial());
 
   @override
   Stream<SignInState> mapEventToState(SignInEvent event) async* {
     if (event is SignInRequested) {
       yield SignInValidation();
+    } else if (event is SignInValidationFailed) {
+      yield* _mapSignInValidationFailedToState(event);
     } else if (event is SignInStarted) {
       yield* _mapSignInStartedToState(event);
     }
@@ -36,9 +37,21 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         event.password,
       );
 
-      yield SignInSuccess(user: user);
+      yield SignInSuccess(user);
     } catch (e) {
-      yield SignInFailure(message: e.toString());
+      // TODO Implement Error Handling ⛔
+      yield SignInFailure(e.toString());
     }
+  }
+
+  Stream<SignInState> _mapSignInValidationFailedToState(
+      SignInValidationFailed event) async* {
+    _notificationBloc.add(
+      SnackBarRequested(
+        'Please input the required information correctly',
+        notificationType: NotificationType.Warning,
+        title: 'Error Validating Form',
+      ),
+    );
   }
 }
