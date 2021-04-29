@@ -42,7 +42,7 @@ class ThemePreset {
       subHeadlineTextColor = CupertinoColors.systemGrey;
       bodyTextColor = CupertinoColors.systemGrey6;
       body2TextColor = CupertinoColors.systemGrey;
-      scaffoldBackgroundColor = CupertinoColors.darkBackgroundGray;
+      scaffoldBackgroundColor = CupertinoColors.black;
       canvasColor = CupertinoColors.darkBackgroundGray;
       dividerColor = CupertinoColors.systemGrey2;
     }
