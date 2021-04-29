@@ -45,7 +45,7 @@ class ShowDialogBox extends NotificationState {
   final NotificationType? notificationType;
   final IconData? positiveActionIcon, descriptionIcon;
   final String message, positiveActionLabel, negativeActionLabel;
-  final Function positiveActionOnPressed, negativeActionOnPressed;
+  final void Function() positiveActionOnPressed, negativeActionOnPressed;
 
   @override
   List<Object> get props => [

@@ -44,7 +44,7 @@ class DialogBoxRequested extends NotificationEvent {
   final NotificationType? notificationType;
   final IconData? descriptionIcon, positiveActionIcon;
   final String message, positiveActionLabel, negativeActionLabel;
-  final Function positiveActionOnPressed, negativeActionOnPressed;
+  final void Function() positiveActionOnPressed, negativeActionOnPressed;
 
   @override
   List<Object> get props => [

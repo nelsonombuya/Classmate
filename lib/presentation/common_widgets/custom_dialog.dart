@@ -1,23 +1,41 @@
-import 'package:classmate/bloc/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:sweetsheet/sweetsheet.dart';
+
+import '../../bloc/notification/notification_bloc.dart';
 
 /// # Custom Dialog
 /// Used to show custom dialog boxes throughout the app
 /// ! Depends on sweetsheet package
 class CustomDialog {
+  final BuildContext context;
+  final NotificationType? type;
+  final SweetSheet sweetSheet = SweetSheet();
+
+  late final CustomSheetColor _dialogType;
+  final String? title;
+  final String description;
+  final IconData? descriptionIcon;
+
+  final String positiveActionLabel;
+  final IconData? positiveActionIcon;
+  final void Function() positiveActionOnPressed;
+
+  final String negativeActionLabel;
+  final IconData? negativeActionIcon;
+  final void Function() negativeActionOnPressed;
+
   CustomDialog(
     this.context, {
-    @required this.title,
-    @required this.description,
-    @required this.positiveActionLabel,
-    @required this.negativeActionLabel,
+    this.title,
+    required this.description,
+    required this.positiveActionLabel,
+    required this.negativeActionLabel,
     this.type,
     this.descriptionIcon,
     this.positiveActionIcon,
-    this.positiveActionOnPressed,
+    required this.positiveActionOnPressed,
     this.negativeActionIcon,
-    this.negativeActionOnPressed,
+    required this.negativeActionOnPressed,
   }) {
     switch (type) {
       case NotificationType.Info:
@@ -40,29 +58,13 @@ class CustomDialog {
     _showSweetSheet(context);
   }
 
-  final BuildContext context;
-  final NotificationType type;
-  final SweetSheet sweetSheet = SweetSheet();
-
-  CustomSheetColor _dialogType;
-  final String title, description;
-  final IconData descriptionIcon;
-
-  final String positiveActionLabel;
-  final IconData positiveActionIcon;
-  final Function positiveActionOnPressed;
-
-  final String negativeActionLabel;
-  final IconData negativeActionIcon;
-  final Function negativeActionOnPressed;
-
   _showSweetSheet(BuildContext context) {
     sweetSheet.show(
       context: context,
-      title: Text(title),
       color: _dialogType,
       icon: descriptionIcon,
       description: Text(description),
+      title: title == null ? null : Text(title!),
       positive: SweetSheetAction(
         icon: positiveActionIcon,
         title: positiveActionLabel,
