@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../constants/device.dart';
+import '../../../constants/device_query.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -10,21 +10,19 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
-  DateTime _selectedDay, _focusedDay = DateTime.now();
-
+  DateTime _selectedDay = DateTime.now(), _focusedDay = DateTime.now();
   DateTime _firstDay = DateTime(DateTime.now().year - 20);
   DateTime _lastDay = DateTime(DateTime.now().year + 20);
-
   CalendarFormat _calendarFormat = CalendarFormat.week;
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return ListView(
       children: <Widget>[
         Container(
-          color: Device.brightness == Brightness.light
+          color: _deviceQuery.brightness == Brightness.light
               ? CupertinoColors.systemGroupedBackground
               : CupertinoColors.darkBackgroundGray,
           child: TableCalendar(
