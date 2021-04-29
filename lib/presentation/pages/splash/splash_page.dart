@@ -5,9 +5,9 @@ import '../../../constants/device_query.dart';
 import 'splash_text.dart';
 
 class SplashPage extends StatefulWidget {
-  final String? errorMessage;
+  final String? message;
 
-  SplashPage({this.errorMessage});
+  SplashPage({this.message});
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -35,11 +35,11 @@ class _SplashPageState extends State<SplashPage> {
       throw Exception('Theme Inherited Widget should not be null. ❗');
     }
 
-    if (widget.errorMessage != null) {
+    if (widget.message != null) {
       _logo = 'red_plain';
       _firstString = 'Something went wrong';
       _firstStringColor = CupertinoColors.destructiveRed;
-      _secondString = widget.errorMessage!;
+      _secondString = widget.message!;
       _secondStringColor = CupertinoColors.destructiveRed;
     } else {
       _logo = _device.brightness == Brightness.light
@@ -83,7 +83,7 @@ class _SplashPageState extends State<SplashPage> {
               opacity: _opacity,
               duration: Duration(seconds: 3),
               child: SplashText(
-                messageMode: (widget.errorMessage == null),
+                messageMode: (widget.message == null),
                 firstString: _firstString,
                 firstStringColor: _firstStringColor,
                 secondString: _secondString,

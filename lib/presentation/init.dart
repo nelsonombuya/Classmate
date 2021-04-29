@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/notification/notification_bloc.dart';
-import '../constants/device.dart';
+import '../constants/device_query.dart';
 import 'pages/home/home.dart';
 import 'pages/splash/splash_page.dart';
 import 'pages/welcome/welcome_page.dart';
@@ -20,6 +20,7 @@ import 'widgets/dialog_widget.dart';
 ///
 /// * Holds the Device Query Inherited Widget
 ///   - Used in the scaling of widgets across the app
+///   - Used to provide MediaQuery data too
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class Init extends StatelessWidget {
             if (state is Authenticated) return HomePage();
 
             if (state is AuthenticationError)
-              return SplashPage(error: state.message);
+              return SplashPage(message: state.message);
 
             return SplashPage();
           },
