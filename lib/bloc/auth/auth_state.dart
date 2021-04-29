@@ -12,17 +12,17 @@ class AuthInitial extends AuthState {}
 class Unauthenticated extends AuthState {}
 
 class Authenticated extends AuthState {
-  const Authenticated({@required this.user});
+  const Authenticated(this.user);
   final UserModel user;
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user.uid];
 }
 
 class AuthenticationError extends AuthState {
-  const AuthenticationError({this.message});
-  final String message;
+  const AuthenticationError(this.errorMessage);
+  final String errorMessage;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [errorMessage];
 }

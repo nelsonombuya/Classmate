@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-import '../../constants/error_handler.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/user_repository.dart';
 
@@ -13,8 +11,7 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository = UserRepository();
-  StreamSubscription _authStateChangesStream;
-  UserModel currentUser;
+  late final StreamSubscription _authStateChangesStream;
 
   AuthBloc() : super(AuthInitial()) {
     try {
@@ -22,7 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) => this.add(AuthChanged(user: user)),
       );
     } catch (e) {
-      this.add(AuthErrorOccurred(message: ErrorHandler(e).message));
+      // TODO Implement proper error handling ⛔
+      this.add(AuthErrorOccurred(e.toString()));
     }
   }
 
@@ -37,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is AuthChanged) {
       yield (event.user == null)
           ? Unauthenticated()
-          : Authenticated(user: this.currentUser = event.user);
+          : Authenticated(event.user!);
     }
 
     if (event is AuthRemoved) {
@@ -48,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is AuthErrorOccurred) {
       if (_userRepository.isUserSignedIn()) _userRepository.signOut();
       yield Unauthenticated();
-      yield AuthenticationError(message: event.message);
+      yield AuthenticationError(event.errorMessage);
     }
   }
 }
