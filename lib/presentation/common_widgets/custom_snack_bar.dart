@@ -1,37 +1,28 @@
-// # Imports
 import 'package:another_flushbar/flushbar.dart';
-import 'package:classmate/bloc/notification/notification_bloc.dart';
-import 'package:classmate/constants/device.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// # Custom Snack Bar
-/// Used to give snack bar notifications to the user
-/// Works throughout the app
-class CustomSnackBar {
-  final NotificationType type;
-  final BuildContext context;
-  final String message;
-  final String title;
+import '../../bloc/notification/notification_bloc.dart';
+import '../../constants/device_query.dart';
 
-  CustomSnackBar(
-    this.context, {
-    @required this.message,
-    this.title,
-    this.type,
-  }) {
-    Device().init(context);
+class CustomSnackBar {
+  final String? title;
+  final String message;
+  final BuildContext context;
+  final NotificationType? type;
+  late final DeviceQuery _deviceQuery;
+
+  CustomSnackBar(this.context, {this.type, this.title, required this.message}) {
+    _deviceQuery = DeviceQuery.of(context);
     _showSnackBar();
   }
 
-  /// ## Template to be used by all Snack Bars
-  /// Minimizes redundancy
   Flushbar _template({
-    IconData icon,
-    Color iconColor,
-    Color titleColor,
-    Color messageColor,
-    Color backgroundColor,
+    IconData? icon,
+    Color? iconColor,
+    Color? titleColor,
+    Color? messageColor,
+    Color? backgroundColor,
     bool shouldIconPulse = false,
   }) {
     return Flushbar(
@@ -41,27 +32,25 @@ class CustomSnackBar {
       messageColor: messageColor,
       duration: Duration(seconds: 5),
       shouldIconPulse: shouldIconPulse,
-      messageSize: Device.height(1.86),
-      positionOffset: Device.height(10.0),
+      messageSize: _deviceQuery.safeHeight(1.86),
+      positionOffset: _deviceQuery.safeHeight(10.0),
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
       backgroundColor: backgroundColor ?? CupertinoColors.darkBackgroundGray,
       margin: EdgeInsets.symmetric(
-        horizontal: Device.width(3.0),
-        vertical: Device.height(1.0),
+        horizontal: _deviceQuery.safeWidth(3.0),
+        vertical: _deviceQuery.safeHeight(1.0),
       ),
       icon: Padding(
-        padding: EdgeInsets.only(left: Device.width(2.0)),
+        padding: EdgeInsets.only(left: _deviceQuery.safeWidth(2.0)),
         child: Icon(
           icon,
-          size: Device.height(3.0),
+          size: _deviceQuery.safeHeight(3.0),
           color: iconColor ?? CupertinoColors.white,
         ),
       ),
     )..show(context);
   }
 
-  /// ## Show Snack Bar
-  /// Shows the snackbar according to the predefined template
   void _showSnackBar() {
     switch (type) {
       case NotificationType.Info:
