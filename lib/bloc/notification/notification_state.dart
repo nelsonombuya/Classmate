@@ -1,53 +1,55 @@
 part of 'notification_bloc.dart';
 
 abstract class NotificationState extends Equatable {
-  const NotificationState();
+  final String message;
+
+  const NotificationState(this.message);
 
   @override
   List<Object> get props => [];
 }
 
-class NotificationsInitial extends NotificationState {}
+class NotificationsInitial extends NotificationState {
+  NotificationsInitial() : super('Notifications initialized');
+}
 
 class ShowSnackBar extends NotificationState {
-  const ShowSnackBar({
+  const ShowSnackBar(
+    this.message, {
     this.title,
-    @required this.message,
     this.notificationType,
-  });
+  }) : super(message);
 
-  final String message, title;
-  final NotificationType notificationType;
+  final String message;
+  final String? title;
+  final NotificationType? notificationType;
 
   @override
-  List<Object> get props => [title, message, notificationType];
+  List<Object> get props => [message];
 }
 
 class ShowDialogBox extends NotificationState {
-  const ShowDialogBox({
-    @required this.title,
-    @required this.message,
-    @required this.positiveActionLabel,
-    @required this.positiveActionOnPressed,
-    @required this.negativeActionLabel,
-    @required this.negativeActionOnPressed,
+  const ShowDialogBox(
+    this.message, {
+    this.title,
+    required this.positiveActionLabel,
+    required this.positiveActionOnPressed,
+    required this.negativeActionLabel,
+    required this.negativeActionOnPressed,
     this.descriptionIcon,
     this.notificationType,
     this.positiveActionIcon,
-  });
+  }) : super(message);
 
-  final NotificationType notificationType;
-  final IconData positiveActionIcon, descriptionIcon;
+  final String? title;
+  final NotificationType? notificationType;
+  final IconData? positiveActionIcon, descriptionIcon;
+  final String message, positiveActionLabel, negativeActionLabel;
   final Function positiveActionOnPressed, negativeActionOnPressed;
-  final String message, title, positiveActionLabel, negativeActionLabel;
 
   @override
   List<Object> get props => [
-        title,
         message,
-        descriptionIcon,
-        notificationType,
-        positiveActionIcon,
         positiveActionLabel,
         positiveActionOnPressed,
         negativeActionLabel,

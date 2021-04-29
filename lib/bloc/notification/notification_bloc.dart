@@ -13,8 +13,9 @@ part 'notification_state.dart';
 enum NotificationType { Danger, Info, Warning, Success }
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
-  NotificationBloc() : super(NotificationsInitial());
   AuthBloc _authBloc = AuthBloc();
+
+  NotificationBloc() : super(NotificationsInitial());
 
   @override
   Stream<NotificationState> mapEventToState(NotificationEvent event) async* {
@@ -30,8 +31,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> _mapSnackBarRequestedToState(
       SnackBarRequested event) async* {
     yield ShowSnackBar(
+      event.message,
       title: event.title,
-      message: event.message,
       notificationType: event.notificationType,
     );
   }
@@ -39,8 +40,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> _mapDialogBoxRequestedToState(
       DialogBoxRequested event) async* {
     yield ShowDialogBox(
+      event.message,
       title: event.title,
-      message: event.message,
       descriptionIcon: event.descriptionIcon,
       notificationType: event.notificationType,
       positiveActionIcon: event.positiveActionIcon,
@@ -54,8 +55,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> _mapSignOutDialogBoxRequestedToState(
       SignOutDialogBoxRequested event) async* {
     yield ShowDialogBox(
+      "Are you sure you want to sign out?",
       title: "Sign Out",
-      message: "Are you sure you want to sign out?",
       positiveActionLabel: "SIGN OUT",
       negativeActionLabel: "CANCEL",
       positiveActionIcon: Icons.logout,
