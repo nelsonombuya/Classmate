@@ -19,10 +19,10 @@ void main() async {
 
   // TODO Restructure App for Landscape Orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(ClassMate()));
+      .then((value) => runApp(Classmate()));
 }
 
-class ClassMate extends StatelessWidget {
+class Classmate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
