@@ -5,14 +5,14 @@ class BackgroundVideoPlayer extends StatefulWidget {
   final String placeholder;
   final String video;
 
-  BackgroundVideoPlayer({@required this.video, @required this.placeholder});
+  BackgroundVideoPlayer({required this.video, required this.placeholder});
 
   @override
   _BackgroundVideoPlayerState createState() => _BackgroundVideoPlayerState();
 }
 
 class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
-  VideoPlayerController _controller;
+  late final VideoPlayerController _controller;
 
   @override
   void initState() {
@@ -46,8 +46,8 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: SizedBox(
-                      height: _controller.value.size?.height ?? 0,
-                      width: _controller.value.size?.width ?? 0,
+                      height: _controller.value.size.height,
+                      width: _controller.value.size.width,
                       child: VideoPlayer(_controller),
                     ),
                   ),

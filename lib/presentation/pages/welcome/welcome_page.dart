@@ -1,60 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants/device.dart';
-import '../../widgets/asciimoji_widget.dart';
-import 'background_video_player_widget.dart';
-import 'classmate_logo.dart';
-import 'create_new_account_widget.dart';
-import 'sign_in_button_widget.dart';
+import '../../../constants/device_query.dart';
+import 'widgets/background_video_player.dart';
+import 'widgets/classmate_logo.dart';
+import 'widgets/create_new_account_button.dart';
+import 'widgets/sign_in_button.dart';
 
-class WelcomePage extends StatefulWidget {
-  @override
-  _WelcomePageState createState() => _WelcomePageState();
-}
-
-class _WelcomePageState extends State<WelcomePage> {
-  // * Used to show easter egg
-  int _eggCounter = 0;
-  void _egg() => setState(() => _eggCounter++);
+class WelcomePage extends StatelessWidget {
+  late final DeviceQuery _deviceQuery;
+  late final String _video;
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
-    String _video = (Device.brightness == Brightness.light) ? 'light' : 'dark';
+    _deviceQuery = DeviceQuery.of(context);
+    _video = (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
           // FIXME OOM Crash after too many hot-reloads or hot-restarts
-          // ! Comment out BackgroundVideoPlayer widget when you intend on doing this
+          // ! Affects the following pages so far:
+          //  - Welcome Page
+          //  - Sign In Page
+          //  - Sign Up Page
+          // ! So make sure to comment out BackgroundVideoPlayer Widget
+          // ! When you want to make a lot of minor tested changes to these pages
           BackgroundVideoPlayer(
             video: 'assets/videos/welcome_screen_$_video.mp4',
             placeholder:
                 'assets/videos/welcome_screen_${_video}_placeholder.png',
           ),
-
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: Device.height(10.0)),
-                Padding(
-                  child: ClassMateLogo(onTap: _egg),
-                  padding: EdgeInsets.symmetric(horizontal: Device.width(5.0)),
+          ListView(
+            children: [
+              SizedBox(height: _deviceQuery.safeHeight(10.0)),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _deviceQuery.safeWidth(5.0),
                 ),
-                SizedBox(height: Device.height(38.0)),
-                SignInButton(),
-                SizedBox(height: Device.height(3.0)),
-                CreateANewAccountButton(),
-                SizedBox(height: Device.height(3.0)),
-                if (_eggCounter >= 5)
-                  ASCIImoji(
-                    color: CupertinoColors.white,
-                    fontSize: Device.height(3.0),
-                  ),
-              ],
-            ),
+                child: ClassMateLogo(),
+              ),
+              SizedBox(height: _deviceQuery.safeHeight(38.0)),
+              SignInButton(),
+              SizedBox(height: _deviceQuery.safeHeight(3.0)),
+              CreateANewAccountButton(),
+            ],
           ),
         ],
       ),
