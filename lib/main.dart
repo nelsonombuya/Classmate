@@ -28,7 +28,7 @@ class ClassMate extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc()..add(AuthStarted()),
+          create: (context) => AuthBloc()..add(AuthCheckStarted()),
         ),
         BlocProvider<NotificationBloc>(
           create: (context) => NotificationBloc(),
@@ -36,6 +36,7 @@ class ClassMate extends StatelessWidget {
       ],
       child: MaterialApp(
         onGenerateRoute: route.controller,
+        initialRoute: route.initPage,
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,
         title: 'Classmate',
