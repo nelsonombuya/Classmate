@@ -1,37 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/custom_bottom_navigation_bar.dart';
-import '../../widgets/notifications_widget.dart';
-import '../../widgets/sign_out_button_widget.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
-import 'custom_fab_widget.dart';
-import 'home_args.dart';
 import 'home_scroll_view.dart';
+import 'widgets/custom_bottom_navigation_bar.dart';
+import 'widgets/custom_fab.dart';
+import 'widgets/notifications_button.dart';
+import 'widgets/sign_out_button.dart';
+
+enum HomeSubPage { Dashboard, Events, Tasks, More }
 
 /// # Home
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
 class HomePage extends StatelessWidget {
-  final HomeArgs args;
+  final HomeSubPage? _subPage;
+  late final Widget? _leading;
+  late final List<Widget>? _actions;
+  late final List<String> _titles;
+  late final List<Widget> _pages;
+  late final List<BottomNavigationBarItem> _bottomNavigationBarItems;
 
-  HomePage({this.args});
+  HomePage({subPage}) : _subPage = subPage;
 
   @override
   Widget build(BuildContext context) {
-    Widget _leading;
+    _actions = [NotificationsButton(), SignOutButton()];
 
-    List<Widget> _actions = [NotificationsWidget(), SignOutButton()];
-
-    final List<String> _titles = [
+    _titles = [
       "Dashboard",
       "Events",
       "Tasks",
       "More",
     ];
 
-    final List<Widget> _pages = [
+    _pages = [
       DashboardPage(),
       EventsPage(),
       Container(
@@ -44,7 +48,7 @@ class HomePage extends StatelessWidget {
       ),
     ];
 
-    List<BottomNavigationBarItem> _bottomNavBarItems = [
+    _bottomNavigationBarItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.dashboard_rounded),
         label: _titles[0],
@@ -68,38 +72,42 @@ class HomePage extends StatelessWidget {
       titles: _titles,
       actions: _actions,
       leading: _leading,
-      bottomNavBarItems: _bottomNavBarItems,
-      overridePageShown: args == null ? null : args.pageToNavigateTo,
+      overridePageShown: _subPage,
+      bottomNavigationBarItems: _bottomNavigationBarItems,
     );
   }
 }
 
 class HomeView extends StatefulWidget {
   HomeView({
+    this.leading,
+    this.actions,
     this.overridePageShown,
-    @required this.pages,
-    @required this.titles,
-    @required this.leading,
-    @required this.actions,
-    @required this.bottomNavBarItems,
+    required this.pages,
+    required this.titles,
+    required this.bottomNavigationBarItems,
   });
 
-  final Widget leading;
+  final Widget? leading;
   final List<Widget> pages;
   final List<String> titles;
-  final List<Widget> actions;
-  final HomeSubPage overridePageShown;
-  final List<BottomNavigationBarItem> bottomNavBarItems;
+  final List<Widget>? actions;
+  final HomeSubPage? overridePageShown;
+  final List<BottomNavigationBarItem> bottomNavigationBarItems;
 
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  void _onTabTapped(int index) {
+  void _onPageSwiped(int index) => setState(() => _currentIndex = index);
+
+  // TODO Implement Error Handling
+  void _onTabTapped(int? index) {
+    if (index == null) throw Exception("Page index can't be null. ❗");
     return setState(() {
       _pageController.animateToPage(
         index,
@@ -108,8 +116,6 @@ class _HomeViewState extends State<HomeView> {
       );
     });
   }
-
-  void _onPageSwiped(int index) => setState(() => _currentIndex = index);
 
   void _overridePageShown(page) {
     switch (page) {
@@ -136,8 +142,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // * Helps when using Sailor to navigate directly to a subpage
-    // * Whilst maintaining the Home Widget's overall functionality
+    // * Helps to navigate directly to a subpage
+    // * Whilst maintaining the Home Widget's overall functionality as a wrapper
     _overridePageShown(widget.overridePageShown);
 
     return Scaffold(
@@ -158,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: CustomBottomNavigationBar(
         onTap: _onTabTapped,
         currentIndex: _currentIndex,
-        items: widget.bottomNavBarItems,
+        items: widget.bottomNavigationBarItems,
       ),
       floatingActionButton: CustomFloatingActionButton(),
     );

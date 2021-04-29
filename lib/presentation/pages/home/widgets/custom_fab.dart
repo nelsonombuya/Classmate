@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../constants/device.dart';
-import 'add_event_form.dart';
+import '../../../../constants/device_query.dart';
+import '../forms/add_event.dart';
 
 /// # Custom Floating Action Button
 /// Allows the user to view the following forms:
@@ -15,9 +15,9 @@ import 'add_event_form.dart';
 class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
-    Color _fabColor = Device.brightness == Brightness.light
+    Color _fabColor = _deviceQuery.brightness == Brightness.light
         ? CupertinoColors.systemGroupedBackground
         : CupertinoColors.darkBackgroundGray;
 

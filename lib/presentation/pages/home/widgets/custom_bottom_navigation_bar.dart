@@ -2,33 +2,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
-import '../../constants/device.dart';
+import '../../../../constants/device_query.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  final List<BottomNavigationBarItem> items;
   final int currentIndex;
-  final Function onTap;
+  final void Function(int?) onTap;
+  late final Color _backgroundColor;
+  late final Color _selectedItemColor;
+  late final TextStyle? _labelStyle;
+  late final DeviceQuery _deviceQuery;
+  final List<BottomNavigationBarItem> items;
 
   CustomBottomNavigationBar({
-    @required this.currentIndex,
-    @required this.onTap,
-    @required this.items,
+    required this.items,
+    required this.onTap,
+    required this.currentIndex,
   });
 
   @override
   Widget build(BuildContext context) {
-    Device().init(context);
+    _deviceQuery = DeviceQuery.of(context);
 
-    TextStyle _labelStyle = Theme.of(context).textTheme.button.copyWith(
-          fontWeight: FontWeight.normal,
-          fontSize: Device.height(1.6),
-          fontFamily: "Averta",
-        );
+    _labelStyle = (Theme.of(context).textTheme.button == null)
+        ? null
+        : Theme.of(context).textTheme.button!.copyWith(
+              fontWeight: FontWeight.normal,
+              fontSize: _deviceQuery.safeHeight(1.6),
+              fontFamily: "Averta",
+            );
 
-    Color _backgroundColor;
-    Color _selectedItemColor;
-
-    if (Device.brightness == Brightness.light) {
+    // TODO Manage System Colors ✨
+    if (_deviceQuery.brightness == Brightness.light) {
       _backgroundColor = CupertinoColors.systemGroupedBackground;
       _selectedItemColor = CupertinoColors.black;
     } else {
@@ -39,17 +43,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return SnakeNavigationBar.color(
       onTap: onTap,
       items: items,
-      height: Device.height(8),
       showSelectedLabels: true,
       showUnselectedLabels: true,
       currentIndex: currentIndex,
       selectedLabelStyle: _labelStyle,
       unselectedLabelStyle: _labelStyle,
+      snakeShape: SnakeShape.indicator,
+      height: _deviceQuery.safeHeight(8),
       backgroundColor: _backgroundColor,
       snakeViewColor: _selectedItemColor,
       selectedItemColor: _selectedItemColor,
-      unselectedItemColor: CupertinoColors.inactiveGray,
-      snakeShape: SnakeShape.indicator,
+      unselectedItemColor: Theme.of(context).disabledColor,
     );
   }
 }

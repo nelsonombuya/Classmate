@@ -16,6 +16,10 @@ const String splashPage = 'splash';
 const String signInPage = 'sign_in';
 const String signUpPage = 'sign_up';
 const String homePage = 'home';
+const String dashboardPage = 'dashboard';
+const String eventsPage = 'events';
+const String tasksPage = 'tasks';
+const String morePage = 'more';
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
@@ -25,12 +29,24 @@ Route<dynamic> controller(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => WelcomePage());
     case splashPage:
       return MaterialPageRoute(builder: (context) => SplashPage());
-    case homePage:
-      return MaterialPageRoute(builder: (context) => HomePage());
     case signInPage:
       return MaterialPageRoute(builder: (context) => SignInPage());
     case signUpPage:
       return MaterialPageRoute(builder: (context) => SignUpPage());
+    case homePage:
+      return MaterialPageRoute(builder: (context) => HomePage());
+    case dashboardPage:
+      return MaterialPageRoute(
+          builder: (context) => HomePage(subPage: HomeSubPage.Dashboard));
+    case eventsPage:
+      return MaterialPageRoute(
+          builder: (context) => HomePage(subPage: HomeSubPage.Events));
+    case tasksPage:
+      return MaterialPageRoute(
+          builder: (context) => HomePage(subPage: HomeSubPage.Tasks));
+    case morePage:
+      return MaterialPageRoute(
+          builder: (context) => HomePage(subPage: HomeSubPage.More));
     default:
       throw ('This route name does not exit');
   }
