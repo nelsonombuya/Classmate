@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
 /// # Device Query
-/// Based on ScreenConfig
+/// Based on SizeConfig
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
 /// - Also acts as a way of getting media query data
 /// * Make sure to add this inherited widget to the ROOT TREE
-/// ! Otherwise, funky things will happen
+/// ! Otherwise, errors will be thrown and widgets won't be properly scaled
 class DeviceQuery extends InheritedWidget {
   final double blockSizeHorizontal;
   final double blockSizeVertical;
   final double safeBlockHorizontal;
   final double safeBlockVertical;
   final Brightness brightness;
+  final MediaQueryData mediaQueryData;
 
   DeviceQuery(BuildContext context, Widget child)
-      : brightness = MediaQuery.of(context).platformBrightness,
+      : mediaQueryData = MediaQuery.of(context),
+        brightness = MediaQuery.of(context).platformBrightness,
         blockSizeHorizontal = MediaQuery.of(context).size.width / 100,
         blockSizeVertical = MediaQuery.of(context).size.height / 100,
         safeBlockHorizontal = (MediaQuery.of(context).size.width -
