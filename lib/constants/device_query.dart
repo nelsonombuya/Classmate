@@ -32,8 +32,11 @@ class DeviceQuery extends InheritedWidget {
   static DeviceQuery? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<DeviceQuery>();
 
+  // * Calculate height and width with relation to the available safe area
   double safeWidth(double width) => safeBlockHorizontal * width;
   double safeHeight(double height) => safeBlockVertical * height;
+
+  // * Calculate height and width with relation to the entire screen area
   double absoluteWidth(double width) => blockSizeHorizontal * width;
   double absoluteHeight(double height) => blockSizeVertical * height;
 }
