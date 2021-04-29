@@ -10,35 +10,25 @@ class UserRepository {
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  UserModel _parseUserToUserModel(User rawUser) {
+  UserModel? _parseUserToUserModel(User? rawUser) {
     return (rawUser == null)
         ? null
         : UserModel(
             uid: rawUser.uid,
             email: rawUser.email,
             displayName: rawUser.displayName,
-            updateProfile: rawUser.updateProfile,
             isEmailVerified: rawUser.emailVerified,
           );
   }
 
   UserModel _parseUserCredentialToUserModel(UserCredential rawUserCredential) {
-    return (rawUserCredential == null)
-        ? null
-        : UserModel(
-            uid: rawUserCredential.user.uid,
-            email: rawUserCredential.user.email,
-            displayName: rawUserCredential.user.displayName,
-            updateProfile: rawUserCredential.user.updateProfile,
-            isEmailVerified: rawUserCredential.user.emailVerified,
-          );
-  }
+    if (rawUserCredential.user == null) {
+      // TODO Implement error handling ❗
+      throw Exception("The user in UserCredential can't be null. ❗");
+    }
 
-  Stream<UserModel> get authStateChanges {
-    return _firebaseAuth
-        .authStateChanges()
-        .distinct()
-        .map(_parseUserToUserModel);
+    User rawUser = rawUserCredential.user!;
+    return _parseUserToUserModel(rawUser)!;
   }
 
   Future<UserModel> createUserWithEmailAndPassword(
@@ -61,18 +51,37 @@ class UserRepository {
     );
   }
 
-  Future<void> updateProfile({String displayName, String photoToURL}) async {
-    return await _firebaseAuth.currentUser.updateProfile(
+  Stream<UserModel?> get authStateChanges {
+    return _firebaseAuth
+        .authStateChanges()
+        .distinct()
+        .map(_parseUserToUserModel);
+  }
+
+  Future<void> updateProfile({String? displayName, String? photoToURL}) async {
+    if (_firebaseAuth.currentUser == null) {
+      // TODO Implement Error Handling ❗
+      throw Exception("There is no user currently signed in ❗");
+    }
+
+    User currentUser = _firebaseAuth.currentUser!;
+    return await currentUser.updateProfile(
       displayName: displayName,
       photoURL: photoToURL,
     );
   }
 
-  Future<void> signOut() async => await _firebaseAuth.signOut();
+  Future<void> signOut() async {
+    return await _firebaseAuth.signOut();
+  }
 
-  bool isUserSignedIn() => this._firebaseAuth.currentUser != null;
+  bool isUserSignedIn() {
+    return this._firebaseAuth.currentUser != null;
+  }
 
-  UserModel currentUser() => _parseUserToUserModel(_firebaseAuth.currentUser);
+  UserModel? getCurrentUser() {
+    return _parseUserToUserModel(_firebaseAuth.currentUser);
+  }
 
   Stream<QuerySnapshot> get userDataStream {
     return _usersCollection.snapshots().distinct();
