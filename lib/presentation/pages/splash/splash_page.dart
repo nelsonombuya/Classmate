@@ -20,31 +20,32 @@ class _SplashPageState extends State<SplashPage> {
   late final String _secondString;
   late final Color _secondStringColor;
   late final double _fontSize;
+  late final TextStyle _splashTextStyle;
+  late final DeviceQuery _deviceQuery;
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final TextStyle? _splashTextStyle = Theme.of(context).textTheme.headline2;
+    _deviceQuery = DeviceQuery.of(context);
 
     // TODO Implement Error Handler ❗
-    if (_splashTextStyle == null) {
-      throw Exception('Theme Inherited Widget should not be null. ❗');
-    }
+    _splashTextStyle = Theme.of(context).textTheme.headline2 == null
+        ? throw Exception('Theme Inherited Widget should not be null. ❗')
+        : Theme.of(context).textTheme.headline2!;
 
     if (widget.message != null) {
       _logo = 'red_plain';
       _firstString = 'Something went wrong';
-      _firstStringColor = CupertinoColors.destructiveRed;
+      _firstStringColor = Theme.of(context).errorColor;
       _secondString = widget.message!;
-      _secondStringColor = CupertinoColors.destructiveRed;
+      _secondStringColor = Theme.of(context).errorColor;
     } else {
       _logo = _deviceQuery.brightness == Brightness.light
           ? 'black_plain'
           : 'white_plain';
       _firstString = 'Class';
-      _firstStringColor = CupertinoColors.white;
+      _firstStringColor = Theme.of(context).backgroundColor;
       _secondString = 'mate';
-      _secondStringColor = Colors.blue;
+      _secondStringColor = Theme.of(context).primaryColor;
     }
     _fontSize = _deviceQuery.safeHeight(4.5);
 

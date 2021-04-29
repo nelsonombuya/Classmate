@@ -8,6 +8,8 @@ class ThemePreset {
   final activeColor = CupertinoColors.activeBlue;
   final inactiveColor = CupertinoColors.inactiveGray;
   final buttonTextColor = CupertinoColors.white;
+  final backgroundColor = CupertinoColors.white;
+  final errorColor = CupertinoColors.destructiveRed;
   final VisualDensity visualDensity = VisualDensity.adaptivePlatformDensity;
 
   var headlineTextColor;
@@ -17,13 +19,13 @@ class ThemePreset {
   var canvasColor;
   var scaffoldBackgroundColor;
 
-  TextStyle? title;
-  TextStyle? headline;
-  TextStyle? subHeadline;
-  TextStyle? body;
-  TextStyle? body2;
-  TextStyle? button;
-  TextStyle? caption;
+  late final TextStyle title;
+  late final TextStyle headline;
+  late final TextStyle subHeadline;
+  late final TextStyle body;
+  late final TextStyle body2;
+  late final TextStyle button;
+  late final TextStyle caption;
 
   ThemePreset(Brightness brightness) {
     if (brightness == Brightness.light) {

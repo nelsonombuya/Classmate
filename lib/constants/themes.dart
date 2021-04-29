@@ -7,8 +7,10 @@ abstract class Themes {
     ThemePreset _preset = ThemePreset(Brightness.light);
 
     return ThemeData.light().copyWith(
+      errorColor: _preset.errorColor,
       accentColor: _preset.primaryColor,
       primaryColor: _preset.primaryColor,
+      backgroundColor: _preset.backgroundColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: ThemeData.light().textTheme.copyWith(
             headline2: _preset.title,
@@ -26,10 +28,12 @@ abstract class Themes {
     ThemePreset _preset = ThemePreset(Brightness.dark);
 
     return ThemeData.dark().copyWith(
+      errorColor: _preset.errorColor,
       canvasColor: _preset.canvasColor,
       accentColor: _preset.accentColor,
       primaryColor: _preset.primaryColor,
       visualDensity: _preset.visualDensity,
+      backgroundColor: _preset.backgroundColor,
       scaffoldBackgroundColor: _preset.scaffoldBackgroundColor,
       textTheme: ThemeData.dark().textTheme.copyWith(
             headline2: _preset.title,
