@@ -57,7 +57,7 @@ class Init extends StatelessWidget {
             if (state is Authenticated) return HomePage();
 
             if (state is AuthenticationError)
-              return SplashPage(message: state.message);
+              return SplashPage(message: state.errorMessage);
 
             return SplashPage();
           },
