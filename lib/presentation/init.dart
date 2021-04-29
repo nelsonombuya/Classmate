@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/notification/notification_bloc.dart';
 import '../constants/device_query.dart';
+import 'common_widgets/custom_snack_bar.dart';
+import 'common_widgets/dialog_widget.dart';
 import 'pages/home/home.dart';
 import 'pages/splash/splash_page.dart';
 import 'pages/welcome/welcome_page.dart';
-import 'widgets/custom_snack_bar.dart';
-import 'widgets/dialog_widget.dart';
 
 /// # Init
 /// * Holds the Notifications Listener:
@@ -20,7 +20,7 @@ import 'widgets/dialog_widget.dart';
 ///
 /// * Holds the Device Query Inherited Widget
 ///   - Used in the scaling of widgets across the app
-///   - Used to provide MediaQuery data too
+///   - Used to provide MediaQuery data
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

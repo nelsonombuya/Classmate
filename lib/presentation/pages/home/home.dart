@@ -13,10 +13,10 @@ import 'home_scroll_view.dart';
 /// # Home
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
-class Home extends StatelessWidget {
+class HomePage extends StatelessWidget {
   final HomeArgs args;
 
-  Home({this.args});
+  HomePage({this.args});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/device_query.dart';
-import 'splash_text.dart';
+import 'widgets/splash_text.dart';
 
 class SplashPage extends StatefulWidget {
   final String? message;
