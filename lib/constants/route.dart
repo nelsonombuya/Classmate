@@ -7,6 +7,9 @@ import '../presentation/pages/sign_up/sign_up_page.dart';
 import '../presentation/pages/splash/splash_page.dart';
 import '../presentation/pages/welcome/welcome_page.dart';
 
+/// This route management system can be found on:
+/// https://oflutter.com/organized-navigation-named-route-in-flutter/
+
 const String initPage = 'init';
 const String welcomePage = 'welcome';
 const String splashPage = 'splash';
