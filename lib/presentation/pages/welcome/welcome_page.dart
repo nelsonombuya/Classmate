@@ -13,6 +13,7 @@ class WelcomePage extends StatelessWidget {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final String _video =
         (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
+    FocusScope.of(context).unfocus();
 
     return Scaffold(
       body: Stack(
