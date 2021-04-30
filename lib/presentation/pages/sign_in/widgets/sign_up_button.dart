@@ -16,7 +16,8 @@ class SignUpButton extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          SecondaryElevatedButton(
+          CustomElevatedButton(
+            secondary: true,
             onPressed: enabled
                 ? () => Navigator.of(context).pushNamed(route.signUpPage)
                 : null,

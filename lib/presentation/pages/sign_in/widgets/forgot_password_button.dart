@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ForgotPasswordWidget extends StatelessWidget {
+class ForgotPasswordButton extends StatelessWidget {
   final bool enabled;
   final void Function()? onPressed;
 
-  ForgotPasswordWidget({this.enabled = true, this.onPressed});
+  ForgotPasswordButton({this.enabled = true, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../constants/device_query.dart';
 
-class SecondaryElevatedButton extends StatelessWidget {
-  final child;
+class CustomElevatedButton extends StatelessWidget {
+  final Widget child;
+  final bool secondary;
   final void Function()? onPressed;
 
-  SecondaryElevatedButton({required this.child, this.onPressed});
+  CustomElevatedButton(
+      {required this.child, this.onPressed, this.secondary = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,9 @@ class SecondaryElevatedButton extends StatelessWidget {
             (Set<MaterialState> states) =>
                 states.contains(MaterialState.disabled)
                     ? Theme.of(context).disabledColor
-                    : Colors.blueGrey[800]!,
+                    : secondary
+                        ? Colors.blueGrey[800]!
+                        : Theme.of(context).primaryColor,
           ),
         ),
       ),
