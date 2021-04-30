@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 import 'bloc/notification/notification_bloc.dart';
@@ -37,6 +38,7 @@ class Classmate extends StatelessWidget {
       child: MaterialApp(
         onGenerateRoute: route.controller,
         initialRoute: route.initPage,
+        builder: EasyLoading.init(),
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,
         title: 'Classmate',
