@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/notification/notification_bloc.dart';
+import 'common_widgets/custom_alerts.dart';
 import 'common_widgets/custom_dialog.dart';
 import 'common_widgets/custom_snack_bar.dart';
 import 'pages/home/home.dart';
@@ -11,15 +12,11 @@ import 'pages/welcome/welcome_page.dart';
 
 /// # Init
 /// * Holds the Notifications Listener:
-///   - Shows either a snack bar or a dialog box upon request
+///   - Shows either a snack bar, dialog box or alert upon request
 ///
 /// * Holds the Auth Builder:
 ///   - Sends the user directly to the dashboard if they're authenticated
 ///   - Kicks them back to the Welcome Page if they're not signed in
-///
-/// * Holds the Device Query Inherited Widget
-///   - Used in the scaling of widgets across the app
-///   - Used to provide MediaQuery data
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,6 +42,10 @@ class Init extends StatelessWidget {
             negativeActionLabel: state.negativeActionLabel,
             negativeActionOnPressed: state.negativeActionOnPressed,
           );
+        }
+
+        if (state is ShowAlert) {
+          CustomAlert(state.message, notificationType: state.notificationType);
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(

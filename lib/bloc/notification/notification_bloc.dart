@@ -10,7 +10,7 @@ import '../auth/auth_bloc.dart';
 part 'notification_event.dart';
 part 'notification_state.dart';
 
-enum NotificationType { Danger, Info, Warning, Success }
+enum NotificationType { Danger, Info, Warning, Success, Loading }
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   AuthBloc _authBloc = AuthBloc();
@@ -23,9 +23,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       yield* _mapSnackBarRequestedToState(event);
     } else if (event is DialogBoxRequested) {
       yield* _mapDialogBoxRequestedToState(event);
+    } else if (event is AlertRequested) {
+      yield* _mapAlertRequestedToState(event);
     } else if (event is SignOutDialogBoxRequested) {
       yield* _mapSignOutDialogBoxRequestedToState(event);
     }
+
+    // * Resets the BLoC to allow for repeated events (DO NOT DELETE)
+    yield NotificationsInitial();
   }
 
   Stream<NotificationState> _mapSnackBarRequestedToState(
@@ -49,6 +54,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       negativeActionLabel: event.negativeActionLabel,
       negativeActionOnPressed: event.negativeActionOnPressed,
       positiveActionOnPressed: event.positiveActionOnPressed,
+    );
+  }
+
+  Stream<NotificationState> _mapAlertRequestedToState(
+      AlertRequested event) async* {
+    yield ShowAlert(
+      event.message,
+      notificationType: event.notificationType,
     );
   }
 

@@ -65,3 +65,13 @@ class SignOutDialogBoxRequested extends NotificationEvent {
   @override
   List<Object> get props => [context];
 }
+
+class AlertRequested extends NotificationEvent {
+  final String message;
+  final NotificationType? notificationType;
+
+  const AlertRequested(this.message, {this.notificationType}) : super(message);
+
+  @override
+  List<Object> get props => [message];
+}

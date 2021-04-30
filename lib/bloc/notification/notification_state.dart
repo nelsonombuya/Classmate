@@ -56,3 +56,16 @@ class ShowDialogBox extends NotificationState {
         negativeActionOnPressed,
       ];
 }
+
+class ShowAlert extends NotificationState {
+  const ShowAlert(
+    this.message, {
+    this.notificationType,
+  }) : super(message);
+
+  final String message;
+  final NotificationType? notificationType;
+
+  @override
+  List<Object> get props => [message];
+}
