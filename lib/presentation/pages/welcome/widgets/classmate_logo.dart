@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import '../../../../constants/device_query.dart';
 
 class ClassMateLogo extends StatelessWidget {
-  late final DeviceQuery _deviceQuery;
-  late final TextStyle _logoTextStyle;
-
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
-    _logoTextStyle = Theme.of(context).textTheme.headline2 == null
-        // TODO Implement Error Handler ❗
-        ? throw Exception('Logo text style should not be null. ❗')
-        : Theme.of(context).textTheme.headline2!;
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final TextStyle _logoTextStyle =
+        Theme.of(context).textTheme.headline2 == null
+            // TODO Implement Error Handler ❗
+            ? throw Exception('Logo text style should not be null. ❗')
+            : Theme.of(context).textTheme.headline2!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

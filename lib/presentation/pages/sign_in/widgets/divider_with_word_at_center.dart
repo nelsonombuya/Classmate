@@ -4,16 +4,14 @@ import '../../../../constants/device_query.dart';
 
 class DividerWithWordAtCenter extends StatelessWidget {
   final String text;
-  late final double _spaceAroundWord;
-  late final double _dividerThickness;
 
   DividerWithWordAtCenter({required this.text});
 
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    _spaceAroundWord = _deviceQuery.safeWidth(2.5);
-    _dividerThickness = _deviceQuery.safeHeight(0.15);
+    final double _spaceAroundWord = _deviceQuery.safeWidth(2.5);
+    final double _dividerThickness = _deviceQuery.safeHeight(0.15);
 
     return Row(
       children: [

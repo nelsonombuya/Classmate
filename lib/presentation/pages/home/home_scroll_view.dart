@@ -8,7 +8,6 @@ class HomeScrollView extends StatelessWidget {
   final String? title;
   final Widget? leading;
   final List<Widget>? actions;
-  late final DeviceQuery _deviceQuery;
 
   HomeScrollView({
     this.title,
@@ -19,7 +18,7 @@ class HomeScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

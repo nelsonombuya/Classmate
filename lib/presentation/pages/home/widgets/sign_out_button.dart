@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/notification/notification_bloc.dart';
 
 class SignOutButton extends StatelessWidget {
-  late final NotificationBloc _notifications;
   @override
   Widget build(BuildContext context) {
-    _notifications = BlocProvider.of<NotificationBloc>(context);
+    final NotificationBloc _notifications =
+        BlocProvider.of<NotificationBloc>(context);
 
     return IconButton(
       onPressed: () => _notifications.add(SignOutDialogBoxRequested(context)),

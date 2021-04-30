@@ -6,13 +6,12 @@ import '../../constants/device_query.dart';
 class SecondaryElevatedButton extends StatelessWidget {
   final child;
   final void Function()? onPressed;
-  late final DeviceQuery _deviceQuery;
 
   SecondaryElevatedButton({required this.child, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(

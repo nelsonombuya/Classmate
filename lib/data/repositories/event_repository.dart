@@ -4,14 +4,13 @@ import '../models/event_model.dart';
 import '../models/user_model.dart';
 
 class EventRepository {
-  CollectionReference _eventsSubCollection;
+  final CollectionReference _eventsSubCollection;
 
-  EventRepository(UserModel user) {
-    _eventsSubCollection = FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('events');
-  }
+  EventRepository(UserModel user)
+      : _eventsSubCollection = FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('events');
 
   Stream<List<EventModel>> get eventsDataStream {
     return _eventsSubCollection

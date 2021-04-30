@@ -6,13 +6,12 @@ import '../../../common_widgets/secondary_elevated_button.dart';
 
 class SignUpButton extends StatelessWidget {
   final bool enabled;
-  late final DeviceQuery _deviceQuery;
 
   SignUpButton({this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return Center(
       child: Column(

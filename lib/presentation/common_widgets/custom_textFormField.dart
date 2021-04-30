@@ -10,7 +10,6 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final IconData? suffixIcon;
   final TextInputType keyboardType;
-  late final DeviceQuery _deviceQuery;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   final void Function()? suffixIconAction;
@@ -32,7 +31,7 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return TextFormField(
       key: key,

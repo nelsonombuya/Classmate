@@ -6,13 +6,12 @@ import '../../constants/device_query.dart';
 class CustomAppBar extends StatelessWidget {
   final String? title;
   final List<Widget>? actions;
-  late final DeviceQuery _deviceQuery;
 
   CustomAppBar({this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return SliverAppBar(
       pinned: true,

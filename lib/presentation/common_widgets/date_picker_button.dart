@@ -23,9 +23,6 @@ class DatePickerButton extends StatelessWidget {
   final Color? backgroundColor;
   final bool showDatePicker;
   final bool showDateTimePicker;
-  late final DeviceQuery _deviceQuery;
-  late final double _leftPadding;
-  late final _backgroundColor, _titleColor, _dateColor, _timeColor, _iconColor;
 
   final DateTime _fiveHundredYearsFromNow = DateTime(
     DateTime.now().year + 500,
@@ -97,7 +94,7 @@ class DatePickerButton extends StatelessWidget {
       currentTime: selectedDate,
       maxTime: lastSelectableDate ?? _fiveHundredYearsFromNow,
       minTime: firstSelectableDate ?? _fiveHundredYearsBeforeNow,
-      theme: _deviceQuery.brightness == Brightness.light
+      theme: DeviceQuery.of(context).brightness == Brightness.light
           ? _lightTheme
           : _darkTheme,
 
@@ -115,7 +112,7 @@ class DatePickerButton extends StatelessWidget {
       currentTime: selectedDate,
       maxTime: lastSelectableDate ?? _fiveHundredYearsFromNow,
       minTime: firstSelectableDate ?? _fiveHundredYearsBeforeNow,
-      theme: _deviceQuery.brightness == Brightness.light
+      theme: DeviceQuery.of(context).brightness == Brightness.light
           ? _lightTheme
           : _darkTheme,
 
@@ -136,11 +133,12 @@ class DatePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
-    _leftPadding =
+    final double _leftPadding =
         icon == null ? _deviceQuery.safeWidth(2) : _deviceQuery.safeWidth(8);
 
+    var _backgroundColor, _titleColor, _dateColor, _timeColor, _iconColor;
     if (_deviceQuery.brightness == Brightness.light) {
       _backgroundColor = CupertinoColors.systemGroupedBackground;
       _titleColor = CupertinoColors.black;

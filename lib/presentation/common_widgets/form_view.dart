@@ -8,7 +8,6 @@ class FormView extends StatelessWidget {
   final String? title;
   final List<Widget>? actions;
   final bool overridePadding;
-  late final DeviceQuery _deviceQuery;
 
   FormView({
     this.title,
@@ -19,7 +18,7 @@ class FormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return GestureDetector(
       onTap: () {

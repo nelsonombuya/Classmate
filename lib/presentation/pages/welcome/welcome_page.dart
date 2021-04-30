@@ -8,13 +8,11 @@ import 'widgets/create_new_account_button.dart';
 import 'widgets/sign_in_button.dart';
 
 class WelcomePage extends StatelessWidget {
-  late final DeviceQuery _deviceQuery;
-  late final String _video;
-
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
-    _video = (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final String _video =
+        (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
 
     return Scaffold(
       body: Stack(
@@ -32,20 +30,22 @@ class WelcomePage extends StatelessWidget {
             placeholder:
                 'assets/videos/welcome_screen_${_video}_placeholder.png',
           ),
-          ListView(
-            children: [
-              SizedBox(height: _deviceQuery.safeHeight(10.0)),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _deviceQuery.safeWidth(5.0),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: _deviceQuery.safeHeight(10.0)),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _deviceQuery.safeWidth(5.0),
+                  ),
+                  child: ClassMateLogo(),
                 ),
-                child: ClassMateLogo(),
-              ),
-              SizedBox(height: _deviceQuery.safeHeight(38.0)),
-              SignInButton(),
-              SizedBox(height: _deviceQuery.safeHeight(3.0)),
-              CreateANewAccountButton(),
-            ],
+                SizedBox(height: _deviceQuery.safeHeight(38.0)),
+                SignInButton(),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                CreateANewAccountButton(),
+              ],
+            ),
           ),
         ],
       ),

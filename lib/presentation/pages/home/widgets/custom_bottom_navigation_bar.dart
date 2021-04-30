@@ -7,10 +7,6 @@ import '../../../../constants/device_query.dart';
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final void Function(int?) onTap;
-  late final Color _backgroundColor;
-  late final Color _selectedItemColor;
-  late final TextStyle? _labelStyle;
-  late final DeviceQuery _deviceQuery;
   final List<BottomNavigationBarItem> items;
 
   CustomBottomNavigationBar({
@@ -21,9 +17,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
-    _labelStyle = (Theme.of(context).textTheme.button == null)
+    final TextStyle? _labelStyle = (Theme.of(context).textTheme.button == null)
         ? null
         : Theme.of(context).textTheme.button!.copyWith(
               fontWeight: FontWeight.normal,
@@ -32,6 +28,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             );
 
     // TODO Manage System Colors ✨
+    var _selectedItemColor, _backgroundColor;
     if (_deviceQuery.brightness == Brightness.light) {
       _backgroundColor = CupertinoColors.systemGroupedBackground;
       _selectedItemColor = CupertinoColors.black;

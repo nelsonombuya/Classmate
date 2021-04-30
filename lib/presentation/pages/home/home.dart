@@ -16,26 +16,23 @@ enum HomeSubPage { Dashboard, Events, Tasks, More }
 /// So that they can share a common AppBar and Bottom Navigation Bar
 class HomePage extends StatelessWidget {
   final HomeSubPage? _subPage;
-  late final Widget? _leading;
-  late final List<Widget>? _actions;
-  late final List<String> _titles;
-  late final List<Widget> _pages;
-  late final List<BottomNavigationBarItem> _bottomNavigationBarItems;
 
   HomePage({subPage}) : _subPage = subPage;
 
   @override
   Widget build(BuildContext context) {
-    _actions = [NotificationsButton(), SignOutButton()];
+    final Widget? _leading;
 
-    _titles = [
+    final List<Widget>? _actions = [NotificationsButton(), SignOutButton()];
+
+    final List<String> _titles = [
       "Dashboard",
       "Events",
       "Tasks",
       "More",
     ];
 
-    _pages = [
+    final List<Widget> _pages = [
       DashboardPage(),
       EventsPage(),
       Container(
@@ -48,7 +45,7 @@ class HomePage extends StatelessWidget {
       ),
     ];
 
-    _bottomNavigationBarItems = [
+    final List<BottomNavigationBarItem> _bottomNavigationBarItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.dashboard_rounded),
         label: _titles[0],
@@ -71,7 +68,7 @@ class HomePage extends StatelessWidget {
       pages: _pages,
       titles: _titles,
       actions: _actions,
-      leading: _leading,
+      // leading: _leading,
       overridePageShown: _subPage,
       bottomNavigationBarItems: _bottomNavigationBarItems,
     );
