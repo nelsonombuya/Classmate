@@ -59,8 +59,10 @@ class _SignInBlocViewState extends State<SignInView> {
         }
 
         if (state is SignInSuccess) {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(route.homePage, (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            route.initPage,
+            (route) => false,
+          );
         }
       },
       child: FormView(
@@ -99,7 +101,10 @@ class _SignInBlocViewState extends State<SignInView> {
             SizedBox(height: _deviceQuery.safeHeight(1.0)),
             ForgotPasswordButton(),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            SignInButton(onPressed: () => _signInBloc.add(SignInRequested())),
+            SignInButton(onPressed: () {
+              FocusScope.of(context).unfocus();
+              _signInBloc.add(SignInRequested());
+            }),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
             DividerWithWordAtCenter(text: 'OR'),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
