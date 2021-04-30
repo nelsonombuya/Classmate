@@ -37,9 +37,8 @@ class SplashText extends StatelessWidget {
               Text(
                 secondString,
                 style: splashTextStyle.copyWith(
-                  fontWeight: FontWeight.w600,
                   color: secondStringColor,
-                  fontSize: fontSize,
+                  fontSize: fontSize - 1,
                 ),
               ),
             ],
@@ -58,8 +57,9 @@ class SplashText extends StatelessWidget {
               Text(
                 secondString,
                 style: splashTextStyle.copyWith(
+                  fontWeight: FontWeight.w600,
                   color: secondStringColor,
-                  fontSize: fontSize - 1,
+                  fontSize: fontSize,
                 ),
               ),
             ],

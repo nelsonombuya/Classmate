@@ -14,23 +14,21 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  late final String _logo;
-  late final String _firstString;
-  late final Color _firstStringColor;
-  late final String _secondString;
-  late final Color _secondStringColor;
-  late final double _fontSize;
-  late final TextStyle _splashTextStyle;
-  late final DeviceQuery _deviceQuery;
-
-  @override
   Widget build(BuildContext context) {
-    _deviceQuery = DeviceQuery.of(context);
+    var _logo;
+    var _firstString;
+    var _firstStringColor;
+    var _secondString;
+    var _secondStringColor;
+
+    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final double _fontSize = _deviceQuery.safeHeight(4.5);
 
     // TODO Implement Error Handler ❗
-    _splashTextStyle = Theme.of(context).textTheme.headline2 == null
-        ? throw Exception('Theme Inherited Widget should not be null. ❗')
-        : Theme.of(context).textTheme.headline2!;
+    final TextStyle _splashTextStyle =
+        Theme.of(context).textTheme.headline2 == null
+            ? throw Exception('Theme Inherited Widget should not be null. ❗')
+            : Theme.of(context).textTheme.headline2!;
 
     if (widget.message != null) {
       _logo = 'red_plain';
@@ -47,16 +45,6 @@ class _SplashPageState extends State<SplashPage> {
       _secondString = 'mate';
       _secondStringColor = Theme.of(context).primaryColor;
     }
-    _fontSize = _deviceQuery.safeHeight(4.5);
-
-    // TODO Implement Loader Animation ✨
-    double _opacity = 0.0;
-    Future<void> _opacitySwitcher() async {
-      await Future.delayed(Duration(seconds: 1));
-      setState(() => _opacity = 1.0);
-    }
-
-    _opacitySwitcher();
 
     return Scaffold(
       body: Stack(
@@ -76,18 +64,14 @@ class _SplashPageState extends State<SplashPage> {
             left: _deviceQuery.safeWidth(4.0),
             top: _deviceQuery.safeHeight(65.0),
             right: _deviceQuery.safeWidth(4.0),
-            child: AnimatedOpacity(
-              opacity: _opacity,
-              duration: Duration(seconds: 3),
-              child: SplashText(
-                messageMode: (widget.message == null),
-                firstString: _firstString,
-                firstStringColor: _firstStringColor,
-                secondString: _secondString,
-                secondStringColor: _secondStringColor,
-                fontSize: _fontSize,
-                splashTextStyle: _splashTextStyle,
-              ),
+            child: SplashText(
+              messageMode: (widget.message != null),
+              firstString: _firstString,
+              firstStringColor: _firstStringColor,
+              secondString: _secondString,
+              secondStringColor: _secondStringColor,
+              fontSize: _fontSize,
+              splashTextStyle: _splashTextStyle,
             ),
           ),
         ],

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/notification/notification_bloc.dart';
-import '../constants/device_query.dart';
 import 'common_widgets/custom_dialog.dart';
 import 'common_widgets/custom_snack_bar.dart';
 import 'pages/home/home.dart';
