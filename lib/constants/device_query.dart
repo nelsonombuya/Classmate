@@ -34,8 +34,12 @@ class DeviceQuery extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static DeviceQuery of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<DeviceQuery>()!;
+  static DeviceQuery of(BuildContext context) {
+    if (context.dependOnInheritedWidgetOfExactType<DeviceQuery>() == null) {
+      throw Exception("Device Query Can't Be Null ❗");
+    }
+    return context.dependOnInheritedWidgetOfExactType<DeviceQuery>()!;
+  }
 
   // * Calculate height and width with relation to the available safe area
   double safeWidth(double width) => safeBlockHorizontal * width;
