@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
 /// - Also acts as a way of getting media query data
-/// * Make sure to add this inherited widget to the ROOT TREE
+/// * Best place to add this widget is to the respective route widgets
+/// * Or at the root of the tree (It still needs MediaQuery [Child of Material App])
 /// ! Otherwise, errors will be thrown and widgets won't be properly scaled
 class DeviceQuery extends InheritedWidget {
   final double blockSizeHorizontal;

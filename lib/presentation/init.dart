@@ -24,44 +24,41 @@ import 'pages/welcome/welcome_page.dart';
 class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DeviceQuery(
-      context,
-      BlocListener<NotificationBloc, NotificationState>(
-        listener: (context, state) {
-          if (state is ShowSnackBar) {
-            CustomSnackBar(
-              context,
-              message: state.message,
-              type: state.notificationType,
-            );
-          }
-          if (state is ShowDialogBox) {
-            CustomDialog(
-              context,
-              title: state.title,
-              description: state.message,
-              type: state.notificationType,
-              descriptionIcon: state.descriptionIcon,
-              positiveActionIcon: state.positiveActionIcon,
-              positiveActionLabel: state.positiveActionLabel,
-              positiveActionOnPressed: state.positiveActionOnPressed,
-              negativeActionLabel: state.negativeActionLabel,
-              negativeActionOnPressed: state.negativeActionOnPressed,
-            );
-          }
+    return BlocListener<NotificationBloc, NotificationState>(
+      listener: (context, state) {
+        if (state is ShowSnackBar) {
+          CustomSnackBar(
+            context,
+            message: state.message,
+            type: state.notificationType,
+          );
+        }
+        if (state is ShowDialogBox) {
+          CustomDialog(
+            context,
+            title: state.title,
+            description: state.message,
+            type: state.notificationType,
+            descriptionIcon: state.descriptionIcon,
+            positiveActionIcon: state.positiveActionIcon,
+            positiveActionLabel: state.positiveActionLabel,
+            positiveActionOnPressed: state.positiveActionOnPressed,
+            negativeActionLabel: state.negativeActionLabel,
+            negativeActionOnPressed: state.negativeActionOnPressed,
+          );
+        }
+      },
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is Unauthenticated) return WelcomePage();
+
+          if (state is Authenticated) return HomePage();
+
+          if (state is AuthenticationError)
+            return SplashPage(message: state.errorMessage);
+
+          return SplashPage();
         },
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is Unauthenticated) return WelcomePage();
-
-            if (state is Authenticated) return HomePage();
-
-            if (state is AuthenticationError)
-              return SplashPage(message: state.errorMessage);
-
-            return SplashPage();
-          },
-        ),
       ),
     );
   }
