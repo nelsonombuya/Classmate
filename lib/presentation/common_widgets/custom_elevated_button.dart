@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import '../../constants/device_query.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  final Widget child;
+  final String label;
   final bool secondary;
   final void Function()? onPressed;
 
   CustomElevatedButton(
-      {required this.child, this.onPressed, this.secondary = false});
+      {required this.label, this.onPressed, this.secondary = false});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,10 @@ class CustomElevatedButton extends StatelessWidget {
         height: _deviceQuery.safeHeight(6.2),
       ),
       child: ElevatedButton(
-        child: child,
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.button,
+        ),
         onPressed: onPressed,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith<Color>(

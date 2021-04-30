@@ -9,12 +9,12 @@ abstract class SignUpEvent extends Equatable {
 
 class SignUpRequested extends SignUpEvent {}
 
-class SignUpValidationFailed extends SignUpEvent {}
+class SignUpCredentialsInvalid extends SignUpEvent {}
 
-class SignUpStarted extends SignUpEvent {
-  const SignUpStarted({
-    required this.password,
+class SignUpCredentialsValid extends SignUpEvent {
+  const SignUpCredentialsValid({
     required this.email,
+    required this.password,
     required this.firstName,
     required this.lastName,
   });

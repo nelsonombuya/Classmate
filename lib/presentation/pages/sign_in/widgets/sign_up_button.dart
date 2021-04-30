@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../constants/device_query.dart';
 import '../../../../constants/route.dart' as route;
-import '../../../common_widgets/secondary_elevated_button.dart';
+import '../../../common_widgets/custom_elevated_button.dart';
 
 class SignUpButton extends StatelessWidget {
   final bool enabled;
@@ -17,14 +17,11 @@ class SignUpButton extends StatelessWidget {
       child: Column(
         children: [
           CustomElevatedButton(
+            label: 'Sign Up',
             secondary: true,
             onPressed: enabled
                 ? () => Navigator.of(context).pushNamed(route.signUpPage)
                 : null,
-            child: Text(
-              'Sign Up',
-              style: Theme.of(context).textTheme.button,
-            ),
           ),
           SizedBox(height: _deviceQuery.safeHeight(3)),
           Text(

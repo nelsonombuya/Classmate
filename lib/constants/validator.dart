@@ -56,7 +56,7 @@ abstract class Validator {
 /// Then use the function confirmPasswordValidator on the
 /// Confirm Password Field
 class PasswordConfirmationValidator extends Validator {
-  String initialPassword = '';
+  String? initialPassword;
 
   String? confirmPasswordValidator(passwordConfirmation) {
     String? normalPasswordValidation =

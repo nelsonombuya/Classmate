@@ -5,11 +5,11 @@ import '../../../bloc/sign_in/sign_in_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../constants/route.dart' as route;
 import '../../../constants/validator.dart';
+import '../../common_widgets/custom_elevated_button.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
 import 'widgets/divider_with_word_at_center.dart';
 import 'widgets/forgot_password_button.dart';
-import 'widgets/sign_in_button.dart';
 import 'widgets/sign_up_button.dart';
 
 class SignInPage extends StatelessWidget {
@@ -92,8 +92,8 @@ class _SignInBlocViewState extends State<SignInView> {
                     suffixIconAction: () =>
                         setState(() => _showPassword = !_showPassword),
                     suffixIcon: _showPassword
-                        ? Icons.visibility_rounded
-                        : Icons.visibility_off_rounded,
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                   ),
                 ],
               ),
@@ -101,10 +101,15 @@ class _SignInBlocViewState extends State<SignInView> {
             SizedBox(height: _deviceQuery.safeHeight(1.0)),
             ForgotPasswordButton(),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            SignInButton(onPressed: () {
-              FocusScope.of(context).unfocus();
-              _signInBloc.add(SignInRequested());
-            }),
+            Center(
+              child: CustomElevatedButton(
+                label: 'Sign In',
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  _signInBloc.add(SignInRequested());
+                },
+              ),
+            ),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
             DividerWithWordAtCenter(text: 'OR'),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),

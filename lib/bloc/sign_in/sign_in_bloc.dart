@@ -66,6 +66,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           notificationType: NotificationType.Danger,
         ),
       );
+      _notificationBloc.add(
+        SnackBarRequested(
+          e.toString(),
+          title: "Error Signing In",
+          notificationType: NotificationType.Danger,
+        ),
+      );
       yield SignInFailure(e.toString());
       rethrow;
     }
