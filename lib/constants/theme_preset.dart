@@ -51,7 +51,7 @@ class ThemePreset {
     headline = TextStyle(fontFamily: 'Averta', color: headlineTextColor);
     subHeadline = TextStyle(fontFamily: 'Averta', color: subHeadlineTextColor);
     body = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
-    body2 = TextStyle(fontFamily: 'Akrobat', color: body2TextColor);
+    body2 = TextStyle(fontFamily: 'Averta', color: body2TextColor);
     caption = GoogleFonts.montserrat(color: disabledColor);
     button = TextStyle(
       fontWeight: FontWeight.w600,

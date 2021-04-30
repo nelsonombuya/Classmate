@@ -36,10 +36,10 @@ class AllDayEventSet extends EventEvent {
 
 class NewPersonalEventAdded extends EventEvent {
   const NewPersonalEventAdded({
-    @required this.title,
-    @required this.description,
-    @required this.startDate,
-    @required this.endDate,
+    required this.title,
+    required this.description,
+    required this.startDate,
+    required this.endDate,
   });
 
   final String title, description;
@@ -48,3 +48,5 @@ class NewPersonalEventAdded extends EventEvent {
   @override
   List<Object> get props => [title, description, startDate, endDate];
 }
+
+class EventAdditionRequested extends EventEvent {}

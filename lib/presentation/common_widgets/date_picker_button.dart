@@ -9,6 +9,7 @@ class DatePickerButton extends StatelessWidget {
   final String title;
   final IconData? icon;
   final Function? onTap;
+  final bool allDayEvent;
   final TextStyle? titleStyle;
   final TextStyle? dateStyle;
   final TextStyle? timeStyle;
@@ -21,8 +22,6 @@ class DatePickerButton extends StatelessWidget {
   final Color? timeColor;
   final Color? splashColor;
   final Color? backgroundColor;
-  final bool showDatePicker;
-  final bool showDateTimePicker;
 
   final DateTime _fiveHundredYearsFromNow = DateTime(
     DateTime.now().year + 500,
@@ -80,11 +79,10 @@ class DatePickerButton extends StatelessWidget {
     this.timeStyle,
     this.splashColor,
     this.backgroundColor,
+    this.allDayEvent = false,
     required this.selectedDate,
     this.firstSelectableDate,
     this.lastSelectableDate,
-    this.showDatePicker = false,
-    this.showDateTimePicker = true,
   });
 
   void _showCupertinoDateTimePicker(BuildContext context) async {
@@ -124,11 +122,8 @@ class DatePickerButton extends StatelessWidget {
   }
 
   _contextualDateTimePicker(BuildContext context) {
-    if (showDateTimePicker) return _showCupertinoDateTimePicker;
-
-    if (showDatePicker) return _showCupertinoDatePicker;
-
-    return _showCupertinoDateTimePicker;
+    if (allDayEvent) return _showCupertinoDatePicker(context);
+    return _showCupertinoDateTimePicker(context);
   }
 
   @override
@@ -199,21 +194,22 @@ class DatePickerButton extends StatelessWidget {
                                 )),
                   ),
                 ),
-                Positioned(
-                  left: _leftPadding,
-                  top: _deviceQuery.safeWidth(16),
-                  child: Text(
-                    DateFormat.jm().format(selectedDate),
-                    style: timeStyle ??
-                        (Theme.of(context).textTheme.bodyText1 == null
-                            ? null
-                            : Theme.of(context).textTheme.bodyText1!.copyWith(
-                                  fontWeight: FontWeight.w100,
-                                  color: timeColor ?? _timeColor,
-                                  fontSize: _deviceQuery.safeHeight(1.7),
-                                )),
+                if (!allDayEvent)
+                  Positioned(
+                    left: _leftPadding,
+                    top: _deviceQuery.safeWidth(16),
+                    child: Text(
+                      DateFormat.jm().format(selectedDate),
+                      style: timeStyle ??
+                          (Theme.of(context).textTheme.bodyText1 == null
+                              ? null
+                              : Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    fontWeight: FontWeight.w100,
+                                    color: timeColor ?? _timeColor,
+                                    fontSize: _deviceQuery.safeHeight(1.7),
+                                  )),
+                    ),
                   ),
-                ),
                 if (icon != null)
                   Positioned(
                     top: _deviceQuery.safeWidth(3),

@@ -4,7 +4,7 @@ import '../../constants/device_query.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final bool enabled;
-  final int maxLines;
+  final int? maxLines;
   final double size;
   final String? label;
   final bool obscureText;

@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repositories/event_repository.dart';
 import '../../data/repositories/user_repository.dart';
@@ -12,16 +13,21 @@ part 'event_event.dart';
 part 'event_state.dart';
 
 class EventBloc extends Bloc<EventEvent, EventState> {
-  EventRepository _eventRepository;
+  final NotificationBloc _notificationBloc;
+  late final EventRepository _eventRepository;
   final UserRepository _userRepository = UserRepository();
-  final NotificationBloc _notificationBloc = NotificationBloc();
 
   bool _isAllDayEvent = false;
   DateTime _selectedStartingDate = DateTime.now();
   DateTime _selectedEndingDate = DateTime.now().add(Duration(minutes: 30));
 
-  EventBloc() : super(EventInitial()) {
-    _eventRepository = EventRepository(_userRepository.currentUser());
+  EventBloc(BuildContext context)
+      : _notificationBloc = BlocProvider.of<NotificationBloc>(context),
+        super(EventInitial()) {
+    if (_userRepository.getCurrentUser() == null) {
+      throw Exception("User not signed in ❗");
+    }
+    _eventRepository = EventRepository(_userRepository.getCurrentUser()!);
   }
 
   @override
@@ -32,6 +38,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       yield* _mapNewEndingDateToState(event);
     } else if (event is AllDayEventSet) {
       yield* _mapAllDayEventToState(event);
+    } else if (event is EventAdditionRequested) {
+      yield* _mapEventAdditionRequestedToState(event);
     } else if (event is NewPersonalEventAdded) {
       yield* _mapNewPersonalEventAddedToState(event);
     }
@@ -82,13 +90,46 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     );
   }
 
+  Stream<EventState> _mapEventAdditionRequestedToState(
+      EventAdditionRequested event) async* {
+    yield EventValidation(
+      selectedStartingDate: _selectedStartingDate,
+      selectedEndingDate: _selectedStartingDate,
+      isAllDayEvent: _isAllDayEvent,
+    );
+  }
+
   Stream<EventState> _mapNewPersonalEventAddedToState(
       NewPersonalEventAdded event) async* {
     try {
+      _notificationBloc.add(
+        AlertRequested(
+          "Adding Event",
+          notificationType: NotificationType.Loading,
+        ),
+      );
+
       Map<String, dynamic> eventData = _parseEventToMap(event);
       await _eventRepository.createEvent(eventData);
-      yield EventAddedSuccessfully();
+
+      _notificationBloc.add(
+        AlertRequested(
+          "Event Added Successfully",
+          notificationType: NotificationType.Success,
+        ),
+      );
+      yield EventAddedSuccessfully(
+        selectedStartingDate: _selectedStartingDate,
+        selectedEndingDate: _selectedEndingDate,
+        isAllDayEvent: _isAllDayEvent,
+      );
     } catch (e) {
+      _notificationBloc.add(
+        AlertRequested(
+          "Error Adding Event",
+          notificationType: NotificationType.Danger,
+        ),
+      );
       _notificationBloc.add(
         SnackBarRequested(
           e.toString(),
@@ -96,7 +137,12 @@ class EventBloc extends Bloc<EventEvent, EventState> {
           notificationType: NotificationType.Danger,
         ),
       );
-      yield ErrorAddingEvent(e.toString());
+      yield ErrorAddingEvent(
+        e.toString(),
+        selectedStartingDate: _selectedStartingDate,
+        selectedEndingDate: _selectedEndingDate,
+        isAllDayEvent: _isAllDayEvent,
+      );
     }
   }
 

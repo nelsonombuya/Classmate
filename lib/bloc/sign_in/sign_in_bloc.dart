@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/user_model.dart';
@@ -15,7 +16,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final UserRepository _userRepository;
   final NotificationBloc _notificationBloc;
 
-  SignInBloc(context)
+  SignInBloc(BuildContext context)
       : _userRepository = UserRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignInInitial());

@@ -46,6 +46,11 @@ abstract class Validator {
     if (value == null) throw Exception("Can't validate null string. ❗");
     return (value.isEmpty) ? 'Please input a title' : null;
   }
+
+  static String? descriptionValidator(String? value) {
+    if (value == null) throw Exception("Can't validate null string. ❗");
+    return (value.isEmpty) ? 'Please input a description' : null;
+  }
 }
 
 /// ### Confirm Password Validator

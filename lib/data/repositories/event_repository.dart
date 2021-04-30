@@ -33,6 +33,7 @@ class EventRepository {
     return snapshot.docs
         .map(
           (doc) => EventModel(
+            docId: '', // TODO Find way to add docID
             title: doc.data()['title'] ?? '',
             description: doc.data()['description'] ?? '',
             startingDate: doc.data()['starting_date'] ?? null,
