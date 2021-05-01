@@ -65,18 +65,18 @@ class UserRepository {
     }
 
     User currentUser = _firebaseAuth.currentUser!;
-    return await currentUser.updateProfile(
+    return currentUser.updateProfile(
       displayName: displayName,
       photoURL: photoToURL,
     );
   }
 
   Future<void> signOut() async {
-    return await _firebaseAuth.signOut();
+    return _firebaseAuth.signOut();
   }
 
   bool isUserSignedIn() {
-    return this._firebaseAuth.currentUser != null;
+    return _firebaseAuth.currentUser != null;
   }
 
   UserModel? getCurrentUser() {
@@ -88,7 +88,7 @@ class UserRepository {
   }
 
   Future updateUserData(UserModel user, Map<String, dynamic> userData) async {
-    return await _usersCollection
+    return _usersCollection
         .doc(user.uid)
         .set(userData, SetOptions(merge: true));
   }

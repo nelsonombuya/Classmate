@@ -20,11 +20,11 @@ class EventRepository {
   }
 
   Future createEvent(Map<String, dynamic> eventData) async {
-    await _eventsSubCollection.doc().set(eventData, SetOptions(merge: true));
+    _eventsSubCollection.doc().set(eventData, SetOptions(merge: true));
   }
 
   Future updateEvent(EventModel event, Map<String, dynamic> eventData) async {
-    await _eventsSubCollection
+    _eventsSubCollection
         .doc(event.docId)
         .set(eventData, SetOptions(merge: true));
   }
