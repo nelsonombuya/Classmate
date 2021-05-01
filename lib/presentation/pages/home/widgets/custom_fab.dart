@@ -18,20 +18,26 @@ class CustomFloatingActionButton extends StatelessWidget {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     Color _fabColor = _deviceQuery.brightness == Brightness.light
-        ? CupertinoColors.systemGroupedBackground
-        : CupertinoColors.darkBackgroundGray;
+        ? CupertinoColors.darkBackgroundGray
+        : CupertinoColors.systemGroupedBackground;
+
+    Color _labelColor = _deviceQuery.brightness == Brightness.light
+        ? CupertinoColors.white
+        : CupertinoColors.black;
 
     return SpeedDial(
       tooltip: "Quick Actions",
       backgroundColor: _fabColor,
+      foregroundColor: _labelColor,
       curve: Curves.fastLinearToSlowEaseIn,
       animatedIcon: AnimatedIcons.menu_close,
       children: [
         SpeedDialChild(
           label: "New Event",
-          child: Icon(Icons.event),
           backgroundColor: _fabColor,
           labelBackgroundColor: _fabColor,
+          labelStyle: TextStyle(color: _labelColor),
+          child: Icon(Icons.event, color: _labelColor),
           onTap: () => showBarModalBottomSheet(
             context: context,
             builder: (context) => AddEventForm(),
@@ -41,13 +47,15 @@ class CustomFloatingActionButton extends StatelessWidget {
           label: "New Task",
           backgroundColor: _fabColor,
           labelBackgroundColor: _fabColor,
-          child: Icon(Icons.list_rounded),
+          labelStyle: TextStyle(color: _labelColor),
+          child: Icon(Icons.list_rounded, color: _labelColor),
         ),
         SpeedDialChild(
           label: "Search",
           backgroundColor: _fabColor,
           labelBackgroundColor: _fabColor,
-          child: Icon(Icons.search_rounded),
+          labelStyle: TextStyle(color: _labelColor),
+          child: Icon(Icons.search_rounded, color: _labelColor),
         ),
       ],
     );
