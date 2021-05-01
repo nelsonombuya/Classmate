@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/event/event_bloc.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import 'home_scroll_view.dart';
@@ -21,7 +23,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget? _leading;
+    final Widget? _leading =
+        IconButton(icon: Icon(Icons.wb_sunny_rounded), onPressed: () {});
 
     final List<Widget>? _actions = [NotificationsButton(), SignOutButton()];
 
@@ -64,13 +67,16 @@ class HomePage extends StatelessWidget {
       )
     ];
 
-    return HomeView(
-      pages: _pages,
-      titles: _titles,
-      actions: _actions,
-      // leading: _leading,
-      overridePageShown: _subPage,
-      bottomNavigationBarItems: _bottomNavigationBarItems,
+    return BlocProvider(
+      create: (context) => EventBloc(context),
+      child: HomeView(
+        pages: _pages,
+        titles: _titles,
+        actions: _actions,
+        leading: _leading,
+        overridePageShown: _subPage,
+        bottomNavigationBarItems: _bottomNavigationBarItems,
+      ),
     );
   }
 }
