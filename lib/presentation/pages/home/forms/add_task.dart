@@ -44,15 +44,13 @@ class AddTaskFormView extends StatefulWidget {
 
 class _AddTaskFormViewState extends State<AddTaskFormView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _taskNameController = TextEditingController();
+  TextEditingController _taskTitleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final TaskBloc _taskBloc = BlocProvider.of<TaskBloc>(context);
     final AddTaskCubit _addTaskCubit = BlocProvider.of<AddTaskCubit>(context);
-
-    final TextEditingController _titleController = TextEditingController();
 
     return MultiBlocListener(
       listeners: [
@@ -65,7 +63,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
               if (_formKey.currentState!.validate()) {
                 _taskBloc.add(
                   NewPersonalTaskAdded(
-                    title: _titleController.text.trim(),
+                    title: _taskTitleController.text.trim(),
                   ),
                 );
               }
@@ -99,7 +97,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
               child: CustomTextFormField(
                 size: 3.0,
                 label: 'Task',
-                controller: _taskNameController,
+                controller: _taskTitleController,
                 keyboardType: TextInputType.text,
                 validator: Validator.titleValidator,
               ),
