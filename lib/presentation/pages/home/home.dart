@@ -23,9 +23,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget? _leading =
-        IconButton(icon: Icon(Icons.wb_sunny_rounded), onPressed: () {});
-
     final List<Widget>? _actions = [NotificationsButton(), SignOutButton()];
 
     final List<String> _titles = [
@@ -73,7 +70,6 @@ class HomePage extends StatelessWidget {
         pages: _pages,
         titles: _titles,
         actions: _actions,
-        leading: _leading,
         overridePageShown: _subPage,
         bottomNavigationBarItems: _bottomNavigationBarItems,
       ),

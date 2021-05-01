@@ -177,52 +177,6 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                       ),
                     ],
                   ),
-                  SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                  Wrap(
-                    spacing: _deviceQuery.safeWidth(4),
-                    runSpacing: _deviceQuery.safeWidth(8),
-                    runAlignment: WrapAlignment.center,
-                    alignment: WrapAlignment.spaceAround,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.repeat_rounded),
-                            onPressed: () {}, // TODO Repeated Events
-                          ),
-                          Text("Repeat Event"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.add_location_rounded),
-                            onPressed: () {}, // TODO Location Based Events
-                          ),
-                          Text("Add Location"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.add_alert_rounded),
-                            onPressed: () {}, // TODO Alerts for Events
-                          ),
-                          Text("Add Reminder"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.people_alt_rounded),
-                            onPressed: () {}, // TODO Shared Events
-                          ),
-                          Text("Add Guests"),
-                        ],
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
