@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/models/task_model.dart';
 import '../../data/repositories/task_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../notification/notification_bloc.dart';
@@ -16,7 +17,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final NotificationBloc _notificationBloc;
   final UserRepository _userRepository;
 
-  late final Stream taskDataStream;
+  late final Stream<List<TaskModel>> taskDataStream;
   late final TaskRepository _taskRepository;
 
   TaskBloc(BuildContext context)

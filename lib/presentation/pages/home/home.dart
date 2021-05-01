@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/event/event_bloc.dart';
+import '../../../bloc/task/task_bloc.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
+import '../tasks/tasks.dart';
 import 'home_scroll_view.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_fab.dart';
@@ -35,10 +37,7 @@ class HomePage extends StatelessWidget {
     final List<Widget> _pages = [
       DashboardPage(),
       EventsPage(),
-      Container(
-        color: CupertinoColors.systemYellow,
-        child: Center(child: Text("TASKS")),
-      ),
+      TasksPage(),
       Container(
         color: CupertinoColors.systemGreen,
         child: Center(child: Text("MORE")),
@@ -64,8 +63,11 @@ class HomePage extends StatelessWidget {
       )
     ];
 
-    return BlocProvider(
-      create: (context) => EventBloc(context),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<EventBloc>(create: (context) => EventBloc(context)),
+        BlocProvider<TaskBloc>(create: (context) => TaskBloc(context)),
+      ],
       child: HomeView(
         pages: _pages,
         titles: _titles,
