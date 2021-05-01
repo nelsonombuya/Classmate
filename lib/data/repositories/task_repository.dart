@@ -27,11 +27,15 @@ class TaskRepository {
     _tasksSubCollection.doc(task.docId).set(taskData, SetOptions(merge: true));
   }
 
+  Future deleteTask(TaskModel task) async {
+    _tasksSubCollection.doc(task.docId).delete();
+  }
+
   List<TaskModel> _mapSnapshotToTaskModelList(QuerySnapshot snapshot) {
     return snapshot.docs
         .map(
           (doc) => TaskModel(
-            docId: '',
+            docId: doc.id,
             title: doc.data()['title'],
             isDone: doc.data()['is_done'],
           ),

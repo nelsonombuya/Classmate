@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../../bloc/notification/notification_bloc.dart';
 import '../../../bloc/task/task_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../data/models/task_model.dart';
@@ -18,6 +18,8 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final TaskBloc _taskBloc = BlocProvider.of<TaskBloc>(context);
+    final NotificationBloc _notificationBloc =
+        BlocProvider.of<NotificationBloc>(context);
 
     return StreamBuilder<List<TaskModel>>(
       stream: _taskBloc.taskDataStream,
@@ -33,50 +35,46 @@ class _TasksPageState extends State<TasksPage> {
                 horizontal: _deviceQuery.safeWidth(4.0),
                 vertical: _deviceQuery.safeHeight(1.0),
               ),
-              child: FocusedMenuHolder(
-                blurSize: 0.0,
-                menuOffset: 10.0,
-                menuItemExtent: 45,
-                animateMenuItems: true,
-                bottomOffsetHeight: 80.0,
-                blurBackgroundColor: Colors.black54,
-                duration: Duration(milliseconds: 100),
-                menuWidth: MediaQuery.of(context).size.width * 0.50,
-                menuBoxDecoration: BoxDecoration(
-                  color: CupertinoColors.systemGroupedBackground,
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                ),
-                menuItems: <FocusedMenuItem>[
-                  FocusedMenuItem(
-                    title: Text("Details"),
-                    trailingIcon: Icon(Icons.open_in_new_rounded),
-                    onPressed: () {},
-                  ),
-                  FocusedMenuItem(
-                    title: Text("Edit"),
-                    trailingIcon: Icon(Icons.edit_rounded),
-                    onPressed: () {},
-                  ),
-                  FocusedMenuItem(
-                    title: Text(
-                      "Delete",
-                      style: TextStyle(
-                        color: Theme.of(context).errorColor,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Slidable(
+                  actionPane: SlidableBehindActionPane(),
+                  actionExtentRatio: 0.25,
+                  actions: <Widget>[
+                    IconSlideAction(
+                      caption: 'Edit',
+                      icon: Icons.edit_rounded,
+                      color: CupertinoColors.activeBlue,
+                      onTap: () {},
+                    ),
+                  ],
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      caption: 'Delete',
+                      icon: Icons.delete_rounded,
+                      color: Theme.of(context).errorColor,
+                      onTap: () => _notificationBloc.add(
+                        DeleteDialogBoxRequested(
+                          context,
+                          () => _taskBloc.add(
+                            DeleteTaskRequested(snapshot.data![index]),
+                          ),
+                        ),
                       ),
                     ),
-                    trailingIcon: Icon(
-                      Icons.delete_rounded,
-                      color: Theme.of(context).errorColor,
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-                onPressed: () {},
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
+                  ],
                   child: CheckboxListTile(
                     value: snapshot.data![index].isDone,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      // TODO Add error handling
+                      if (value == null) {
+                        throw Exception(
+                            "The checked value shouldn't be null ❗");
+                      }
+
+                      snapshot.data![index].isDone = value;
+                      _taskBloc.add(UpdateTaskRequested(snapshot.data![index]));
+                    },
                     tileColor: CupertinoColors.systemGroupedBackground,
                     title: Text(
                       "${snapshot.data![index].title}",

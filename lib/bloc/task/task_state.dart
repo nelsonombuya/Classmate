@@ -18,3 +18,21 @@ class TaskAddedSuccessfully extends TaskState {
   @override
   List<Object> get props => ["title : $title", "Done: $isDone"];
 }
+
+class TaskUpdatedSuccessfully extends TaskState {
+  final TaskModel task;
+
+  TaskUpdatedSuccessfully(this.task);
+
+  @override
+  List<Object> get props => [task];
+}
+
+class TaskDeletedSuccessfully extends TaskState {
+  final TaskModel task;
+
+  TaskDeletedSuccessfully(this.task);
+
+  @override
+  List<Object> get props => [task];
+}

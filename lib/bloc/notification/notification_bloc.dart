@@ -27,6 +27,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       yield* _mapAlertRequestedToState(event);
     } else if (event is SignOutDialogBoxRequested) {
       yield* _mapSignOutDialogBoxRequestedToState(event);
+    } else if (event is DeleteDialogBoxRequested) {
+      yield* _mapDeleteDialogBoxRequestedToState(event);
     }
 
     // * Resets the BLoC to allow for repeated events (DO NOT DELETE)
@@ -78,6 +80,26 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       positiveActionOnPressed: () {
         Navigator.of(event.context).pop();
         _authBloc.add(AuthRemoved());
+      },
+      negativeActionOnPressed: () {
+        Navigator.of(event.context).pop();
+      },
+    );
+  }
+
+  Stream<NotificationState> _mapDeleteDialogBoxRequestedToState(
+      DeleteDialogBoxRequested event) async* {
+    yield ShowDialogBox(
+      "Are you sure you want to delete this?",
+      title: "Delete",
+      positiveActionLabel: "DELETE",
+      negativeActionLabel: "CANCEL",
+      descriptionIcon: Icons.delete_rounded,
+      positiveActionIcon: Icons.delete_rounded,
+      notificationType: NotificationType.Danger,
+      positiveActionOnPressed: () {
+        Navigator.of(event.context).pop();
+        event.deleteFunction();
       },
       negativeActionOnPressed: () {
         Navigator.of(event.context).pop();

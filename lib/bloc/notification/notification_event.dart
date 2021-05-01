@@ -56,6 +56,16 @@ class DialogBoxRequested extends NotificationEvent {
       ];
 }
 
+class AlertRequested extends NotificationEvent {
+  final String message;
+  final NotificationType? notificationType;
+
+  const AlertRequested(this.message, {this.notificationType}) : super(message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class SignOutDialogBoxRequested extends NotificationEvent {
   final BuildContext context;
 
@@ -66,12 +76,13 @@ class SignOutDialogBoxRequested extends NotificationEvent {
   List<Object> get props => [context];
 }
 
-class AlertRequested extends NotificationEvent {
-  final String message;
-  final NotificationType? notificationType;
+class DeleteDialogBoxRequested extends NotificationEvent {
+  final BuildContext context;
+  final Function deleteFunction;
 
-  const AlertRequested(this.message, {this.notificationType}) : super(message);
+  const DeleteDialogBoxRequested(this.context, this.deleteFunction)
+      : super('Are you sure you want to delete this?');
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [context, deleteFunction];
 }
