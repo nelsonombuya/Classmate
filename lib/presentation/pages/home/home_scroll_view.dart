@@ -24,14 +24,14 @@ class HomeScrollView extends StatelessWidget {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            floating: true,
+            pinned: true,
             elevation: 0.0,
             actions: actions,
             leading: leading,
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: _deviceQuery.brightness == Brightness.light
-                ? CupertinoColors.systemGroupedBackground
-                : CupertinoColors.darkBackgroundGray,
+                ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
+                : CupertinoColors.darkBackgroundGray.withOpacity(0.8),
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               titlePadding:

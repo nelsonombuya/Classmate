@@ -26,8 +26,8 @@ class CustomAppBar extends StatelessWidget {
       ),
       // TODO Find a way to standardize colors using Theme ✨
       backgroundColor: _deviceQuery.brightness == Brightness.light
-          ? CupertinoColors.systemGroupedBackground
-          : CupertinoColors.darkBackgroundGray,
+          ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
+          : CupertinoColors.darkBackgroundGray.withOpacity(0.8),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: _deviceQuery.safeHeight(1.6)),
