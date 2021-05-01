@@ -12,46 +12,48 @@ class ThemePreset {
   final disabledColor = CupertinoColors.inactiveGray;
   final VisualDensity visualDensity = VisualDensity.adaptivePlatformDensity;
 
-  var headlineTextColor;
-  var subHeadlineTextColor;
-  var bodyTextColor;
-  var body2TextColor;
-  var canvasColor;
-  var scaffoldBackgroundColor;
-  var dividerColor;
+  late Color headline2Color;
+  late Color subtitle1Color;
+  late Color bodyTextColor;
+  late Color body2TextColor;
+  late Color canvasColor;
+  late Color dividerColor;
+  late Color scaffoldBackgroundColor;
 
-  late final TextStyle title;
-  late final TextStyle headline;
-  late final TextStyle subHeadline;
-  late final TextStyle body;
-  late final TextStyle body2;
+  late final TextStyle headline2;
+  late final TextStyle headline5;
+  late final TextStyle subtitle1;
+  late final TextStyle headline6;
+  late final TextStyle bodyText1;
+  late final TextStyle bodyText2;
   late final TextStyle button;
   late final TextStyle caption;
 
   ThemePreset(Brightness brightness) {
     if (brightness == Brightness.light) {
-      headlineTextColor = CupertinoColors.label;
-      subHeadlineTextColor = CupertinoColors.secondaryLabel;
+      headline2Color = CupertinoColors.label;
+      subtitle1Color = CupertinoColors.secondaryLabel;
       bodyTextColor = CupertinoColors.label;
       body2TextColor = CupertinoColors.secondaryLabel;
-      scaffoldBackgroundColor = CupertinoColors.white;
       canvasColor = CupertinoColors.white;
       dividerColor = CupertinoColors.black;
+      scaffoldBackgroundColor = CupertinoColors.white;
     } else {
-      headlineTextColor = CupertinoColors.systemGrey6;
-      subHeadlineTextColor = CupertinoColors.systemGrey;
+      headline2Color = CupertinoColors.systemGrey6;
+      subtitle1Color = CupertinoColors.systemGrey;
       bodyTextColor = CupertinoColors.systemGrey6;
       body2TextColor = CupertinoColors.systemGrey;
-      scaffoldBackgroundColor = CupertinoColors.black;
       canvasColor = CupertinoColors.black;
       dividerColor = CupertinoColors.systemGrey2;
+      scaffoldBackgroundColor = CupertinoColors.black;
     }
 
-    title = GoogleFonts.poppins(color: headlineTextColor);
-    headline = TextStyle(fontFamily: 'Averta', color: headlineTextColor);
-    subHeadline = TextStyle(fontFamily: 'Averta', color: subHeadlineTextColor);
-    body = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
-    body2 = TextStyle(fontFamily: 'Averta', color: body2TextColor);
+    headline2 = GoogleFonts.poppins(color: headline2Color);
+    headline5 = TextStyle(fontFamily: 'Averta', color: headline2Color);
+    headline6 = TextStyle(fontFamily: 'Averta', color: headline2Color);
+    subtitle1 = TextStyle(fontFamily: 'Averta', color: subtitle1Color);
+    bodyText1 = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
+    bodyText2 = TextStyle(fontFamily: 'Averta', color: body2TextColor);
     caption = GoogleFonts.montserrat(color: disabledColor);
     button = TextStyle(
       fontWeight: FontWeight.w600,
