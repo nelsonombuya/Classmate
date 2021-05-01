@@ -12,7 +12,7 @@ class EventRepository {
             .doc(user.uid)
             .collection('events');
 
-  Stream<List<EventModel>> get eventsDataStream {
+  Stream<List<EventModel>> get eventDataStream {
     return _eventsSubCollection
         .snapshots()
         .distinct()
@@ -33,11 +33,15 @@ class EventRepository {
     return snapshot.docs
         .map(
           (doc) => EventModel(
-            docId: '', // TODO Find way to add docID
-            title: doc.data()['title'] ?? '',
-            description: doc.data()['description'] ?? '',
-            startingDate: doc.data()['starting_date'] ?? null,
-            endingDate: doc.data()['ending_date'] ?? null,
+            docId: '',
+            title: doc.data()['title'],
+            description: doc.data()['description'],
+            startingDate: DateTime.fromMillisecondsSinceEpoch(
+              doc.data()['start_date'],
+            ),
+            endingDate: DateTime.fromMillisecondsSinceEpoch(
+              doc.data()['end_date'],
+            ),
           ),
         )
         .toList();

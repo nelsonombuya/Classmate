@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
+import '../../data/models/event_model.dart';
 import '../../data/repositories/event_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../notification/notification_bloc.dart';
@@ -14,89 +16,31 @@ part 'event_state.dart';
 
 class EventBloc extends Bloc<EventEvent, EventState> {
   final NotificationBloc _notificationBloc;
-  late final EventRepository _eventRepository;
   final UserRepository _userRepository = UserRepository();
 
-  bool _isAllDayEvent = false;
-  DateTime _selectedStartingDate = DateTime.now();
-  DateTime _selectedEndingDate = DateTime.now().add(Duration(minutes: 30));
+  late final EventRepository _eventRepository;
+  late final Stream<List<EventModel>> eventDataStream;
 
   EventBloc(BuildContext context)
       : _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(EventInitial()) {
-    if (_userRepository.getCurrentUser() == null) {
-      throw Exception("User not signed in ❗");
+    try {
+      if (_userRepository.getCurrentUser() == null) {
+        throw Exception("User not signed in ❗");
+      }
+      _eventRepository = EventRepository(_userRepository.getCurrentUser()!);
+      eventDataStream = _eventRepository.eventDataStream;
+    } on Exception catch (e) {
+      this.addError(e);
+      rethrow;
     }
-    _eventRepository = EventRepository(_userRepository.getCurrentUser()!);
   }
 
   @override
   Stream<EventState> mapEventToState(EventEvent event) async* {
-    if (event is StartingDateChanged) {
-      yield* _mapNewStartingDateToState(event);
-    } else if (event is EndingDateChanged) {
-      yield* _mapNewEndingDateToState(event);
-    } else if (event is AllDayEventSet) {
-      yield* _mapAllDayEventToState(event);
-    } else if (event is EventAdditionRequested) {
-      yield* _mapEventAdditionRequestedToState(event);
-    } else if (event is NewPersonalEventAdded) {
+    if (event is NewPersonalEventAdded) {
       yield* _mapNewPersonalEventAddedToState(event);
     }
-  }
-
-  Stream<EventState> _mapNewStartingDateToState(
-      StartingDateChanged event) async* {
-    _selectedStartingDate = event.date;
-
-    if (_selectedEndingDate.isBefore(event.date)) {
-      _selectedEndingDate = event.date.add(Duration(minutes: 30));
-    }
-
-    yield EventDateChanged(
-      selectedStartingDate: _selectedStartingDate,
-      selectedEndingDate: _selectedEndingDate,
-      isAllDayEvent: _isAllDayEvent,
-    );
-  }
-
-  Stream<EventState> _mapNewEndingDateToState(EndingDateChanged event) async* {
-    _selectedEndingDate = event.date;
-
-    yield EventDateChanged(
-      selectedStartingDate: _selectedStartingDate,
-      selectedEndingDate: _selectedEndingDate,
-      isAllDayEvent: _isAllDayEvent,
-    );
-  }
-
-  Stream<EventState> _mapAllDayEventToState(AllDayEventSet event) async* {
-    _isAllDayEvent = event.isAllDayEvent;
-
-    if (_isAllDayEvent) {
-      _selectedStartingDate = DateTime(
-        _selectedStartingDate.year,
-        _selectedStartingDate.month,
-        _selectedStartingDate.day,
-      );
-
-      _selectedEndingDate = _selectedStartingDate.add(Duration(hours: 24));
-    }
-
-    yield EventDateChanged(
-      selectedStartingDate: _selectedStartingDate,
-      selectedEndingDate: _selectedEndingDate,
-      isAllDayEvent: _isAllDayEvent,
-    );
-  }
-
-  Stream<EventState> _mapEventAdditionRequestedToState(
-      EventAdditionRequested event) async* {
-    yield EventValidation(
-      selectedStartingDate: _selectedStartingDate,
-      selectedEndingDate: _selectedStartingDate,
-      isAllDayEvent: _isAllDayEvent,
-    );
   }
 
   Stream<EventState> _mapNewPersonalEventAddedToState(
@@ -119,9 +63,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
         ),
       );
       yield EventAddedSuccessfully(
-        selectedStartingDate: _selectedStartingDate,
-        selectedEndingDate: _selectedEndingDate,
-        isAllDayEvent: _isAllDayEvent,
+        selectedStartingDate: event.startDate,
+        selectedEndingDate: event.endDate,
       );
     } catch (e) {
       _notificationBloc.add(
@@ -137,12 +80,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
           notificationType: NotificationType.Danger,
         ),
       );
-      yield ErrorAddingEvent(
-        e.toString(),
-        selectedStartingDate: _selectedStartingDate,
-        selectedEndingDate: _selectedEndingDate,
-        isAllDayEvent: _isAllDayEvent,
-      );
+      this.addError(e);
+      rethrow;
     }
   }
 
@@ -150,8 +89,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     return {
       "title": event.title,
       "description": event.description,
-      "start_date": event.startDate,
-      "end_date": event.endDate,
+      "start_date": event.startDate.millisecondsSinceEpoch,
+      "end_date": event.endDate.millisecondsSinceEpoch,
     };
   }
 }

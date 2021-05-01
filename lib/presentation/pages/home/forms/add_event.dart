@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/event/event_bloc.dart';
 import '../../../../constants/device_query.dart';
 import '../../../../constants/validator.dart';
+import '../../../../cubit/add_event/add_event_cubit.dart';
 import '../../../common_widgets/custom_textFormField.dart';
 import '../../../common_widgets/date_picker_button.dart';
 import '../../../common_widgets/form_view.dart';
@@ -14,8 +15,15 @@ class AddEventForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return DeviceQuery(
       context,
-      BlocProvider<EventBloc>(
-        create: (context) => EventBloc(context),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<AddEventCubit>(
+            create: (context) => AddEventCubit(),
+          ),
+          BlocProvider<EventBloc>(
+            create: (context) => EventBloc(context),
+          ),
+        ],
         child: AddEventFormView(),
       ),
     );
@@ -46,34 +54,44 @@ class _AddEventFormViewState extends State<AddEventFormView> {
   Widget build(BuildContext context) {
     final EventBloc _eventsBloc = BlocProvider.of<EventBloc>(context);
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final AddEventCubit _addEventCubit =
+        BlocProvider.of<AddEventCubit>(context);
 
-    return BlocListener<EventBloc, EventState>(
-      listener: (context, state) async {
-        if (state is EventValidation) {
-          if (_formKey.currentState == null)
-            throw Exception("Current Form State is Null ❗ ");
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AddEventCubit, AddEventState>(
+          listener: (context, state) {
+            if (state is EventValidation) {
+              if (_formKey.currentState == null)
+                throw Exception("Current Form State is Null ❗ ");
 
-          if (_formKey.currentState!.validate()) {
-            _eventsBloc.add(
-              NewPersonalEventAdded(
-                title: _titleController.text.trim(),
-                description: _descriptionController.text.trim(),
-                startDate: state.selectedStartingDate,
-                endDate: state.selectedEndingDate,
-              ),
-            );
-          }
-        }
-
-        if (state is EventAddedSuccessfully) {
-          Navigator.of(context).pop();
-        }
-      },
+              if (_formKey.currentState!.validate()) {
+                _eventsBloc.add(
+                  NewPersonalEventAdded(
+                    title: _titleController.text.trim(),
+                    description: _descriptionController.text.trim(),
+                    startDate: state.selectedStartingDate,
+                    endDate: state.selectedEndingDate,
+                  ),
+                );
+              }
+            }
+          },
+        ),
+        BlocListener<EventBloc, EventState>(
+          listener: (context, state) {
+            if (state is EventAddedSuccessfully) Navigator.of(context).pop();
+          },
+        ),
+      ],
       child: FormView(
         title: "Add Event",
         actions: [
           TextButton.icon(
-            onPressed: () => _eventsBloc.add(EventAdditionRequested()),
+            onPressed: () {
+              _addEventCubit.validateNewEvent();
+              FocusScope.of(context).unfocus();
+            },
             icon: Icon(Icons.save_alt_rounded),
             label: Text("SAVE"),
           ),
@@ -104,7 +122,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                   SizedBox(height: _deviceQuery.safeHeight(3.0)),
                   Column(
                     children: [
-                      BlocBuilder<EventBloc, EventState>(
+                      BlocBuilder<AddEventCubit, AddEventState>(
                         builder: (context, state) {
                           return Row(
                             children: [
@@ -123,14 +141,14 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                               ),
                               Switch.adaptive(
                                 value: state.isAllDayEvent,
-                                onChanged: (value) =>
-                                    _eventsBloc.add(AllDayEventSet(value)),
+                                onChanged: (value) => _addEventCubit
+                                    .changeAllDayEventState(value),
                               ),
                             ],
                           );
                         },
                       ),
-                      BlocBuilder<EventBloc, EventState>(
+                      BlocBuilder<AddEventCubit, AddEventState>(
                         builder: (context, state) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +158,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                                 allDayEvent: state.isAllDayEvent,
                                 selectedDate: state.selectedStartingDate,
                                 onTap: (date) =>
-                                    _eventsBloc.add(StartingDateChanged(date)),
+                                    _addEventCubit.changeStartingDate(date),
                               ),
                               if (!state.isAllDayEvent)
                                 DatePickerButton(
@@ -151,7 +169,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                                       .selectedStartingDate
                                       .add(Duration(minutes: 5)),
                                   onTap: (date) =>
-                                      _eventsBloc.add(EndingDateChanged(date)),
+                                      _addEventCubit.changeEndingDate(date),
                                 ),
                             ],
                           );
