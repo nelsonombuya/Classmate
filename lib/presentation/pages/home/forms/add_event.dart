@@ -92,7 +92,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
               _addEventCubit.validateNewEvent();
               FocusScope.of(context).unfocus();
             },
-            icon: Icon(Icons.save_alt_rounded),
+            icon: Icon(Icons.save_rounded),
             label: Text("SAVE"),
           ),
         ],
