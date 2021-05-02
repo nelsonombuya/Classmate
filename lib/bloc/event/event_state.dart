@@ -9,14 +9,14 @@ abstract class EventState extends Equatable {
 
 class EventInitial extends EventState {}
 
-class EventAddedSuccessfully extends EventState {
-  const EventAddedSuccessfully({
+class EventCreatedSuccessfully extends EventState {
+  final DateTime selectedStartingDate;
+  final DateTime selectedEndingDate;
+
+  const EventCreatedSuccessfully({
     required this.selectedStartingDate,
     required this.selectedEndingDate,
   });
-
-  final DateTime selectedStartingDate;
-  final DateTime selectedEndingDate;
 
   @override
   List<Object> get props => [
@@ -25,11 +25,20 @@ class EventAddedSuccessfully extends EventState {
       ];
 }
 
-class ErrorAddingEvent extends EventState {
-  const ErrorAddingEvent(this.errorMessage);
+class EventUpdatedSuccessfully extends EventState {
+  final EventModel event;
 
-  final String errorMessage;
+  const EventUpdatedSuccessfully(this.event);
 
   @override
-  List<Object> get props => [errorMessage];
+  List<Object> get props => [event];
+}
+
+class EventDeletedSuccessfully extends EventState {
+  final EventModel event;
+
+  const EventDeletedSuccessfully(this.event);
+
+  @override
+  List<Object> get props => [event];
 }

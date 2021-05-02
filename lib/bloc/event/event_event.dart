@@ -7,8 +7,8 @@ abstract class EventEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NewPersonalEventAdded extends EventEvent {
-  const NewPersonalEventAdded({
+class PersonalEventCreated extends EventEvent {
+  const PersonalEventCreated({
     required this.title,
     required this.description,
     required this.startDate,
@@ -20,4 +20,22 @@ class NewPersonalEventAdded extends EventEvent {
 
   @override
   List<Object> get props => [title, description, startDate, endDate];
+}
+
+class PersonalEventUpdated extends EventEvent {
+  final EventModel event;
+
+  const PersonalEventUpdated(this.event);
+
+  @override
+  List<Object> get props => [event];
+}
+
+class PersonalEventDeleted extends EventEvent {
+  final EventModel event;
+
+  const PersonalEventDeleted(this.event);
+
+  @override
+  List<Object> get props => [event];
 }

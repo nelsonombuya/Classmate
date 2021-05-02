@@ -1,49 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/auth_model.dart';
 import '../models/event_model.dart';
-import '../models/user_model.dart';
 
 class EventRepository {
   final CollectionReference _eventsSubCollection;
 
-  EventRepository(UserModel user)
+  EventRepository(AuthModel user)
       : _eventsSubCollection = FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .collection('events');
 
-  Stream<List<EventModel>> get eventDataStream {
+  Stream<List<EventModel>> get personalEventDataStream {
     return _eventsSubCollection
         .snapshots()
         .distinct()
         .map(_mapSnapshotToEventModel);
   }
 
-  Future createEvent(Map<String, dynamic> eventData) async {
-    _eventsSubCollection.doc().set(eventData, SetOptions(merge: true));
+  Future createEvent(EventModel event) async {
+    _eventsSubCollection.doc().set(event.toMap(), SetOptions(merge: true));
   }
 
-  Future updateEvent(EventModel event, Map<String, dynamic> eventData) async {
+  Future updateEvent(EventModel event) async {
     _eventsSubCollection
         .doc(event.docId)
-        .set(eventData, SetOptions(merge: true));
+        .set(event.toMap(), SetOptions(merge: true));
+  }
+
+  Future deleteEvent(EventModel event) async {
+    _eventsSubCollection.doc(event.docId).delete();
   }
 
   List<EventModel> _mapSnapshotToEventModel(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map(
-          (doc) => EventModel(
-            docId: '',
-            title: doc.data()['title'],
-            description: doc.data()['description'],
-            startingDate: DateTime.fromMillisecondsSinceEpoch(
-              doc.data()['start_date'],
-            ),
-            endingDate: DateTime.fromMillisecondsSinceEpoch(
-              doc.data()['end_date'],
-            ),
-          ),
-        )
-        .toList();
+    return snapshot.docs.map(
+      (doc) {
+        EventModel newEvent = EventModel.fromMap(doc.data());
+        return newEvent.copyWith(docId: doc.id);
+      },
+    ).toList();
   }
 }

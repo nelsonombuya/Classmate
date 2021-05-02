@@ -1,33 +1,33 @@
 import 'dart:convert';
 
 class EventModel {
-  String docId;
+  String? docId;
   String title;
   String description;
-  DateTime startingDate;
-  DateTime endingDate;
+  DateTime startDate;
+  DateTime endDate;
 
   EventModel({
-    required this.docId,
+    this.docId,
     required this.title,
     required this.description,
-    required this.startingDate,
-    required this.endingDate,
+    required this.startDate,
+    required this.endDate,
   });
 
   EventModel copyWith({
     String? docId,
     String? title,
     String? description,
-    DateTime? startingDate,
-    DateTime? endingDate,
+    DateTime? startDate,
+    DateTime? endDate,
   }) {
     return EventModel(
       docId: docId ?? this.docId,
       title: title ?? this.title,
       description: description ?? this.description,
-      startingDate: startingDate ?? this.startingDate,
-      endingDate: endingDate ?? this.endingDate,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
     );
   }
 
@@ -36,8 +36,8 @@ class EventModel {
       'docId': docId,
       'title': title,
       'description': description,
-      'startingDate': startingDate.millisecondsSinceEpoch,
-      'endingDate': endingDate.millisecondsSinceEpoch,
+      'startDate': startDate.millisecondsSinceEpoch,
+      'endDate': endDate.millisecondsSinceEpoch,
     };
   }
 
@@ -46,8 +46,8 @@ class EventModel {
       docId: map['docId'],
       title: map['title'],
       description: map['description'],
-      startingDate: DateTime.fromMillisecondsSinceEpoch(map['startingDate']),
-      endingDate: DateTime.fromMillisecondsSinceEpoch(map['endingDate']),
+      startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate']),
+      endDate: DateTime.fromMillisecondsSinceEpoch(map['endDate']),
     );
   }
 
@@ -58,7 +58,7 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel(docId: $docId, title: $title, description: $description, startingDate: $startingDate, endingDate: $endingDate)';
+    return 'EventModel(docId: $docId, title: $title, description: $description, startDate: $startDate, endDate: $endDate)';
   }
 
   @override
@@ -69,8 +69,8 @@ class EventModel {
         other.docId == docId &&
         other.title == title &&
         other.description == description &&
-        other.startingDate == startingDate &&
-        other.endingDate == endingDate;
+        other.startDate == startDate &&
+        other.endDate == endDate;
   }
 
   @override
@@ -78,7 +78,7 @@ class EventModel {
     return docId.hashCode ^
         title.hashCode ^
         description.hashCode ^
-        startingDate.hashCode ^
-        endingDate.hashCode;
+        startDate.hashCode ^
+        endDate.hashCode;
   }
 }
