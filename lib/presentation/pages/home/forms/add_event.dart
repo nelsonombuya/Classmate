@@ -67,7 +67,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
 
               if (_formKey.currentState!.validate()) {
                 _eventsBloc.add(
-                  NewPersonalEventAdded(
+                  PersonalEventCreated(
                     title: _titleController.text.trim(),
                     description: _descriptionController.text.trim(),
                     startDate: state.selectedStartingDate,
@@ -80,7 +80,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
         ),
         BlocListener<EventBloc, EventState>(
           listener: (context, state) {
-            if (state is EventAddedSuccessfully) Navigator.of(context).pop();
+            if (state is EventCreatedSuccessfully) Navigator.of(context).pop();
           },
         ),
       ],

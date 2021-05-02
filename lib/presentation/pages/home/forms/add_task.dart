@@ -62,7 +62,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
 
               if (_formKey.currentState!.validate()) {
                 _taskBloc.add(
-                  NewPersonalTaskAdded(
+                  PersonalTaskCreated(
                     title: _taskTitleController.text.trim(),
                   ),
                 );
