@@ -2,11 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
-part 'add_event_state.dart';
+part 'create_event_state.dart';
 
-class AddEventCubit extends Cubit<AddEventState> {
-  AddEventCubit()
-      : super(AddEventInitial(
+class CreateEventCubit extends Cubit<CreateEventState> {
+  CreateEventCubit()
+      : super(CreateEventInitial(
           selectedStartingDate: DateTime.now(),
           selectedEndingDate: DateTime.now().add(Duration(minutes: 30)),
           isAllDayEvent: false,

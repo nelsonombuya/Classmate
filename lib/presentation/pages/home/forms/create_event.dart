@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/event/event_bloc.dart';
 import '../../../../constants/device_query.dart';
 import '../../../../constants/validator.dart';
-import '../../../../cubit/add_event/add_event_cubit.dart';
+import '../../../../cubit/create_event/create_event_cubit.dart';
 import '../../../common_widgets/custom_textFormField.dart';
 import '../../../common_widgets/date_picker_button.dart';
 import '../../../common_widgets/form_view.dart';
@@ -17,8 +17,8 @@ class AddEventForm extends StatelessWidget {
       context,
       MultiBlocProvider(
         providers: [
-          BlocProvider<AddEventCubit>(
-            create: (context) => AddEventCubit(),
+          BlocProvider<CreateEventCubit>(
+            create: (context) => CreateEventCubit(),
           ),
           BlocProvider<EventBloc>(
             create: (context) => EventBloc(context),
@@ -54,12 +54,12 @@ class _AddEventFormViewState extends State<AddEventFormView> {
   Widget build(BuildContext context) {
     final EventBloc _eventsBloc = BlocProvider.of<EventBloc>(context);
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final AddEventCubit _addEventCubit =
-        BlocProvider.of<AddEventCubit>(context);
+    final CreateEventCubit _createEventCubit =
+        BlocProvider.of<CreateEventCubit>(context);
 
     return MultiBlocListener(
       listeners: [
-        BlocListener<AddEventCubit, AddEventState>(
+        BlocListener<CreateEventCubit, CreateEventState>(
           listener: (context, state) {
             if (state is EventValidation) {
               if (_formKey.currentState == null)
@@ -89,7 +89,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
         actions: [
           TextButton.icon(
             onPressed: () {
-              _addEventCubit.validateNewEvent();
+              _createEventCubit.validateNewEvent();
               FocusScope.of(context).unfocus();
             },
             icon: Icon(Icons.save_rounded),
@@ -122,7 +122,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                   SizedBox(height: _deviceQuery.safeHeight(3.0)),
                   Column(
                     children: [
-                      BlocBuilder<AddEventCubit, AddEventState>(
+                      BlocBuilder<CreateEventCubit, CreateEventState>(
                         builder: (context, state) {
                           return Row(
                             children: [
@@ -141,14 +141,14 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                               ),
                               Switch.adaptive(
                                 value: state.isAllDayEvent,
-                                onChanged: (value) => _addEventCubit
+                                onChanged: (value) => _createEventCubit
                                     .changeAllDayEventState(value),
                               ),
                             ],
                           );
                         },
                       ),
-                      BlocBuilder<AddEventCubit, AddEventState>(
+                      BlocBuilder<CreateEventCubit, CreateEventState>(
                         builder: (context, state) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +158,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                                 allDayEvent: state.isAllDayEvent,
                                 selectedDate: state.selectedStartingDate,
                                 onTap: (date) =>
-                                    _addEventCubit.changeStartingDate(date),
+                                    _createEventCubit.changeStartingDate(date),
                               ),
                               if (!state.isAllDayEvent)
                                 DatePickerButton(
@@ -169,7 +169,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                                       .selectedStartingDate
                                       .add(Duration(minutes: 5)),
                                   onTap: (date) =>
-                                      _addEventCubit.changeEndingDate(date),
+                                      _createEventCubit.changeEndingDate(date),
                                 ),
                             ],
                           );

@@ -4,8 +4,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../constants/device_query.dart';
-import '../forms/add_event.dart';
-import '../forms/add_task.dart';
+import '../forms/create_event.dart';
+import '../forms/create_task.dart';
 
 /// # Custom Floating Action Button
 /// Allows the user to view the following forms:
@@ -50,7 +50,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           labelStyle: TextStyle(color: _labelColor),
           onTap: () => showBarModalBottomSheet(
             context: context,
-            builder: (context) => AddTaskForm(),
+            builder: (context) => CreateTaskForm(),
           ),
           child: Icon(Icons.list_rounded, color: _labelColor),
         ),

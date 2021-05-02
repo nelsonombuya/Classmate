@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/task/task_bloc.dart';
 import '../../../../constants/device_query.dart';
 import '../../../../constants/validator.dart';
-import '../../../../cubit/add_task/add_task_cubit.dart';
+import '../../../../cubit/create_task/create_task_cubit.dart';
 import '../../../common_widgets/custom_textFormField.dart';
 import '../../../common_widgets/form_view.dart';
 
-class AddTaskForm extends StatelessWidget {
+class CreateTaskForm extends StatelessWidget {
   final bool edit;
 
-  AddTaskForm({this.edit = false});
+  CreateTaskForm({this.edit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class AddTaskForm extends StatelessWidget {
       context,
       MultiBlocProvider(
         providers: [
-          BlocProvider<AddTaskCubit>(
-            create: (context) => AddTaskCubit(),
+          BlocProvider<CreateTaskCubit>(
+            create: (context) => CreateTaskCubit(),
           ),
           BlocProvider<TaskBloc>(
             create: (context) => TaskBloc(context),
@@ -50,11 +50,12 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final TaskBloc _taskBloc = BlocProvider.of<TaskBloc>(context);
-    final AddTaskCubit _addTaskCubit = BlocProvider.of<AddTaskCubit>(context);
+    final CreateTaskCubit _createTaskCubit =
+        BlocProvider.of<CreateTaskCubit>(context);
 
     return MultiBlocListener(
       listeners: [
-        BlocListener<AddTaskCubit, AddTaskState>(
+        BlocListener<CreateTaskCubit, CreateTaskState>(
           listener: (context, state) {
             if (state is TaskValidation) {
               if (_formKey.currentState == null)
@@ -77,11 +78,11 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
         ),
       ],
       child: FormView(
-        title: "Add Task",
+        title: "Create Task",
         actions: [
           TextButton.icon(
             onPressed: () {
-              _addTaskCubit.validateNewTask();
+              _createTaskCubit.validateNewTask();
               FocusScope.of(context).unfocus();
             },
             icon: Icon(Icons.save_rounded),

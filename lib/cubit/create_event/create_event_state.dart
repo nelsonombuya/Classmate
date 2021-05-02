@@ -1,7 +1,7 @@
-part of 'add_event_cubit.dart';
+part of 'create_event_cubit.dart';
 
-abstract class AddEventState extends Equatable {
-  AddEventState({
+abstract class CreateEventState extends Equatable {
+  CreateEventState({
     required this.selectedStartingDate,
     required this.selectedEndingDate,
     required this.isAllDayEvent,
@@ -19,8 +19,8 @@ abstract class AddEventState extends Equatable {
       ];
 }
 
-class AddEventInitial extends AddEventState {
-  AddEventInitial({
+class CreateEventInitial extends CreateEventState {
+  CreateEventInitial({
     required this.selectedStartingDate,
     required this.selectedEndingDate,
     required this.isAllDayEvent,
@@ -42,7 +42,7 @@ class AddEventInitial extends AddEventState {
       ];
 }
 
-class EventDateChanged extends AddEventState {
+class EventDateChanged extends CreateEventState {
   EventDateChanged({
     required this.selectedStartingDate,
     required this.selectedEndingDate,
@@ -65,7 +65,7 @@ class EventDateChanged extends AddEventState {
       ];
 }
 
-class EventValidation extends AddEventState {
+class EventValidation extends CreateEventState {
   EventValidation({
     required this.selectedStartingDate,
     required this.selectedEndingDate,
