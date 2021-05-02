@@ -21,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     } catch (e) {
       this.addError(AuthErrorOccurred(e.toString()));
+      rethrow;
     }
   }
 
