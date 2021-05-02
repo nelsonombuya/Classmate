@@ -5,19 +5,19 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/user_model.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/models/auth_model.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../notification/notification_bloc.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final UserRepository _userRepository;
+  final AuthRepository _authRepository;
   final NotificationBloc _notificationBloc;
 
   SignInBloc(BuildContext context)
-      : _userRepository = UserRepository(),
+      : _authRepository = AuthRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignInInitial());
 
@@ -30,9 +30,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     } else if (event is SignInCredentialsInvalid) {
       yield* _mapSignInCredentialsInvalidToState(event);
     }
-
-    // * Resets the BLoC to allow for repeated events (DO NOT DELETE)
-    yield SignInInitial();
   }
 
   Stream<SignInState> _mapSignInCredentialsValidToState(
@@ -48,7 +45,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Stream<SignInState> _signIn(String email, String password) async* {
     try {
-      UserModel user = await _userRepository.signInWithEmailAndPassword(
+      AuthModel user = await _authRepository.signInWithEmailAndPassword(
         email,
         password,
       );
@@ -60,7 +57,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       );
       yield SignInSuccess(user);
     } catch (e) {
-      // TODO Implement Error Handling ⛔
       _notificationBloc.add(
         AlertRequested(
           "Error Signing In",
@@ -74,8 +70,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           notificationType: NotificationType.Danger,
         ),
       );
-      yield SignInFailure(e.toString());
-      rethrow;
+      this.addError(e);
     }
   }
 

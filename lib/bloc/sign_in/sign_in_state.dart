@@ -13,7 +13,7 @@ class SignInValidation extends SignInState {}
 
 class SignInSuccess extends SignInState {
   SignInSuccess(this.user);
-  final UserModel user;
+  final AuthModel user;
 
   @override
   List<Object> get props => [user.uid];
