@@ -5,7 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/user_model.dart';
+import '../../data/models/auth_model.dart';
+import '../../data/models/user_data_model.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../notification/notification_bloc.dart';
 
@@ -13,11 +15,13 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
+  final AuthRepository _authRepository;
   final UserRepository _userRepository;
   final NotificationBloc _notificationBloc;
 
   SignUpBloc(BuildContext context)
-      : _userRepository = UserRepository(),
+      : _authRepository = AuthRepository(),
+        _userRepository = UserRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignUpInitial());
 
@@ -30,9 +34,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     } else if (event is SignUpCredentialsInvalid) {
       yield* _mapSignUpCredentialsInvalidToState(event);
     }
-
-    // * Resets the BLoC to allow for repeated events (DO NOT DELETE)
-    yield SignUpInitial();
   }
 
   Stream<SignUpState> _mapSignUpCredentialsValidToState(
@@ -44,7 +45,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       ),
     );
 
-    Map<String, dynamic> userData = _parseEventToMap(event);
+    UserDataModel userData = UserDataModel(
+      firstName: event.firstName,
+      lastName: event.lastName,
+    );
 
     yield* _signUp(
       email: event.email,
@@ -60,27 +64,28 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     required String password,
     required String firstName,
     required String lastName,
-    userData,
+    required UserDataModel userData,
   }) async* {
     try {
-      UserModel user = await _userRepository.createUserWithEmailAndPassword(
+      AuthModel user = await _authRepository.createUserWithEmailAndPassword(
         email,
         password,
       );
 
       String displayName = "${firstName[0]}. $lastName";
 
-      await _userRepository.updateProfile(displayName: displayName);
+      await _authRepository.updateProfile(displayName: displayName);
       await _userRepository.updateUserData(user, userData);
+
       _notificationBloc.add(
         AlertRequested(
           "Signed Up Successfully",
           notificationType: NotificationType.Success,
         ),
       );
+
       yield SignUpSuccess(user);
     } catch (e) {
-      // TODO Implement Error Handling ⛔
       _notificationBloc.add(
         AlertRequested(
           "Error Signing Up",
@@ -94,8 +99,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           notificationType: NotificationType.Danger,
         ),
       );
-      yield SignUpFailure(e.toString());
-      rethrow;
+      this.addError(e);
     }
   }
 
@@ -108,14 +112,5 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         title: 'Error Validating Form',
       ),
     );
-  }
-
-  Map<String, dynamic> _parseEventToMap(event) {
-    return {
-      "names": {
-        "first_name": event.firstName,
-        "last_name": event.lastName,
-      }
-    };
   }
 }

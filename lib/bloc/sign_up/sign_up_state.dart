@@ -9,22 +9,12 @@ abstract class SignUpState extends Equatable {
 
 class SignUpInitial extends SignUpState {}
 
-class SignUpLoading extends SignUpState {}
-
 class SignUpValidation extends SignUpState {}
 
 class SignUpSuccess extends SignUpState {
   SignUpSuccess(this.user);
-  final UserModel user;
+  final AuthModel user;
 
   @override
   List<Object> get props => [user];
-}
-
-class SignUpFailure extends SignUpState {
-  SignUpFailure(this.errorMessage);
-  final String errorMessage;
-
-  @override
-  List<Object> get props => [errorMessage];
 }

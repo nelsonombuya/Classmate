@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUp> {
       listener: (context, state) {
         if (state is SignUpValidation) {
           if (_formKey.currentState == null)
-            throw Exception("Current Form State is Null ❗ ");
+            _signUpBloc.addError("Current Form State is Null ❗ ");
 
           if (_formKey.currentState!.validate()) {
             setState(() => _showPassword = false);
@@ -93,12 +93,13 @@ class _SignUpState extends State<SignUp> {
                       ),
                       SizedBox(width: _deviceQuery.safeWidth(4.0)),
                       Expanded(
-                          child: CustomTextFormField(
-                        label: 'Last Name',
-                        controller: _lastNameController,
-                        keyboardType: TextInputType.name,
-                        validator: Validator.nameValidator,
-                      )),
+                        child: CustomTextFormField(
+                          label: 'Last Name',
+                          controller: _lastNameController,
+                          keyboardType: TextInputType.name,
+                          validator: Validator.nameValidator,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: _deviceQuery.safeHeight(3.0)),
