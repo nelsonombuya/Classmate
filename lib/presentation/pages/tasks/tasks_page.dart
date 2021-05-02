@@ -22,69 +22,89 @@ class _TasksPageState extends State<TasksPage> {
         BlocProvider.of<NotificationBloc>(context);
 
     return StreamBuilder<List<TaskModel>>(
-      stream: _taskBloc.taskDataStream,
+      stream: _taskBloc.personalTaskDataStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-
-        return ListView.builder(
-          itemCount: snapshot.data!.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: _deviceQuery.safeWidth(4.0),
-                vertical: _deviceQuery.safeHeight(1.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Slidable(
-                  actionPane: SlidableBehindActionPane(),
-                  actionExtentRatio: 0.25,
-                  actions: <Widget>[
-                    IconSlideAction(
-                      caption: 'Edit',
-                      icon: Icons.edit_rounded,
-                      color: CupertinoColors.activeBlue,
-                      onTap: () {},
-                    ),
-                  ],
-                  secondaryActions: <Widget>[
-                    IconSlideAction(
-                      caption: 'Delete',
-                      icon: Icons.delete_rounded,
-                      color: Theme.of(context).errorColor,
-                      onTap: () => _notificationBloc.add(
-                        DeleteDialogBoxRequested(
-                          context,
-                          () => _taskBloc.add(
-                            DeleteTaskRequested(snapshot.data![index]),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator.adaptive());
+        }
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _deviceQuery.safeWidth(4.0),
+                  vertical: _deviceQuery.safeHeight(1.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Slidable(
+                    actionPane: SlidableBehindActionPane(),
+                    actionExtentRatio: 0.25,
+                    actions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Edit',
+                        icon: Icons.edit_rounded,
+                        color: CupertinoColors.activeBlue,
+                        onTap: () {},
+                      ),
+                    ],
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Delete',
+                        icon: Icons.delete_rounded,
+                        color: Theme.of(context).errorColor,
+                        onTap: () => _notificationBloc.add(
+                          DeleteDialogBoxRequested(
+                            context,
+                            () => _taskBloc.add(
+                              PersonalTaskDeleted(snapshot.data![index]),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                  child: CheckboxListTile(
-                    value: snapshot.data![index].isDone,
-                    onChanged: (value) {
-                      // TODO Add error handling
-                      if (value == null) {
-                        throw Exception(
-                            "The checked value shouldn't be null ❗");
-                      }
+                    ],
+                    child: CheckboxListTile(
+                      value: snapshot.data![index].isDone,
+                      onChanged: (value) {
+                        if (value == null) {
+                          throw Exception(
+                              "The checked value shouldn't be null ❗");
+                        }
 
-                      snapshot.data![index].isDone = value;
-                      _taskBloc.add(UpdateTaskRequested(snapshot.data![index]));
-                    },
-                    tileColor: CupertinoColors.systemGroupedBackground,
-                    title: Text(
-                      "${snapshot.data![index].title}",
-                      style: Theme.of(context).textTheme.headline6,
+                        snapshot.data![index].isDone = value;
+                        _taskBloc
+                            .add(PersonalTaskUpdated(snapshot.data![index]));
+                      },
+                      tileColor: CupertinoColors.systemGroupedBackground,
+                      title: Text(
+                        "${snapshot.data![index].title}",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          );
+        }
+        return Column(
+          children: [
+            Text(
+              "	¯\_( ͡° ͜ʖ ͡°)_/¯",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(fontFamily: "Noto"),
+            ),
+            Text(
+              "No Events Found",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(fontFamily: "Noto"),
+            ),
+          ],
         );
       },
     );

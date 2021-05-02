@@ -6,7 +6,7 @@ import '../../../bloc/event/event_bloc.dart';
 import '../../../bloc/task/task_bloc.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
-import '../tasks/tasks.dart';
+import '../tasks/tasks_page.dart';
 import 'home_scroll_view.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_fab.dart';

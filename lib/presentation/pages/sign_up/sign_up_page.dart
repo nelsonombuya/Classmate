@@ -44,8 +44,10 @@ class _SignUpState extends State<SignUp> {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
         if (state is SignUpValidation) {
-          if (_formKey.currentState == null)
+          if (_formKey.currentState == null) {
             _signUpBloc.addError("Current Form State is Null ❗ ");
+            throw Exception("Current Form State is Null ❗ ");
+          }
 
           if (_formKey.currentState!.validate()) {
             setState(() => _showPassword = false);

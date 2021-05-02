@@ -42,8 +42,10 @@ class _SignInBlocViewState extends State<SignInView> {
     return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) async {
         if (state is SignInValidation) {
-          if (_formKey.currentState == null)
+          if (_formKey.currentState == null) {
             _signInBloc.addError("Current Form State is Null ❗ ");
+            throw Exception("Current Form State is Null ❗ ");
+          }
 
           if (_formKey.currentState!.validate()) {
             setState(() => _showPassword = false);
