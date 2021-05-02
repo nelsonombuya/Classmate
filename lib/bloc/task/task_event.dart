@@ -7,29 +7,29 @@ abstract class TaskEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NewPersonalTaskAdded extends TaskEvent {
+class PersonalTaskCreated extends TaskEvent {
   final String title;
   final bool isDone;
 
-  NewPersonalTaskAdded({required this.title, this.isDone = false});
+  PersonalTaskCreated({required this.title, this.isDone = false});
 
   @override
   List<Object> get props => ["title : $title", "Done: $isDone"];
 }
 
-class UpdateTaskRequested extends TaskEvent {
+class PersonalTaskUpdated extends TaskEvent {
   final TaskModel task;
 
-  UpdateTaskRequested(this.task);
+  PersonalTaskUpdated(this.task);
 
   @override
   List<Object> get props => [task];
 }
 
-class DeleteTaskRequested extends TaskEvent {
+class PersonalTaskDeleted extends TaskEvent {
   final TaskModel task;
 
-  DeleteTaskRequested(this.task);
+  PersonalTaskDeleted(this.task);
 
   @override
   List<Object> get props => [task];

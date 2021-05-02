@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/task_model.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/task_repository.dart';
-import '../../data/repositories/user_repository.dart';
 import '../notification/notification_bloc.dart';
 
 part 'task_event.dart';
@@ -16,34 +16,35 @@ part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   late final TaskRepository _taskRepository;
-  late final UserRepository _userRepository;
+  late final AuthRepository _authRepository;
   late final NotificationBloc _notificationBloc;
-  late final Stream<List<TaskModel>> taskDataStream;
+  late final Stream<List<TaskModel>> personalTaskDataStream;
 
   TaskBloc(BuildContext context) : super(TaskInitial()) {
-    _userRepository = UserRepository();
+    _authRepository = AuthRepository();
     _notificationBloc = BlocProvider.of<NotificationBloc>(context);
 
-    if (_userRepository.getCurrentUser() == null)
+    if (_authRepository.getCurrentUser() == null) {
       throw Exception("User not signed in ❗");
+    }
 
-    _taskRepository = TaskRepository(_userRepository.getCurrentUser()!);
-    taskDataStream = _taskRepository.taskDataStream;
+    _taskRepository = TaskRepository(_authRepository.getCurrentUser()!);
+    personalTaskDataStream = _taskRepository.personalTaskDataStream;
   }
 
   @override
   Stream<TaskState> mapEventToState(TaskEvent event) async* {
-    if (event is NewPersonalTaskAdded) {
-      yield* _mapNewPersonalTaskAddedToState(event);
-    } else if (event is UpdateTaskRequested) {
-      yield* _mapUpdateTaskRequestedToState(event);
-    } else if (event is DeleteTaskRequested) {
-      yield* _mapDeleteTaskRequestedToState(event);
+    if (event is PersonalTaskCreated) {
+      yield* _mapPersonalTaskCreatedToState(event);
+    } else if (event is PersonalTaskUpdated) {
+      yield* _mapPersonalTaskUpdatedToState(event);
+    } else if (event is PersonalTaskDeleted) {
+      yield* _mapPersonalTaskDeletedToState(event);
     }
   }
 
-  Stream<TaskState> _mapNewPersonalTaskAddedToState(
-      NewPersonalTaskAdded event) async* {
+  Stream<TaskState> _mapPersonalTaskCreatedToState(
+      PersonalTaskCreated event) async* {
     try {
       _notificationBloc.add(
         AlertRequested(
@@ -52,18 +53,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ),
       );
 
-      Map<String, dynamic> taskData = _parseTaskToMap(event);
+      TaskModel newTask = TaskModel(title: event.title, isDone: event.isDone);
+      await _taskRepository.createTask(newTask.toMap());
 
-      await _taskRepository.createTask(taskData);
-
+      yield TaskAddedSuccessfully(title: event.title, isDone: event.isDone);
       _notificationBloc.add(
         AlertRequested(
           "Task Added Successfully",
           notificationType: NotificationType.Success,
         ),
       );
-
-      yield TaskAddedSuccessfully(title: event.title, isDone: event.isDone);
     } catch (e) {
       _notificationBloc.add(
         AlertRequested(
@@ -79,17 +78,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ),
       );
       this.addError(e);
-      rethrow;
     }
   }
 
-  Stream<TaskState> _mapUpdateTaskRequestedToState(
-      UpdateTaskRequested event) async* {
+  Stream<TaskState> _mapPersonalTaskUpdatedToState(
+      PersonalTaskUpdated event) async* {
     try {
-      Map<String, dynamic> taskData = _parseTaskToMap(event.task);
-
-      _taskRepository.updateTask(event.task, taskData);
-
+      _taskRepository.updateTask(event.task);
       yield TaskUpdatedSuccessfully(event.task);
     } on Exception catch (e) {
       _notificationBloc.add(
@@ -106,21 +101,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ),
       );
       this.addError(e);
-      rethrow;
     }
   }
 
-  Stream<TaskState> _mapDeleteTaskRequestedToState(
-      DeleteTaskRequested event) async* {
+  Stream<TaskState> _mapPersonalTaskDeletedToState(
+      PersonalTaskDeleted event) async* {
     try {
       _taskRepository.deleteTask(event.task);
+      yield TaskDeletedSuccessfully(event.task);
       _notificationBloc.add(
         AlertRequested(
           "Task Deleted",
           notificationType: NotificationType.Success,
         ),
       );
-      yield TaskDeletedSuccessfully(event.task);
     } on Exception catch (e) {
       _notificationBloc.add(
         AlertRequested(
@@ -138,12 +132,5 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       this.addError(e);
       rethrow;
     }
-  }
-
-  Map<String, dynamic> _parseTaskToMap(event) {
-    return {
-      "title": event.title,
-      "is_done": event.isDone,
-    };
   }
 }

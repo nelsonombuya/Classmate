@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/auth_model.dart';
 import '../models/task_model.dart';
-import '../models/user_model.dart';
 
 class TaskRepository {
   final CollectionReference _tasksSubCollection;
 
-  TaskRepository(UserModel user)
+  TaskRepository(AuthModel user)
       : _tasksSubCollection = FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .collection('tasks');
 
-  Stream<List<TaskModel>> get taskDataStream {
+  Stream<List<TaskModel>> get personalTaskDataStream {
     return _tasksSubCollection
         .snapshots()
         .distinct()
@@ -23,8 +23,10 @@ class TaskRepository {
     _tasksSubCollection.doc().set(taskData, SetOptions(merge: true));
   }
 
-  Future updateTask(TaskModel task, Map<String, dynamic> taskData) async {
-    _tasksSubCollection.doc(task.docId).set(taskData, SetOptions(merge: true));
+  Future updateTask(TaskModel task) async {
+    _tasksSubCollection
+        .doc(task.docId)
+        .set(task.toMap(), SetOptions(merge: true));
   }
 
   Future deleteTask(TaskModel task) async {
@@ -32,14 +34,9 @@ class TaskRepository {
   }
 
   List<TaskModel> _mapSnapshotToTaskModelList(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map(
-          (doc) => TaskModel(
-            docId: doc.id,
-            title: doc.data()['title'],
-            isDone: doc.data()['is_done'],
-          ),
-        )
-        .toList();
+    return snapshot.docs.map((doc) {
+      TaskModel newTask = TaskModel.fromMap(doc.data());
+      return newTask.copyWith(docId: doc.id);
+    }).toList();
   }
 }
