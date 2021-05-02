@@ -13,13 +13,16 @@ class PersonalEventCreated extends EventEvent {
     required this.description,
     required this.startDate,
     required this.endDate,
+    required this.isAllDayEvent,
   });
 
   final String title, description;
   final DateTime startDate, endDate;
+  final bool isAllDayEvent;
 
   @override
-  List<Object> get props => [title, description, startDate, endDate];
+  List<Object> get props =>
+      [title, description, startDate, endDate, isAllDayEvent];
 }
 
 class PersonalEventUpdated extends EventEvent {

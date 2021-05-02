@@ -72,6 +72,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                     description: _descriptionController.text.trim(),
                     startDate: state.selectedStartingDate,
                     endDate: state.selectedEndingDate,
+                    isAllDayEvent: state.isAllDayEvent,
                   ),
                 );
               }

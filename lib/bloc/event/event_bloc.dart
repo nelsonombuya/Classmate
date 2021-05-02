@@ -59,6 +59,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
         description: event.description,
         startDate: event.startDate,
         endDate: event.endDate,
+        isAllDayEvent: event.isAllDayEvent,
       );
 
       await _eventRepository.createEvent(newEvent);
