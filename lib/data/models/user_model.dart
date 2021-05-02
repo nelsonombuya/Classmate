@@ -1,46 +1,41 @@
 import 'dart:convert';
 
 class UserModel {
-  String uid;
-  String? email;
-  String? displayName;
-  bool isEmailVerified;
+  String firstName;
+  String lastName;
+  List? registeredUnits;
+
   UserModel({
-    required this.uid,
-    required this.email,
-    required this.displayName,
-    required this.isEmailVerified,
+    required this.firstName,
+    required this.lastName,
+    this.registeredUnits,
   });
 
   UserModel copyWith({
-    String? uid,
-    String? email,
-    String? displayName,
-    bool? isEmailVerified,
+    String? firstName,
+    String? lastName,
+    List? registeredUnits,
   }) {
     return UserModel(
-      uid: uid ?? this.uid,
-      email: email ?? this.email,
-      displayName: displayName ?? this.displayName,
-      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      registeredUnits: registeredUnits ?? this.registeredUnits,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
-      'email': email,
-      'displayName': displayName,
-      'isEmailVerified': isEmailVerified,
+      'firstName': firstName,
+      'lastName': lastName,
+      'registeredUnits': registeredUnits,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      uid: map['uid'],
-      email: map['email'],
-      displayName: map['displayName'],
-      isEmailVerified: map['isEmailVerified'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      registeredUnits: map['registeredUnits'],
     );
   }
 
@@ -50,26 +45,20 @@ class UserModel {
       UserModel.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'UserModel(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified)';
-  }
+  String toString() =>
+      'UserModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is UserModel &&
-        other.uid == uid &&
-        other.email == email &&
-        other.displayName == displayName &&
-        other.isEmailVerified == isEmailVerified;
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.registeredUnits == registeredUnits;
   }
 
   @override
-  int get hashCode {
-    return uid.hashCode ^
-        email.hashCode ^
-        displayName.hashCode ^
-        isEmailVerified.hashCode;
-  }
+  int get hashCode =>
+      firstName.hashCode ^ lastName.hashCode ^ registeredUnits.hashCode;
 }

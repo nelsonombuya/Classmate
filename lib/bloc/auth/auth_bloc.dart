@@ -3,30 +3,30 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/user_model.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/models/auth_model.dart';
+import '../../data/repositories/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final UserRepository _userRepository = UserRepository();
+  late final AuthRepository _authRepository;
   late final StreamSubscription _authStateChangesStream;
 
   AuthBloc() : super(AuthInitial()) {
     try {
-      _authStateChangesStream = _userRepository.authStateChanges.listen(
+      _authRepository = AuthRepository();
+      _authStateChangesStream = _authRepository.authStateChanges.listen(
         (user) => this.add(AuthChanged(user: user)),
       );
     } catch (e) {
-      // TODO Implement proper error handling ⛔
-      this.add(AuthErrorOccurred(e.toString()));
+      this.addError(AuthErrorOccurred(e.toString()));
     }
   }
 
   @override
-  Future<void> close() async {
-    await _authStateChangesStream.cancel();
+  Future<void> close() {
+    _authStateChangesStream.cancel();
     return super.close();
   }
 
@@ -39,12 +39,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     if (event is AuthRemoved) {
-      _userRepository.signOut();
+      _authRepository.signOut();
       yield Unauthenticated();
     }
 
     if (event is AuthErrorOccurred) {
-      if (_userRepository.isUserSignedIn()) _userRepository.signOut();
+      if (_authRepository.isUserSignedIn()) _authRepository.signOut();
       yield Unauthenticated();
       yield AuthenticationError(event.errorMessage);
     }

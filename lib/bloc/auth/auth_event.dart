@@ -12,12 +12,12 @@ class AuthCheckStarted extends AuthEvent {}
 class AuthRemoved extends AuthEvent {}
 
 class AuthChanged extends AuthEvent {
-  final UserModel? user;
+  final AuthModel? user;
 
   const AuthChanged({this.user});
 
   @override
-  List<Object> get props => [user ?? 'No User'];
+  List<Object> get props => [user == null ? 'No User Signed In' : user!.uid];
 }
 
 class AuthErrorOccurred extends AuthEvent {
