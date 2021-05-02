@@ -1,22 +1,22 @@
 import 'dart:convert';
 
-class UserModel {
+class UserDataModel {
   String firstName;
   String lastName;
   List? registeredUnits;
 
-  UserModel({
+  UserDataModel({
     required this.firstName,
     required this.lastName,
     this.registeredUnits,
   });
 
-  UserModel copyWith({
+  UserDataModel copyWith({
     String? firstName,
     String? lastName,
     List? registeredUnits,
   }) {
-    return UserModel(
+    return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       registeredUnits: registeredUnits ?? this.registeredUnits,
@@ -31,8 +31,8 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+  factory UserDataModel.fromMap(Map<String, dynamic> map) {
+    return UserDataModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
       registeredUnits: map['registeredUnits'],
@@ -41,18 +41,18 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserDataModel.fromJson(String source) =>
+      UserDataModel.fromMap(json.decode(source));
 
   @override
   String toString() =>
-      'UserModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits)';
+      'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is UserModel &&
+    return other is UserDataModel &&
         other.firstName == firstName &&
         other.lastName == lastName &&
         other.registeredUnits == registeredUnits;
