@@ -14,7 +14,7 @@ class ManageCourseForm extends StatelessWidget {
     return DeviceQuery(
       context,
       BlocProvider<ManageCourseCubit>(
-        create: (context) => ManageCourseCubit(),
+        create: (context) => ManageCourseCubit(context),
         child: ManageCoursesFormView(),
       ),
     );
@@ -55,15 +55,20 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
                       SizedBox(height: _deviceQuery.safeHeight(2.0)),
                       Text("Please Select Your Course"),
                       SizedBox(height: _deviceQuery.safeHeight(1.0)),
-                      DropdownButtonFormField<String>(
-                        items: courses.map((courseId) {
-                          return DropdownMenuItem<String>(
-                            child: Text(courseId),
-                            value: courseId,
+                      BlocBuilder<ManageCourseCubit, ManageCourseState>(
+                        builder: (context, state) {
+                          return DropdownButtonFormField<String>(
+                            value: state.courseId,
+                            items: courses.map((courseId) {
+                              return DropdownMenuItem<String>(
+                                child: Text(courseId),
+                                value: courseId,
+                              );
+                            }).toList(),
+                            onChanged: (String? courseID) {
+                              _manageCourseCubit.changeSelectedCourse(courseID);
+                            },
                           );
-                        }).toList(),
-                        onChanged: (String? courseID) {
-                          _manageCourseCubit.changeSelectedCourse(courseID);
                         },
                       ),
                       SizedBox(height: _deviceQuery.safeHeight(6.0)),
@@ -81,14 +86,30 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
                                     .data()['units']
                                     .keys
                                     .toList();
+
+                            var _yearString = (year) {
+                              switch (year) {
+                                case 'year_1':
+                                  return 'Year 1';
+                                case 'year_2':
+                                  return 'Year 2';
+                                case 'year_3':
+                                  return 'Year 3';
+                                case 'year_4':
+                                  return 'Year 4';
+                                default:
+                                  throw Exception('Invalid year given');
+                              }
+                            };
                             return Column(
                               children: [
                                 Text("Please select your year"),
                                 SizedBox(height: _deviceQuery.safeHeight(1.0)),
                                 DropdownButtonFormField<String>(
+                                  value: state.year,
                                   items: years.map((year) {
                                     return DropdownMenuItem<String>(
-                                      child: Text(year),
+                                      child: Text(_yearString(year)),
                                       value: year,
                                     );
                                   }).toList(),
@@ -103,7 +124,12 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
                         },
                       ),
                       SizedBox(height: _deviceQuery.safeHeight(6.0)),
-                      BlocBuilder<ManageCourseCubit, ManageCourseState>(
+                      BlocConsumer<ManageCourseCubit, ManageCourseState>(
+                        listener: (context, state) {
+                          if (state is CourseDetailsUpdatedSuccessfully) {
+                            Navigator.of(context).pop();
+                          }
+                        },
                         builder: (context, state) {
                           if (state.courseId != null && state.year != null) {
                             var selectedCourseIndex =
@@ -125,10 +151,18 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
                                   itemCount: units.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Text(
-                                      "${units[index]['name']}",
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "\u2022 ${units[index]['name']}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6,
+                                        ),
+                                        SizedBox(height: 10),
+                                      ],
                                     );
                                   },
                                 ),

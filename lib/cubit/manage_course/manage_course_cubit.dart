@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/notification/notification_bloc.dart';
 import '../../data/models/user_data_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/course_repository.dart';
@@ -12,11 +15,30 @@ part 'manage_course_state.dart';
 class ManageCourseCubit extends Cubit<ManageCourseState> {
   final CourseRepository _courseRepository = CourseRepository();
   final AuthRepository _authRepository = AuthRepository();
+  late final NotificationBloc _notificationBloc;
   late final UserRepository _userRepository;
   late final coursesDataStream;
 
-  ManageCourseCubit() : super(ManageCourseInitial()) {
+  ManageCourseCubit(BuildContext context)
+      : _notificationBloc = BlocProvider.of<NotificationBloc>(context),
+        super(ManageCourseInitial()) {
     coursesDataStream = _courseRepository.coursesDataStream;
+
+    if (!_authRepository.isUserSignedIn()) {
+      this.addError("No User Signed In ❗");
+      throw NullThrownError();
+    }
+    _userRepository = UserRepository(_authRepository.getCurrentUser()!);
+
+    _userRepository.getUserData().then((value) {
+      if (value != null && value.course != null) {
+        emit(CourseDetailsChanged(
+          year: value.year,
+          courseId: value.course!.id,
+          selectedUnits: value.registeredUnits ?? <DocumentReference>[],
+        ));
+      }
+    });
   }
 
   void changeSelectedCourse(String? selectedCourseID) {
@@ -83,15 +105,16 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
   }
 
   void saveCourseDetails() async {
-    if (!_authRepository.isUserSignedIn()) {
-      this.addError("No User Signed In ❗");
-      throw NullThrownError();
-    }
+    _notificationBloc.add(
+      AlertRequested(
+        "Saving Course Details",
+        notificationType: NotificationType.Loading,
+      ),
+    );
 
     DocumentReference course =
         FirebaseFirestore.instance.doc("/courses/${state.courseId}");
 
-    _userRepository = UserRepository(_authRepository.getCurrentUser()!);
     UserDataModel? currentUserData = await _userRepository.getUserData();
 
     UserDataModel newUserData = currentUserData == null
@@ -107,6 +130,12 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
           );
 
     _userRepository.updateUserData(newUserData);
+    _notificationBloc.add(
+      AlertRequested(
+        "Course Details Updated",
+        notificationType: NotificationType.Success,
+      ),
+    );
     emit(CourseDetailsUpdatedSuccessfully(
       course: state.courseId,
       year: state.year,
