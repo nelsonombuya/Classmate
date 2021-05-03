@@ -18,12 +18,12 @@ class CustomFloatingActionButton extends StatelessWidget {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     Color _fabColor = _deviceQuery.brightness == Brightness.light
-        ? CupertinoColors.darkBackgroundGray
-        : CupertinoColors.systemGroupedBackground;
+        ? CupertinoColors.systemGroupedBackground
+        : CupertinoColors.darkBackgroundGray;
 
     Color _labelColor = _deviceQuery.brightness == Brightness.light
-        ? CupertinoColors.white
-        : CupertinoColors.black;
+        ? CupertinoColors.black
+        : CupertinoColors.white;
 
     return SpeedDial(
       tooltip: "Quick Actions",

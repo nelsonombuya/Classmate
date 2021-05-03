@@ -24,7 +24,7 @@ class HomeScrollView extends StatelessWidget {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            pinned: true,
+            floating: true,
             elevation: 0.0,
             actions: actions,
             leading: leading,

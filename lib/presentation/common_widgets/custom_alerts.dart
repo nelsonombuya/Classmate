@@ -2,6 +2,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../bloc/notification/notification_bloc.dart';
 
+// ! Depends on EasyLoading Package
 class CustomAlert {
   final NotificationType? notificationType;
   final String message;
