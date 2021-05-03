@@ -6,6 +6,7 @@ class EventModel {
   String description;
   DateTime startDate;
   DateTime endDate;
+  bool isAllDayEvent;
 
   EventModel({
     this.docId,
@@ -13,6 +14,7 @@ class EventModel {
     required this.description,
     required this.startDate,
     required this.endDate,
+    required this.isAllDayEvent,
   });
 
   EventModel copyWith({
@@ -21,6 +23,7 @@ class EventModel {
     String? description,
     DateTime? startDate,
     DateTime? endDate,
+    bool? isAllDayEvent,
   }) {
     return EventModel(
       docId: docId ?? this.docId,
@@ -28,6 +31,7 @@ class EventModel {
       description: description ?? this.description,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      isAllDayEvent: isAllDayEvent ?? this.isAllDayEvent,
     );
   }
 
@@ -38,6 +42,7 @@ class EventModel {
       'description': description,
       'startDate': startDate.millisecondsSinceEpoch,
       'endDate': endDate.millisecondsSinceEpoch,
+      'isAllDayEvent': isAllDayEvent,
     };
   }
 
@@ -48,6 +53,7 @@ class EventModel {
       description: map['description'],
       startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate']),
       endDate: DateTime.fromMillisecondsSinceEpoch(map['endDate']),
+      isAllDayEvent: map['isAllDayEvent'],
     );
   }
 
@@ -58,7 +64,7 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel(docId: $docId, title: $title, description: $description, startDate: $startDate, endDate: $endDate)';
+    return 'EventModel(docId: $docId, title: $title, description: $description, startDate: $startDate, endDate: $endDate, isAllDayEvent: $isAllDayEvent)';
   }
 
   @override
@@ -70,7 +76,8 @@ class EventModel {
         other.title == title &&
         other.description == description &&
         other.startDate == startDate &&
-        other.endDate == endDate;
+        other.endDate == endDate &&
+        other.isAllDayEvent == isAllDayEvent;
   }
 
   @override
@@ -79,6 +86,7 @@ class EventModel {
         title.hashCode ^
         description.hashCode ^
         startDate.hashCode ^
-        endDate.hashCode;
+        endDate.hashCode ^
+        isAllDayEvent.hashCode;
   }
 }

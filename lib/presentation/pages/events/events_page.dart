@@ -8,6 +8,7 @@ import '../../../bloc/event/event_bloc.dart';
 import '../../../bloc/notification/notification_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../data/models/event_model.dart';
+import '../../common_widgets/no_data_found.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  final ScrollController _listViewScrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
@@ -32,13 +34,12 @@ class _EventsPageState extends State<EventsPage> {
         if (snapshot.hasData) {
           List<EventModel> events = snapshot.data!;
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: events.length,
+            controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _deviceQuery.safeWidth(4.0),
-                  vertical: _deviceQuery.safeHeight(1.0),
-                ),
+                padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Slidable(
@@ -59,41 +60,55 @@ class _EventsPageState extends State<EventsPage> {
                         color: Theme.of(context).errorColor,
                         onTap: () {
                           _notificationBloc.add(
-                            DeleteDialogBoxRequested(context, () {
-                              _eventBloc
-                                  .add(PersonalEventDeleted(events[index]));
-                            }),
+                            DeleteDialogBoxRequested(
+                              context,
+                              () => _eventBloc.add(
+                                PersonalEventDeleted(events[index]),
+                              ),
+                            ),
                           );
                         },
                       ),
                     ],
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () {}, // TODO Show Event Details
                       isThreeLine: true,
                       enableFeedback: true,
-                      tileColor: CupertinoColors.systemGroupedBackground,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      tileColor: _deviceQuery.brightness == Brightness.light
+                          ? CupertinoColors.systemGroupedBackground
+                          : CupertinoColors.darkBackgroundGray,
+                      leading: Icon(
+                        Icons.person_rounded,
+                        color: CupertinoColors.activeBlue,
+                      ),
                       title: Text(
                         "${events[index].title}",
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${events[index].description}"),
-                        ],
-                      ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                              "${DateFormat.jm().format(events[index].startDate)}"),
-                          Text("TO"),
-                          Text(
-                              "${DateFormat.jm().format(events[index].endDate)}"),
-                        ],
-                      ),
+                      subtitle: events[index].isAllDayEvent
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${events[index].description}"),
+                                SizedBox(height: _deviceQuery.safeHeight(2.0)),
+                                Text(
+                                    "All Day On: ${DateFormat('EEE dd MMM').format(events[index].startDate)}"),
+                              ],
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${events[index].description}"),
+                                SizedBox(height: _deviceQuery.safeHeight(2.0)),
+                                Text(
+                                    "From: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].startDate)}"),
+                                SizedBox(height: _deviceQuery.safeHeight(1.0)),
+                                Text(
+                                    "To: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].endDate)}"),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -101,24 +116,7 @@ class _EventsPageState extends State<EventsPage> {
             },
           );
         }
-        return Column(
-          children: [
-            Text(
-              "	¯\_( ͡° ͜ʖ ͡°)_/¯",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(fontFamily: "Noto"),
-            ),
-            Text(
-              "No Events Found",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(fontFamily: "Noto"),
-            ),
-          ],
-        );
+        return NoDataFound(message: "No Events Found");
       },
     );
   }

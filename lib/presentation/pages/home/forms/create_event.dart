@@ -86,15 +86,20 @@ class _AddEventFormViewState extends State<AddEventFormView> {
         ),
       ],
       child: FormView(
-        title: "Add Event",
+        title: "Create Event",
         actions: [
-          TextButton.icon(
+          TextButton(
             onPressed: () {
               _createEventCubit.validateNewEvent();
               FocusScope.of(context).unfocus();
             },
-            icon: Icon(Icons.save_rounded),
-            label: Text("SAVE"),
+            child: Text(
+              "SAVE",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(color: CupertinoColors.activeBlue),
+            ),
           ),
         ],
         child: Column(
@@ -132,9 +137,6 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                                 "All Day",
                                 style: TextStyle(
                                   fontSize: _deviceQuery.safeHeight(2.1),
-                                  color: state.isAllDayEvent
-                                      ? CupertinoColors.black
-                                      : null,
                                   fontWeight: state.isAllDayEvent
                                       ? FontWeight.bold
                                       : null,
@@ -142,6 +144,7 @@ class _AddEventFormViewState extends State<AddEventFormView> {
                               ),
                               Switch.adaptive(
                                 value: state.isAllDayEvent,
+                                activeColor: Theme.of(context).primaryColor,
                                 onChanged: (value) => _createEventCubit
                                     .changeAllDayEventState(value),
                               ),
