@@ -6,6 +6,7 @@ import '../../../bloc/event/event_bloc.dart';
 import '../../../bloc/task/task_bloc.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
+import '../more/more_page.dart';
 import '../tasks/tasks_page.dart';
 import 'home_scroll_view.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
@@ -38,10 +39,7 @@ class HomePage extends StatelessWidget {
       DashboardPage(),
       EventsPage(),
       TasksPage(),
-      Container(
-        color: CupertinoColors.systemGreen,
-        child: Center(child: Text("MORE")),
-      ),
+      MorePage(),
     ];
 
     final List<BottomNavigationBarItem> _bottomNavigationBarItems = [
