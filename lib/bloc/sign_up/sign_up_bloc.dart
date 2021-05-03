@@ -16,12 +16,10 @@ part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final AuthRepository _authRepository;
-  final UserRepository _userRepository;
   final NotificationBloc _notificationBloc;
 
   SignUpBloc(BuildContext context)
       : _authRepository = AuthRepository(),
-        _userRepository = UserRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignUpInitial());
 
@@ -75,7 +73,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       String displayName = "${firstName[0]}. $lastName";
 
       await _authRepository.updateProfile(displayName: displayName);
-      await _userRepository.updateUserData(user, userData);
+      await UserRepository(_authRepository.getCurrentUser()!)
+          .updateUserData(userData);
 
       _notificationBloc.add(
         AlertRequested(
