@@ -14,6 +14,8 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
+  final ScrollController _listViewScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
@@ -28,14 +30,14 @@ class _TasksPageState extends State<TasksPage> {
           return Center(child: CircularProgressIndicator.adaptive());
         }
         if (snapshot.hasData) {
+          List<TaskModel> tasks = snapshot.data!;
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            shrinkWrap: true,
+            itemCount: tasks.length,
+            controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _deviceQuery.safeWidth(4.0),
-                  vertical: _deviceQuery.safeHeight(1.0),
-                ),
+                padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Slidable(
@@ -58,28 +60,37 @@ class _TasksPageState extends State<TasksPage> {
                           DeleteDialogBoxRequested(
                             context,
                             () => _taskBloc.add(
-                              PersonalTaskDeleted(snapshot.data![index]),
+                              PersonalTaskDeleted(tasks[index]),
                             ),
                           ),
                         ),
                       ),
                     ],
                     child: CheckboxListTile(
-                      value: snapshot.data![index].isDone,
+                      value: tasks[index].isDone,
+                      activeColor: CupertinoColors.activeBlue,
                       onChanged: (value) {
                         if (value == null) {
                           throw Exception(
                               "The checked value shouldn't be null ❗");
                         }
 
-                        snapshot.data![index].isDone = value;
-                        _taskBloc
-                            .add(PersonalTaskUpdated(snapshot.data![index]));
+                        tasks[index].isDone = value;
+                        _taskBloc.add(PersonalTaskUpdated(tasks[index]));
                       },
-                      tileColor: CupertinoColors.systemGroupedBackground,
+                      tileColor: _deviceQuery.brightness == Brightness.light
+                          ? CupertinoColors.systemGroupedBackground
+                          : CupertinoColors.darkBackgroundGray,
                       title: Text(
-                        "${snapshot.data![index].title}",
-                        style: Theme.of(context).textTheme.headline6,
+                        "${tasks[index].title}",
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              decoration: tasks[index].isDone
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                              color: tasks[index].isDone
+                                  ? Theme.of(context).disabledColor
+                                  : null,
+                            ),
                       ),
                     ),
                   ),
@@ -89,20 +100,19 @@ class _TasksPageState extends State<TasksPage> {
           );
         }
         return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "	¯\_( ͡° ͜ʖ ͡°)_/¯",
+              "¯\\_( ͡° ͜ʖ ͡°)_/¯",
               style: Theme.of(context)
                   .textTheme
                   .headline2!
                   .copyWith(fontFamily: "Noto"),
             ),
+            SizedBox(height: _deviceQuery.safeHeight(4.0)),
             Text(
               "No Events Found",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(fontFamily: "Noto"),
+              style: Theme.of(context).textTheme.headline5!,
             ),
           ],
         );
