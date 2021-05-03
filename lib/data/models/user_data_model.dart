@@ -4,15 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class UserDataModel {
+  String? year;
   String? firstName;
   String? lastName;
-  List<DocumentReference>? registeredUnits;
   DocumentReference? course;
+  List<DocumentReference>? registeredUnits;
   UserDataModel({
     this.firstName,
     this.lastName,
     this.registeredUnits,
     this.course,
+    this.year,
   });
 
   UserDataModel copyWith({
@@ -20,12 +22,14 @@ class UserDataModel {
     String? lastName,
     List<DocumentReference>? registeredUnits,
     DocumentReference? course,
+    String? year,
   }) {
     return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       registeredUnits: registeredUnits ?? this.registeredUnits,
       course: course ?? this.course,
+      year: year ?? this.year,
     );
   }
 
@@ -35,6 +39,7 @@ class UserDataModel {
       'lastName': lastName,
       'registeredUnits': registeredUnits,
       'course': course,
+      'year': year,
     };
   }
 
@@ -42,8 +47,9 @@ class UserDataModel {
     return UserDataModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      registeredUnits: map['registeredUnits'].cast<DocumentReference>(),
+      registeredUnits: map['registeredUnits']?.cast<DocumentReference>(),
       course: map['course'],
+      year: map['year'],
     );
   }
 
@@ -54,7 +60,7 @@ class UserDataModel {
 
   @override
   String toString() {
-    return 'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits, course: $course)';
+    return 'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits, course: $course, year: $year)';
   }
 
   @override
@@ -65,7 +71,8 @@ class UserDataModel {
         other.firstName == firstName &&
         other.lastName == lastName &&
         listEquals(other.registeredUnits, registeredUnits) &&
-        other.course == course;
+        other.course == course &&
+        other.year == year;
   }
 
   @override
@@ -73,6 +80,7 @@ class UserDataModel {
     return firstName.hashCode ^
         lastName.hashCode ^
         registeredUnits.hashCode ^
-        course.hashCode;
+        course.hashCode ^
+        year.hashCode;
   }
 }

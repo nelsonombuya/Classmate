@@ -10,6 +10,10 @@ class UserRepository {
       : _userDocument =
             FirebaseFirestore.instance.collection('users').doc(user.uid);
 
+  Future<UserDataModel?> getUserData() async {
+    return _userDocument.get().then(_mapSnapshotToUserModelList);
+  }
+
   Stream<UserDataModel?> get userDataStream {
     return _userDocument
         .snapshots()

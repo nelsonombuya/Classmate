@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'manage_courses_form.dart';
+import 'manage_course_form.dart';
 
 class MorePage extends StatelessWidget {
   final ScrollController _listViewScrollController = ScrollController();
