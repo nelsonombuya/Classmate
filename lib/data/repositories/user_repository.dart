@@ -4,29 +4,33 @@ import '../models/auth_model.dart';
 import '../models/user_data_model.dart';
 
 class UserRepository {
-  final CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  final DocumentReference _userDocument;
 
-  Stream<List<UserDataModel>> get userDataStream {
-    return _usersCollection
+  UserRepository(AuthModel user)
+      : _userDocument =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+  Stream<UserDataModel?> get userDataStream {
+    return _userDocument
         .snapshots()
         .distinct()
         .map(_mapSnapshotToUserModelList);
   }
 
-  List<UserDataModel> _mapSnapshotToUserModelList(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return UserDataModel.fromMap(doc.data());
-    }).toList();
+  UserDataModel? _mapSnapshotToUserModelList(DocumentSnapshot snapshot) {
+    return (snapshot.data() == null)
+        ? null
+        : UserDataModel.fromMap(snapshot.data()!);
   }
 
-  Future updateUserData(AuthModel user, UserDataModel userData) async {
-    return _usersCollection
-        .doc(user.uid)
-        .set(userData.toMap(), SetOptions(merge: true));
+  Future updateUserData(UserDataModel userData) async {
+    return _userDocument.set(
+      userData.toMap(),
+      SetOptions(merge: true),
+    );
   }
 
-  Future deleteUserData(AuthModel user) async {
-    return _usersCollection.doc(user.uid).delete();
+  Future deleteUserData() async {
+    return _userDocument.delete();
   }
 }

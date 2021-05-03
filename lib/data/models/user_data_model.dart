@@ -1,25 +1,31 @@
 import 'dart:convert';
 
-class UserDataModel {
-  String firstName;
-  String lastName;
-  List? registeredUnits;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
+class UserDataModel {
+  String? firstName;
+  String? lastName;
+  List<DocumentReference>? registeredUnits;
+  DocumentReference? course;
   UserDataModel({
-    required this.firstName,
-    required this.lastName,
+    this.firstName,
+    this.lastName,
     this.registeredUnits,
+    this.course,
   });
 
   UserDataModel copyWith({
     String? firstName,
     String? lastName,
-    List? registeredUnits,
+    List<DocumentReference>? registeredUnits,
+    DocumentReference? course,
   }) {
     return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       registeredUnits: registeredUnits ?? this.registeredUnits,
+      course: course ?? this.course,
     );
   }
 
@@ -28,6 +34,7 @@ class UserDataModel {
       'firstName': firstName,
       'lastName': lastName,
       'registeredUnits': registeredUnits,
+      'course': course,
     };
   }
 
@@ -35,7 +42,8 @@ class UserDataModel {
     return UserDataModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      registeredUnits: map['registeredUnits'],
+      registeredUnits: map['registeredUnits'].cast<DocumentReference>(),
+      course: map['course'],
     );
   }
 
@@ -45,8 +53,9 @@ class UserDataModel {
       UserDataModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits)';
+  String toString() {
+    return 'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits, course: $course)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -55,10 +64,15 @@ class UserDataModel {
     return other is UserDataModel &&
         other.firstName == firstName &&
         other.lastName == lastName &&
-        other.registeredUnits == registeredUnits;
+        listEquals(other.registeredUnits, registeredUnits) &&
+        other.course == course;
   }
 
   @override
-  int get hashCode =>
-      firstName.hashCode ^ lastName.hashCode ^ registeredUnits.hashCode;
+  int get hashCode {
+    return firstName.hashCode ^
+        lastName.hashCode ^
+        registeredUnits.hashCode ^
+        course.hashCode;
+  }
 }
