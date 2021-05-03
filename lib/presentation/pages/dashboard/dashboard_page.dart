@@ -34,6 +34,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
   @override
   Widget build(BuildContext context) {
     DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    ScrollController _listViewController = ScrollController();
 
     return BlocBuilder<SessionCubit, SessionState>(
       builder: (context, state) {
@@ -43,6 +44,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
 
         return ListView.builder(
           shrinkWrap: true,
+          controller: _listViewController,
           itemCount: state.sessionStreamsList.length,
           itemBuilder: (context, index) {
             return StreamBuilder<DocumentSnapshot>(
