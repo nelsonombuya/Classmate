@@ -13,6 +13,7 @@ class ThemePreset {
   final VisualDensity visualDensity = VisualDensity.adaptivePlatformDensity;
 
   late Color headline2Color;
+  late Color headline3Color;
   late Color subtitle1Color;
   late Color bodyTextColor;
   late Color body2TextColor;
@@ -21,6 +22,7 @@ class ThemePreset {
   late Color scaffoldBackgroundColor;
 
   late final TextStyle headline2;
+  late final TextStyle headline3;
   late final TextStyle headline5;
   late final TextStyle subtitle1;
   late final TextStyle headline6;
@@ -32,6 +34,7 @@ class ThemePreset {
   ThemePreset(Brightness brightness) {
     if (brightness == Brightness.light) {
       headline2Color = CupertinoColors.label;
+      headline3Color = CupertinoColors.label;
       subtitle1Color = CupertinoColors.secondaryLabel;
       bodyTextColor = CupertinoColors.label;
       body2TextColor = CupertinoColors.secondaryLabel;
@@ -40,6 +43,7 @@ class ThemePreset {
       scaffoldBackgroundColor = CupertinoColors.white;
     } else {
       headline2Color = CupertinoColors.systemGrey6;
+      headline3Color = CupertinoColors.systemGrey6;
       subtitle1Color = CupertinoColors.systemGrey;
       bodyTextColor = CupertinoColors.systemGrey6;
       body2TextColor = CupertinoColors.systemGrey;
@@ -49,6 +53,7 @@ class ThemePreset {
     }
 
     headline2 = GoogleFonts.poppins(color: headline2Color);
+    headline3 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     headline5 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     headline6 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     subtitle1 = TextStyle(fontFamily: 'Averta', color: subtitle1Color);

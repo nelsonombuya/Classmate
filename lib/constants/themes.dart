@@ -16,6 +16,7 @@ abstract class Themes {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: ThemeData.light().textTheme.copyWith(
             headline2: _preset.headline2,
+            headline3: _preset.headline3,
             headline5: _preset.headline5,
             headline6: _preset.headline6,
             subtitle1: _preset.subtitle1,
@@ -42,6 +43,7 @@ abstract class Themes {
       scaffoldBackgroundColor: _preset.scaffoldBackgroundColor,
       textTheme: ThemeData.dark().textTheme.copyWith(
             headline2: _preset.headline2,
+            headline3: _preset.headline3,
             headline5: _preset.headline5,
             headline6: _preset.headline6,
             subtitle1: _preset.subtitle1,
