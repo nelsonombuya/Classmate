@@ -109,15 +109,7 @@ class EventDetailsView extends StatelessWidget {
                             Icons.edit_rounded,
                             color: Theme.of(context).primaryColor,
                           ),
-                          onPressed: () {
-                            _notificationBloc.add(
-                              DeleteDialogBoxRequested(context, () {}
-                                  // () => _eventBloc.add(
-                                  //   PersonalEventDeleted(),
-                                  // ),
-                                  ),
-                            );
-                          },
+                          onPressed: () {},
                         ),
                         Text(
                           "Edit Event",

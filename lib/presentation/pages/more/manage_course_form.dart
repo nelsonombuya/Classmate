@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants/device_query.dart';
 import '../../../cubit/manage_course/manage_course_cubit.dart';
+import '../../../data/repositories/unit_repository.dart';
 import '../../common_widgets/custom_elevated_button.dart';
 import '../../common_widgets/form_view.dart';
 import '../../common_widgets/no_data_found.dart';
@@ -32,6 +33,8 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
     final ManageCourseCubit _manageCourseCubit =
         BlocProvider.of<ManageCourseCubit>(context);
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+
+    bool _addOtherUnits = false;
 
     return Column(
       children: [
@@ -192,6 +195,56 @@ class _ManageCoursesFormViewState extends State<ManageCoursesFormView> {
             },
           ),
         ),
+        TextButton(
+          child: Text("Add Other Units"),
+          onPressed: () => setState(() => _addOtherUnits = !_addOtherUnits),
+        ),
+        if (_addOtherUnits)
+          BlocBuilder<ManageCourseCubit, ManageCourseState>(
+            builder: (context, state) {
+              UnitRepository _unitRepository = UnitRepository();
+              ScrollController _scrollController = ScrollController();
+
+              return StreamBuilder(
+                stream: _unitRepository.unitsStream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator.adaptive();
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text("Error gathering data");
+                  }
+
+                  if (snapshot.hasData) {
+                    var units = snapshot.data.docs;
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CheckboxListTile(
+                          value: state.selectedUnits
+                                  ?.indexOf(units[index].data()['ref']) ==
+                              -1,
+                          title: Text(units[index].data()['name']),
+                          onChanged: (value) {
+                            value == true
+                                ? _manageCourseCubit.addSelectedUnits(
+                                    units[index].data()['ref'])
+                                : _manageCourseCubit.removeSelectedUnits(
+                                    units[index].data()['ref']);
+                          },
+                        );
+                      },
+                    );
+                  }
+                  return Text("No Data Found");
+                },
+              );
+            },
+          ),
       ],
     );
   }
