@@ -40,7 +40,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Icon(Icons.event, color: _labelColor),
           onTap: () => showBarModalBottomSheet(
             context: context,
-            builder: (context) => AddEventForm(),
+            builder: (context) => CreateEvent(),
           ),
         ),
         SpeedDialChild(

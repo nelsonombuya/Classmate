@@ -10,7 +10,7 @@ import '../../../common_widgets/custom_textFormField.dart';
 import '../../../common_widgets/date_picker_button.dart';
 import '../../../common_widgets/form_view.dart';
 
-class AddEventForm extends StatelessWidget {
+class CreateEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DeviceQuery(
@@ -24,18 +24,18 @@ class AddEventForm extends StatelessWidget {
             create: (context) => EventBloc(context),
           ),
         ],
-        child: AddEventFormView(),
+        child: CreateEventView(),
       ),
     );
   }
 }
 
-class AddEventFormView extends StatefulWidget {
+class CreateEventView extends StatefulWidget {
   @override
-  _AddEventFormViewState createState() => _AddEventFormViewState();
+  _CreateEventViewState createState() => _CreateEventViewState();
 }
 
-class _AddEventFormViewState extends State<AddEventFormView> {
+class _CreateEventViewState extends State<CreateEventView> {
   // TODO Calendar Functions to add later
   // DateTime _from, _to, _reminder;
   // int _numberOfRepetitions;
