@@ -1,4 +1,5 @@
 import 'package:classmate/presentation/pages/events/event_details.dart';
+import 'package:classmate/presentation/pages/home/forms/create_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +53,11 @@ class _EventsPageState extends State<EventsPage> {
                         caption: 'Edit',
                         icon: Icons.edit_rounded,
                         color: CupertinoColors.activeBlue,
-                        onTap: () {},
+                        onTap: () => showBarModalBottomSheet(
+                          context: context,
+                          builder: (context) =>
+                              CreateEvent(event: events[index]),
+                        ),
                       ),
                     ],
                     secondaryActions: <Widget>[

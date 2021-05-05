@@ -1,3 +1,5 @@
+import 'package:classmate/data/models/event_model.dart';
+import 'package:classmate/presentation/pages/events/events_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,12 @@ import '../../../common_widgets/date_picker_button.dart';
 import '../../../common_widgets/form_view.dart';
 
 class CreateEvent extends StatelessWidget {
+  // * This page can also be used to edit events
+  // * When the event is passed through the constructor
+  final EventModel? event;
+
+  const CreateEvent({this.event});
+
   @override
   Widget build(BuildContext context) {
     return DeviceQuery(
@@ -24,31 +32,36 @@ class CreateEvent extends StatelessWidget {
             create: (context) => EventBloc(context),
           ),
         ],
-        child: CreateEventView(),
+        child: CreateEventView(event: event),
       ),
     );
   }
 }
 
 class CreateEventView extends StatefulWidget {
+  final EventModel? event;
+
+  const CreateEventView({this.event});
+
   @override
   _CreateEventViewState createState() => _CreateEventViewState();
 }
 
 class _CreateEventViewState extends State<CreateEventView> {
-  // TODO Calendar Functions to add later
-  // DateTime _from, _to, _reminder;
-  // int _numberOfRepetitions;
-  // RepetitionRange _repetitionRange;
-  // - Location
-  // - Guests
-  //     - UID
-  //     - Names
-  //     - Profile Pictures
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.event != null) {
+      _titleController.text = widget.event!.title;
+      _descriptionController.text = widget.event!.description;
+      BlocProvider.of<CreateEventCubit>(context)
+          .updateEventDetails(widget.event!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,22 +79,38 @@ class _CreateEventViewState extends State<CreateEventView> {
                 throw Exception("Current Form State is Null ❗ ");
 
               if (_formKey.currentState!.validate()) {
-                _eventsBloc.add(
-                  PersonalEventCreated(
-                    title: _titleController.text.trim(),
-                    description: _descriptionController.text.trim(),
-                    startDate: state.selectedStartingDate,
-                    endDate: state.selectedEndingDate,
-                    isAllDayEvent: state.isAllDayEvent,
-                  ),
-                );
+                if (widget.event != null) {
+                  _eventsBloc.add(
+                    PersonalEventUpdated(
+                      docId: widget.event!.docId!,
+                      title: _titleController.text.trim(),
+                      description: _descriptionController.text.trim(),
+                      startDate: state.selectedStartingDate,
+                      endDate: state.selectedEndingDate,
+                      isAllDayEvent: state.isAllDayEvent,
+                    ),
+                  );
+                } else {
+                  _eventsBloc.add(
+                    PersonalEventCreated(
+                      title: _titleController.text.trim(),
+                      description: _descriptionController.text.trim(),
+                      startDate: state.selectedStartingDate,
+                      endDate: state.selectedEndingDate,
+                      isAllDayEvent: state.isAllDayEvent,
+                    ),
+                  );
+                }
               }
             }
           },
         ),
         BlocListener<EventBloc, EventState>(
           listener: (context, state) {
-            if (state is EventCreatedSuccessfully) Navigator.of(context).pop();
+            if (state is EventCreatedSuccessfully ||
+                state is EventUpdatedSuccessfully) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       ],
@@ -90,7 +119,7 @@ class _CreateEventViewState extends State<CreateEventView> {
         actions: [
           TextButton(
             onPressed: () {
-              _createEventCubit.validateNewEvent();
+              _createEventCubit.validateEvent();
               FocusScope.of(context).unfocus();
             },
             child: Text(

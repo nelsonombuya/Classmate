@@ -3,9 +3,11 @@ import 'package:classmate/bloc/notification/notification_bloc.dart';
 import 'package:classmate/constants/device_query.dart';
 import 'package:classmate/data/models/event_model.dart';
 import 'package:classmate/presentation/common_widgets/form_view.dart';
+import 'package:classmate/presentation/pages/home/forms/create_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final EventModel event;
@@ -34,7 +36,8 @@ class EventDetailsView extends StatelessWidget {
 
     return BlocListener<EventBloc, EventState>(
       listener: (context, state) {
-        if (state is EventDeletedSuccessfully) {
+        if (state is EventDeletedSuccessfully ||
+            state is EventUpdatedSuccessfully) {
           Navigator.of(context).pop();
         }
       },
@@ -110,12 +113,10 @@ class EventDetailsView extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                           ),
                           onPressed: () {
-                            _notificationBloc.add(
-                              DeleteDialogBoxRequested(context, () {}
-                                  // () => _eventBloc.add(
-                                  //   PersonalEventDeleted(),
-                                  // ),
-                                  ),
+                            Navigator.of(context).pop();
+                            showBarModalBottomSheet(
+                              context: context,
+                              builder: (context) => CreateEvent(event: event),
                             );
                           },
                         ),

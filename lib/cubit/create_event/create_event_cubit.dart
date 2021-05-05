@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:classmate/data/models/event_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
@@ -11,6 +12,14 @@ class CreateEventCubit extends Cubit<CreateEventState> {
           selectedEndingDate: DateTime.now().add(Duration(minutes: 30)),
           isAllDayEvent: false,
         ));
+
+  void updateEventDetails(EventModel event) {
+    emit(EventDateChanged(
+      selectedStartingDate: event.startDate,
+      selectedEndingDate: event.endDate,
+      isAllDayEvent: event.isAllDayEvent,
+    ));
+  }
 
   void changeStartingDate(DateTime newDate) {
     DateTime selectedStartingDate = newDate;
@@ -71,7 +80,7 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     ));
   }
 
-  void validateNewEvent() {
+  void validateEvent() {
     emit(EventValidation(
       selectedStartingDate: state.selectedStartingDate,
       selectedEndingDate: state.selectedEndingDate,

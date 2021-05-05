@@ -95,8 +95,17 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   Stream<EventState> _mapPersonalEventUpdatedToState(
       PersonalEventUpdated event) async* {
     try {
-      _eventRepository.updateEvent(event.event);
-      yield EventUpdatedSuccessfully(event.event);
+      EventModel updatedEvent = EventModel(
+        docId: event.docId,
+        title: event.title,
+        description: event.description,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        isAllDayEvent: event.isAllDayEvent,
+      );
+
+      _eventRepository.updateEvent(updatedEvent);
+      yield EventUpdatedSuccessfully(updatedEvent);
       _notificationBloc.add(
         AlertRequested(
           "Event Updated",

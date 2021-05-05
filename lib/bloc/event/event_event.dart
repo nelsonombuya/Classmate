@@ -26,12 +26,22 @@ class PersonalEventCreated extends EventEvent {
 }
 
 class PersonalEventUpdated extends EventEvent {
-  final EventModel event;
+  const PersonalEventUpdated({
+    required this.docId,
+    required this.title,
+    required this.description,
+    required this.startDate,
+    required this.endDate,
+    required this.isAllDayEvent,
+  });
 
-  const PersonalEventUpdated(this.event);
+  final String title, description, docId;
+  final DateTime startDate, endDate;
+  final bool isAllDayEvent;
 
   @override
-  List<Object> get props => [event];
+  List<Object> get props =>
+      [title, description, startDate, endDate, isAllDayEvent];
 }
 
 class PersonalEventDeleted extends EventEvent {
