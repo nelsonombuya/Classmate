@@ -4,6 +4,10 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="Classmate">
+        <!-- API Key for Google Maps-->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDmSoiXC2GHaQLpI_tcZaH2ArdRw2MlsG0"/>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -11,6 +15,8 @@
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
+
+
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
