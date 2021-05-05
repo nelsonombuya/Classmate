@@ -1,8 +1,10 @@
+import 'package:classmate/presentation/pages/events/event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../bloc/event/event_bloc.dart';
 import '../../../bloc/notification/notification_bloc.dart';
@@ -71,7 +73,10 @@ class _EventsPageState extends State<EventsPage> {
                       ),
                     ],
                     child: ListTile(
-                      onTap: () {}, // TODO Show Event Details
+                      onTap: () => showBarModalBottomSheet(
+                        context: context,
+                        builder: (context) => EventDetailsPage(events[index]),
+                      ),
                       isThreeLine: true,
                       enableFeedback: true,
                       contentPadding:
