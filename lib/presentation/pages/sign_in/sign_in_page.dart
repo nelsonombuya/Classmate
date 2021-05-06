@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/sign_in/sign_in_bloc.dart';
 import '../../../constants/device_query.dart';
-import '../../../constants/route.dart' as route;
 import '../../../constants/validator.dart';
 import '../../common_widgets/custom_elevated_button.dart';
 import '../../common_widgets/custom_textFormField.dart';
@@ -12,22 +11,12 @@ import 'widgets/divider_with_word_at_center.dart';
 import 'widgets/forgot_password_button.dart';
 import 'widgets/sign_up_button.dart';
 
-class SignInPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(context),
-      child: SignInView(),
-    );
-  }
-}
-
-class SignInView extends StatefulWidget {
+class SignInPage extends StatefulWidget {
   @override
   _SignInBlocViewState createState() => _SignInBlocViewState();
 }
 
-class _SignInBlocViewState extends State<SignInView> {
+class _SignInBlocViewState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -37,36 +26,9 @@ class _SignInBlocViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final SignInBloc _signInBloc = BlocProvider.of<SignInBloc>(context);
 
-    return BlocListener<SignInBloc, SignInState>(
-      listener: (context, state) async {
-        if (state is SignInValidation) {
-          if (_formKey.currentState == null) {
-            _signInBloc.addError("Current Form State is Null ❗ ");
-            throw Exception("Current Form State is Null ❗ ");
-          }
-
-          if (_formKey.currentState!.validate()) {
-            setState(() => _showPassword = false);
-            _signInBloc.add(
-              SignInCredentialsValid(
-                email: _emailController.text.trim(),
-                password: _passwordController.text,
-              ),
-            );
-          } else {
-            _signInBloc.add(SignInCredentialsInvalid());
-          }
-        }
-
-        if (state is SignInSuccess) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            route.initPage,
-            (route) => false,
-          );
-        }
-      },
+    return BlocProvider<SignInBloc>(
+      create: (context) => SignInBloc(context),
       child: FormView(
         title: "Sign In",
         child: Column(
@@ -103,13 +65,37 @@ class _SignInBlocViewState extends State<SignInView> {
             SizedBox(height: _deviceQuery.safeHeight(1.0)),
             ForgotPasswordButton(),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            Center(
-              child: CustomElevatedButton(
-                label: 'Sign In',
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  _signInBloc.add(SignInRequested());
-                },
+            BlocListener<SignInBloc, SignInState>(
+              listener: (context, state) {
+                if (state is SignInValidation) {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() => _showPassword = false);
+                    context.read<SignInBloc>().add(
+                          SignInCredentialsValid(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text,
+                          ),
+                        );
+                  } else {
+                    context.read<SignInBloc>().add(SignInCredentialsInvalid());
+                  }
+                }
+
+                if (state is SignInSuccess) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/',
+                    (route) => false,
+                  );
+                }
+              },
+              child: Center(
+                child: CustomElevatedButton(
+                  label: 'Sign In',
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    context.read<SignInBloc>().add(SignInRequested());
+                  },
+                ),
               ),
             ),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),

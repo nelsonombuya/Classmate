@@ -5,20 +5,20 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubit/notification/notification_cubit.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/user_repository.dart';
-import '../notification/notification_bloc.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final UserRepository _UserRepository;
-  final NotificationBloc _notificationBloc;
+  final UserRepository _userRepository;
+  final NotificationCubit _notificationCubit;
 
   SignInBloc(BuildContext context)
-      : _UserRepository = UserRepository(),
-        _notificationBloc = BlocProvider.of<NotificationBloc>(context),
+      : _userRepository = UserRepository(),
+        _notificationCubit = context.read<NotificationCubit>(),
         super(SignInInitial());
 
   @override
@@ -34,41 +34,35 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Stream<SignInState> _mapSignInCredentialsValidToState(
       SignInCredentialsValid event) async* {
-    _notificationBloc.add(
-      AlertRequested(
-        'Signing In...',
-        notificationType: NotificationType.Loading,
-      ),
+    _notificationCubit.showAlert(
+      'Signing In...',
+      type: NotificationType.Loading,
     );
     yield* _signIn(event.email, event.password);
   }
 
   Stream<SignInState> _signIn(String email, String password) async* {
     try {
-      UserModel user = await _UserRepository.signInWithEmailAndPassword(
+      UserModel user = await _userRepository.signInWithEmailAndPassword(
         email,
         password,
       );
-      _notificationBloc.add(
-        AlertRequested(
-          "Signed In Successfully",
-          notificationType: NotificationType.Success,
-        ),
+
+      _notificationCubit.showAlert(
+        "Signed In Successfully",
+        type: NotificationType.Success,
       );
+
       yield SignInSuccess(user);
     } catch (e) {
-      _notificationBloc.add(
-        AlertRequested(
-          "Error Signing In",
-          notificationType: NotificationType.Danger,
-        ),
+      _notificationCubit.showAlert(
+        "Error Signing In",
+        type: NotificationType.Danger,
       );
-      _notificationBloc.add(
-        SnackBarRequested(
-          e.toString(),
-          title: "Error Signing In",
-          notificationType: NotificationType.Danger,
-        ),
+      _notificationCubit.showSnackBar(
+        e.toString(),
+        title: "Error Signing In",
+        type: NotificationType.Danger,
       );
       this.addError(e);
     }
@@ -76,12 +70,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Stream<SignInState> _mapSignInCredentialsInvalidToState(
       SignInCredentialsInvalid event) async* {
-    _notificationBloc.add(
-      SnackBarRequested(
-        'Please input the required information correctly',
-        notificationType: NotificationType.Warning,
-        title: 'Error Validating Form',
-      ),
+    _notificationCubit.showSnackBar(
+      'Please input the required information correctly',
+      title: 'Error Validating Form',
+      type: NotificationType.Warning,
     );
   }
 }

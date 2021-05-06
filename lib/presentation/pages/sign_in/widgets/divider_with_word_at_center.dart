@@ -24,11 +24,10 @@ class DividerWithWordAtCenter extends StatelessWidget {
         VerticalDivider(width: _spaceAroundWord),
         Text(
           text,
-          style: (Theme.of(context).textTheme.subtitle2 == null)
-              ? null
-              : Theme.of(context).textTheme.subtitle2!.copyWith(
-                    color: Theme.of(context).dividerColor,
-                  ),
+          style: Theme.of(context)
+              .textTheme
+              .subtitle2!
+              .copyWith(color: Theme.of(context).dividerColor),
         ),
         VerticalDivider(width: _spaceAroundWord),
         Expanded(
