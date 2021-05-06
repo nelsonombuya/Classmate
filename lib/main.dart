@@ -4,13 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'bloc/auth/auth_bloc.dart';
-import 'bloc/notification/notification_bloc.dart';
 import 'bloc/watchtower_observer.dart';
-import 'constants/route.dart' as route;
-import 'constants/themes.dart';
+import 'presentation/init.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,28 +17,4 @@ void main() async {
   // TODO Restructure App for Landscape Orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(Classmate()));
-}
-
-class Classmate extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc()..add(AuthCheckStarted()),
-        ),
-        BlocProvider<NotificationBloc>(
-          create: (context) => NotificationBloc(),
-        ),
-      ],
-      child: MaterialApp(
-        onGenerateRoute: route.controller,
-        initialRoute: route.initPage,
-        builder: EasyLoading.init(),
-        darkTheme: Themes.darkTheme,
-        theme: Themes.lightTheme,
-        title: 'Classmate',
-      ),
-    );
-  }
 }
