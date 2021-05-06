@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/auth_model.dart';
+import '../models/user_model.dart';
 
 class SessionRepository {
   final DocumentReference unit;
@@ -22,7 +22,7 @@ class SessionRepository {
   }
 
   updateAssignmentForUser({
-    required AuthModel user,
+    required UserModel user,
     required String assignmentID,
     required Map<String, dynamic> userData,
   }) {

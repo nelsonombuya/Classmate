@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/auth_model.dart';
+import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../notification/notification_bloc.dart';
 
@@ -13,11 +13,11 @@ part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final AuthRepository _authRepository;
+  final UserRepository _UserRepository;
   final NotificationBloc _notificationBloc;
 
   SignInBloc(BuildContext context)
-      : _authRepository = AuthRepository(),
+      : _UserRepository = UserRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignInInitial());
 
@@ -45,7 +45,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Stream<SignInState> _signIn(String email, String password) async* {
     try {
-      AuthModel user = await _authRepository.signInWithEmailAndPassword(
+      UserModel user = await _UserRepository.signInWithEmailAndPassword(
         email,
         password,
       );

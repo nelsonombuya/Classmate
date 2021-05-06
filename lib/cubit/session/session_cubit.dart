@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/auth_model.dart';
+import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/session_repository.dart';
 import '../../data/repositories/unit_repository.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/user_data_repository.dart';
 
 part 'session_state.dart';
 
@@ -17,9 +17,9 @@ class SessionCubit extends Cubit<SessionState> {
   List<Stream<DocumentSnapshot>> lessonStreamsList = [];
   List<SessionRepository> sessionsList = [];
 
-  late final UserRepository _userRepository;
+  late final UserDataRepository _UserDataRepository;
   late final StreamSubscription _userDataStreamSubscription;
-  final AuthRepository _authRepository = AuthRepository();
+  final UserRepository _UserRepository = UserRepository();
 
   SessionCubit()
       : super(SessionInitial(
@@ -27,13 +27,14 @@ class SessionCubit extends Cubit<SessionState> {
           [].cast<Stream<QuerySnapshot>>(),
           [].cast<SessionRepository>(),
         )) {
-    if (!_authRepository.isUserSignedIn()) {
+    if (!_UserRepository.isUserSignedIn()) {
       this.addError("There's no user signed in ❗");
       throw NullThrownError();
     }
 
-    _userRepository = UserRepository(_authRepository.getCurrentUser()!);
-    Stream _userDataStream = _userRepository.userDataStream.asBroadcastStream();
+    _UserDataRepository = UserDataRepository(_UserRepository.getCurrentUser()!);
+    Stream _userDataStream =
+        _UserDataRepository.userDataStream.asBroadcastStream();
 
     // * Gets a list of units that the user has registered for
     _userDataStreamSubscription = _userDataStream.listen((snapshot) {
@@ -88,7 +89,7 @@ class SessionCubit extends Cubit<SessionState> {
   void updateAssignmentDetails({
     required SessionRepository session,
     required String assignmentId,
-    required AuthModel user,
+    required UserModel user,
     required bool value,
   }) {
     session.updateAssignmentForUser(

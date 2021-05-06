@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/auth_model.dart';
+import '../models/user_model.dart';
 import '../models/event_model.dart';
 
 class EventRepository {
   final CollectionReference _eventsSubCollection;
 
-  EventRepository(AuthModel user)
+  EventRepository(UserModel user)
       : _eventsSubCollection = FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)

@@ -5,21 +5,21 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/auth_model.dart';
 import '../../data/models/user_data_model.dart';
+import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/user_data_repository.dart';
 import '../notification/notification_bloc.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final AuthRepository _authRepository;
+  final UserRepository _UserRepository;
   final NotificationBloc _notificationBloc;
 
   SignUpBloc(BuildContext context)
-      : _authRepository = AuthRepository(),
+      : _UserRepository = UserRepository(),
         _notificationBloc = BlocProvider.of<NotificationBloc>(context),
         super(SignUpInitial());
 
@@ -65,15 +65,15 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     required UserDataModel userData,
   }) async* {
     try {
-      AuthModel user = await _authRepository.createUserWithEmailAndPassword(
+      UserModel user = await _UserRepository.createUserWithEmailAndPassword(
         email,
         password,
       );
 
       String displayName = "${firstName[0]}. $lastName";
 
-      await _authRepository.updateProfile(displayName: displayName);
-      await UserRepository(_authRepository.getCurrentUser()!)
+      await _UserRepository.updateProfile(displayName: displayName);
+      await UserDataRepository(_UserRepository.getCurrentUser()!)
           .updateUserData(userData);
 
       _notificationBloc.add(

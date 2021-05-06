@@ -12,7 +12,7 @@ class AuthCheckStarted extends AuthEvent {}
 class AuthRemoved extends AuthEvent {}
 
 class AuthChanged extends AuthEvent {
-  final AuthModel? user;
+  final UserModel? user;
 
   const AuthChanged({this.user});
 

@@ -1,25 +1,25 @@
 import 'dart:convert';
 
-class AuthModel {
+class UserModel {
   String uid;
   String? email;
   String? displayName;
   bool isEmailVerified;
 
-  AuthModel({
+  UserModel({
     required this.uid,
     required this.email,
     required this.displayName,
     required this.isEmailVerified,
   });
 
-  AuthModel copyWith({
+  UserModel copyWith({
     String? uid,
     String? email,
     String? displayName,
     bool? isEmailVerified,
   }) {
-    return AuthModel(
+    return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
@@ -36,8 +36,8 @@ class AuthModel {
     };
   }
 
-  factory AuthModel.fromMap(Map<String, dynamic> map) {
-    return AuthModel(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       uid: map['uid'],
       email: map['email'],
       displayName: map['displayName'],
@@ -47,19 +47,19 @@ class AuthModel {
 
   String toJson() => json.encode(toMap());
 
-  factory AuthModel.fromJson(String source) =>
-      AuthModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'AuthModel(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified)';
+    return 'UserModel(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AuthModel &&
+    return other is UserModel &&
         other.uid == uid &&
         other.email == email &&
         other.displayName == displayName &&

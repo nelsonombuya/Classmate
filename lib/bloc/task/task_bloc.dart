@@ -16,19 +16,19 @@ part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   late final TaskRepository _taskRepository;
-  late final AuthRepository _authRepository;
+  late final UserRepository _UserRepository;
   late final NotificationBloc _notificationBloc;
   late final Stream<List<TaskModel>> personalTaskDataStream;
 
   TaskBloc(BuildContext context) : super(TaskInitial()) {
-    _authRepository = AuthRepository();
+    _UserRepository = UserRepository();
     _notificationBloc = BlocProvider.of<NotificationBloc>(context);
 
-    if (_authRepository.getCurrentUser() == null) {
+    if (_UserRepository.getCurrentUser() == null) {
       throw Exception("User not signed in ❗");
     }
 
-    _taskRepository = TaskRepository(_authRepository.getCurrentUser()!);
+    _taskRepository = TaskRepository(_UserRepository.getCurrentUser()!);
     personalTaskDataStream = _taskRepository.personalTaskDataStream;
   }
 

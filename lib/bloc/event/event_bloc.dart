@@ -15,21 +15,21 @@ part 'event_event.dart';
 part 'event_state.dart';
 
 class EventBloc extends Bloc<EventEvent, EventState> {
-  late final AuthRepository _authRepository;
+  late final UserRepository _UserRepository;
   late final EventRepository _eventRepository;
   late final NotificationBloc _notificationBloc;
   late final Stream<List<EventModel>> personalEventDataStream;
 
   EventBloc(BuildContext context) : super(EventInitial()) {
-    _authRepository = AuthRepository();
+    _UserRepository = UserRepository();
     _notificationBloc = BlocProvider.of<NotificationBloc>(context);
 
-    if (_authRepository.getCurrentUser() == null) {
+    if (_UserRepository.getCurrentUser() == null) {
       this.addError("User not signed in ❗");
       throw Exception("User not signed in ❗");
     }
 
-    _eventRepository = EventRepository(_authRepository.getCurrentUser()!);
+    _eventRepository = EventRepository(_UserRepository.getCurrentUser()!);
     personalEventDataStream = _eventRepository.personalEventDataStream;
   }
 

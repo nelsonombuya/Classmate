@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/auth_model.dart';
+import '../models/user_model.dart';
 import '../models/task_model.dart';
 
 class TaskRepository {
   final CollectionReference _tasksSubCollection;
 
-  TaskRepository(AuthModel user)
+  TaskRepository(UserModel user)
       : _tasksSubCollection = FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)

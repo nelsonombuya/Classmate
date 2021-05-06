@@ -13,7 +13,7 @@ class SignUpValidation extends SignUpState {}
 
 class SignUpSuccess extends SignUpState {
   SignUpSuccess(this.user);
-  final AuthModel user;
+  final UserModel user;
 
   @override
   List<Object> get props => [user];
