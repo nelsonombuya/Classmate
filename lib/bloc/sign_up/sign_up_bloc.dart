@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/user_data_model.dart';
 import '../../data/models/user_model.dart';
-import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/user_repository.dart';
 import '../../data/repositories/user_data_repository.dart';
 import '../notification/notification_bloc.dart';
 

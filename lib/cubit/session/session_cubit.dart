@@ -5,10 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/models/user_model.dart';
-import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/session_repository.dart';
 import '../../data/repositories/unit_repository.dart';
 import '../../data/repositories/user_data_repository.dart';
+import '../../data/repositories/user_repository.dart';
 
 part 'session_state.dart';
 

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/event_model.dart';
-import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/user_repository.dart';
 import '../../data/repositories/event_repository.dart';
 import '../notification/notification_bloc.dart';
 

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../constants/device_query.dart';
 import '../../../cubit/session/session_cubit.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/repositories/auth_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../../common_widgets/no_data_found.dart';
 
 class DashboardPage extends StatelessWidget {

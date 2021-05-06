@@ -4,11 +4,11 @@ import '../models/user_model.dart';
 import 'user_data_repository.dart';
 
 class UserRepository {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth;
   late final UserModel? currentUser;
   late final UserDataRepository userDataRepository;
 
-  UserRepository() {
+  UserRepository() : _firebaseAuth = FirebaseAuth.instance {
     this.currentUser = _mapUserToUserModel(_firebaseAuth.currentUser);
 
     if (currentUser != null) {
