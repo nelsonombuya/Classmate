@@ -37,7 +37,6 @@ class Classmate extends StatelessWidget {
       ],
       child: MaterialApp(
         onGenerateRoute: route.controller,
-        initialRoute: route.initPage,
         builder: EasyLoading.init(),
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,

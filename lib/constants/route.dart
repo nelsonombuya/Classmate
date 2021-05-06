@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../presentation/init.dart';
 import '../presentation/pages/home/home.dart';
 import '../presentation/pages/sign_in/sign_in_page.dart';
 import '../presentation/pages/sign_up/sign_up_page.dart';
@@ -11,7 +10,6 @@ import 'device_query.dart';
 /// This route management system can be found on:
 /// https://oflutter.com/organized-navigation-named-route-in-flutter/
 
-const String initPage = '/';
 const String welcomePage = '/welcome';
 const String splashPage = '/splash';
 const String signInPage = '/sign_in';
@@ -24,9 +22,6 @@ const String morePage = '/more';
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
-    case initPage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, Init()));
     case welcomePage:
       return MaterialPageRoute(
           builder: (context) => DeviceQuery(context, WelcomePage()));
