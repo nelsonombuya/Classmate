@@ -10,15 +10,16 @@ import 'widgets/sign_in_button.dart';
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final String _video =
         (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
-    FocusScope.of(context).unfocus();
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
+          // TODO Verify OOM Crashes
           // FIXME OOM Crash after too many hot-reloads or hot-restarts
           // ! Affects the following pages so far:
           //  - Welcome Page
