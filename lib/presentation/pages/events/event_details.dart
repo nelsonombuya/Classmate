@@ -1,13 +1,14 @@
-import 'package:classmate/bloc/event/event_bloc.dart';
-import 'package:classmate/bloc/notification/notification_bloc.dart';
-import 'package:classmate/constants/device_query.dart';
-import 'package:classmate/data/models/event_model.dart';
-import 'package:classmate/presentation/common_widgets/form_view.dart';
-import 'package:classmate/presentation/pages/home/forms/create_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import '../../../bloc/event/event_bloc.dart';
+import '../../../bloc/notification/notification_bloc.dart';
+import '../../../constants/device_query.dart';
+import '../../../data/models/event_model.dart';
+import '../../common_widgets/form_view.dart';
+import '../home/forms/create_event.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final EventModel event;

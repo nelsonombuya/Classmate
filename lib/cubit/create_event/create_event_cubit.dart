@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:classmate/data/models/event_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
+
+import '../../data/models/event_model.dart';
 
 part 'create_event_state.dart';
 
