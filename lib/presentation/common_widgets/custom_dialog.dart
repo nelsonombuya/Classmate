@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sweetsheet/sweetsheet.dart';
 
-import '../../bloc/notification/notification_bloc.dart';
+import '../../cubit/notification/notification_cubit.dart';
 
-/// # Custom Dialog
-/// Used to show custom dialog boxes throughout the app
+/// ### Custom Dialog
 /// ! Depends on sweetsheet package
 class CustomDialog {
-  final BuildContext context;
-  final NotificationType? type;
-  final SweetSheet sweetSheet = SweetSheet();
+  final SweetSheet _sweetSheet;
 
-  late final CustomSheetColor _dialogType;
   final String? title;
   final String description;
+  final NotificationType? type;
   final IconData? descriptionIcon;
+  late final CustomSheetColor _dialogType;
 
   final String positiveActionLabel;
   final IconData? positiveActionIcon;
@@ -25,7 +23,7 @@ class CustomDialog {
   final void Function() negativeActionOnPressed;
 
   CustomDialog(
-    this.context, {
+    context, {
     this.title,
     required this.description,
     required this.positiveActionLabel,
@@ -36,20 +34,24 @@ class CustomDialog {
     required this.positiveActionOnPressed,
     this.negativeActionIcon,
     required this.negativeActionOnPressed,
-  }) {
+  }) : _sweetSheet = SweetSheet() {
     switch (type) {
       case NotificationType.Info:
         _dialogType = SweetSheetColor.NICE;
         break;
+
       case NotificationType.Warning:
         _dialogType = SweetSheetColor.WARNING;
         break;
+
       case NotificationType.Danger:
         _dialogType = SweetSheetColor.DANGER;
         break;
+
       case NotificationType.Success:
         _dialogType = SweetSheetColor.SUCCESS;
         break;
+
       default:
         _dialogType = SweetSheetColor.NICE;
         break;
@@ -59,7 +61,7 @@ class CustomDialog {
   }
 
   _showSweetSheet(BuildContext context) {
-    sweetSheet.show(
+    _sweetSheet.show(
       context: context,
       color: _dialogType,
       icon: descriptionIcon,

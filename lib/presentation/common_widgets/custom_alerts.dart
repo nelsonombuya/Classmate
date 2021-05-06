@@ -1,31 +1,38 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../../bloc/notification/notification_bloc.dart';
+import '../../cubit/notification/notification_cubit.dart';
 
-// ! Depends on EasyLoading Package
+/// ### Custom Alerts
+/// ! Depends on EasyLoading Package
 class CustomAlert {
-  final NotificationType? notificationType;
   final String message;
+  final NotificationType? notificationType;
 
   CustomAlert(this.message, {this.notificationType}) {
-    _show();
-  }
-  _show() {
     switch (notificationType) {
-      case NotificationType.Info:
-        return EasyLoading.showInfo(message);
       case NotificationType.Loading:
-        return EasyLoading.show(
-          dismissOnTap: false,
+        EasyLoading.show(
           status: message,
+          dismissOnTap: false,
           maskType: EasyLoadingMaskType.black,
         );
-      case NotificationType.Success:
-        return EasyLoading.showSuccess(message);
+        break;
+
+      case NotificationType.Info:
+        EasyLoading.showInfo(message);
+        break;
+
       case NotificationType.Danger:
-        return EasyLoading.showError(message);
+        EasyLoading.showError(message);
+        break;
+
+      case NotificationType.Success:
+        EasyLoading.showSuccess(message);
+        break;
+
       default:
-        return EasyLoading.showToast(message);
+        EasyLoading.showToast(message);
+        break;
     }
   }
 }

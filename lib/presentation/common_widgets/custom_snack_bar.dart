@@ -2,9 +2,11 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/notification/notification_bloc.dart';
 import '../../constants/device_query.dart';
+import '../../cubit/notification/notification_cubit.dart';
 
+/// ### Custom Snack Bar
+/// ! Depends on Another FlushBar
 class CustomSnackBar {
   final String? title;
   final String message;
@@ -33,12 +35,12 @@ class CustomSnackBar {
       duration: Duration(seconds: 5),
       shouldIconPulse: shouldIconPulse,
       messageSize: _deviceQuery.safeHeight(1.86),
-      positionOffset: _deviceQuery.safeHeight(10.0),
+      positionOffset: _deviceQuery.safeHeight(5.0),
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
       backgroundColor: backgroundColor ?? CupertinoColors.darkBackgroundGray,
       margin: EdgeInsets.symmetric(
         horizontal: _deviceQuery.safeWidth(3.0),
-        vertical: _deviceQuery.safeHeight(1.0),
+        vertical: _deviceQuery.safeHeight(10.0),
       ),
       icon: Padding(
         padding: EdgeInsets.only(left: _deviceQuery.safeWidth(2.0)),
@@ -48,7 +50,7 @@ class CustomSnackBar {
           color: iconColor ?? CupertinoColors.white,
         ),
       ),
-    )..show(context);
+    )..show(context); // TODO Stacking Notifications
   }
 
   void _showSnackBar() {
@@ -60,8 +62,8 @@ class CustomSnackBar {
       case NotificationType.Warning:
         _template(
           iconColor: CupertinoColors.white,
-          messageColor: CupertinoColors.white,
           icon: Icons.warning_amber_rounded,
+          messageColor: CupertinoColors.white,
           backgroundColor: CupertinoColors.activeOrange,
         );
         break;
