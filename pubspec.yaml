@@ -27,7 +27,6 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   string_validator: ^0.3.0
   sweetsheet: ^0.3.1
-  table_calendar: ^3.0.0
   video_player: ^2.1.1
 
 dev_dependencies:
