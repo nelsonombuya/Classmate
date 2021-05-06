@@ -21,14 +21,9 @@ class _SplashPageState extends State<SplashPage> {
     var _secondString;
     var _secondStringColor;
 
+    final TextStyle _splashTextStyle = Theme.of(context).textTheme.headline2!;
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
     final double _fontSize = _deviceQuery.safeHeight(4.5);
-
-    // TODO Implement Error Handler ❗
-    final TextStyle _splashTextStyle =
-        Theme.of(context).textTheme.headline2 == null
-            ? throw Exception('Theme Inherited Widget should not be null. ❗')
-            : Theme.of(context).textTheme.headline2!;
 
     if (widget.message != null) {
       _logo = 'red_plain';
