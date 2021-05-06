@@ -1,29 +1,66 @@
 part of 'session_cubit.dart';
 
 abstract class SessionState extends Equatable {
-  final List<Stream<DocumentSnapshot>> sessionStreamsList;
+  final List<Stream<DocumentSnapshot>> lessonStreamsList;
+  final List<Stream<QuerySnapshot>> assignmentStreamsList;
+  final List<SessionRepository> sessionList;
 
-  const SessionState(this.sessionStreamsList);
+  const SessionState(
+    this.lessonStreamsList,
+    this.assignmentStreamsList,
+    this.sessionList,
+  );
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        lessonStreamsList,
+        assignmentStreamsList,
+        sessionList,
+      ];
 }
 
 class SessionInitial extends SessionState {
-  final List<Stream<DocumentSnapshot>> sessionStreamsList;
+  final List<Stream<DocumentSnapshot>> lessonStreamsList;
+  final List<Stream<QuerySnapshot>> assignmentStreamsList;
+  final List<SessionRepository> sessionList;
 
-  const SessionInitial(this.sessionStreamsList) : super(sessionStreamsList);
+  const SessionInitial(
+    this.lessonStreamsList,
+    this.assignmentStreamsList,
+    this.sessionList,
+  ) : super(
+          lessonStreamsList,
+          assignmentStreamsList,
+          sessionList,
+        );
 
   @override
-  List<Object> get props => [sessionStreamsList];
+  List<Object> get props => [
+        lessonStreamsList,
+        assignmentStreamsList,
+        sessionList,
+      ];
 }
 
-
 class SessionStreamListChanged extends SessionState {
-  final List<Stream<DocumentSnapshot>> sessionStreamsList;
+  final List<Stream<DocumentSnapshot>> lessonStreamsList;
+  final List<Stream<QuerySnapshot>> assignmentStreamsList;
+  final List<SessionRepository> sessionList;
 
-  const SessionStreamListChanged(this.sessionStreamsList) : super(sessionStreamsList);
+  const SessionStreamListChanged(
+    this.lessonStreamsList,
+    this.assignmentStreamsList,
+    this.sessionList,
+  ) : super(
+          lessonStreamsList,
+          assignmentStreamsList,
+          sessionList,
+        );
 
   @override
-  List<Object> get props => [sessionStreamsList];
+  List<Object> get props => [
+        lessonStreamsList,
+        assignmentStreamsList,
+        sessionList,
+      ];
 }

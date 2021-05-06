@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/auth_model.dart';
+
 class SessionRepository {
   final DocumentReference unit;
   final String session;
@@ -8,5 +10,27 @@ class SessionRepository {
 
   Stream<DocumentSnapshot> get sessionDataStream {
     return unit.collection('sessions').doc(session).snapshots().distinct();
+  }
+
+  Stream<QuerySnapshot> get assignmentsDataStream {
+    return unit
+        .collection('sessions')
+        .doc(session)
+        .collection('assignments')
+        .snapshots()
+        .distinct();
+  }
+
+  updateAssignmentForUser({
+    required AuthModel user,
+    required String assignmentID,
+    required Map<String, dynamic> userData,
+  }) {
+    return unit
+        .collection('sessions')
+        .doc(session)
+        .collection('assignments')
+        .doc(assignmentID)
+        .update(userData);
   }
 }
