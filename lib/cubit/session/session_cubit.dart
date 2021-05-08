@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/user_model.dart';
+import '../../data/models/user_data_model.dart';
 import '../../data/repositories/session_repository.dart';
 import '../../data/repositories/unit_repository.dart';
-import '../../data/repositories/user_data_repository.dart';
 import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/authentication_repository.dart';
 
 part 'session_state.dart';
 
@@ -17,9 +17,10 @@ class SessionCubit extends Cubit<SessionState> {
   List<Stream<DocumentSnapshot>> lessonStreamsList = [];
   List<SessionRepository> sessionsList = [];
 
-  late final UserDataRepository _UserDataRepository;
+  late final UserRepository _UserRepository;
   late final StreamSubscription _userDataStreamSubscription;
-  final UserRepository _UserRepository = UserRepository();
+  final AuthenticationRepository _AuthenticationRepository =
+      AuthenticationRepository();
 
   SessionCubit()
       : super(SessionInitial(
@@ -27,14 +28,14 @@ class SessionCubit extends Cubit<SessionState> {
           [].cast<Stream<QuerySnapshot>>(),
           [].cast<SessionRepository>(),
         )) {
-    if (!_UserRepository.isUserSignedIn()) {
+    if (!_AuthenticationRepository.isUserSignedIn()) {
       this.addError("There's no user signed in ❗");
       throw NullThrownError();
     }
 
-    _UserDataRepository = UserDataRepository(_UserRepository.getCurrentUser()!);
-    Stream _userDataStream =
-        _UserDataRepository.userDataStream.asBroadcastStream();
+    _UserRepository =
+        UserRepository(_AuthenticationRepository.getCurrentUser()!);
+    Stream _userDataStream = _UserRepository.userDataStream.asBroadcastStream();
 
     // * Gets a list of units that the user has registered for
     _userDataStreamSubscription = _userDataStream.listen((snapshot) {

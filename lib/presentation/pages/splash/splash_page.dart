@@ -5,9 +5,9 @@ import '../../../constants/device_query.dart';
 import 'widgets/splash_text.dart';
 
 class SplashPage extends StatefulWidget {
-  final String? message;
-
   SplashPage({this.message});
+
+  final String? message;
 
   @override
   _SplashPageState createState() => _SplashPageState();

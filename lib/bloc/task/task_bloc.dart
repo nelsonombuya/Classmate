@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/task_model.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/authentication_repository.dart';
 import '../../data/repositories/task_repository.dart';
 import '../notification/notification_bloc.dart';
 
@@ -16,19 +16,20 @@ part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   late final TaskRepository _taskRepository;
-  late final UserRepository _UserRepository;
+  late final AuthenticationRepository _AuthenticationRepository;
   late final NotificationBloc _notificationBloc;
   late final Stream<List<TaskModel>> personalTaskDataStream;
 
   TaskBloc(BuildContext context) : super(TaskInitial()) {
-    _UserRepository = UserRepository();
+    _AuthenticationRepository = AuthenticationRepository();
     _notificationBloc = BlocProvider.of<NotificationBloc>(context);
 
-    if (_UserRepository.getCurrentUser() == null) {
+    if (_AuthenticationRepository.getCurrentUser() == null) {
       throw Exception("User not signed in ❗");
     }
 
-    _taskRepository = TaskRepository(_UserRepository.getCurrentUser()!);
+    _taskRepository =
+        TaskRepository(_AuthenticationRepository.getCurrentUser()!);
     personalTaskDataStream = _taskRepository.personalTaskDataStream;
   }
 

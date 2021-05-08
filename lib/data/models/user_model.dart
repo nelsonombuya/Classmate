@@ -1,29 +1,24 @@
 import 'dart:convert';
 
 class UserModel {
-  String uid;
-  String? email;
-  String? displayName;
-  bool isEmailVerified;
-
-  UserModel({
+  final String uid;
+  final String? email;
+  final String? displayName;
+  const UserModel({
     required this.uid,
-    required this.email,
-    required this.displayName,
-    required this.isEmailVerified,
+    this.email,
+    this.displayName,
   });
 
   UserModel copyWith({
     String? uid,
     String? email,
     String? displayName,
-    bool? isEmailVerified,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
-      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 
@@ -32,7 +27,6 @@ class UserModel {
       'uid': uid,
       'email': email,
       'displayName': displayName,
-      'isEmailVerified': isEmailVerified,
     };
   }
 
@@ -41,7 +35,6 @@ class UserModel {
       uid: map['uid'],
       email: map['email'],
       displayName: map['displayName'],
-      isEmailVerified: map['isEmailVerified'],
     );
   }
 
@@ -51,9 +44,8 @@ class UserModel {
       UserModel.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'UserModel(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified)';
-  }
+  String toString() =>
+      'UserModel(uid: $uid, email: $email, displayName: $displayName)';
 
   @override
   bool operator ==(Object other) {
@@ -62,15 +54,15 @@ class UserModel {
     return other is UserModel &&
         other.uid == uid &&
         other.email == email &&
-        other.displayName == displayName &&
-        other.isEmailVerified == isEmailVerified;
+        other.displayName == displayName;
   }
 
   @override
-  int get hashCode {
-    return uid.hashCode ^
-        email.hashCode ^
-        displayName.hashCode ^
-        isEmailVerified.hashCode;
-  }
+  int get hashCode => uid.hashCode ^ email.hashCode ^ displayName.hashCode;
+
+  static const empty = UserModel(
+    uid: "-",
+    email: "-",
+    displayName: "-",
+  );
 }

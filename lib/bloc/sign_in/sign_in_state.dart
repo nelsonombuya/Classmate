@@ -9,18 +9,18 @@ abstract class SignInState extends Equatable {
 
 class SignInInitial extends SignInState {}
 
-class SignInValidation extends SignInState {}
-
 class SignInSuccess extends SignInState {
-  SignInSuccess(this.user);
-  final UserModel user;
+  SignInSuccess(this.uid);
+
+  final String uid;
 
   @override
-  List<Object> get props => [user.uid];
+  List<Object> get props => [uid, DateTime.now()];
 }
 
 class SignInFailure extends SignInState {
   SignInFailure(this.message);
+
   final String message;
 
   @override

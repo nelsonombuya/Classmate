@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/sign_in/sign_in_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../constants/validator.dart';
+import '../../../cubit/navigation/navigation_cubit.dart';
+import '../../../cubit/notification/notification_cubit.dart';
+import '../../../data/repositories/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../../common_widgets/custom_elevated_button.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
@@ -18,8 +22,8 @@ class SignInPage extends StatefulWidget {
 
 class _SignInBlocViewState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool _showPassword = false;
 
@@ -28,7 +32,12 @@ class _SignInBlocViewState extends State<SignInPage> {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
 
     return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(context),
+      create: (context) => SignInBloc(
+        context.read<AuthenticationRepository>(),
+        context.read<NotificationCubit>(),
+        context.read<UserRepository>(),
+        context.read<NavigationCubit>(),
+      ),
       child: FormView(
         title: "Sign In",
         child: Column(
@@ -65,43 +74,27 @@ class _SignInBlocViewState extends State<SignInPage> {
             SizedBox(height: _deviceQuery.safeHeight(1.0)),
             ForgotPasswordButton(),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            BlocListener<SignInBloc, SignInState>(
-              listener: (context, state) {
-                if (state is SignInValidation) {
+            Center(
+              child: CustomElevatedButton(
+                label: 'Sign In',
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  setState(() => _showPassword = false);
                   if (_formKey.currentState!.validate()) {
-                    setState(() => _showPassword = false);
                     context.read<SignInBloc>().add(
-                          SignInCredentialsValid(
+                          SignInRequested(
                             email: _emailController.text.trim(),
                             password: _passwordController.text,
                           ),
                         );
-                  } else {
-                    context.read<SignInBloc>().add(SignInCredentialsInvalid());
                   }
-                }
-
-                if (state is SignInSuccess) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/',
-                    (route) => false,
-                  );
-                }
-              },
-              child: Center(
-                child: CustomElevatedButton(
-                  label: 'Sign In',
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    context.read<SignInBloc>().add(SignInRequested());
-                  },
-                ),
+                },
               ),
             ),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
             DividerWithWordAtCenter(text: 'OR'),
             SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            SignUpButton(), // Navigates to sign up page
+            SignUpButton(),
           ],
         ),
       ),

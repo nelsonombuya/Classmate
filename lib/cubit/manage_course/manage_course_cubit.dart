@@ -6,17 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/notification/notification_bloc.dart';
 import '../../data/models/user_data_model.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/authentication_repository.dart';
 import '../../data/repositories/course_repository.dart';
-import '../../data/repositories/user_data_repository.dart';
+import '../../data/repositories/user_repository.dart';
 
 part 'manage_course_state.dart';
 
 class ManageCourseCubit extends Cubit<ManageCourseState> {
   final CourseRepository _courseRepository = CourseRepository();
-  final UserRepository _UserRepository = UserRepository();
+  final AuthenticationRepository _AuthenticationRepository =
+      AuthenticationRepository();
   late final NotificationBloc _notificationBloc;
-  late final UserDataRepository _UserDataRepository;
+  late final UserRepository _UserRepository;
   late final coursesDataStream;
 
   ManageCourseCubit(BuildContext context)
@@ -24,13 +25,14 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
         super(ManageCourseInitial()) {
     coursesDataStream = _courseRepository.coursesDataStream;
 
-    if (!_UserRepository.isUserSignedIn()) {
+    if (!_AuthenticationRepository.isUserSignedIn()) {
       this.addError("No User Signed In ❗");
       throw NullThrownError();
     }
-    _UserDataRepository = UserDataRepository(_UserRepository.getCurrentUser()!);
+    _UserRepository =
+        UserRepository(_AuthenticationRepository.getCurrentUser()!);
 
-    _UserDataRepository.getUserData().then((value) {
+    _UserRepository.getUserData().then((value) {
       if (value != null && value.course != null) {
         emit(CourseDetailsChanged(
           year: value.year,
@@ -115,10 +117,10 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
     DocumentReference course =
         FirebaseFirestore.instance.doc("/courses/${state.courseId}");
 
-    UserDataModel? currentUserData = await _UserDataRepository.getUserData();
+    UserModel? currentUserData = await _UserRepository.getUserData();
 
-    UserDataModel newUserData = currentUserData == null
-        ? UserDataModel(
+    UserModel newUserData = currentUserData == null
+        ? UserModel(
             course: course,
             year: state.year,
             registeredUnits: state.selectedUnits,
@@ -129,7 +131,7 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
             registeredUnits: state.selectedUnits,
           );
 
-    _UserDataRepository.updateUserData(newUserData);
+    _UserRepository.updateUserData(newUserData);
     _notificationBloc.add(
       AlertRequested(
         "Course Details Updated",

@@ -10,6 +10,7 @@ import 'device_query.dart';
 /// This route management system can be found on:
 /// https://oflutter.com/organized-navigation-named-route-in-flutter/
 
+const String root = '/';
 const String welcomePage = '/welcome';
 const String splashPage = '/splash';
 const String signInPage = '/sign_in';

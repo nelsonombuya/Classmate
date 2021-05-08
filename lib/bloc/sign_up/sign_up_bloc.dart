@@ -2,114 +2,101 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/route.dart' as route;
+import '../../cubit/navigation/navigation_cubit.dart';
+import '../../cubit/notification/notification_cubit.dart';
 import '../../data/models/user_data_model.dart';
-import '../../data/models/user_model.dart';
+import '../../data/repositories/authentication_repository.dart';
 import '../../data/repositories/user_repository.dart';
-import '../../data/repositories/user_data_repository.dart';
-import '../notification/notification_bloc.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final UserRepository _UserRepository;
-  final NotificationBloc _notificationBloc;
+  final AuthenticationRepository _authenticationRepository;
+  final NotificationCubit _notificationCubit;
+  final UserRepository _userRepository;
+  final NavigationCubit _navigationCubit;
 
-  SignUpBloc(BuildContext context)
-      : _UserRepository = UserRepository(),
-        _notificationBloc = BlocProvider.of<NotificationBloc>(context),
-        super(SignUpInitial());
+  SignUpBloc(
+    this._authenticationRepository,
+    this._notificationCubit,
+    this._userRepository,
+    this._navigationCubit,
+  ) : super(SignUpInitial());
 
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
     if (event is SignUpRequested) {
-      yield SignUpValidation();
-    } else if (event is SignUpCredentialsValid) {
-      yield* _mapSignUpCredentialsValidToState(event);
-    } else if (event is SignUpCredentialsInvalid) {
-      yield* _mapSignUpCredentialsInvalidToState(event);
+      yield* _mapSignUpRequestedToState(event);
     }
   }
 
-  Stream<SignUpState> _mapSignUpCredentialsValidToState(
-      SignUpCredentialsValid event) async* {
-    _notificationBloc.add(
-      AlertRequested(
-        'Signing Up...',
-        notificationType: NotificationType.Loading,
-      ),
-    );
-
-    UserDataModel userData = UserDataModel(
-      firstName: event.firstName,
-      lastName: event.lastName,
-    );
-
-    yield* _signUp(
-      email: event.email,
-      password: event.password,
-      firstName: event.firstName,
-      lastName: event.firstName,
-      userData: userData,
-    );
-  }
-
-  Stream<SignUpState> _signUp({
-    required String email,
-    required String password,
-    required String firstName,
-    required String lastName,
-    required UserDataModel userData,
-  }) async* {
+  Stream<SignUpState> _mapSignUpRequestedToState(SignUpRequested event) async* {
     try {
-      UserModel user = await _UserRepository.createUserWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      String displayName = "${firstName[0]}. $lastName";
-
-      await _UserRepository.updateProfile(displayName: displayName);
-      await UserDataRepository(_UserRepository.getCurrentUser()!)
-          .updateUserData(userData);
-
-      _notificationBloc.add(
-        AlertRequested(
-          "Signed Up Successfully",
-          notificationType: NotificationType.Success,
-        ),
-      );
-
-      yield SignUpSuccess(user);
+      _showSignUpLoadingNotification();
+      await _authenticationRepository.signUp(event.email, event.password);
+      await _setNewUserNames(event.firstName, event.lastName);
+      _showSignUpSuccessfulNotification();
+      _navigateToDashboard();
+      yield SignUpSuccess(_userRepository.getUser()!.uid);
     } catch (e) {
-      _notificationBloc.add(
-        AlertRequested(
-          "Error Signing Up",
-          notificationType: NotificationType.Danger,
-        ),
-      );
-      _notificationBloc.add(
-        SnackBarRequested(
-          e.toString(),
-          title: "Error Signing Up",
-          notificationType: NotificationType.Danger,
-        ),
-      );
       this.addError(e);
+      _showSignUpUnsuccessfulNotification(e.toString());
+      yield SignUpFailure(e.toString());
     }
   }
 
-  Stream<SignUpState> _mapSignUpCredentialsInvalidToState(
-      SignUpCredentialsInvalid event) async* {
-    _notificationBloc.add(
-      SnackBarRequested(
-        'Please input the required information correctly',
-        notificationType: NotificationType.Warning,
-        title: 'Error Validating Form',
-      ),
+  Future<void> _setNewUserNames(String firstName, String lastName) async {
+    await _setDisplayName(firstName, lastName);
+    await _setNamesInDatabase(firstName, lastName);
+  }
+
+  Future<void> _setDisplayName(String firstName, String lastName) async {
+    String displayName = "${firstName[0]}. $lastName";
+    await _userRepository.updateUserProfile(displayName: displayName);
+  }
+
+  Future<void> _setNamesInDatabase(String firstName, String lastName) async {
+    UserDataModel userData = UserDataModel(
+      firstName: firstName,
+      lastName: lastName,
+    );
+    await _userRepository.updateUserData(userData);
+  }
+
+  void _showSignUpLoadingNotification() {
+    return _notificationCubit.showSnackBar(
+      'Signing Up...',
+      type: NotificationType.Loading,
+    );
+  }
+
+  void _showSignUpSuccessfulNotification() {
+    _notificationCubit.showAlert(
+      "Signed Up Successfully",
+      type: NotificationType.Success,
+    );
+  }
+
+  void _showSignUpUnsuccessfulNotification(String errorMessage) {
+    _notificationCubit.showAlert(
+      "Error Signing Up",
+      type: NotificationType.Danger,
+    );
+    _notificationCubit.showSnackBar(
+      errorMessage,
+      title: "Error Signing Up",
+      type: NotificationType.Danger,
+    );
+  }
+
+  void _navigateToDashboard() {
+    _navigationCubit.navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      route.root,
+      (route) => false,
     );
   }
 }

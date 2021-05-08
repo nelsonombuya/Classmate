@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/watchtower_observer.dart';
-import 'presentation/init.dart';
+import 'data/repositories/authentication_repository.dart';
+import 'data/repositories/user_repository.dart';
+import 'presentation/classmate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,12 @@ void main() async {
   Bloc.observer = Watchtower();
 
   // TODO Restructure App for Landscape Orientation
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(Classmate()));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (value) => runApp(
+      Classmate(
+        authenticationRepository: AuthenticationRepository(),
+        userRepository: UserRepository(),
+      ),
+    ),
+  );
 }

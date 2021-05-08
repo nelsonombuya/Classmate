@@ -1,79 +1,84 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/route.dart' as route;
+import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import '../../data/models/user_model.dart';
+import '../../data/repositories/authentication_repository.dart';
 import '../../data/repositories/user_repository.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final UserRepository _userRepository;
-  final NotificationCubit _notificationCubit;
+  SignInBloc(
+    this._authenticationRepository,
+    this._notificationCubit,
+    this._userRepository,
+    this._navigationCubit,
+  ) : super(SignInInitial());
 
-  SignInBloc(BuildContext context)
-      : _userRepository = UserRepository(),
-        _notificationCubit = context.read<NotificationCubit>(),
-        super(SignInInitial());
+  final AuthenticationRepository _authenticationRepository;
+  final NotificationCubit _notificationCubit;
+  final UserRepository _userRepository;
+  final NavigationCubit _navigationCubit;
 
   @override
   Stream<SignInState> mapEventToState(SignInEvent event) async* {
     if (event is SignInRequested) {
-      yield SignInValidation();
-    } else if (event is SignInCredentialsValid) {
-      yield* _mapSignInCredentialsValidToState(event);
-    } else if (event is SignInCredentialsInvalid) {
-      yield* _mapSignInCredentialsInvalidToState(event);
+      yield* _mapSignInRequestedToState(event);
     }
   }
 
-  Stream<SignInState> _mapSignInCredentialsValidToState(
-      SignInCredentialsValid event) async* {
-    _notificationCubit.showAlert(
+  Stream<SignInState> _mapSignInRequestedToState(SignInRequested event) async* {
+    try {
+      _showSignInLoadingNotification();
+      await _authenticationRepository.signIn(event.email, event.password);
+      _showSignInSuccessNotification();
+      yield SignInSuccess(_userRepository.getUser()!.uid);
+      _navigateToDashboard();
+    } catch (e) {
+      this.addError(e);
+      _showSignInUnsuccessfulNotification(e.toString());
+      yield SignInFailure(e.toString());
+    }
+  }
+
+  void _showSignInLoadingNotification() {
+    return _notificationCubit.showAlert(
       'Signing In...',
       type: NotificationType.Loading,
     );
-    yield* _signIn(event.email, event.password);
   }
 
-  Stream<SignInState> _signIn(String email, String password) async* {
-    try {
-      UserModel user = await _userRepository.signInWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      _notificationCubit.showAlert(
-        "Signed In Successfully",
-        type: NotificationType.Success,
-      );
-
-      yield SignInSuccess(user);
-    } catch (e) {
-      _notificationCubit.showAlert(
-        "Error Signing In",
-        type: NotificationType.Danger,
-      );
-      _notificationCubit.showSnackBar(
-        e.toString(),
-        title: "Error Signing In",
-        type: NotificationType.Danger,
-      );
-      this.addError(e);
-    }
+  void _showSignInSuccessNotification() {
+    return _notificationCubit.showAlert(
+      "Signed In Successfully",
+      type: NotificationType.Success,
+    );
   }
 
-  Stream<SignInState> _mapSignInCredentialsInvalidToState(
-      SignInCredentialsInvalid event) async* {
+  void _showSignInUnsuccessfulNotification(String errorMessage) {
+    _notificationCubit.showAlert(
+      "Error Signing In",
+      type: NotificationType.Danger,
+    );
+
     _notificationCubit.showSnackBar(
-      'Please input the required information correctly',
-      title: 'Error Validating Form',
-      type: NotificationType.Warning,
+      errorMessage,
+      title: "Error Signing In",
+      type: NotificationType.Danger,
+    );
+  }
+
+  void _navigateToDashboard() {
+    _navigationCubit.navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      route.root, // Will automatically redirect to Dashboard Page
+      (route) => false,
     );
   }
 }

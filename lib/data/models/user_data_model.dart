@@ -1,35 +1,35 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'package:equatable/equatable.dart';
 
-class UserDataModel {
-  String? year;
-  String? firstName;
-  String? lastName;
-  DocumentReference? course;
-  List<DocumentReference>? registeredUnits;
-  UserDataModel({
+class UserDataModel extends Equatable {
+  final String? firstName;
+  final String? lastName;
+  final String? displayName;
+  final String? course;
+  final List<String>? registeredUnits;
+
+  const UserDataModel({
     this.firstName,
     this.lastName,
-    this.registeredUnits,
+    this.displayName,
     this.course,
-    this.year,
+    this.registeredUnits,
   });
 
   UserDataModel copyWith({
     String? firstName,
     String? lastName,
-    List<DocumentReference>? registeredUnits,
-    DocumentReference? course,
-    String? year,
+    String? displayName,
+    String? course,
+    List<String>? registeredUnits,
   }) {
     return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      registeredUnits: registeredUnits ?? this.registeredUnits,
+      displayName: displayName ?? this.displayName,
       course: course ?? this.course,
-      year: year ?? this.year,
+      registeredUnits: registeredUnits ?? this.registeredUnits,
     );
   }
 
@@ -37,9 +37,9 @@ class UserDataModel {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'registeredUnits': registeredUnits,
+      'displayName': displayName,
       'course': course,
-      'year': year,
+      'registeredUnits': registeredUnits,
     };
   }
 
@@ -47,9 +47,9 @@ class UserDataModel {
     return UserDataModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      registeredUnits: map['registeredUnits']?.cast<DocumentReference>(),
+      displayName: map['displayName'],
       course: map['course'],
-      year: map['year'],
+      registeredUnits: List<String>.from(map['registeredUnits']),
     );
   }
 
@@ -59,28 +59,16 @@ class UserDataModel {
       UserDataModel.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'UserDataModel(firstName: $firstName, lastName: $lastName, registeredUnits: $registeredUnits, course: $course, year: $year)';
-  }
+  bool get stringify => true;
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is UserDataModel &&
-        other.firstName == firstName &&
-        other.lastName == lastName &&
-        listEquals(other.registeredUnits, registeredUnits) &&
-        other.course == course &&
-        other.year == year;
-  }
-
-  @override
-  int get hashCode {
-    return firstName.hashCode ^
-        lastName.hashCode ^
-        registeredUnits.hashCode ^
-        course.hashCode ^
-        year.hashCode;
+  List<Object> get props {
+    return [
+      firstName ?? '-',
+      lastName ?? '-',
+      displayName ?? '-',
+      course ?? '-',
+      registeredUnits ?? '-',
+    ];
   }
 }

@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../../constants/device_query.dart';
 import '../../../cubit/session/session_cubit.dart';
-import '../../../data/models/user_model.dart';
-import '../../../data/repositories/user_repository.dart';
+import '../../../data/models/user_data_model.dart';
+import '../../../data/repositories/authentication_repository.dart';
 import '../../common_widgets/no_data_found.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     DeviceQuery _deviceQuery = DeviceQuery.of(context);
     ScrollController _listViewController = ScrollController();
     SessionCubit _sessionCubit = BlocProvider.of<SessionCubit>(context);
-    UserModel _currentUser = UserRepository().getCurrentUser()!;
+    UserModel _currentUser = AuthenticationRepository().getCurrentUser()!;
     String _currentUserUid = _currentUser.uid;
 
     return BlocBuilder<SessionCubit, SessionState>(

@@ -2,17 +2,13 @@ import 'package:string_validator/string_validator.dart';
 
 /// ### Validator
 /// Has common static functions that can be used for input validation
-/// TODO Implement proper error handling ❗
 abstract class Validator {
   static String? emailValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
-    return isEmail(value) ? null : 'Please enter valid email address';
+    return isEmail(value!) ? null : 'Please enter valid email address';
   }
 
   static String? nameValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
-
-    if (value.length < 1) return 'Please input a name';
+    if (value!.length < 1) return 'Please input a name';
 
     if (value[0] == " ") return 'Remove the space before your name';
 
@@ -23,17 +19,15 @@ abstract class Validator {
   }
 
   static String? passwordValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
-    if (value.isEmpty) return 'Please input a password';
+    if (value!.isEmpty) return 'Please input a password';
     return (value.length >= 8) ? null : 'Password is too short';
   }
 
   static String? securePasswordValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
-    return RegExp(pattern).hasMatch(value)
+    return RegExp(pattern).hasMatch(value!)
         ? null
         : '''Please enter a password with:
           Minimum 1 Upper case
@@ -43,13 +37,11 @@ abstract class Validator {
   }
 
   static String? titleValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
-    return (value.isEmpty) ? 'Please input a title' : null;
+    return (value!.isEmpty) ? 'Please input a title' : null;
   }
 
   static String? descriptionValidator(String? value) {
-    if (value == null) throw Exception("Can't validate null string. ❗");
-    return (value.isEmpty) ? 'Please input a description' : null;
+    return (value!.isEmpty) ? 'Please input a description' : null;
   }
 }
 

@@ -19,7 +19,6 @@ class WelcomePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // TODO Verify OOM Crashes
           // FIXME OOM Crash after too many hot-reloads or hot-restarts
           // ! Affects the following pages so far:
           //  - Welcome Page

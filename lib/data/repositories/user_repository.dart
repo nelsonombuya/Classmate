@@ -1,63 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../models/user_data_model.dart';
 import '../models/user_model.dart';
-import 'user_data_repository.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
-  late final UserModel? currentUser;
-  late final UserDataRepository userDataRepository;
+  late final DocumentReference _userDocument;
 
   UserRepository() : _firebaseAuth = FirebaseAuth.instance {
-    this.currentUser = _mapUserToUserModel(_firebaseAuth.currentUser);
-
-    if (currentUser != null) {
-      this.userDataRepository = UserDataRepository(currentUser!);
-    }
+    _userDocument = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid);
   }
 
-  Future<UserModel> createUserWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    return _mapUserCredentialToUserModel(
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      ),
-    )!;
+  UserModel? getUser() {
+    return _mapUserToUserModel(_firebaseAuth.currentUser);
   }
 
-  Future<UserModel> signInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    return _mapUserCredentialToUserModel(
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      ),
-    )!;
+  Stream<UserDataModel?> get userDataStream {
+    return _userDocument
+        .snapshots()
+        .distinct()
+        .map(_mapSnapshotToUserDataModel);
   }
 
-  Stream<UserModel?> get authStateChanges {
-    return _firebaseAuth.authStateChanges().distinct().map(_mapUserToUserModel);
+  Future<UserDataModel?> getUserData() {
+    return _userDocument.get().then(_mapSnapshotToUserDataModel);
   }
 
-  Future<void> updateProfile({String? displayName, String? photoToURL}) {
+  Future<void> setUserData(UserDataModel userData) {
+    return _userDocument.set(userData.toMap(), SetOptions(merge: true));
+  }
+
+  Future<void> updateUserData(UserDataModel userData) {
+    return _userDocument.update(userData.toMap());
+  }
+
+  Future<void> deleteUserData() => _userDocument.delete();
+
+  Future<void> updateUserProfile({String? displayName, String? photoToURL}) {
     return _firebaseAuth.currentUser!.updateProfile(
       displayName: displayName,
       photoURL: photoToURL,
     );
   }
 
-  Future<void> signOut() => _firebaseAuth.signOut();
-
-  // # Mappers
-  UserModel? _mapUserCredentialToUserModel(UserCredential rawUserCredential) {
-    return _mapUserToUserModel(rawUserCredential.user);
-  }
-
+  // ## Mappers
+  // ### User
   UserModel? _mapUserToUserModel(User? rawUser) {
     return (rawUser == null)
         ? null
@@ -65,7 +55,13 @@ class UserRepository {
             uid: rawUser.uid,
             email: rawUser.email,
             displayName: rawUser.displayName,
-            isEmailVerified: rawUser.emailVerified,
           );
+  }
+
+  // ### User Data
+  UserDataModel? _mapSnapshotToUserDataModel(DocumentSnapshot snapshot) {
+    return (snapshot.data() == null)
+        ? null
+        : UserDataModel.fromMap(snapshot.data()!);
   }
 }
