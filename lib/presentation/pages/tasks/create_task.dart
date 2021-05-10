@@ -18,17 +18,14 @@ class CreateTaskForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeviceQuery(
-      context: context,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: tasksBloc),
-          BlocProvider<CreateTaskCubit>(
-            create: (context) => CreateTaskCubit(),
-          ),
-        ],
-        child: AddTaskFormView(task),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: tasksBloc),
+        BlocProvider<CreateTaskCubit>(
+          create: (context) => CreateTaskCubit(),
+        ),
+      ],
+      child: AddTaskFormView(task),
     );
   }
 }
@@ -48,7 +45,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
       title: "Create Task",

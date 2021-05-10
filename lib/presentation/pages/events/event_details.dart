@@ -20,10 +20,7 @@ class EventDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: eventsBloc,
-      child: DeviceQuery(
-        context: context,
-        child: EventDetailsView(event),
-      ),
+      child: EventDetailsView(event),
     );
   }
 }
@@ -35,7 +32,7 @@ class EventDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
       title: "Event Details",

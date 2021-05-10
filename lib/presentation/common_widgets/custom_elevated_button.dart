@@ -16,7 +16,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(

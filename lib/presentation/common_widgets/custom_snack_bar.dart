@@ -15,7 +15,7 @@ class CustomSnackBar {
   late final DeviceQuery _deviceQuery;
 
   CustomSnackBar(this.context, {this.type, this.title, required this.message}) {
-    _deviceQuery = DeviceQuery.of(context);
+    _deviceQuery = DeviceQuery(context);
     _showSnackBar();
   }
 

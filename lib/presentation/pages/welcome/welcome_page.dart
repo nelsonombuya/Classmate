@@ -11,7 +11,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
     final String _video =
         (_deviceQuery.brightness == Brightness.light) ? 'light' : 'dark';
 

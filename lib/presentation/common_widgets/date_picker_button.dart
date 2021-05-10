@@ -92,7 +92,7 @@ class DatePickerButton extends StatelessWidget {
       currentTime: selectedDate,
       maxTime: lastSelectableDate ?? _fiveHundredYearsFromNow,
       minTime: firstSelectableDate ?? _fiveHundredYearsBeforeNow,
-      theme: DeviceQuery.of(context).brightness == Brightness.light
+      theme: DeviceQuery(context).brightness == Brightness.light
           ? _lightTheme
           : _darkTheme,
 
@@ -110,7 +110,7 @@ class DatePickerButton extends StatelessWidget {
       currentTime: selectedDate,
       maxTime: lastSelectableDate ?? _fiveHundredYearsFromNow,
       minTime: firstSelectableDate ?? _fiveHundredYearsBeforeNow,
-      theme: DeviceQuery.of(context).brightness == Brightness.light
+      theme: DeviceQuery(context).brightness == Brightness.light
           ? _lightTheme
           : _darkTheme,
 
@@ -128,7 +128,7 @@ class DatePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     final double _leftPadding =
         icon == null ? _deviceQuery.safeWidth(2) : _deviceQuery.safeWidth(8);

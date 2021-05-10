@@ -7,7 +7,7 @@ import '../../../../constants/route.dart' as route;
 class SignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(

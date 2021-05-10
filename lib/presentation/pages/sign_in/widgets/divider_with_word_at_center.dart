@@ -9,7 +9,7 @@ class DividerWithWordAtCenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
     final double _spaceAroundWord = _deviceQuery.safeWidth(2.5);
     final double _dividerThickness = _deviceQuery.safeHeight(0.15);
 

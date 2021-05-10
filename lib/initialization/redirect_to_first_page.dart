@@ -26,20 +26,17 @@ class RedirectToFirstPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeviceQuery(
-      context: context,
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case AuthenticationStatus.authenticated:
-              return HomePage();
-            case AuthenticationStatus.unauthenticated:
-              return WelcomePage();
-            default:
-              return SplashPage();
-          }
-        },
-      ),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case AuthenticationStatus.authenticated:
+            return HomePage();
+          case AuthenticationStatus.unauthenticated:
+            return WelcomePage();
+          default:
+            return SplashPage();
+        }
+      },
     );
   }
 }

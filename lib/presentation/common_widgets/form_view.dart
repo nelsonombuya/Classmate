@@ -18,7 +18,7 @@ class FormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return GestureDetector(
       onTap: () {

@@ -18,7 +18,7 @@ import '../../tasks/create_task.dart';
 class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     Color _fabColor = _deviceQuery.brightness == Brightness.light
         ? CupertinoColors.systemGroupedBackground

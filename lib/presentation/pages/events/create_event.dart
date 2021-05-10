@@ -21,17 +21,14 @@ class CreateEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeviceQuery(
-      context: context,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: eventsBloc),
-          BlocProvider<CreateEventCubit>(
-            create: (context) => CreateEventCubit(),
-          ),
-        ],
-        child: CreateEventView(event: event),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: eventsBloc),
+        BlocProvider<CreateEventCubit>(
+          create: (context) => CreateEventCubit(),
+        ),
+      ],
+      child: CreateEventView(event: event),
     );
   }
 }
@@ -62,7 +59,7 @@ class _CreateEventViewState extends State<CreateEventView> {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
     return FormView(
       title: "Create Event",
       actions: [

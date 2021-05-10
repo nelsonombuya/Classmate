@@ -5,44 +5,33 @@ import 'package:flutter/material.dart';
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
 /// - Also acts as a way of getting media query data
-/// * Best place to add this widget is to the respective route widgets
-/// * Or at the root of the tree (It still needs MediaQuery [Child of Material App])
-/// ! Otherwise, errors will be thrown and widgets won't be properly scaled
-class DeviceQuery extends InheritedWidget {
-  final double blockSizeHorizontal;
-  final double blockSizeVertical;
-  final double safeBlockHorizontal;
-  final double safeBlockVertical;
+class DeviceQuery {
+  final double _blockSizeHorizontal;
+  final double _blockSizeVertical;
+  final double _safeBlockHorizontal;
+  final double _safeBlockVertical;
   final Brightness brightness;
   final MediaQueryData mediaQueryData;
 
-  DeviceQuery({required BuildContext context, required Widget child})
+  DeviceQuery(context)
       : mediaQueryData = MediaQuery.of(context),
         brightness = MediaQuery.of(context).platformBrightness,
-        blockSizeHorizontal = MediaQuery.of(context).size.width / 100,
-        blockSizeVertical = MediaQuery.of(context).size.height / 100,
-        safeBlockHorizontal = (MediaQuery.of(context).size.width -
+        _blockSizeHorizontal = MediaQuery.of(context).size.width / 100,
+        _blockSizeVertical = MediaQuery.of(context).size.height / 100,
+        _safeBlockHorizontal = (MediaQuery.of(context).size.width -
                 (MediaQuery.of(context).padding.left +
                     MediaQuery.of(context).padding.right)) /
             100,
-        safeBlockVertical = (MediaQuery.of(context).size.height -
+        _safeBlockVertical = (MediaQuery.of(context).size.height -
                 (MediaQuery.of(context).padding.top +
                     MediaQuery.of(context).padding.bottom)) /
-            100,
-        super(child: child);
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
-
-  static DeviceQuery of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DeviceQuery>()!;
-  }
+            100;
 
   // * Calculate height and width with relation to the available safe area
-  double safeWidth(double width) => safeBlockHorizontal * width;
-  double safeHeight(double height) => safeBlockVertical * height;
+  double safeWidth(double width) => _safeBlockHorizontal * width;
+  double safeHeight(double height) => _safeBlockVertical * height;
 
   // * Calculate height and width with relation to the entire screen area
-  double absoluteWidth(double width) => blockSizeHorizontal * width;
-  double absoluteHeight(double height) => blockSizeVertical * height;
+  double absoluteWidth(double width) => _blockSizeHorizontal * width;
+  double absoluteHeight(double height) => _blockSizeVertical * height;
 }

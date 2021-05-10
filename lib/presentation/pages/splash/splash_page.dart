@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
     Color _secondStringColor;
 
     final TextStyle _splashTextStyle = Theme.of(context).textTheme.headline2!;
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
     final double _fontSize = _deviceQuery.safeHeight(4.5);
 
     if (widget._message != null) {

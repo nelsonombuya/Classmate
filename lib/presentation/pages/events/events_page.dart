@@ -23,7 +23,7 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return StreamBuilder<List<EventModel>>(
       stream: context.read<EventsBloc>().personalEventDataStream,

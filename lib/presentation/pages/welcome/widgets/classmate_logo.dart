@@ -6,7 +6,7 @@ import '../../../../constants/device_query.dart';
 class ClassMateLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
     final TextStyle _logoTextStyle =
         Theme.of(context).textTheme.headline2 == null
             // TODO Implement Error Handler ❗

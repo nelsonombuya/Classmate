@@ -17,7 +17,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     final TextStyle? _labelStyle = (Theme.of(context).textTheme.button == null)
         ? null

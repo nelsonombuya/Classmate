@@ -9,7 +9,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    // DeviceQuery _deviceQuery = DeviceQuery.of(context);
+    // DeviceQuery _deviceQuery = DeviceQuery(context);
     // ScrollController _listViewController = ScrollController();
     // SessionCubit _sessionCubit = BlocProvider.of<SessionCubit>(context);
     // UserModel _currentUser = AuthenticationRepository().getCurrentUser()!;
