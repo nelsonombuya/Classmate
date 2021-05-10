@@ -4,17 +4,20 @@ import '../../constants/device_query.dart';
 import 'custom_appbar.dart';
 
 class FormView extends StatelessWidget {
-  final Widget child;
-  final String? title;
-  final List<Widget>? actions;
-  final bool overridePadding;
-
   FormView({
-    this.title,
-    this.actions,
-    required this.child,
-    this.overridePadding = false,
-  });
+    String? title,
+    List<Widget>? actions,
+    bool overridePadding = false,
+    required Widget child,
+  })   : _child = child,
+        _title = title,
+        _actions = actions,
+        _overridePadding = overridePadding;
+
+  final Widget _child;
+  final String? _title;
+  final List<Widget>? _actions;
+  final bool _overridePadding;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +34,8 @@ class FormView extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             CustomAppBar(
-              title: title,
-              actions: actions,
+              title: _title,
+              actions: _actions,
             ),
             SliverList(
               delegate: SliverChildListDelegate(
@@ -40,11 +43,11 @@ class FormView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal:
-                          overridePadding ? 0.0 : _deviceQuery.safeWidth(7.0),
+                          _overridePadding ? 0.0 : _deviceQuery.safeWidth(7.0),
                       vertical:
-                          overridePadding ? 0.0 : _deviceQuery.safeHeight(2.0),
+                          _overridePadding ? 0.0 : _deviceQuery.safeHeight(2.0),
                     ),
-                    child: child,
+                    child: _child,
                   ),
                 ],
               ),

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import '../../constants/device_query.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final String? title;
-  final List<Widget>? actions;
+  CustomAppBar({String? title, List<Widget>? actions})
+      : _title = title,
+        _actions = actions;
 
-  CustomAppBar({this.title, this.actions});
+  final String? _title;
+  final List<Widget>? _actions;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class CustomAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       elevation: 0.0,
-      actions: actions,
+      actions: _actions,
       expandedHeight: kToolbarHeight * 3.0,
       iconTheme: IconThemeData(
         color: _deviceQuery.brightness == Brightness.light
@@ -31,10 +33,10 @@ class CustomAppBar extends StatelessWidget {
         titlePadding: EdgeInsets.only(
           bottom: _deviceQuery.safeHeight(1.6),
         ),
-        title: (title == null)
+        title: (_title == null)
             ? null
             : Text(
-                title!.toUpperCase(),
+                _title!.toUpperCase(),
                 style: (Theme.of(context).textTheme.headline5 == null)
                     ? null
                     : Theme.of(context)

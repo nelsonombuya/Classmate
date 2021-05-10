@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../constants/device_query.dart';
 
 class NoDataFound extends StatelessWidget {
-  const NoDataFound({Key? key, this.message = "No Data Found"})
-      : super(key: key);
+  const NoDataFound({Key? key, String message = "No Data Found"})
+      : _message = message,
+        super(key: key);
 
-  final String message;
+  final String _message;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class NoDataFound extends StatelessWidget {
           height: _deviceQuery.safeHeight(2.0),
         ),
         Text(
-          message,
+          _message,
           style: Theme.of(context).textTheme.headline5,
         ),
       ],

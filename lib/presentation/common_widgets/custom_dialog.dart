@@ -6,35 +6,28 @@ import '../../cubit/notification/notification_cubit.dart';
 /// ### Custom Dialog
 /// ! Depends on sweetsheet package
 class CustomDialog {
-  final SweetSheet _sweetSheet;
-
-  final String? title;
-  final String description;
-  final NotificationType? type;
-  final IconData? descriptionIcon;
-  late final CustomSheetColor _dialogType;
-
-  final String positiveActionLabel;
-  final IconData? positiveActionIcon;
-  final void Function() positiveActionOnPressed;
-
-  final String negativeActionLabel;
-  final IconData? negativeActionIcon;
-  final void Function() negativeActionOnPressed;
-
   CustomDialog(
-    context, {
-    this.title,
-    required this.description,
-    required this.positiveActionLabel,
-    required this.negativeActionLabel,
-    this.type,
-    this.descriptionIcon,
-    this.positiveActionIcon,
-    required this.positiveActionOnPressed,
-    this.negativeActionIcon,
-    required this.negativeActionOnPressed,
-  }) : _sweetSheet = SweetSheet() {
+    BuildContext context, {
+    String? title,
+    NotificationType? type,
+    IconData? descriptionIcon,
+    IconData? positiveActionIcon,
+    IconData? negativeActionIcon,
+    required String description,
+    required String positiveActionLabel,
+    required void Function() positiveActionOnPressed,
+    required String negativeActionLabel,
+    required void Function() negativeActionOnPressed,
+  })   : _sweetSheet = SweetSheet(),
+        _title = title,
+        _description = description,
+        _descriptionIcon = descriptionIcon,
+        _positiveActionLabel = positiveActionLabel,
+        _positiveActionIcon = positiveActionIcon,
+        _positiveActionOnPressed = positiveActionOnPressed,
+        _negativeActionLabel = negativeActionLabel,
+        _negativeActionIcon = negativeActionIcon,
+        _negativeActionOnPressed = negativeActionOnPressed {
     switch (type) {
       case NotificationType.Info:
         _dialogType = SweetSheetColor.NICE;
@@ -60,22 +53,37 @@ class CustomDialog {
     _showSweetSheet(context);
   }
 
+  final SweetSheet _sweetSheet;
+
+  final String? _title;
+  final String _description;
+  final IconData? _descriptionIcon;
+  late final CustomSheetColor _dialogType;
+
+  final String _positiveActionLabel;
+  final IconData? _positiveActionIcon;
+  final void Function() _positiveActionOnPressed;
+
+  final String _negativeActionLabel;
+  final IconData? _negativeActionIcon;
+  final void Function() _negativeActionOnPressed;
+
   _showSweetSheet(BuildContext context) {
     _sweetSheet.show(
       context: context,
       color: _dialogType,
-      icon: descriptionIcon,
-      description: Text(description),
-      title: title == null ? null : Text(title!),
+      icon: _descriptionIcon,
+      description: Text(_description),
+      title: _title == null ? null : Text(_title!),
       positive: SweetSheetAction(
-        icon: positiveActionIcon,
-        title: positiveActionLabel,
-        onPressed: positiveActionOnPressed,
+        icon: _positiveActionIcon,
+        title: _positiveActionLabel,
+        onPressed: _positiveActionOnPressed,
       ),
       negative: SweetSheetAction(
-        icon: negativeActionIcon,
-        title: negativeActionLabel,
-        onPressed: negativeActionOnPressed,
+        icon: _negativeActionIcon,
+        title: _negativeActionLabel,
+        onPressed: _negativeActionOnPressed,
       ),
     );
   }

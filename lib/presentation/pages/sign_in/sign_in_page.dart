@@ -25,17 +25,17 @@ class SignInPage extends StatelessWidget {
         context.read<UserRepository>(),
         context.read<NavigationCubit>(),
       ),
-      child: SignInPageView(),
+      child: _SignInPageView(),
     );
   }
 }
 
-class SignInPageView extends StatefulWidget {
+class _SignInPageView extends StatefulWidget {
   @override
   _SignInPageViewState createState() => _SignInPageViewState();
 }
 
-class _SignInPageViewState extends State<SignInPageView> {
+class _SignInPageViewState extends State<_SignInPageView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

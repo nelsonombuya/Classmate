@@ -8,16 +8,21 @@ import '../../cubit/notification/notification_cubit.dart';
 /// ### Custom Snack Bar
 /// ! Depends on Another FlushBar
 class CustomSnackBar {
-  final String? title;
-  final String message;
-  final BuildContext context;
-  final NotificationType? type;
-  late final DeviceQuery _deviceQuery;
-
-  CustomSnackBar(this.context, {this.type, this.title, required this.message}) {
-    _deviceQuery = DeviceQuery(context);
-    _showSnackBar();
+  CustomSnackBar(
+    this._context, {
+    String? title,
+    NotificationType? type,
+    required String message,
+  })   : _title = title,
+        _message = message,
+        _deviceQuery = DeviceQuery(_context) {
+    _showSnackBar(type);
   }
+
+  final String? _title;
+  final String _message;
+  final BuildContext _context;
+  final DeviceQuery _deviceQuery;
 
   Flushbar _template({
     IconData? icon,
@@ -28,8 +33,8 @@ class CustomSnackBar {
     bool shouldIconPulse = false,
   }) {
     return Flushbar(
-      title: title,
-      message: message,
+      title: _title,
+      message: _message,
       titleColor: titleColor,
       messageColor: messageColor,
       duration: Duration(seconds: 5),
@@ -50,10 +55,10 @@ class CustomSnackBar {
           color: iconColor ?? CupertinoColors.white,
         ),
       ),
-    )..show(context); // TODO Stacking Notifications
+    )..show(_context); // TODO Stacking Notifications
   }
 
-  void _showSnackBar() {
+  void _showSnackBar(NotificationType? type) {
     switch (type) {
       case NotificationType.Info:
         _template(icon: Icons.info_outline_rounded);
