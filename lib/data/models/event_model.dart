@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class EventModel {
-  String? docId;
+  String? id;
   String title;
   String description;
   DateTime startDate;
@@ -9,7 +9,7 @@ class EventModel {
   bool isAllDayEvent;
 
   EventModel({
-    this.docId,
+    this.id,
     required this.title,
     required this.description,
     required this.startDate,
@@ -18,7 +18,7 @@ class EventModel {
   });
 
   EventModel copyWith({
-    String? docId,
+    String? id,
     String? title,
     String? description,
     DateTime? startDate,
@@ -26,7 +26,7 @@ class EventModel {
     bool? isAllDayEvent,
   }) {
     return EventModel(
-      docId: docId ?? this.docId,
+      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       startDate: startDate ?? this.startDate,
@@ -37,7 +37,7 @@ class EventModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'docId': docId,
+      'id': id,
       'title': title,
       'description': description,
       'startDate': startDate.millisecondsSinceEpoch,
@@ -48,7 +48,7 @@ class EventModel {
 
   factory EventModel.fromMap(Map<String, dynamic> map) {
     return EventModel(
-      docId: map['docId'],
+      id: map['id'],
       title: map['title'],
       description: map['description'],
       startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate']),
@@ -64,7 +64,7 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel(docId: $docId, title: $title, description: $description, startDate: $startDate, endDate: $endDate, isAllDayEvent: $isAllDayEvent)';
+    return 'EventModel(id: $id, title: $title, description: $description, startDate: $startDate, endDate: $endDate, isAllDayEvent: $isAllDayEvent)';
   }
 
   @override
@@ -72,7 +72,7 @@ class EventModel {
     if (identical(this, other)) return true;
 
     return other is EventModel &&
-        other.docId == docId &&
+        other.id == id &&
         other.title == title &&
         other.description == description &&
         other.startDate == startDate &&
@@ -82,7 +82,7 @@ class EventModel {
 
   @override
   int get hashCode {
-    return docId.hashCode ^
+    return id.hashCode ^
         title.hashCode ^
         description.hashCode ^
         startDate.hashCode ^
