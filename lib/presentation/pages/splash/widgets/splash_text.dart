@@ -3,42 +3,49 @@ import 'package:flutter/material.dart';
 class SplashText extends StatelessWidget {
   const SplashText({
     Key? key,
-    this.messageMode = false,
-    required this.firstString,
-    required this.splashTextStyle,
-    required this.firstStringColor,
-    required this.fontSize,
-    required this.secondString,
-    required this.secondStringColor,
-  }) : super(key: key);
+    bool messageMode = false,
+    required String firstString,
+    required TextStyle splashTextStyle,
+    required Color firstStringColor,
+    required double fontSize,
+    required String secondString,
+    required Color secondStringColor,
+  })   : _messageMode = messageMode,
+        _firstString = firstString,
+        _splashTextStyle = splashTextStyle,
+        _firstStringColor = firstStringColor,
+        _fontSize = fontSize,
+        _secondString = secondString,
+        _secondStringColor = secondStringColor,
+        super(key: key);
 
-  final String firstString;
-  final TextStyle splashTextStyle;
-  final Color firstStringColor;
-  final double fontSize;
-  final String secondString;
-  final Color secondStringColor;
-  final bool messageMode;
+  final String _firstString;
+  final TextStyle _splashTextStyle;
+  final Color _firstStringColor;
+  final double _fontSize;
+  final String _secondString;
+  final Color _secondStringColor;
+  final bool _messageMode;
 
   @override
   Widget build(BuildContext context) {
-    return messageMode
+    return _messageMode
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                firstString,
-                style: splashTextStyle.copyWith(
+                _firstString,
+                style: _splashTextStyle.copyWith(
                   fontWeight: FontWeight.w300,
-                  color: firstStringColor,
-                  fontSize: fontSize,
+                  color: _firstStringColor,
+                  fontSize: _fontSize - 10,
                 ),
               ),
               Text(
-                secondString,
-                style: splashTextStyle.copyWith(
-                  color: secondStringColor,
-                  fontSize: fontSize - 1,
+                _secondString,
+                style: _splashTextStyle.copyWith(
+                  color: _secondStringColor,
+                  fontSize: _fontSize - 12,
                 ),
               ),
             ],
@@ -47,19 +54,19 @@ class SplashText extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                firstString,
-                style: splashTextStyle.copyWith(
+                _firstString,
+                style: _splashTextStyle.copyWith(
                   fontWeight: FontWeight.w300,
-                  color: firstStringColor,
-                  fontSize: fontSize,
+                  color: _firstStringColor,
+                  fontSize: _fontSize,
                 ),
               ),
               Text(
-                secondString,
-                style: splashTextStyle.copyWith(
+                _secondString,
+                style: _splashTextStyle.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: secondStringColor,
-                  fontSize: fontSize,
+                  color: _secondStringColor,
+                  fontSize: _fontSize,
                 ),
               ),
             ],
