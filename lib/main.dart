@@ -13,7 +13,7 @@ import 'initialization/global_bloc_observer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EquatableConfig.stringify = kDebugMode;
-  Bloc.observer = GlobalBLoCObserver();
+  Bloc.observer = Watchtower();
   await Firebase.initializeApp();
 
   // TODO Restructure App for Landscape Orientation
