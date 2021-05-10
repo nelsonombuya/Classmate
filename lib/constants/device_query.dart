@@ -35,9 +35,6 @@ class DeviceQuery extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
   static DeviceQuery of(BuildContext context) {
-    if (context.dependOnInheritedWidgetOfExactType<DeviceQuery>() == null) {
-      throw Exception("Device Query Can't Be Null ❗");
-    }
     return context.dependOnInheritedWidgetOfExactType<DeviceQuery>()!;
   }
 
