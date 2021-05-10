@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 class TaskModel {
-  String? docId;
-  String title;
-  bool isDone;
-  TaskModel({
-    this.docId,
+  final String? id;
+  final String title;
+  final bool isDone;
+  const TaskModel({
+    this.id,
     required this.title,
     required this.isDone,
   });
 
   TaskModel copyWith({
-    String? docId,
+    String? id,
     String? title,
     bool? isDone,
   }) {
     return TaskModel(
-      docId: docId ?? this.docId,
+      id: id ?? this.id,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
     );
@@ -24,7 +24,7 @@ class TaskModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'docId': docId,
+      'id': id,
       'title': title,
       'isDone': isDone,
     };
@@ -32,7 +32,7 @@ class TaskModel {
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
-      docId: map['docId'],
+      id: map['id'],
       title: map['title'],
       isDone: map['isDone'],
     );
@@ -44,19 +44,23 @@ class TaskModel {
       TaskModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'TaskModel(docId: $docId, title: $title, isDone: $isDone)';
+  String toString() => 'TaskModel(id: $id, title: $title, isDone: $isDone)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is TaskModel &&
-        other.docId == docId &&
+        other.id == id &&
         other.title == title &&
         other.isDone == isDone;
   }
 
   @override
-  int get hashCode => docId.hashCode ^ title.hashCode ^ isDone.hashCode;
+  int get hashCode => id.hashCode ^ title.hashCode ^ isDone.hashCode;
+
+  static const empty = TaskModel(
+    title: '-',
+    isDone: false,
+  );
 }
