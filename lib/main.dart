@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/watchtower_observer.dart';
 import 'data/repositories/authentication_repository.dart';
 import 'data/repositories/user_repository.dart';
-import 'presentation/classmate.dart';
+import 'initialization/classmate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
