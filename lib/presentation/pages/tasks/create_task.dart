@@ -2,17 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/task/task_bloc.dart';
+import '../../../bloc/tasks/tasks_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../constants/validator.dart';
 import '../../../cubit/create_task/create_task_cubit.dart';
+import '../../../data/models/task_model.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
 
 class CreateTaskForm extends StatelessWidget {
-  final bool edit;
+  const CreateTaskForm({this.task, required this.tasksBloc});
 
-  CreateTaskForm({this.edit = false});
+  final TaskModel? task;
+  final TasksBloc tasksBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +22,21 @@ class CreateTaskForm extends StatelessWidget {
       context,
       MultiBlocProvider(
         providers: [
+          BlocProvider.value(value: tasksBloc),
           BlocProvider<CreateTaskCubit>(
             create: (context) => CreateTaskCubit(),
           ),
-          BlocProvider<TaskBloc>(
-            create: (context) => TaskBloc(context),
-          ),
         ],
-        child: AddTaskFormView(edit),
+        child: AddTaskFormView(task),
       ),
     );
   }
 }
 
 class AddTaskFormView extends StatefulWidget {
-  final bool edit;
+  AddTaskFormView(this.task);
 
-  AddTaskFormView(this.edit);
+  final TaskModel? task;
 
   @override
   _AddTaskFormViewState createState() => _AddTaskFormViewState();
@@ -44,67 +44,53 @@ class AddTaskFormView extends StatefulWidget {
 
 class _AddTaskFormViewState extends State<AddTaskFormView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _taskTitleController = TextEditingController();
+  final TextEditingController _taskTitleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final TaskBloc _taskBloc = BlocProvider.of<TaskBloc>(context);
-    final CreateTaskCubit _createTaskCubit =
-        BlocProvider.of<CreateTaskCubit>(context);
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<CreateTaskCubit, CreateTaskState>(
-          listener: (context, state) {
-            if (state is TaskValidation) {
-              if (_formKey.currentState == null)
-                throw Exception("Current Form State is Null ❗ ");
-
-              if (_formKey.currentState!.validate()) {
-                _taskBloc.add(
-                  PersonalTaskCreated(
-                    title: _taskTitleController.text.trim(),
-                  ),
-                );
-              }
-            }
-          },
-        ),
-        BlocListener<TaskBloc, TaskState>(
-          listener: (context, state) {
-            if (state is TaskAddedSuccessfully) Navigator.of(context).pop();
+    return FormView(
+      title: "Create Task",
+      actions: [
+        BlocBuilder<CreateTaskCubit, CreateTaskState>(
+          builder: (context, state) {
+            return TextButton(
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+                if (_formKey.currentState!.validate()) {
+                  if (widget.task != null) {
+                    context.read<TasksBloc>().add(PersonalTaskUpdated(widget
+                        .task!
+                        .copyWith(title: _taskTitleController.text)));
+                  } else {
+                    context.read<TasksBloc>().add(PersonalTaskCreated(
+                        title: _taskTitleController.text.trim()));
+                  }
+                }
+              },
+              child: Text("SAVE"),
+            );
           },
         ),
       ],
-      child: FormView(
-        title: "Create Task",
-        actions: [
-          TextButton.icon(
-            onPressed: () {
-              _createTaskCubit.validateNewTask();
-              FocusScope.of(context).unfocus();
-            },
-            icon: Icon(Icons.save_rounded),
-            label: Text("SAVE"),
+      child: Column(
+        children: [
+          SizedBox(
+            height: _deviceQuery.safeHeight(2.0),
+          ),
+          Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: CustomTextFormField(
+              size: 3.0,
+              label: 'Task',
+              controller: _taskTitleController,
+              keyboardType: TextInputType.text,
+              validator: Validator.titleValidator,
+            ),
           ),
         ],
-        child: Column(
-          children: [
-            SizedBox(height: _deviceQuery.safeHeight(2.0)),
-            Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: CustomTextFormField(
-                size: 3.0,
-                label: 'Task',
-                controller: _taskTitleController,
-                keyboardType: TextInputType.text,
-                validator: Validator.titleValidator,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

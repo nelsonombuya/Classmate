@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../bloc/notification/notification_bloc.dart';
-import '../../../bloc/task/task_bloc.dart';
+import '../../../bloc/tasks/tasks_bloc.dart';
 import '../../../constants/device_query.dart';
+import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/task_model.dart';
+import '../../common_widgets/no_data_found.dart';
+import 'create_task.dart';
 
 class TasksPage extends StatefulWidget {
   @override
@@ -19,15 +22,14 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final TaskBloc _taskBloc = BlocProvider.of<TaskBloc>(context);
-    final NotificationBloc _notificationBloc =
-        BlocProvider.of<NotificationBloc>(context);
 
     return StreamBuilder<List<TaskModel>>(
-      stream: _taskBloc.personalTaskDataStream,
+      stream: context.read<TasksBloc>().personalTaskDataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator.adaptive());
+          return Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
         }
         if (snapshot.hasData) {
           List<TaskModel> tasks = snapshot.data!;
@@ -37,7 +39,9 @@ class _TasksPageState extends State<TasksPage> {
             controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(
+                  _deviceQuery.safeWidth(8.0),
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Slidable(
@@ -48,7 +52,13 @@ class _TasksPageState extends State<TasksPage> {
                         caption: 'Edit',
                         icon: Icons.edit_rounded,
                         color: CupertinoColors.activeBlue,
-                        onTap: () {},
+                        onTap: () => showBarModalBottomSheet(
+                          context: context,
+                          builder: (context) => CreateTaskForm(
+                            task: tasks[index],
+                            tasksBloc: context.read<TasksBloc>(),
+                          ),
+                        ),
                       ),
                     ],
                     secondaryActions: <Widget>[
@@ -56,27 +66,26 @@ class _TasksPageState extends State<TasksPage> {
                         caption: 'Delete',
                         icon: Icons.delete_rounded,
                         color: Theme.of(context).errorColor,
-                        onTap: () => _notificationBloc.add(
-                          DeleteDialogBoxRequested(
-                            context,
-                            () => _taskBloc.add(
-                              PersonalTaskDeleted(tasks[index]),
-                            ),
-                          ),
-                        ),
+                        onTap: () => context
+                            .read<NotificationCubit>()
+                            .showDeleteDialog(
+                                DialogType.DeleteEvent,
+                                // * If the dialog is accepted
+                                // * It will send an event deleted request
+                                () => context
+                                    .read<TasksBloc>()
+                                    .add(PersonalTaskDeleted(tasks[index]))),
                       ),
                     ],
                     child: CheckboxListTile(
                       value: tasks[index].isDone,
                       activeColor: CupertinoColors.activeBlue,
                       onChanged: (value) {
-                        if (value == null) {
-                          throw Exception(
-                              "The checked value shouldn't be null ❗");
-                        }
-
-                        tasks[index].isDone = value;
-                        _taskBloc.add(PersonalTaskUpdated(tasks[index]));
+                        context.read<TasksBloc>().add(
+                              PersonalTaskUpdated(
+                                tasks[index].copyWith(isDone: value),
+                              ),
+                            );
                       },
                       tileColor: _deviceQuery.brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
@@ -99,23 +108,7 @@ class _TasksPageState extends State<TasksPage> {
             },
           );
         }
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "¯\\_( ͡° ͜ʖ ͡°)_/¯",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(fontFamily: "Noto"),
-            ),
-            SizedBox(height: _deviceQuery.safeHeight(4.0)),
-            Text(
-              "No Events Found",
-              style: Theme.of(context).textTheme.headline5!,
-            ),
-          ],
-        );
+        return NoDataFound(message: "No Tasks Found");
       },
     );
   }
