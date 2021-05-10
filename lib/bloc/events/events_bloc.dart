@@ -17,7 +17,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   })   : _eventRepository = eventRepository,
         _notificationCubit = notificationCubit,
         personalEventDataStream = eventRepository.personalEventDataStream,
-        super(EventsInitial());
+        super(EventsState.initial());
 
   final EventRepository _eventRepository;
   final NotificationCubit _notificationCubit;
@@ -49,7 +49,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
       await _eventRepository.createPersonalEvent(newEvent);
       _showEventCreatedSuccessfullyNotification();
-      yield EventCreatedSuccessfully(newEvent);
+      yield EventsState.created(newEvent);
     } catch (e) {
       _showErrorCreatingEventNotification(e.toString());
       this.addError(e);
@@ -62,7 +62,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showUpdatingEventNotification();
       await _eventRepository.updatePersonalEvent(event.event);
       _showEventUpdatedSuccessfullyNotification();
-      yield EventUpdatedSuccessfully(event.event);
+      yield EventsState.updated(event.event);
     } catch (e) {
       _showErrorUpdatingEventNotification(e.toString());
       this.addError(e);
@@ -75,7 +75,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showDeletingEventNotification();
       await _eventRepository.deletePersonalEvent(event.event);
       _showEventDeletedSuccessfullyNotification();
-      yield EventDeletedSuccessfully(event.event);
+      yield EventsState.deleted(event.event);
     } on Exception catch (e) {
       _showErrorDeletingEventNotification(e.toString());
       this.addError(e);

@@ -1,8 +1,6 @@
 part of 'tasks_bloc.dart';
 
 class TasksState extends Equatable {
-  const TasksState(this.task);
-
   const TasksState.initial({this.task = TaskModel.empty});
 
   const TasksState.created(this.task);

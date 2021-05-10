@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class EventModel {
-  String? id;
-  String title;
-  String description;
-  DateTime startDate;
-  DateTime endDate;
-  bool isAllDayEvent;
+  final String? id;
+  final String title;
+  final String description;
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool isAllDayEvent;
 
-  EventModel({
+  const EventModel({
     this.id,
     required this.title,
     required this.description,
