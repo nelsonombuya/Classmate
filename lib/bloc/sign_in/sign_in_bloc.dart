@@ -42,9 +42,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       yield SignInSuccess(_userRepository.getUser()!.uid);
       _navigateToDashboard();
     } catch (e) {
-      this.addError(e);
       _showSignInUnsuccessfulNotification(e.toString());
       yield SignInFailure(e.toString());
+      this.addError(e);
     }
   }
 

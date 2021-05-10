@@ -43,9 +43,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       _navigateToDashboard();
       yield SignUpSuccess(_userRepository.getUser()!.uid);
     } catch (e) {
-      this.addError(e);
       _showSignUpUnsuccessfulNotification(e.toString());
       yield SignUpFailure(e.toString());
+      this.addError(e);
     }
   }
 

@@ -15,12 +15,27 @@ import 'widgets/divider_with_word_at_center.dart';
 import 'widgets/forgot_password_button.dart';
 import 'widgets/sign_up_button.dart';
 
-class SignInPage extends StatefulWidget {
+class SignInPage extends StatelessWidget {
   @override
-  _SignInBlocViewState createState() => _SignInBlocViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SignInBloc(
+        context.read<AuthenticationRepository>(),
+        context.read<NotificationCubit>(),
+        context.read<UserRepository>(),
+        context.read<NavigationCubit>(),
+      ),
+      child: SignInPageView(),
+    );
+  }
 }
 
-class _SignInBlocViewState extends State<SignInPage> {
+class SignInPageView extends StatefulWidget {
+  @override
+  _SignInPageViewState createState() => _SignInPageViewState();
+}
+
+class _SignInPageViewState extends State<SignInPageView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -31,72 +46,64 @@ class _SignInBlocViewState extends State<SignInPage> {
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
-    return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(
-        context.read<AuthenticationRepository>(),
-        context.read<NotificationCubit>(),
-        context.read<UserRepository>(),
-        context.read<NavigationCubit>(),
-      ),
-      child: FormView(
-        title: "Sign In",
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: _deviceQuery.safeHeight(2.0)),
-            Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                children: [
-                  CustomTextFormField(
-                    label: 'E-Mail Address',
-                    controller: _emailController,
-                    validator: Validator.emailValidator,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                  CustomTextFormField(
-                    label: 'Password',
-                    obscureText: !_showPassword,
-                    controller: _passwordController,
-                    validator: Validator.passwordValidator,
-                    keyboardType: TextInputType.visiblePassword,
-                    suffixIconAction: () =>
-                        setState(() => _showPassword = !_showPassword),
-                    suffixIcon: _showPassword
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                  ),
-                ],
-              ),
+    return FormView(
+      title: "Sign In",
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: _deviceQuery.safeHeight(2.0)),
+          Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              children: [
+                CustomTextFormField(
+                  label: 'E-Mail Address',
+                  controller: _emailController,
+                  validator: Validator.emailValidator,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                CustomTextFormField(
+                  label: 'Password',
+                  obscureText: !_showPassword,
+                  controller: _passwordController,
+                  validator: Validator.passwordValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  suffixIconAction: () =>
+                      setState(() => _showPassword = !_showPassword),
+                  suffixIcon: _showPassword
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
+              ],
             ),
-            SizedBox(height: _deviceQuery.safeHeight(1.0)),
-            ForgotPasswordButton(),
-            SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            Center(
-              child: CustomElevatedButton(
-                label: 'Sign In',
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  setState(() => _showPassword = false);
-                  if (_formKey.currentState!.validate()) {
-                    context.read<SignInBloc>().add(
-                          SignInRequested(
-                            email: _emailController.text.trim(),
-                            password: _passwordController.text,
-                          ),
-                        );
-                  }
-                },
-              ),
+          ),
+          SizedBox(height: _deviceQuery.safeHeight(1.0)),
+          ForgotPasswordButton(),
+          SizedBox(height: _deviceQuery.safeHeight(6.0)),
+          Center(
+            child: CustomElevatedButton(
+              label: 'Sign In',
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+                setState(() => _showPassword = false);
+                if (_formKey.currentState!.validate()) {
+                  context.read<SignInBloc>().add(
+                        SignInRequested(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text,
+                        ),
+                      );
+                }
+              },
             ),
-            SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            DividerWithWordAtCenter(text: 'OR'),
-            SizedBox(height: _deviceQuery.safeHeight(6.0)),
-            SignUpButton(),
-          ],
-        ),
+          ),
+          SizedBox(height: _deviceQuery.safeHeight(6.0)),
+          DividerWithWordAtCenter(text: 'OR'),
+          SizedBox(height: _deviceQuery.safeHeight(6.0)),
+          SignUpButton(),
+        ],
       ),
     );
   }
