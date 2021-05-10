@@ -21,8 +21,8 @@ class EventDetailsPage extends StatelessWidget {
     return BlocProvider.value(
       value: eventsBloc,
       child: DeviceQuery(
-        context,
-        EventDetailsView(event),
+        context: context,
+        child: EventDetailsView(event),
       ),
     );
   }

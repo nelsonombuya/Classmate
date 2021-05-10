@@ -24,36 +24,27 @@ const String morePage = '/more';
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
     case welcomePage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, WelcomePage()));
+      return MaterialPageRoute(builder: (context) => WelcomePage());
     case splashPage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, SplashPage()));
+      return MaterialPageRoute(builder: (context) => SplashPage());
     case signInPage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, SignInPage()));
+      return MaterialPageRoute(builder: (context) => SignInPage());
     case signUpPage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, SignUpPage()));
+      return MaterialPageRoute(builder: (context) => SignUpPage());
     case homePage:
-      return MaterialPageRoute(
-          builder: (context) => DeviceQuery(context, HomePage()));
+      return MaterialPageRoute(builder: (context) => HomePage());
     case dashboardPage:
       return MaterialPageRoute(
-          builder: (context) =>
-              DeviceQuery(context, HomePage(subPage: HomeSubPage.Dashboard)));
+          builder: (context) => HomePage(subPage: HomeSubPage.Dashboard));
     case eventsPage:
       return MaterialPageRoute(
-          builder: (context) =>
-              DeviceQuery(context, HomePage(subPage: HomeSubPage.Events)));
+          builder: (context) => HomePage(subPage: HomeSubPage.Events));
     case tasksPage:
       return MaterialPageRoute(
-          builder: (context) =>
-              DeviceQuery(context, HomePage(subPage: HomeSubPage.Tasks)));
+          builder: (context) => HomePage(subPage: HomeSubPage.Tasks));
     case morePage:
       return MaterialPageRoute(
-          builder: (context) =>
-              DeviceQuery(context, HomePage(subPage: HomeSubPage.More)));
+          builder: (context) => HomePage(subPage: HomeSubPage.More));
     default:
       throw ('This route name does not exit');
   }

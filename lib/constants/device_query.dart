@@ -16,7 +16,7 @@ class DeviceQuery extends InheritedWidget {
   final Brightness brightness;
   final MediaQueryData mediaQueryData;
 
-  DeviceQuery(BuildContext context, Widget child)
+  DeviceQuery({required BuildContext context, required Widget child})
       : mediaQueryData = MediaQuery.of(context),
         brightness = MediaQuery.of(context).platformBrightness,
         blockSizeHorizontal = MediaQuery.of(context).size.width / 100,
