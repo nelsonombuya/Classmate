@@ -1,5 +1,3 @@
-import 'package:classmate/presentation/pages/events/event_details.dart';
-import 'package:classmate/presentation/pages/events/create_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +5,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../bloc/event/event_bloc.dart';
-import '../../../bloc/notification/notification_bloc.dart';
+import '../../../bloc/events/events_bloc.dart';
 import '../../../constants/device_query.dart';
+import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/event_model.dart';
 import '../../common_widgets/no_data_found.dart';
+import 'create_event.dart';
+import 'event_details.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -20,15 +20,13 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   final ScrollController _listViewScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery.of(context);
-    final EventBloc _eventBloc = BlocProvider.of<EventBloc>(context);
-    final NotificationBloc _notificationBloc =
-        BlocProvider.of<NotificationBloc>(context);
 
     return StreamBuilder<List<EventModel>>(
-      stream: _eventBloc.personalEventDataStream,
+      stream: context.read<EventsBloc>().personalEventDataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator.adaptive());
@@ -42,7 +40,9 @@ class _EventsPageState extends State<EventsPage> {
             controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(
+                  _deviceQuery.safeWidth(8.0),
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Slidable(
@@ -55,8 +55,10 @@ class _EventsPageState extends State<EventsPage> {
                         color: CupertinoColors.activeBlue,
                         onTap: () => showBarModalBottomSheet(
                           context: context,
-                          builder: (context) =>
-                              CreateEvent(event: events[index]),
+                          builder: (context) => CreateEvent(
+                            event: events[index],
+                            eventsBloc: context.read<EventsBloc>(),
+                          ),
                         ),
                       ),
                     ],
@@ -65,27 +67,31 @@ class _EventsPageState extends State<EventsPage> {
                         caption: 'Delete',
                         icon: Icons.delete_rounded,
                         color: Theme.of(context).errorColor,
-                        onTap: () {
-                          _notificationBloc.add(
-                            DeleteDialogBoxRequested(
-                              context,
-                              () => _eventBloc.add(
-                                PersonalEventDeleted(events[index]),
-                              ),
-                            ),
-                          );
-                        },
+                        onTap: () => context
+                            .read<NotificationCubit>()
+                            .showDeleteDialog(
+                                DialogType.DeleteEvent,
+                                // * If the dialog is accepted
+                                // * It will send an event deleted request
+                                () => context
+                                    .read<EventsBloc>()
+                                    .add(PersonalEventDeleted(events[index]))),
                       ),
                     ],
                     child: ListTile(
-                      onTap: () => showBarModalBottomSheet(
-                        context: context,
-                        builder: (context) => EventDetailsPage(events[index]),
-                      ),
                       isThreeLine: true,
                       enableFeedback: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      onTap: () => showBarModalBottomSheet(
+                        context: context,
+                        builder: (context) => EventDetailsPage(
+                          event: events[index],
+                          eventsBloc: context.read<EventsBloc>(),
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: _deviceQuery.safeWidth(4.0),
+                        vertical: _deviceQuery.safeHeight(2.0),
+                      ),
                       tileColor: _deviceQuery.brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
                           : CupertinoColors.darkBackgroundGray,
@@ -104,7 +110,7 @@ class _EventsPageState extends State<EventsPage> {
                                 Text("${events[index].description}"),
                                 SizedBox(height: _deviceQuery.safeHeight(2.0)),
                                 Text(
-                                    "All Day On: ${DateFormat('EEE dd MMM').format(events[index].startDate)}"),
+                                    "All Day: ${DateFormat('EEE dd MMM').format(events[index].startDate)}"),
                               ],
                             )
                           : Column(
