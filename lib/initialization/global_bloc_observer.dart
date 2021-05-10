@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 
-class Watchtower extends BlocObserver {
+class GlobalBLoCObserver extends BlocObserver {
   var logger = Logger();
 
   @override

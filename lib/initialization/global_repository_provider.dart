@@ -1,7 +1,8 @@
-import '../data/repositories/authentication_repository.dart';
-import '../data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../data/repositories/authentication_repository.dart';
+import '../data/repositories/user_repository.dart';
 
 /// # Global Repository Provider
 /// Used to provide the necessary repositories to the rest of the app
@@ -10,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///     Contains current user authentication states
 ///   * User Repository
 ///     Contains current user data according to the authentication states
-
 class GlobalRepositoryProvider extends StatelessWidget {
   const GlobalRepositoryProvider({
     Key? key,
