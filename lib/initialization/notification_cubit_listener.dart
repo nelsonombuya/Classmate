@@ -5,20 +5,21 @@ import '../presentation/common_widgets/custom_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// # Notification Listener
+/// # Notification Cubit Listener
 /// Contains the presets for the different kinds of notifications used in the app
 ///   Alerts
 ///   SnackBar
 ///   Dialog Box
 /// * Check the Notifications Cubit for more info
 /// ! Make sure Notifications Cubit is in the Global BLoC Providers
-class NotificationListener extends StatelessWidget {
-  const NotificationListener({
+class NotificationCubitListener extends StatelessWidget {
+  const NotificationCubitListener({
     Key? key,
-    required this.child,
-  }) : super(key: key);
+    required Widget child,
+  })   : _child = child,
+        super(key: key);
 
-  final Widget child;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class NotificationListener extends StatelessWidget {
           );
         }
       },
-      child: child,
+      child: _child,
     );
   }
 }

@@ -14,23 +14,26 @@ import '../data/repositories/user_repository.dart';
 class GlobalRepositoryProvider extends StatelessWidget {
   const GlobalRepositoryProvider({
     Key? key,
-    required this.authenticationRepository,
-    required this.userRepository,
-    required this.child,
-  }) : super(key: key);
+    required Widget child,
+    required UserRepository userRepository,
+    required AuthenticationRepository authenticationRepository,
+  })   : _child = child,
+        _userRepository = userRepository,
+        _authenticationRepository = authenticationRepository,
+        super(key: key);
 
-  final AuthenticationRepository authenticationRepository;
-  final UserRepository userRepository;
-  final Widget child;
+  final Widget _child;
+  final UserRepository _userRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider.value(value: authenticationRepository),
-        RepositoryProvider.value(value: userRepository),
+        RepositoryProvider.value(value: _authenticationRepository),
+        RepositoryProvider.value(value: _userRepository),
       ],
-      child: child,
+      child: _child,
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:classmate/constants/device_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -8,6 +7,7 @@ import '../data/repositories/authentication_repository.dart';
 import '../data/repositories/user_repository.dart';
 import 'global_bloc_provider.dart';
 import 'global_repository_provider.dart';
+import 'notification_cubit_listener.dart';
 import 'redirect_to_first_page.dart';
 
 /// # Classmate
@@ -19,35 +19,34 @@ import 'redirect_to_first_page.dart';
 class Classmate extends StatelessWidget {
   Classmate({
     Key? key,
-    required this.userRepository,
-    required this.authenticationRepository,
-  }) : super(key: key);
+    required UserRepository userRepository,
+    required AuthenticationRepository authenticationRepository,
+  })   : _userRepository = userRepository,
+        _authenticationRepository = authenticationRepository,
+        super(key: key);
 
-  final UserRepository userRepository;
-  final AuthenticationRepository authenticationRepository;
+  final UserRepository _userRepository;
+  final AuthenticationRepository _authenticationRepository;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return GlobalRepositoryProvider(
-      authenticationRepository: authenticationRepository,
-      userRepository: userRepository,
+      userRepository: _userRepository,
+      authenticationRepository: _authenticationRepository,
       child: GlobalBLoCProvider(
         navigatorKey: _navigatorKey,
-        userRepository: userRepository,
-        authenticationRepository: authenticationRepository,
-        child: DeviceQuery(
-          context: context,
-          child: MaterialApp(
-            onGenerateRoute: route.controller,
-            navigatorKey: _navigatorKey,
-            builder: EasyLoading.init(),
-            darkTheme: Themes.darkTheme,
-            theme: Themes.lightTheme,
-            title: 'Classmate',
-            home: NotificationListener(
-              child: RedirectToFirstPage(),
-            ),
+        userRepository: _userRepository,
+        authenticationRepository: _authenticationRepository,
+        child: MaterialApp(
+          onGenerateRoute: route.controller,
+          navigatorKey: _navigatorKey,
+          builder: EasyLoading.init(),
+          darkTheme: Themes.darkTheme,
+          theme: Themes.lightTheme,
+          title: 'Classmate',
+          home: NotificationCubitListener(
+            child: RedirectToFirstPage(),
           ),
         ),
       ),

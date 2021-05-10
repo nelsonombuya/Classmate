@@ -19,45 +19,35 @@ import '../data/repositories/user_repository.dart';
 class GlobalBLoCProvider extends StatelessWidget {
   const GlobalBLoCProvider({
     Key? key,
-    required this.child,
-    required this.navigatorKey,
-    required this.userRepository,
-    required this.authenticationRepository,
-  }) : super(key: key);
+    required Widget child,
+    required UserRepository userRepository,
+    required GlobalKey<NavigatorState> navigatorKey,
+    required AuthenticationRepository authenticationRepository,
+  })   : _child = child,
+        _userRepository = userRepository,
+        _navigatorKey = navigatorKey,
+        _authenticationRepository = authenticationRepository,
+        super(key: key);
 
-  final Widget child;
-  final GlobalKey<NavigatorState> navigatorKey;
+  final Widget _child;
+  final GlobalKey<NavigatorState> _navigatorKey;
 
-  final UserRepository userRepository;
-  final AuthenticationRepository authenticationRepository;
+  final UserRepository _userRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NavigationCubit>(
-          create: (context) => NavigationCubit(navigatorKey),
+          create: (context) => NavigationCubit(_navigatorKey),
         ),
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
-            userRepository: userRepository,
-            authenticationRepository: authenticationRepository,
+            userRepository: _userRepository,
+            authenticationRepository: _authenticationRepository,
           ),
         ),
-      ],
-      child: DependentBLoCProviders(child),
-    );
-  }
-}
-
-class DependentBLoCProviders extends StatelessWidget {
-  const DependentBLoCProviders(this.child);
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
         BlocProvider<NotificationCubit>(
           create: (context) => NotificationCubit(
             navigationCubit: context.read<NavigationCubit>(),
@@ -65,7 +55,7 @@ class DependentBLoCProviders extends StatelessWidget {
           ),
         ),
       ],
-      child: child,
+      child: _child,
     );
   }
 }
