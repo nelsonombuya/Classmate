@@ -8,8 +8,11 @@ class CustomElevatedButton extends StatelessWidget {
   final bool secondary;
   final void Function()? onPressed;
 
-  CustomElevatedButton(
-      {required this.label, this.onPressed, this.secondary = false});
+  CustomElevatedButton({
+    required this.label,
+    this.onPressed,
+    this.secondary = false,
+  });
 
   @override
   Widget build(BuildContext context) {
