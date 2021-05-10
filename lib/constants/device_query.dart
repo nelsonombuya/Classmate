@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// # Device Query
+/// ## Device Query
 /// Based on SizeConfig
 /// https://github.com/dancamdev/effectively_scale_UI_according_to_different_screen_sizes/blob/master/lib/SizeConfig.dart
 /// - Used for scaling of widgets and text
