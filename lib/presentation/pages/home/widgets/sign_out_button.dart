@@ -9,8 +9,7 @@ class SignOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.logout, color: Theme.of(context).errorColor),
-      onPressed: () =>
-          context.read<NotificationCubit>().showSignOutDialog(context),
+      onPressed: () => context.read<NotificationCubit>().showSignOutDialog(),
     );
   }
 }

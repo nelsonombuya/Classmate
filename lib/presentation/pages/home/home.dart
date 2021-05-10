@@ -2,8 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/event/event_bloc.dart';
-import '../../../bloc/task/task_bloc.dart';
+import '../../../bloc/events/events_bloc.dart';
+import '../../../bloc/tasks/tasks_bloc.dart';
+import '../../../cubit/notification/notification_cubit.dart';
+import '../../../data/models/user_model.dart';
+import '../../../data/repositories/event_repository.dart';
+import '../../../data/repositories/task_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import '../more/more_page.dart';
@@ -64,17 +69,38 @@ class HomePage extends StatelessWidget {
       )
     ];
 
-    return MultiBlocProvider(
+    final UserRepository _userRepository = context.read<UserRepository>();
+    final UserModel _user = _userRepository.getUser()!;
+    final EventRepository _eventRepository = EventRepository(_user);
+    final TaskRepository _taskRepository = TaskRepository(_user);
+
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider<EventBloc>(create: (context) => EventBloc(context)),
-        BlocProvider<TaskBloc>(create: (context) => TaskBloc(context)),
+        RepositoryProvider.value(value: _eventRepository),
+        RepositoryProvider.value(value: _taskRepository),
       ],
-      child: HomeView(
-        pages: _pages,
-        titles: _titles,
-        actions: _actions,
-        overridePageShown: _subPage,
-        bottomNavigationBarItems: _bottomNavigationBarItems,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<EventsBloc>(
+            create: (context) => EventsBloc(
+              eventRepository: _eventRepository,
+              notificationCubit: context.read<NotificationCubit>(),
+            ),
+          ),
+          BlocProvider<TasksBloc>(
+            create: (context) => TasksBloc(
+              taskRepository: _taskRepository,
+              notificationCubit: context.read<NotificationCubit>(),
+            ),
+          ),
+        ],
+        child: HomeView(
+          pages: _pages,
+          titles: _titles,
+          actions: _actions,
+          overridePageShown: _subPage,
+          bottomNavigationBarItems: _bottomNavigationBarItems,
+        ),
       ),
     );
   }

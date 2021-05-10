@@ -27,7 +27,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
               fontFamily: "Averta",
             );
 
-    // TODO Manage System Colors ✨
     var _selectedItemColor, _backgroundColor;
     if (_deviceQuery.brightness == Brightness.light) {
       _backgroundColor = CupertinoColors.systemGroupedBackground;
