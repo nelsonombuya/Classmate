@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
-  final bool enabled;
-  final void Function()? onPressed;
+  final bool _enabled;
+  final void Function()? _onPressed;
 
-  ForgotPasswordButton({this.enabled = true, this.onPressed});
+  ForgotPasswordButton({bool enabled = true, void Function()? onPressed})
+      : _enabled = enabled,
+        _onPressed = onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class ForgotPasswordButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: enabled ? onPressed : null,
+          onPressed: _enabled ? _onPressed : null,
           child: Text(
             'Forgot Password?',
             style: TextStyle(color: Theme.of(context).primaryColor),

@@ -5,7 +5,7 @@ import '../../cubit/notification/notification_cubit.dart';
 /// ### Custom Alerts
 /// ! Depends on EasyLoading Package
 class CustomAlert {
-  CustomAlert(String message, {required NotificationType notificationType}) {
+  CustomAlert(String message, {NotificationType? notificationType}) {
     switch (notificationType) {
       case NotificationType.Loading:
         EasyLoading.show(

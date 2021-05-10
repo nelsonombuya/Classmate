@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../constants/device_query.dart';
 
 class DividerWithWordAtCenter extends StatelessWidget {
-  final String text;
+  const DividerWithWordAtCenter(this._text);
 
-  DividerWithWordAtCenter({required this.text});
+  final String _text;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DividerWithWordAtCenter extends StatelessWidget {
         ),
         VerticalDivider(width: _spaceAroundWord),
         Text(
-          text,
+          _text,
           style: Theme.of(context)
               .textTheme
               .subtitle2!

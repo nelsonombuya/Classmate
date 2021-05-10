@@ -100,7 +100,7 @@ class _SignInPageViewState extends State<_SignInPageView> {
             ),
           ),
           SizedBox(height: _deviceQuery.safeHeight(6.0)),
-          DividerWithWordAtCenter(text: 'OR'),
+          DividerWithWordAtCenter('OR'),
           SizedBox(height: _deviceQuery.safeHeight(6.0)),
           SignUpButton(),
         ],

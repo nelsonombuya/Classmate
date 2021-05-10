@@ -13,8 +13,8 @@ import 'initialization/global_bloc_observer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EquatableConfig.stringify = kDebugMode;
-  Bloc.observer = Watchtower();
   await Firebase.initializeApp();
+  Bloc.observer = Watchtower();
 
   // TODO Restructure App for Landscape Orientation
   // TODO Restructure App for Web View

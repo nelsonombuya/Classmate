@@ -22,17 +22,17 @@ class SignUpPage extends StatelessWidget {
         context.read<UserRepository>(),
         context.read<NavigationCubit>(),
       ),
-      child: SignUpPageView(),
+      child: _SignUpPageView(),
     );
   }
 }
 
-class SignUpPageView extends StatefulWidget {
+class _SignUpPageView extends StatefulWidget {
   @override
   _SignUpPageViewState createState() => _SignUpPageViewState();
 }
 
-class _SignUpPageViewState extends State<SignUpPageView> {
+class _SignUpPageViewState extends State<_SignUpPageView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final PasswordConfirmationValidator _passwordConfirmation =
       PasswordConfirmationValidator();

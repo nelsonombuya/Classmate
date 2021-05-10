@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/authentication/authentication_bloc.dart';
-import '../constants/device_query.dart';
 import '../data/repositories/authentication_repository.dart';
 import '../presentation/pages/home/home.dart';
 import '../presentation/pages/splash/splash_page.dart';

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class BackgroundVideoPlayer extends StatefulWidget {
-  BackgroundVideoPlayer({required String video, required String placeholder})
-      : _video = video,
+  const BackgroundVideoPlayer({
+    required String video,
+    required String placeholder,
+  })   : _video = video,
         _placeholder = placeholder;
 
   final String _placeholder;

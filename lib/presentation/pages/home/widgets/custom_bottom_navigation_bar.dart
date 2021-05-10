@@ -5,15 +5,17 @@ import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import '../../../../constants/device_query.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  final int currentIndex;
-  final void Function(int?) onTap;
-  final List<BottomNavigationBarItem> items;
+  const CustomBottomNavigationBar({
+    required int currentIndex,
+    required void Function(int?) onTap,
+    required List<BottomNavigationBarItem> items,
+  })   : _currentIndex = currentIndex,
+        _onTap = onTap,
+        _items = items;
 
-  CustomBottomNavigationBar({
-    required this.items,
-    required this.onTap,
-    required this.currentIndex,
-  });
+  final int _currentIndex;
+  final void Function(int?) _onTap;
+  final List<BottomNavigationBarItem> _items;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
     }
 
     return SnakeNavigationBar.color(
-      onTap: onTap,
-      items: items,
+      onTap: _onTap,
+      items: _items,
       showSelectedLabels: true,
       showUnselectedLabels: true,
-      currentIndex: currentIndex,
+      currentIndex: _currentIndex,
       selectedLabelStyle: _labelStyle,
       unselectedLabelStyle: _labelStyle,
       snakeShape: SnakeShape.indicator,

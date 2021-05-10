@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import '../../../constants/device_query.dart';
 
 class HomeScrollView extends StatelessWidget {
-  final PageView child;
-  final String? title;
-  final Widget? leading;
-  final List<Widget>? actions;
+  const HomeScrollView({
+    String? title,
+    Widget? leading,
+    List<Widget>? actions,
+    required PageView child,
+  })   : _child = child,
+        _title = title,
+        _leading = leading,
+        _actions = actions;
 
-  HomeScrollView({
-    this.title,
-    this.actions,
-    this.leading,
-    required this.child,
-  });
+  final PageView _child;
+  final String? _title;
+  final Widget? _leading;
+  final List<Widget>? _actions;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +29,8 @@ class HomeScrollView extends StatelessWidget {
           SliverAppBar(
             floating: true,
             elevation: 0.0,
-            actions: actions,
-            leading: leading,
+            actions: _actions,
+            leading: _leading,
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: _deviceQuery.brightness == Brightness.light
                 ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
@@ -37,14 +40,14 @@ class HomeScrollView extends StatelessWidget {
               titlePadding: EdgeInsets.only(
                 bottom: _deviceQuery.safeHeight(1.6),
               ),
-              title: (title == null)
+              title: (_title == null)
                   ? null
-                  : Text(title!, style: Theme.of(context).textTheme.headline5),
+                  : Text(_title!, style: Theme.of(context).textTheme.headline5),
             ),
           ),
         ];
       },
-      body: child,
+      body: _child,
     );
   }
 }

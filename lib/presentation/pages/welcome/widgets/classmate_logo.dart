@@ -7,11 +7,7 @@ class ClassMateLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
-    final TextStyle _logoTextStyle =
-        Theme.of(context).textTheme.headline2 == null
-            // TODO Implement Error Handler ❗
-            ? throw Exception('Logo text style should not be null. ❗')
-            : Theme.of(context).textTheme.headline2!;
+    final TextStyle _logoTextStyle = Theme.of(context).textTheme.headline2!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

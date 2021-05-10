@@ -25,7 +25,7 @@ enum HomeSubPage { Dashboard, Events, Tasks, More }
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
 class HomePage extends StatelessWidget {
-  HomePage({subPage}) : _subPage = subPage;
+  const HomePage({HomeSubPage? subPage}) : _subPage = subPage;
 
   final HomeSubPage? _subPage;
 
@@ -94,7 +94,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
-        child: HomeView(
+        child: _HomeView(
           pages: _pages,
           titles: _titles,
           actions: _actions,
@@ -106,28 +106,33 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomeView extends StatefulWidget {
-  HomeView({
-    this.leading,
-    this.actions,
-    this.overridePageShown,
-    required this.pages,
-    required this.titles,
-    required this.bottomNavigationBarItems,
-  });
+class _HomeView extends StatefulWidget {
+  const _HomeView({
+    Widget? leading,
+    List<Widget>? actions,
+    HomeSubPage? overridePageShown,
+    required List<Widget> pages,
+    required List<String> titles,
+    required List<BottomNavigationBarItem> bottomNavigationBarItems,
+  })   : _leading = leading,
+        _actions = actions,
+        _overridePageShown = overridePageShown,
+        _pages = pages,
+        _titles = titles,
+        _bottomNavigationBarItems = bottomNavigationBarItems;
 
-  final Widget? leading;
-  final List<Widget> pages;
-  final List<String> titles;
-  final List<Widget>? actions;
-  final HomeSubPage? overridePageShown;
-  final List<BottomNavigationBarItem> bottomNavigationBarItems;
+  final Widget? _leading;
+  final List<Widget> _pages;
+  final List<String> _titles;
+  final List<Widget>? _actions;
+  final HomeSubPage? _overridePageShown;
+  final List<BottomNavigationBarItem> _bottomNavigationBarItems;
 
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<_HomeView> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
@@ -170,17 +175,17 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // * Helps to navigate directly to a subpage
     // * Whilst maintaining the Home Widget's overall functionality as a wrapper
-    _overridePageShown(widget.overridePageShown);
+    _overridePageShown(widget._overridePageShown);
 
     return Scaffold(
       extendBody: true,
       body: SafeArea(
         child: HomeScrollView(
-          actions: widget.actions,
-          leading: widget.leading,
-          title: widget.titles[_currentIndex],
+          actions: widget._actions,
+          leading: widget._leading,
+          title: widget._titles[_currentIndex],
           child: PageView(
-            children: widget.pages,
+            children: widget._pages,
             controller: _pageController,
             onPageChanged: _onPageSwiped,
             physics: ClampingScrollPhysics(),
@@ -190,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: CustomBottomNavigationBar(
         onTap: _onTabTapped,
         currentIndex: _currentIndex,
-        items: widget.bottomNavigationBarItems,
+        items: widget._bottomNavigationBarItems,
       ),
       floatingActionButton: CustomFloatingActionButton(),
     );

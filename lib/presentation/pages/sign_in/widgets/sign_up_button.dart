@@ -5,9 +5,9 @@ import '../../../../constants/route.dart' as route;
 import '../../../common_widgets/custom_elevated_button.dart';
 
 class SignUpButton extends StatelessWidget {
-  final bool enabled;
+  SignUpButton({bool enabled = true}) : _enabled = enabled;
 
-  SignUpButton({this.enabled = true});
+  final bool _enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class SignUpButton extends StatelessWidget {
           CustomElevatedButton(
             label: 'Sign Up',
             secondary: true,
-            onPressed: enabled
+            onPressed: _enabled
                 ? () => Navigator.of(context).pushNamed(route.signUpPage)
                 : null,
           ),
