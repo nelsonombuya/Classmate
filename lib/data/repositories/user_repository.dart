@@ -11,7 +11,7 @@ class UserRepository {
   UserRepository() : _firebaseAuth = FirebaseAuth.instance {
     _userDocument = FirebaseFirestore.instance
         .collection('users')
-        .doc(_firebaseAuth.currentUser!.uid);
+        .doc(_firebaseAuth.currentUser?.uid);
   }
 
   UserModel? getUser() {
