@@ -34,14 +34,14 @@ class WelcomePage extends StatelessWidget {
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: _deviceQuery.safeHeight(10.0)),
+                SizedBox(height: _deviceQuery.safeHeight(15.0)),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: _deviceQuery.safeWidth(5.0),
                   ),
                   child: ClassMateLogo(),
                 ),
-                SizedBox(height: _deviceQuery.safeHeight(38.0)),
+                SizedBox(height: _deviceQuery.safeHeight(35.0)),
                 SignInButton(),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 CreateANewAccountButton(),

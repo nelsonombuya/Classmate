@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class BackgroundVideoPlayer extends StatefulWidget {
-  final String placeholder;
-  final String video;
+  BackgroundVideoPlayer({required String video, required String placeholder})
+      : _video = video,
+        _placeholder = placeholder;
 
-  BackgroundVideoPlayer({required this.video, required this.placeholder});
+  final String _placeholder;
+  final String _video;
 
   @override
   _BackgroundVideoPlayerState createState() => _BackgroundVideoPlayerState();
@@ -17,7 +19,7 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.video)
+    _controller = VideoPlayerController.asset(widget._video)
       ..initialize().then(
         (_) => setState(
           () {
@@ -57,7 +59,7 @@ class _BackgroundVideoPlayerState extends State<BackgroundVideoPlayer> {
           : Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(widget.placeholder),
+                  image: AssetImage(widget._placeholder),
                   fit: BoxFit.cover,
                 ),
               ),
