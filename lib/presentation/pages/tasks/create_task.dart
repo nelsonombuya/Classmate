@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/task/task_bloc.dart';
-import '../../../../constants/device_query.dart';
-import '../../../../constants/validator.dart';
-import '../../../../cubit/create_task/create_task_cubit.dart';
-import '../../../common_widgets/custom_textFormField.dart';
-import '../../../common_widgets/form_view.dart';
+import '../../../bloc/task/task_bloc.dart';
+import '../../../constants/device_query.dart';
+import '../../../constants/validator.dart';
+import '../../../cubit/create_task/create_task_cubit.dart';
+import '../../common_widgets/custom_textFormField.dart';
+import '../../common_widgets/form_view.dart';
 
 class CreateTaskForm extends StatelessWidget {
   final bool edit;

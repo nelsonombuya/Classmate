@@ -18,19 +18,19 @@ class CustomAppBar extends StatelessWidget {
       elevation: 0.0,
       actions: actions,
       expandedHeight: kToolbarHeight * 3.0,
-      // TODO Find a way to standardize colors using Theme ✨
       iconTheme: IconThemeData(
         color: _deviceQuery.brightness == Brightness.light
             ? CupertinoColors.black
             : CupertinoColors.systemGrey4,
       ),
-      // TODO Find a way to standardize colors using Theme ✨
       backgroundColor: _deviceQuery.brightness == Brightness.light
           ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
           : CupertinoColors.darkBackgroundGray.withOpacity(0.8),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        titlePadding: EdgeInsets.only(bottom: _deviceQuery.safeHeight(1.6)),
+        titlePadding: EdgeInsets.only(
+          bottom: _deviceQuery.safeHeight(1.6),
+        ),
         title: (title == null)
             ? null
             : Text(

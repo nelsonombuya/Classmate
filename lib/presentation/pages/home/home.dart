@@ -7,11 +7,11 @@ import '../../../bloc/task/task_bloc.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import '../more/more_page.dart';
+import '../notifications/notifications_button.dart';
 import '../tasks/tasks_page.dart';
 import 'home_scroll_view.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_fab.dart';
-import 'widgets/notifications_button.dart';
 import 'widgets/sign_out_button.dart';
 
 enum HomeSubPage { Dashboard, Events, Tasks, More }
@@ -20,13 +20,16 @@ enum HomeSubPage { Dashboard, Events, Tasks, More }
 /// Acts as a wrapper around the other pages
 /// So that they can share a common AppBar and Bottom Navigation Bar
 class HomePage extends StatelessWidget {
-  final HomeSubPage? _subPage;
-
   HomePage({subPage}) : _subPage = subPage;
+
+  final HomeSubPage? _subPage;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget>? _actions = [NotificationsButton(), SignOutButton()];
+    final List<Widget>? _actions = [
+      NotificationsButton(),
+      SignOutButton(),
+    ];
 
     final List<String> _titles = [
       "Dashboard",
@@ -104,16 +107,14 @@ class _HomeViewState extends State<HomeView> {
 
   void _onPageSwiped(int index) => setState(() => _currentIndex = index);
 
-  // TODO Implement Error Handling
   void _onTabTapped(int? index) {
-    if (index == null) throw Exception("Page index can't be null. ❗");
-    return setState(() {
-      _pageController.animateToPage(
-        index,
+    return setState(
+      () => _pageController.animateToPage(
+        index!,
         curve: Curves.fastLinearToSlowEaseIn,
         duration: Duration(milliseconds: 800),
-      );
-    });
+      ),
+    );
   }
 
   void _overridePageShown(page) {

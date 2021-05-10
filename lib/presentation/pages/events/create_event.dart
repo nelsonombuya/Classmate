@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/event/event_bloc.dart';
-import '../../../../constants/device_query.dart';
-import '../../../../constants/validator.dart';
-import '../../../../cubit/create_event/create_event_cubit.dart';
-import '../../../common_widgets/custom_textFormField.dart';
-import '../../../common_widgets/date_picker_button.dart';
-import '../../../common_widgets/form_view.dart';
+import '../../../bloc/event/event_bloc.dart';
+import '../../../constants/device_query.dart';
+import '../../../constants/validator.dart';
+import '../../../cubit/create_event/create_event_cubit.dart';
+import '../../common_widgets/custom_textFormField.dart';
+import '../../common_widgets/date_picker_button.dart';
+import '../../common_widgets/form_view.dart';
 
 class CreateEvent extends StatelessWidget {
   // * This page can also be used to edit events

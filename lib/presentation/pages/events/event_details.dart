@@ -8,7 +8,7 @@ import '../../../bloc/notification/notification_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../data/models/event_model.dart';
 import '../../common_widgets/form_view.dart';
-import '../home/forms/create_event.dart';
+import 'create_event.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final EventModel event;

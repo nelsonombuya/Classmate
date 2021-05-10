@@ -4,8 +4,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../constants/device_query.dart';
-import '../forms/create_event.dart';
-import '../forms/create_task.dart';
+import '../../events/create_event.dart';
+import '../../tasks/create_task.dart';
 
 /// # Custom Floating Action Button
 /// Allows the user to view the following forms:
