@@ -3,7 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/authentication/authentication_bloc.dart';
+import '../navigation/navigation_cubit.dart';
 
 part 'notification_state.dart';
 
@@ -11,7 +12,15 @@ enum NotificationType { Loading, Info, Warning, Danger, Success }
 enum DialogType { DeleteEvent, DeleteTask }
 
 class NotificationCubit extends Cubit<NotificationState> {
-  NotificationCubit() : super(NotificationInitial());
+  NotificationCubit({
+    required AuthenticationBloc authenticationBloc,
+    required NavigationCubit navigationCubit,
+  })   : _authenticationBloc = authenticationBloc,
+        _navigationCubit = navigationCubit,
+        super(NotificationInitial());
+
+  final AuthenticationBloc _authenticationBloc;
+  final NavigationCubit _navigationCubit;
 
   void showSnackBar(String message, {String? title, NotificationType? type}) {
     emit(ShowSnackBar(
@@ -52,7 +61,7 @@ class NotificationCubit extends Cubit<NotificationState> {
     ));
   }
 
-  void showSignOutDialog(BuildContext context) {
+  void showSignOutDialog() {
     return showDialogBox(
       "Are you sure you want to sign out?",
       title: "Sign Out",
@@ -62,19 +71,17 @@ class NotificationCubit extends Cubit<NotificationState> {
       positiveActionIcon: Icons.logout,
       descriptionIcon: Icons.warning_amber_rounded,
       positiveActionOnPressed: () {
-        Navigator.of(context).pop();
-        context.read<AuthBloc>().add(AuthRemoved());
+        _navigationCubit.navigatorKey.currentState!.pop();
+        return _authenticationBloc.add(AuthenticationLogoutRequested());
       },
       negativeActionOnPressed: () {
-        Navigator.of(context).pop();
+        return _navigationCubit.navigatorKey.currentState!.pop();
       },
     );
   }
 
-  void showDeleteDialog(
-      BuildContext context, DialogType type, Function deleteFunction) {
+  void showDeleteDialog(DialogType type, Function deleteFunction) {
     String objectToBeDeleted;
-
     switch (type) {
       case DialogType.DeleteEvent:
         objectToBeDeleted = "Event";
@@ -96,11 +103,11 @@ class NotificationCubit extends Cubit<NotificationState> {
       positiveActionIcon: Icons.delete_rounded,
       type: NotificationType.Danger,
       positiveActionOnPressed: () {
-        Navigator.of(context).pop();
-        deleteFunction();
+        _navigationCubit.navigatorKey.currentState!.pop();
+        return deleteFunction();
       },
       negativeActionOnPressed: () {
-        Navigator.of(context).pop();
+        return _navigationCubit.navigatorKey.currentState!.pop();
       },
     );
   }
