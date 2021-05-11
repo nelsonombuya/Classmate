@@ -1,3 +1,4 @@
+import 'package:classmate/presentation/pages/more/manage_units/manage_units.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -18,7 +19,7 @@ class MorePage extends StatelessWidget {
             child: ListTile(
               enableFeedback: true,
               title: Text(
-                "Manage Course Details",
+                "Manage Registered Units",
                 style: Theme.of(context).textTheme.headline6,
               ),
               leading: Icon(Icons.school_rounded),
@@ -30,7 +31,7 @@ class MorePage extends StatelessWidget {
                       : CupertinoColors.darkBackgroundGray,
               onTap: () => showBarModalBottomSheet(
                 context: context,
-                builder: (context) => Container(),
+                builder: (context) => ManageUnits(),
               ),
             ),
           )
