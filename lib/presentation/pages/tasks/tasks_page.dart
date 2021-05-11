@@ -22,16 +22,17 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+    final TasksBloc _tasksBloc = context.read<TasksBloc>();
 
     return StreamBuilder<List<TaskModel>>(
-      stream: context.read<TasksBloc>().personalTaskDataStream,
+      stream: _tasksBloc.personalTaskDataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator.adaptive(),
           );
         }
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           List<TaskModel> tasks = snapshot.data!;
           return ListView.builder(
             shrinkWrap: true,
@@ -56,7 +57,7 @@ class _TasksPageState extends State<TasksPage> {
                           context: context,
                           builder: (context) => CreateTaskForm(
                             task: tasks[index],
-                            tasksBloc: context.read<TasksBloc>(),
+                            tasksBloc: _tasksBloc,
                           ),
                         ),
                       ),
@@ -72,8 +73,7 @@ class _TasksPageState extends State<TasksPage> {
                                 DialogType.DeleteEvent,
                                 // * If the dialog is accepted
                                 // * It will send an event deleted request
-                                () => context
-                                    .read<TasksBloc>()
+                                () => _tasksBloc
                                     .add(PersonalTaskDeleted(tasks[index]))),
                       ),
                     ],
@@ -81,11 +81,11 @@ class _TasksPageState extends State<TasksPage> {
                       value: tasks[index].isDone,
                       activeColor: CupertinoColors.activeBlue,
                       onChanged: (value) {
-                        context.read<TasksBloc>().add(
-                              PersonalTaskUpdated(
-                                tasks[index].copyWith(isDone: value),
-                              ),
-                            );
+                        _tasksBloc.add(
+                          PersonalTaskUpdated(
+                            tasks[index].copyWith(isDone: value),
+                          ),
+                        );
                       },
                       tileColor: _deviceQuery.brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
