@@ -140,13 +140,11 @@ class _HomeViewState extends State<_HomeView> {
 
   void _onPageSwiped(int index) => setState(() => _currentIndex = index);
 
-  void _onTabTapped(int? index) {
-    return setState(
-      () => _pageController.animateToPage(
-        index!,
-        curve: Curves.fastLinearToSlowEaseIn,
-        duration: Duration(milliseconds: 800),
-      ),
+  Future<void> _onTabTapped(int? index) {
+    return _pageController.animateToPage(
+      index!,
+      curve: Curves.fastLinearToSlowEaseIn,
+      duration: Duration(milliseconds: 800),
     );
   }
 
