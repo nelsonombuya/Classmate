@@ -15,20 +15,22 @@ class NoDataFound extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(height: _deviceQuery.safeHeight(3.0)),
         Text(
           "¯\\_( ͡° ͜ʖ ͡°)_/¯",
+          textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
-              .headline2!
+              .headline4!
               .copyWith(fontFamily: "Noto"),
         ),
-        SizedBox(
-          height: _deviceQuery.safeHeight(2.0),
-        ),
+        SizedBox(height: _deviceQuery.safeHeight(3.0)),
         Text(
           _message,
-          style: Theme.of(context).textTheme.headline5,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline6,
         ),
       ],
     );

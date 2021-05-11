@@ -42,7 +42,7 @@ class _EventsPageState extends State<EventsPage> {
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: EdgeInsets.all(
-                  _deviceQuery.safeWidth(8.0),
+                  _deviceQuery.safeWidth(4.0),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
