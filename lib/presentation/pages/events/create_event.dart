@@ -28,13 +28,13 @@ class CreateEvent extends StatelessWidget {
           create: (context) => CreateEventCubit(),
         ),
       ],
-      child: CreateEventView(event: event),
+      child: _CreateEventView(event),
     );
   }
 }
 
-class CreateEventView extends StatefulWidget {
-  const CreateEventView({this.event});
+class _CreateEventView extends StatefulWidget {
+  const _CreateEventView(this.event);
 
   final EventModel? event;
 
@@ -42,7 +42,7 @@ class CreateEventView extends StatefulWidget {
   _CreateEventViewState createState() => _CreateEventViewState();
 }
 
-class _CreateEventViewState extends State<CreateEventView> {
+class _CreateEventViewState extends State<_CreateEventView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -60,6 +60,7 @@ class _CreateEventViewState extends State<CreateEventView> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+
     return FormView(
       title: "Create Event",
       actions: [

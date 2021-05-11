@@ -28,6 +28,9 @@ class CustomFloatingActionButton extends StatelessWidget {
         ? CupertinoColors.black
         : CupertinoColors.white;
 
+    final EventsBloc _eventsBloc = context.read<EventsBloc>();
+    final TasksBloc _tasksBloc = context.read<TasksBloc>();
+
     return SpeedDial(
       tooltip: "Quick Actions",
       backgroundColor: _fabColor,
@@ -43,9 +46,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Icon(Icons.event, color: _labelColor),
           onTap: () => showBarModalBottomSheet(
             context: context,
-            builder: (context) => CreateEvent(
-              eventsBloc: context.read<EventsBloc>(),
-            ),
+            builder: (context) => CreateEvent(eventsBloc: _eventsBloc),
           ),
         ),
         SpeedDialChild(
@@ -56,9 +57,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Icon(Icons.list_rounded, color: _labelColor),
           onTap: () => showBarModalBottomSheet(
             context: context,
-            builder: (context) => CreateTaskForm(
-              tasksBloc: context.read<TasksBloc>(),
-            ),
+            builder: (context) => CreateTaskForm(tasksBloc: _tasksBloc),
           ),
         ),
       ],

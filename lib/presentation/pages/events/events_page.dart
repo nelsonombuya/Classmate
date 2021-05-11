@@ -24,6 +24,7 @@ class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+    final EventsBloc _eventsBloc = context.read<EventsBloc>();
 
     return StreamBuilder<List<EventModel>>(
       stream: context.read<EventsBloc>().personalEventDataStream,
@@ -32,7 +33,7 @@ class _EventsPageState extends State<EventsPage> {
           return Center(child: CircularProgressIndicator.adaptive());
         }
 
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           List<EventModel> events = snapshot.data!;
           return ListView.builder(
             shrinkWrap: true,
@@ -46,8 +47,8 @@ class _EventsPageState extends State<EventsPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Slidable(
-                    actionPane: SlidableBehindActionPane(),
                     actionExtentRatio: 0.25,
+                    actionPane: SlidableBehindActionPane(),
                     actions: <Widget>[
                       IconSlideAction(
                         caption: 'Edit',
@@ -57,7 +58,7 @@ class _EventsPageState extends State<EventsPage> {
                           context: context,
                           builder: (context) => CreateEvent(
                             event: events[index],
-                            eventsBloc: context.read<EventsBloc>(),
+                            eventsBloc: _eventsBloc,
                           ),
                         ),
                       ),
@@ -73,8 +74,7 @@ class _EventsPageState extends State<EventsPage> {
                                 DialogType.DeleteEvent,
                                 // * If the dialog is accepted
                                 // * It will send an event deleted request
-                                () => context
-                                    .read<EventsBloc>()
+                                () => _eventsBloc
                                     .add(PersonalEventDeleted(events[index]))),
                       ),
                     ],

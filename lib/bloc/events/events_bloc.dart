@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:classmate/cubit/navigation/navigation_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../cubit/notification/notification_cubit.dart';
@@ -14,12 +15,15 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   EventsBloc({
     required EventRepository eventRepository,
     required NotificationCubit notificationCubit,
+    required NavigationCubit navigationCubit,
   })   : _eventRepository = eventRepository,
         _notificationCubit = notificationCubit,
+        _navigationCubit = navigationCubit,
         personalEventDataStream = eventRepository.personalEventDataStream,
         super(EventsState.initial());
 
   final EventRepository _eventRepository;
+  final NavigationCubit _navigationCubit;
   final NotificationCubit _notificationCubit;
   late final Stream<List<EventModel>> personalEventDataStream;
 
@@ -62,6 +66,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showUpdatingEventNotification();
       await _eventRepository.updatePersonalEvent(event.event);
       _showEventUpdatedSuccessfullyNotification();
+      _popCurrentPage();
       yield EventsState.updated(event.event);
     } catch (e) {
       _showErrorUpdatingEventNotification(e.toString());
@@ -80,6 +85,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showErrorDeletingEventNotification(e.toString());
       this.addError(e);
     }
+  }
+
+  // ## Navigator
+  void _popCurrentPage() {
+    print("Popping current page");
+    return _navigationCubit.navigatorKey.currentState!.pop();
   }
 
   // ## Notifications

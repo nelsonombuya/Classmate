@@ -80,12 +80,4 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       isAllDayEvent: isAllDayEvent,
     ));
   }
-
-  void validateEvent() {
-    emit(EventValidation(
-      selectedStartingDate: state.selectedStartingDate,
-      selectedEndingDate: state.selectedEndingDate,
-      isAllDayEvent: state.isAllDayEvent,
-    ));
-  }
 }
