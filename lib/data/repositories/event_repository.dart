@@ -20,7 +20,7 @@ class EventRepository {
         .map(_mapSnapshotToEventModel);
   }
 
-  Future createPersonalEvent(EventModel event) async {
+  Future<void> createPersonalEvent(EventModel event) async {
     _eventsSubCollection.doc().set(event.toMap(), SetOptions(merge: true));
   }
 
