@@ -18,12 +18,11 @@ void main() async {
 
   // TODO Restructure App for Landscape Orientation
   // TODO Restructure App for Web View
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(
-      Classmate(
-        authenticationRepository: AuthenticationRepository(),
-        userRepository: UserRepository(),
-      ),
-    ),
+    (value) => runApp(Classmate(
+      authenticationRepository: AuthenticationRepository(),
+      userRepository: UserRepository(),
+    )),
   );
 }
