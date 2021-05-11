@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class EventModel {
+import 'package:equatable/equatable.dart';
+
+class EventModel extends Equatable {
   final String? id;
   final String title;
   final String description;
@@ -88,5 +90,20 @@ class EventModel {
         startDate.hashCode ^
         endDate.hashCode ^
         isAllDayEvent.hashCode;
+  }
+
+  @override
+  bool get stringify => true;
+
+  @override
+  List<Object> get props {
+    return [
+      id ?? '-',
+      title,
+      description,
+      startDate,
+      endDate,
+      isAllDayEvent,
+    ];
   }
 }

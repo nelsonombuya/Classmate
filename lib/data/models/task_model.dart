@@ -1,9 +1,12 @@
 import 'dart:convert';
 
-class TaskModel {
+import 'package:equatable/equatable.dart';
+
+class TaskModel extends Equatable {
   final String? id;
   final String title;
   final bool isDone;
+
   const TaskModel({
     this.id,
     required this.title,
@@ -63,4 +66,10 @@ class TaskModel {
     title: '-',
     isDone: false,
   );
+
+  @override
+  bool get stringify => true;
+
+  @override
+  List<Object> get props => [id ?? '-', title, isDone];
 }
