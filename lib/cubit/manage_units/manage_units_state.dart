@@ -1,13 +1,24 @@
 part of 'manage_units_cubit.dart';
 
 class ManageUnitsState extends Equatable {
-  const ManageUnitsState.initial({this.school, this.course, this.year});
+  const ManageUnitsState.initial({
+    this.school,
+    this.course,
+    this.year,
+    this.changed = false,
+  });
 
-  const ManageUnitsState.changed({this.school, this.course, this.year});
+  const ManageUnitsState.changed({
+    this.school,
+    this.course,
+    this.year,
+    this.changed = true,
+  });
 
   final SchoolModel? school;
   final CourseModel? course;
   final String? year;
+  final bool changed;
 
   @override
   List<Object> get props => [

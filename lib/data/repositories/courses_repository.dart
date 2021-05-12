@@ -24,6 +24,13 @@ class CourseRepository {
         .then(_mapQuerySnapshotToCourseModel);
   }
 
+  Future<CourseModel> getCourseDetailsFromID(String courseID) {
+    return _courseSubCollection
+        .doc(courseID)
+        .get()
+        .then(_mapQuerySnapshotToCourseModel);
+  }
+
   // ### Mappers
   List<CourseModel> _mapQuerySnapshotToCourseModelList(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {

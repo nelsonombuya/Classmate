@@ -7,10 +7,15 @@ class SchoolRepository {
 
   final CollectionReference _schoolsCollection;
 
-  Future<List<SchoolModel>> getAllSchools() async {
+  Future<List<SchoolModel>> getAllSchools() {
+    return _schoolsCollection.get().then(_mapQuerySnapshotToSchoolModelList);
+  }
+
+  Future<SchoolModel> getSchoolDetailsFromID(String schoolID) {
     return _schoolsCollection
+        .doc(schoolID)
         .get()
-        .then((snapshot) => _mapQuerySnapshotToSchoolModelList(snapshot));
+        .then(_mapDocumentSnapshotToSchoolModel);
   }
 
   // ### Mappers
@@ -18,5 +23,9 @@ class SchoolRepository {
     return snapshot.docs.map((doc) {
       return SchoolModel.fromMap(doc.data()).copyWith(id: doc.id);
     }).toList();
+  }
+
+  SchoolModel _mapDocumentSnapshotToSchoolModel(DocumentSnapshot snapshot) {
+    return SchoolModel.fromMap(snapshot.data()!).copyWith(id: snapshot.id);
   }
 }
