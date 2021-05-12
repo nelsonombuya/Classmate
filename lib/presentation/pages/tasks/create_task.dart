@@ -48,7 +48,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
-      title: "Create Task",
+      title: widget.task == null ? "Create Task" : "Edit Task",
       actions: [
         BlocBuilder<CreateTaskCubit, CreateTaskState>(
           builder: (context, state) {

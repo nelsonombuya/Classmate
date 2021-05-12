@@ -62,7 +62,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
-      title: "Create Event",
+      title: widget.event == null ? "Create Event" : "Edit Event",
       actions: [
         BlocBuilder<CreateEventCubit, CreateEventState>(
           builder: (context, state) {
