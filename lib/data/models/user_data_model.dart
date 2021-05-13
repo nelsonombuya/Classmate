@@ -55,7 +55,7 @@ class UserDataModel extends Equatable {
       course: map['course'],
       school: map['school'],
       year: map['year'],
-      registeredUnits: List<String>.from(map['registeredUnits']),
+      registeredUnits: List<String>.from(map['registeredUnits'] ?? []),
     );
   }
 

@@ -25,6 +25,7 @@ class ThemePreset {
   late final TextStyle headline3;
   late final TextStyle headline5;
   late final TextStyle subtitle1;
+  late final TextStyle subtitle2;
   late final TextStyle headline6;
   late final TextStyle bodyText1;
   late final TextStyle bodyText2;
@@ -57,6 +58,7 @@ class ThemePreset {
     headline5 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     headline6 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     subtitle1 = TextStyle(fontFamily: 'Averta', color: subtitle1Color);
+    subtitle2 = TextStyle(fontFamily: 'Averta');
     bodyText1 = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
     bodyText2 = TextStyle(fontFamily: 'Averta', color: body2TextColor);
     caption = GoogleFonts.montserrat(color: disabledColor);

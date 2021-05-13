@@ -104,7 +104,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
           .then((newUserData) => _userRepository.setUserData(newUserData));
 
       _showCourseDetailsSavedNotification();
-      _popCurrentPage();
+      _navigationCubit.popCurrentPage();
     } catch (e) {
       _showErrorSavingCourseDetailsNotification(e.toString());
       this.addError(e);
@@ -149,11 +149,6 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
       title: "Error Saving Course Details",
       type: NotificationType.Danger,
     );
-  }
-
-  // ### Navigation
-  void _popCurrentPage() {
-    return _navigationCubit.navigatorKey.currentState!.pop();
   }
 
   // ### Mappers
