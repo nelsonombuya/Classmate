@@ -1,20 +1,20 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../constants/device_query.dart';
 import '../../../../cubit/manage_units/manage_units_cubit.dart';
 import '../../../../cubit/navigation/navigation_cubit.dart';
 import '../../../../cubit/notification/notification_cubit.dart';
-import '../../../../data/models/course_model.dart';
-import '../../../../data/models/school_model.dart';
 import '../../../../data/repositories/school_repository.dart';
 import '../../../../data/repositories/user_repository.dart';
 import '../../../common_widgets/form_view.dart';
 import '../../../common_widgets/no_data_found.dart';
 import 'widgets/course_dropdownformfield.dart';
-import 'widgets/school_dropdownformfield.dart';
 import 'widgets/list_of_units.dart';
+import 'widgets/school_dropdownformfield.dart';
+import 'widgets/session_dropdownformfield.dart';
 import 'widgets/year_dropdownformfield.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageUnits extends StatelessWidget {
   final SchoolRepository _schoolRepository = SchoolRepository();
@@ -46,6 +46,7 @@ class _ManageUnitsView extends StatelessWidget {
             bool enabled = (state.school != null &&
                 state.course != null &&
                 state.year != null &&
+                state.session != null &&
                 state.changed == true);
             return TextButton(
               onPressed: enabled
@@ -88,15 +89,35 @@ class _ManageUnitsView extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-                  buildWhen: (previous, next) => previous.course != next.course,
-                  builder: (context, state) {
-                    return (state.course != null)
-                        ? YearDropdownFormField(state)
-                        : SizedBox();
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                        buildWhen: (previous, next) =>
+                            previous.course != next.course,
+                        builder: (context, state) {
+                          return (state.course != null)
+                              ? YearDropdownFormField(state)
+                              : SizedBox();
+                        },
+                      ),
+                    ),
+                    SizedBox(width: _deviceQuery.safeWidth(4.0)),
+                    Expanded(
+                      child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                        buildWhen: (previous, next) =>
+                            previous.course != next.course,
+                        builder: (context, state) {
+                          return (state.course != null)
+                              ? SessionDropdownFormField(state)
+                              : SizedBox();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                SizedBox(height: _deviceQuery.safeHeight(6.0)),
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
                   buildWhen: (previous, next) => previous.year != next.year,
                   builder: (context, state) {

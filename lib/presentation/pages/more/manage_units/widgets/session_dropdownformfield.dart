@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../cubit/manage_units/manage_units_cubit.dart';
+import '../../../../../data/models/session_model.dart';
 import '../../../../common_widgets/no_data_found.dart';
 
-class YearDropdownFormField extends StatelessWidget {
-  const YearDropdownFormField(this._state, {Key? key}) : super(key: key);
+class SessionDropdownFormField extends StatelessWidget {
+  const SessionDropdownFormField(this._state, {Key? key}) : super(key: key);
 
   final ManageUnitsState _state;
 
@@ -15,38 +16,38 @@ class YearDropdownFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Year",
+          "Session",
           style: Theme.of(context).textTheme.headline6,
         ),
-        FutureBuilder<List<String>>(
-          future: context.read<ManageUnitsCubit>().getListOfYears(),
+        FutureBuilder<List<SessionModel>>(
+          future: context.read<ManageUnitsCubit>().getListOfSessions(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator.adaptive();
             }
             if (snapshot.hasData) {
-              return DropdownButtonFormField<String>(
-                hint: Text("Select a year"),
-                value: _state.year,
-                onChanged: (String? year) {
-                  if (year != null) {
+              return DropdownButtonFormField<SessionModel>(
+                hint: Text("Select a session"),
+                value: _state.session,
+                onChanged: (SessionModel? session) {
+                  if (session != null) {
                     return context
                         .read<ManageUnitsCubit>()
-                        .changeSelectedYear(year);
+                        .changeSelectedSession(session);
                   }
                 },
                 items: snapshot.data!
                     .map(
-                      (String year) => DropdownMenuItem(
-                        value: year,
-                        child: Text(year),
+                      (SessionModel session) => DropdownMenuItem(
+                        value: session,
+                        child: Text(session.name ?? session.id ?? "-"),
                       ),
                     )
                     .toList(),
               );
             }
             return NoDataFound(
-              message: "No years available for this school",
+              message: "No sessions available for this school",
             );
           },
         ),

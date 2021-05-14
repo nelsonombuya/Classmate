@@ -3,9 +3,11 @@ import 'package:equatable/equatable.dart';
 
 import '../../data/models/course_model.dart';
 import '../../data/models/school_model.dart';
+import '../../data/models/session_model.dart';
 import '../../data/models/user_data_model.dart';
 import '../../data/repositories/courses_repository.dart';
 import '../../data/repositories/school_repository.dart';
+import '../../data/repositories/sessions_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../navigation/navigation_cubit.dart';
 import '../notification/notification_cubit.dart';
@@ -14,37 +16,42 @@ part 'manage_units_state.dart';
 
 class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   ManageUnitsCubit({
-    required SchoolRepository schoolRepository,
     required UserRepository userRepository,
-    required NotificationCubit notificationCubit,
+    required SchoolRepository schoolRepository,
     required NavigationCubit navigationCubit,
-  })   : _schoolRepository = schoolRepository,
-        _userRepository = userRepository,
-        _notificationCubit = notificationCubit,
+    required NotificationCubit notificationCubit,
+  })   : _userRepository = userRepository,
+        _schoolRepository = schoolRepository,
         _navigationCubit = navigationCubit,
+        _notificationCubit = notificationCubit,
         super(ManageUnitsState.initial());
 
-  late CourseRepository _courseRepository;
-
-  final SchoolRepository _schoolRepository;
-  final UserRepository _userRepository;
-  final NotificationCubit _notificationCubit;
   final NavigationCubit _navigationCubit;
+  final NotificationCubit _notificationCubit;
+
+  final UserRepository _userRepository;
+  final SchoolRepository _schoolRepository;
+
+  late CourseRepository _courseRepository;
+  late SessionRepository _sessionRepository;
 
   Future<void> checkUserData() async {
     return await _userRepository.getUserData().then((userData) async {
       if (!state.changed &&
           userData?.schoolId != null &&
           userData?.courseId != null &&
+          userData?.sessionId != null &&
           userData?.year != null &&
-          userData?.registeredUnitCodes != null) {
+          userData?.registeredUnitIds != null) {
         SchoolModel school = await _getUserSchool(userData!);
         CourseModel course = await _getUserCourse(userData, school);
+        SessionModel session = await _getUserSession(userData, school);
         String year = _mapYearToPrettyYear(userData.year!);
         emit(ManageUnitsState.changed(
           changed: false,
           school: school,
           course: course,
+          session: session,
           year: year,
         ));
       }
@@ -58,6 +65,11 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   Future<List<CourseModel>> getListOfCourses() async {
     _initializeCourseRepository(state.school!);
     return await _courseRepository.getAllCourses();
+  }
+
+  Future<List<SessionModel>> getListOfSessions() async {
+    _initializeSessionRepository(state.school!);
+    return await _sessionRepository.getAllSessions();
   }
 
   Future<List<String>> getListOfYears() async {
@@ -91,8 +103,21 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     ));
   }
 
+  void changeSelectedSession(SessionModel session) {
+    return emit(ManageUnitsState.changed(
+      school: state.school,
+      course: state.course,
+      year: state.year,
+      session: session,
+    ));
+  }
+
   void _initializeCourseRepository(SchoolModel school) {
     _courseRepository = CourseRepository(school);
+  }
+
+  void _initializeSessionRepository(SchoolModel school) {
+    _sessionRepository = SessionRepository(school);
   }
 
   Future<void> saveCourseDetailsToDatabase() async {
@@ -125,7 +150,16 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     return await _courseRepository.getCourseDetailsFromID(userData.courseId!);
   }
 
-  // ### Notifications
+  Future<SessionModel> _getUserSession(
+    UserDataModel userData,
+    SchoolModel school,
+  ) async {
+    _initializeSessionRepository(school);
+    return await _sessionRepository
+        .getSessionDetailsFromID(userData.sessionId!);
+  }
+
+  // ## Notifications
   void _showSavingCourseDetailsNotification() {
     return _notificationCubit.showAlert(
       "Saving Course Details",
@@ -152,7 +186,11 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     );
   }
 
-  // ### Mappers
+  /// ## Mappers
+  /// ### Map Year To Pretty Year
+  /// Converts the year keys in the firebase database to
+  /// a prettier and more readable string
+  /// e.g. => year1 -> Year 1
   String _mapYearToPrettyYear(String year) {
     switch (year) {
       case 'firstYear':
@@ -173,6 +211,10 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     }
   }
 
+  /// ### Map Pretty Year To Year
+  /// Converts the pretty year displayed to the user
+  /// back to the year keys found on the firebase database
+  /// for data integrity
   String _mapPrettyYearToYear(String prettyYear) {
     switch (prettyYear) {
       case 'First Year':
@@ -196,7 +238,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   List<String> _getListOfSelectedUnits() {
     return List<String>.from(state
         .course!.units[_mapPrettyYearToYear(state.year!)]
-        .map((unit) => unit['code'])
+        .map((unit) => unit['id'])
         .toList());
   }
 
@@ -205,14 +247,16 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
         ? currentUserData.copyWith(
             schoolId: state.school!.id,
             courseId: state.course!.id,
+            sessionId: state.session!.id,
             year: _mapPrettyYearToYear(state.year!),
-            registeredUnitCodes: _getListOfSelectedUnits(),
+            registeredUnitIds: _getListOfSelectedUnits(),
           )
         : UserDataModel(
             schoolId: state.school!.id,
             courseId: state.course!.id,
+            sessionId: state.session!.id,
             year: _mapPrettyYearToYear(state.year!),
-            registeredUnitCodes: _getListOfSelectedUnits(),
+            registeredUnitIds: _getListOfSelectedUnits(),
           );
   }
 }

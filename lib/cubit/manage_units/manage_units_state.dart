@@ -5,6 +5,7 @@ class ManageUnitsState extends Equatable {
     this.school,
     this.course,
     this.year,
+    this.session,
     this.changed = false,
   });
 
@@ -12,11 +13,13 @@ class ManageUnitsState extends Equatable {
     this.school,
     this.course,
     this.year,
+    this.session,
     this.changed = true,
   });
 
   final SchoolModel? school;
   final CourseModel? course;
+  final SessionModel? session;
   final String? year;
   final bool changed;
 
@@ -25,5 +28,6 @@ class ManageUnitsState extends Equatable {
         school ?? 'No School Selected',
         course ?? 'No Course Selected',
         year ?? 'No Year Selected',
+        session ?? 'No Session Selected',
       ];
 }
