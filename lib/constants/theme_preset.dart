@@ -58,7 +58,7 @@ class ThemePreset {
     headline5 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     headline6 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     subtitle1 = TextStyle(fontFamily: 'Averta', color: subtitle1Color);
-    subtitle2 = TextStyle(fontFamily: 'Averta');
+    subtitle2 = TextStyle(fontFamily: 'Averta', color: headline2Color);
     bodyText1 = TextStyle(fontFamily: 'Averta', color: bodyTextColor);
     bodyText2 = TextStyle(fontFamily: 'Averta', color: body2TextColor);
     caption = GoogleFonts.montserrat(color: disabledColor);
