@@ -68,14 +68,18 @@ class _EventsPageState extends State<EventsPage> {
                         caption: 'Delete',
                         icon: Icons.delete_rounded,
                         color: Theme.of(context).errorColor,
-                        onTap: () => context
-                            .read<NotificationCubit>()
-                            .showDeleteDialog(
-                                DialogType.DeleteEvent,
-                                // * If the dialog is accepted
-                                // * It will send an event deleted request
-                                () => _eventsBloc
-                                    .add(PersonalEventDeleted(events[index]))),
+                        onTap: () =>
+                            context.read<NotificationCubit>().showDeleteDialog(
+                                  DialogType.DeleteEvent,
+                                  // * If the dialog is accepted
+                                  // * It will send an event deleted request
+                                  () => _eventsBloc.add(
+                                    PersonalEventDeleted(
+                                      events[index],
+                                      popCurrentPage: false,
+                                    ),
+                                  ),
+                                ),
                       ),
                     ],
                     child: ListTile(

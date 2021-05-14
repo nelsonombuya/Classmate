@@ -71,11 +71,11 @@ class NotificationCubit extends Cubit<NotificationState> {
       positiveActionIcon: Icons.logout,
       descriptionIcon: Icons.warning_amber_rounded,
       positiveActionOnPressed: () {
-        _navigationCubit.navigatorKey.currentState!.pop();
+        _navigationCubit.popCurrentPage();
         return _authenticationBloc.add(AuthenticationLogoutRequested());
       },
       negativeActionOnPressed: () {
-        return _navigationCubit.navigatorKey.currentState!.pop();
+        return _navigationCubit.popCurrentPage();
       },
     );
   }
@@ -103,11 +103,11 @@ class NotificationCubit extends Cubit<NotificationState> {
       positiveActionIcon: Icons.delete_rounded,
       type: NotificationType.Danger,
       positiveActionOnPressed: () {
-        _navigationCubit.navigatorKey.currentState!.pop();
+        _navigationCubit.popCurrentPage();
         return deleteFunction();
       },
       negativeActionOnPressed: () {
-        return _navigationCubit.navigatorKey.currentState!.pop();
+        return _navigationCubit.popCurrentPage();
       },
     );
   }

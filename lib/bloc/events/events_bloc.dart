@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:classmate/cubit/navigation/navigation_cubit.dart';
+import '../../cubit/navigation/navigation_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../cubit/notification/notification_cubit.dart';
@@ -53,6 +53,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
       await _eventRepository.createPersonalEvent(newEvent);
       _showEventCreatedSuccessfullyNotification();
+      _navigationCubit.popCurrentPage();
       yield EventsState.created(newEvent);
     } catch (e) {
       _showErrorCreatingEventNotification(e.toString());
@@ -66,7 +67,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showUpdatingEventNotification();
       await _eventRepository.updatePersonalEvent(event.event);
       _showEventUpdatedSuccessfullyNotification();
-      _popCurrentPage();
+      _navigationCubit.popCurrentPage();
       yield EventsState.updated(event.event);
     } catch (e) {
       _showErrorUpdatingEventNotification(e.toString());
@@ -80,17 +81,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showDeletingEventNotification();
       await _eventRepository.deletePersonalEvent(event.event);
       _showEventDeletedSuccessfullyNotification();
+      if (event.popCurrentPage) _navigationCubit.popCurrentPage();
       yield EventsState.deleted(event.event);
     } on Exception catch (e) {
       _showErrorDeletingEventNotification(e.toString());
       this.addError(e);
     }
-  }
-
-  // ## Navigator
-  void _popCurrentPage() {
-    print("Popping current page");
-    return _navigationCubit.navigatorKey.currentState!.pop();
   }
 
   // ## Notifications
@@ -131,7 +127,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   void _showEventDeletedSuccessfullyNotification() {
     return _notificationCubit.showAlert(
-      "Event Updated",
+      "Event Deleted",
       type: NotificationType.Success,
     );
   }

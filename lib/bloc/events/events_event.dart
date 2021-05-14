@@ -49,9 +49,11 @@ class PersonalEventUpdated extends ExistingEvent {
 }
 
 class PersonalEventDeleted extends ExistingEvent {
-  const PersonalEventDeleted(this.event) : super(event);
+  const PersonalEventDeleted(this.event, {this.popCurrentPage = true})
+      : super(event);
 
   final EventModel event;
+  final bool popCurrentPage;
 
   @override
   List<Object> get props => [event];
