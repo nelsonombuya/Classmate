@@ -5,35 +5,35 @@ import 'package:equatable/equatable.dart';
 class UserDataModel extends Equatable {
   final String? firstName;
   final String? lastName;
-  final String? course;
-  final String? school;
+  final String? courseId;
+  final String? schoolId;
   final String? year;
-  final List<String>? registeredUnits;
+  final List<String>? registeredUnitCodes;
 
   const UserDataModel({
     this.firstName,
     this.lastName,
-    this.course,
-    this.school,
+    this.courseId,
+    this.schoolId,
     this.year,
-    this.registeredUnits,
+    this.registeredUnitCodes,
   });
 
   UserDataModel copyWith({
     String? firstName,
     String? lastName,
-    String? course,
-    String? school,
+    String? courseId,
+    String? schoolId,
     String? year,
-    List<String>? registeredUnits,
+    List<String>? registeredUnitCodes,
   }) {
     return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      course: course ?? this.course,
-      school: school ?? this.school,
+      courseId: courseId ?? this.courseId,
+      schoolId: schoolId ?? this.schoolId,
       year: year ?? this.year,
-      registeredUnits: registeredUnits ?? this.registeredUnits,
+      registeredUnitCodes: registeredUnitCodes ?? this.registeredUnitCodes,
     );
   }
 
@@ -41,10 +41,10 @@ class UserDataModel extends Equatable {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'course': course,
-      'school': school,
+      'courseId': courseId,
+      'schoolId': schoolId,
       'year': year,
-      'registeredUnits': registeredUnits,
+      'registeredUnitCodes': registeredUnitCodes,
     };
   }
 
@@ -52,10 +52,10 @@ class UserDataModel extends Equatable {
     return UserDataModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      course: map['course'],
-      school: map['school'],
+      courseId: map['courseId'],
+      schoolId: map['schoolId'],
       year: map['year'],
-      registeredUnits: List<String>.from(map['registeredUnits']),
+      registeredUnitCodes: List<String>.from(map['registeredUnitCodes'] ?? []),
     );
   }
 
@@ -72,10 +72,10 @@ class UserDataModel extends Equatable {
     return [
       "First Name: ${firstName ?? '-'}",
       "Last Name: ${lastName ?? '-'}",
-      "School ID: ${school ?? '-'}",
-      "Course ID: ${course ?? '-'}",
+      "School ID: ${schoolId ?? '-'}",
+      "Course ID: ${courseId ?? '-'}",
       "Year: ${year ?? '-'}",
-      "Registered Units: ${registeredUnits ?? '-'}",
+      "Registered Units: ${registeredUnitCodes ?? '-'}",
     ];
   }
 }

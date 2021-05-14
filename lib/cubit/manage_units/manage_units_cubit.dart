@@ -1,13 +1,14 @@
 import 'package:bloc/bloc.dart';
-import 'package:classmate/cubit/navigation/navigation_cubit.dart';
-import 'package:classmate/cubit/notification/notification_cubit.dart';
-import 'package:classmate/data/models/course_model.dart';
-import 'package:classmate/data/models/school_model.dart';
-import 'package:classmate/data/models/user_data_model.dart';
-import 'package:classmate/data/repositories/courses_repository.dart';
-import 'package:classmate/data/repositories/school_repository.dart';
-import 'package:classmate/data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../data/models/course_model.dart';
+import '../../data/models/school_model.dart';
+import '../../data/models/user_data_model.dart';
+import '../../data/repositories/courses_repository.dart';
+import '../../data/repositories/school_repository.dart';
+import '../../data/repositories/user_repository.dart';
+import '../navigation/navigation_cubit.dart';
+import '../notification/notification_cubit.dart';
 
 part 'manage_units_state.dart';
 
@@ -33,13 +34,13 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   Future<void> checkUserData() async {
     return await _userRepository.getUserData().then((userData) async {
       if (!state.changed &&
-          userData?.school != null &&
-          userData?.course != null &&
+          userData?.schoolId != null &&
+          userData?.courseId != null &&
           userData?.year != null &&
-          userData?.registeredUnits != null) {
+          userData?.registeredUnitCodes != null) {
         SchoolModel school = await _getUserSchool(userData!);
         CourseModel course = await _getUserCourse(userData, school);
-        String year = _mapYearKeysToString(userData.year!);
+        String year = _mapYearToPrettyYear(userData.year!);
         emit(ManageUnitsState.changed(
           changed: false,
           school: school,
@@ -62,13 +63,13 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   Future<List<String>> getListOfYears() async {
     return await _courseRepository
         .getCourseDetails(state.course!)
-        .then((course) => course.units.keys.map(_mapYearKeysToString).toList());
+        .then((course) => course.units.keys.map(_mapYearToPrettyYear).toList());
   }
 
   Future<List> getListOfUnits() async {
     return await _courseRepository
         .getCourseDetails(state.course!)
-        .then((course) => course.units[_mapYearStringToKey(state.year!)]);
+        .then((course) => course.units[_mapPrettyYearToYear(state.year!)]);
   }
 
   void changeSelectedSchool(SchoolModel school) {
@@ -104,7 +105,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
           .then((newUserData) => _userRepository.setUserData(newUserData));
 
       _showCourseDetailsSavedNotification();
-      _popCurrentPage();
+      _navigationCubit.popCurrentPage();
     } catch (e) {
       _showErrorSavingCourseDetailsNotification(e.toString());
       this.addError(e);
@@ -113,7 +114,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
 
   // ### Getting User Data
   Future<SchoolModel> _getUserSchool(UserDataModel userData) async {
-    return await _schoolRepository.getSchoolDetailsFromID(userData.school!);
+    return await _schoolRepository.getSchoolDetailsFromID(userData.schoolId!);
   }
 
   Future<CourseModel> _getUserCourse(
@@ -121,7 +122,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     SchoolModel school,
   ) async {
     _initializeCourseRepository(school);
-    return await _courseRepository.getCourseDetailsFromID(userData.course!);
+    return await _courseRepository.getCourseDetailsFromID(userData.courseId!);
   }
 
   // ### Notifications
@@ -151,14 +152,9 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     );
   }
 
-  // ### Navigation
-  void _popCurrentPage() {
-    return _navigationCubit.navigatorKey.currentState!.pop();
-  }
-
   // ### Mappers
-  String _mapYearKeysToString(String key) {
-    switch (key) {
+  String _mapYearToPrettyYear(String year) {
+    switch (year) {
       case 'firstYear':
         return 'First Year';
       case 'secondYear':
@@ -177,8 +173,8 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     }
   }
 
-  String _mapYearStringToKey(String year) {
-    switch (year) {
+  String _mapPrettyYearToYear(String prettyYear) {
+    switch (prettyYear) {
       case 'First Year':
         return 'firstYear';
       case 'Second Year':
@@ -199,7 +195,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
 
   List<String> _getListOfSelectedUnits() {
     return List<String>.from(state
-        .course!.units[_mapYearStringToKey(state.year!)]
+        .course!.units[_mapPrettyYearToYear(state.year!)]
         .map((unit) => unit['code'])
         .toList());
   }
@@ -207,16 +203,16 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   UserDataModel _updateUserData(UserDataModel? currentUserData) {
     return currentUserData != null
         ? currentUserData.copyWith(
-            school: state.school!.id,
-            course: state.course!.id,
-            year: _mapYearStringToKey(state.year!),
-            registeredUnits: _getListOfSelectedUnits(),
+            schoolId: state.school!.id,
+            courseId: state.course!.id,
+            year: _mapPrettyYearToYear(state.year!),
+            registeredUnitCodes: _getListOfSelectedUnits(),
           )
         : UserDataModel(
-            school: state.school!.id,
-            course: state.course!.id,
-            year: _mapYearStringToKey(state.year!),
-            registeredUnits: _getListOfSelectedUnits(),
+            schoolId: state.school!.id,
+            courseId: state.course!.id,
+            year: _mapPrettyYearToYear(state.year!),
+            registeredUnitCodes: _getListOfSelectedUnits(),
           );
   }
 }

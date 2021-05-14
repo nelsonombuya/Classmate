@@ -8,4 +8,6 @@ class NavigationCubit extends Cubit<NavigationState> {
   NavigationCubit(this.navigatorKey) : super(NavigationInitial());
 
   final GlobalKey<NavigatorState> navigatorKey;
+
+  void popCurrentPage() => navigatorKey.currentState!.pop();
 }

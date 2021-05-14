@@ -1,5 +1,5 @@
-import 'package:classmate/data/models/course_model.dart';
-import 'package:classmate/data/models/school_model.dart';
+import '../models/course_model.dart';
+import '../models/school_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CourseRepository {

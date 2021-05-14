@@ -1,17 +1,17 @@
-import 'package:classmate/constants/device_query.dart';
-import 'package:classmate/cubit/manage_units/manage_units_cubit.dart';
-import 'package:classmate/cubit/navigation/navigation_cubit.dart';
-import 'package:classmate/cubit/notification/notification_cubit.dart';
-import 'package:classmate/data/models/course_model.dart';
-import 'package:classmate/data/models/school_model.dart';
-import 'package:classmate/data/repositories/school_repository.dart';
-import 'package:classmate/data/repositories/user_repository.dart';
-import 'package:classmate/presentation/common_widgets/form_view.dart';
-import 'package:classmate/presentation/common_widgets/no_data_found.dart';
-import 'package:classmate/presentation/pages/more/manage_units/widgets/course_dropdownformfield.dart';
-import 'package:classmate/presentation/pages/more/manage_units/widgets/school_dropdownformfield.dart';
-import 'package:classmate/presentation/pages/more/manage_units/widgets/confirm_list_of_units.dart';
-import 'package:classmate/presentation/pages/more/manage_units/widgets/year_dropdownformfield.dart';
+import '../../../../constants/device_query.dart';
+import '../../../../cubit/manage_units/manage_units_cubit.dart';
+import '../../../../cubit/navigation/navigation_cubit.dart';
+import '../../../../cubit/notification/notification_cubit.dart';
+import '../../../../data/models/course_model.dart';
+import '../../../../data/models/school_model.dart';
+import '../../../../data/repositories/school_repository.dart';
+import '../../../../data/repositories/user_repository.dart';
+import '../../../common_widgets/form_view.dart';
+import '../../../common_widgets/no_data_found.dart';
+import 'widgets/course_dropdownformfield.dart';
+import 'widgets/school_dropdownformfield.dart';
+import 'widgets/list_of_units.dart';
+import 'widgets/year_dropdownformfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,59 +36,79 @@ class ManageUnits extends StatelessWidget {
 class _ManageUnitsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    DeviceQuery _deviceQuery = DeviceQuery(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
-    return BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-      builder: (context, state) {
-        return FormView(
-          title: "Manage Units",
-          actions: [
-            if (state.school != null &&
+    return FormView(
+      title: "Manage Units",
+      actions: [
+        BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+          builder: (context, state) {
+            bool enabled = (state.school != null &&
                 state.course != null &&
                 state.year != null &&
-                state.changed == true)
-              TextButton(
-                onPressed: () {
-                  context
+                state.changed == true);
+            return TextButton(
+              onPressed: enabled
+                  ? () => context
                       .read<ManageUnitsCubit>()
-                      .saveCourseDetailsToDatabase();
-                },
-                child: Text(
-                  "SAVE",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(color: CupertinoColors.activeBlue),
-                ),
+                      .saveCourseDetailsToDatabase()
+                  : null,
+              child: Text(
+                "SAVE",
+                textScaleFactor: 1.2,
               ),
-          ],
-          child: FutureBuilder(
-            future: context.read<ManageUnitsCubit>().checkUserData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator.adaptive());
-              }
+            );
+          },
+        ),
+      ],
+      child: FutureBuilder(
+        future: context.read<ManageUnitsCubit>().checkUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator.adaptive());
+          }
 
-              return ListView(
-                shrinkWrap: true,
-                children: [
-                  SchoolDropdownFormField(state),
-                  SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                  if (state.school != null) CourseDropdownFormField(state),
-                  SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                  if (state.school != null && state.course != null)
-                    YearDropdownFormField(state),
-                  SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                  if (state.school != null &&
-                      state.course != null &&
-                      state.year != null)
-                    ConfirmListOfUnits(),
-                ],
-              );
-            },
-          ),
-        );
-      },
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.school != next.school,
+                  builder: (context, state) {
+                    return SchoolDropdownFormField(state);
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.school != next.school,
+                  builder: (context, state) {
+                    return (state.school != null)
+                        ? CourseDropdownFormField(state)
+                        : SizedBox();
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.course != next.course,
+                  builder: (context, state) {
+                    return (state.course != null)
+                        ? YearDropdownFormField(state)
+                        : SizedBox();
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.year != next.year,
+                  builder: (context, state) {
+                    return (state.year != null) ? ListOfUnits() : SizedBox();
+                  },
+                ),
+              ],
+            );
+          }
+          return NoDataFound(message: "Error Fetching Data");
+        },
+      ),
     );
   }
 }

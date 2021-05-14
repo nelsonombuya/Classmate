@@ -1,4 +1,4 @@
-import 'package:classmate/presentation/pages/more/manage_units/manage_units.dart';
+import 'manage_units/manage_units.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
