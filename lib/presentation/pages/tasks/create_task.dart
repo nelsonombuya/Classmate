@@ -10,30 +10,36 @@ import '../../../logic/cubit/create_task/create_task_cubit.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
 
+/// # Create Task Form
+/// The page can be used for both creating new tasks
+/// and updating existing tasks
+/// (By passing the task through the widget's constructor)
 class CreateTaskForm extends StatelessWidget {
-  const CreateTaskForm({this.task, required this.tasksBloc});
+  const CreateTaskForm({TaskModel? task, required TasksBloc tasksBloc})
+      : _task = task,
+        _tasksBloc = tasksBloc;
 
-  final TaskModel? task;
-  final TasksBloc tasksBloc;
+  final TaskModel? _task;
+  final TasksBloc _tasksBloc;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: tasksBloc),
+        BlocProvider.value(value: _tasksBloc),
         BlocProvider<CreateTaskCubit>(
           create: (context) => CreateTaskCubit(),
         ),
       ],
-      child: AddTaskFormView(task),
+      child: AddTaskFormView(_task),
     );
   }
 }
 
 class AddTaskFormView extends StatefulWidget {
-  AddTaskFormView(this.task);
+  AddTaskFormView(this._task);
 
-  final TaskModel? task;
+  final TaskModel? _task;
 
   @override
   _AddTaskFormViewState createState() => _AddTaskFormViewState();
@@ -48,7 +54,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
-      title: widget.task == null ? "Create Task" : "Edit Task",
+      title: widget._task == null ? "Create Task" : "Edit Task",
       actions: [
         BlocBuilder<CreateTaskCubit, CreateTaskState>(
           builder: (context, state) {
@@ -56,17 +62,27 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
               onPressed: () {
                 FocusScope.of(context).unfocus();
                 if (_formKey.currentState!.validate()) {
-                  if (widget.task != null) {
-                    context.read<TasksBloc>().add(PersonalTaskUpdated(widget
-                        .task!
-                        .copyWith(title: _taskTitleController.text)));
+                  if (widget._task != null) {
+                    context.read<TasksBloc>().add(
+                          PersonalTaskUpdated(
+                            widget._task!.copyWith(
+                              title: _taskTitleController.text,
+                            ),
+                          ),
+                        );
                   } else {
-                    context.read<TasksBloc>().add(PersonalTaskCreated(
-                        title: _taskTitleController.text.trim()));
+                    context.read<TasksBloc>().add(
+                          PersonalTaskCreated(
+                            title: _taskTitleController.text.trim(),
+                          ),
+                        );
                   }
                 }
               },
-              child: Text("SAVE"),
+              child: Text(
+                widget._task == null ? "SAVE" : "UPDATE",
+                textScaleFactor: 1.2,
+              ),
             );
           },
         ),
@@ -80,7 +96,7 @@ class _AddTaskFormViewState extends State<AddTaskFormView> {
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: CustomTextFormField(
-              size: 3.0,
+              size: 2.8,
               label: 'Task',
               controller: _taskTitleController,
               keyboardType: TextInputType.text,

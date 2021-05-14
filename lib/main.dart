@@ -67,7 +67,7 @@ class App extends StatelessWidget {
           builder: EasyLoading.init(),
           darkTheme: Themes.darkTheme,
           theme: Themes.lightTheme,
-          title: 'App',
+          title: 'Classmate',
           home: NotificationCubitListener(
             child: RedirectToFirstPage(),
           ),

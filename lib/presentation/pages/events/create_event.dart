@@ -11,32 +11,36 @@ import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/date_picker_button.dart';
 import '../../common_widgets/form_view.dart';
 
+/// # Create Event Form
+/// The page can be used for both creating new events
+/// and updating existing events
+/// (By passing the event through the widget's constructor)
 class CreateEvent extends StatelessWidget {
-  // * This page can also be used to edit events
-  // * When the event is passed through the constructor
-  const CreateEvent({this.event, required this.eventsBloc});
+  const CreateEvent({EventModel? event, required EventsBloc eventsBloc})
+      : _event = event,
+        _eventsBloc = eventsBloc;
 
-  final EventModel? event;
-  final EventsBloc eventsBloc;
+  final EventModel? _event;
+  final EventsBloc _eventsBloc;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: eventsBloc),
+        BlocProvider.value(value: _eventsBloc),
         BlocProvider<CreateEventCubit>(
           create: (context) => CreateEventCubit(),
         ),
       ],
-      child: _CreateEventView(event),
+      child: _CreateEventView(_event),
     );
   }
 }
 
 class _CreateEventView extends StatefulWidget {
-  const _CreateEventView(this.event);
+  const _CreateEventView(this._event);
 
-  final EventModel? event;
+  final EventModel? _event;
 
   @override
   _CreateEventViewState createState() => _CreateEventViewState();
@@ -50,10 +54,10 @@ class _CreateEventViewState extends State<_CreateEventView> {
   @override
   void initState() {
     super.initState();
-    if (widget.event != null) {
-      _titleController.text = widget.event!.title;
-      _descriptionController.text = widget.event!.description;
-      context.read<CreateEventCubit>().updateEventDetails(widget.event!);
+    if (widget._event != null) {
+      _titleController.text = widget._event!.title;
+      _descriptionController.text = widget._event!.description;
+      context.read<CreateEventCubit>().updateEventDetails(widget._event!);
     }
   }
 
@@ -62,7 +66,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
-      title: widget.event == null ? "Create Event" : "Edit Event",
+      title: widget._event == null ? "Create Event" : "Edit Event",
       actions: [
         BlocBuilder<CreateEventCubit, CreateEventState>(
           builder: (context, state) {
@@ -70,10 +74,10 @@ class _CreateEventViewState extends State<_CreateEventView> {
               onPressed: () {
                 FocusScope.of(context).unfocus();
                 if (_formKey.currentState!.validate()) {
-                  if (widget.event != null) {
+                  if (widget._event != null) {
                     return context.read<EventsBloc>().add(
                           PersonalEventUpdated(
-                            widget.event!.copyWith(
+                            widget._event!.copyWith(
                               title: _titleController.text.trim(),
                               description: _descriptionController.text.trim(),
                               startDate: state.selectedStartingDate,
@@ -96,11 +100,8 @@ class _CreateEventViewState extends State<_CreateEventView> {
                 }
               },
               child: Text(
-                widget.event == null ? "SAVE" : "UPDATE",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(color: CupertinoColors.activeBlue),
+                widget._event == null ? "SAVE" : "UPDATE",
+                textScaleFactor: 1.2,
               ),
             );
           },
@@ -108,9 +109,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
       ],
       child: Column(
         children: [
-          SizedBox(
-            height: _deviceQuery.safeHeight(2.0),
-          ),
+          SizedBox(height: _deviceQuery.safeHeight(2.0)),
           Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -123,9 +122,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
                   keyboardType: TextInputType.text,
                   validator: Validator.titleValidator,
                 ),
-                SizedBox(
-                  height: _deviceQuery.safeHeight(2.0),
-                ),
+                SizedBox(height: _deviceQuery.safeHeight(2.0)),
                 CustomTextFormField(
                   maxLines: null,
                   label: 'Description',
@@ -133,18 +130,14 @@ class _CreateEventViewState extends State<_CreateEventView> {
                   keyboardType: TextInputType.multiline,
                   validator: Validator.descriptionValidator,
                 ),
-                SizedBox(
-                  height: _deviceQuery.safeHeight(3.0),
-                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<CreateEventCubit, CreateEventState>(
                   builder: (context, state) {
                     return Column(
                       children: [
                         Row(
                           children: [
-                            SizedBox(
-                              width: _deviceQuery.safeWidth(2.0),
-                            ),
+                            SizedBox(width: _deviceQuery.safeWidth(2.0)),
                             Text(
                               "All Day",
                               style: TextStyle(
