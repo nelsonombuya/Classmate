@@ -84,10 +84,10 @@ class NotificationCubit extends Cubit<NotificationState> {
     String objectToBeDeleted;
     switch (type) {
       case DialogType.DeleteEvent:
-        objectToBeDeleted = "Event";
+        objectToBeDeleted = "event";
         break;
       case DialogType.DeleteTask:
-        objectToBeDeleted = "Task";
+        objectToBeDeleted = "task";
         break;
       default:
         objectToBeDeleted = "";
@@ -96,7 +96,7 @@ class NotificationCubit extends Cubit<NotificationState> {
 
     return showDialogBox(
       "Are you sure you want to delete this $objectToBeDeleted?",
-      title: "Delete",
+      title: "Delete $objectToBeDeleted",
       positiveActionLabel: "DELETE ${objectToBeDeleted.toUpperCase()}",
       negativeActionLabel: "CANCEL",
       descriptionIcon: Icons.delete_rounded,
