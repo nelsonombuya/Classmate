@@ -32,7 +32,7 @@ class EventDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeviceQuery _deviceQuery = DeviceQuery(context);
+    final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
       title: "Event Details",
