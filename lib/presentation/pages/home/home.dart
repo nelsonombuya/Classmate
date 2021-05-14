@@ -1,10 +1,10 @@
-import '../../../cubit/navigation/navigation_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/events/events_bloc.dart';
 import '../../../bloc/tasks/tasks_bloc.dart';
+import '../../../cubit/navigation/navigation_cubit.dart';
 import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/event_repository.dart';
@@ -92,6 +92,7 @@ class HomePage extends StatelessWidget {
           BlocProvider<TasksBloc>(
             create: (context) => TasksBloc(
               taskRepository: _taskRepository,
+              navigationCubit: context.read<NavigationCubit>(),
               notificationCubit: context.read<NotificationCubit>(),
             ),
           ),

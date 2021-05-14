@@ -41,7 +41,7 @@ class _TasksPageState extends State<TasksPage> {
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: EdgeInsets.all(
-                  _deviceQuery.safeWidth(8.0),
+                  _deviceQuery.safeWidth(4.0),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
@@ -70,7 +70,7 @@ class _TasksPageState extends State<TasksPage> {
                         onTap: () => context
                             .read<NotificationCubit>()
                             .showDeleteDialog(
-                                DialogType.DeleteEvent,
+                                DialogType.DeleteTask,
                                 // * If the dialog is accepted
                                 // * It will send an event deleted request
                                 () => _tasksBloc
@@ -84,6 +84,7 @@ class _TasksPageState extends State<TasksPage> {
                         _tasksBloc.add(
                           PersonalTaskUpdated(
                             tasks[index].copyWith(isDone: value),
+                            silentUpdate: true,
                           ),
                         );
                       },

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
 import '../../data/models/task_model.dart';
 import '../../data/repositories/task_repository.dart';
@@ -14,12 +15,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   TasksBloc({
     required TaskRepository taskRepository,
     required NotificationCubit notificationCubit,
+    required NavigationCubit navigationCubit,
   })   : _taskRepository = taskRepository,
+        _navigationCubit = navigationCubit,
         _notificationCubit = notificationCubit,
         personalTaskDataStream = taskRepository.personalTaskDataStream,
         super(TasksState.initial());
 
   final TaskRepository _taskRepository;
+  final NavigationCubit _navigationCubit;
   final NotificationCubit _notificationCubit;
   late final Stream<List<TaskModel>> personalTaskDataStream;
 
@@ -41,6 +45,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       TaskModel newTask = TaskModel(title: event.title, isDone: false);
       await _taskRepository.createPersonalTask(newTask);
       _showTaskCreatedSuccessfullyNotification();
+      _navigationCubit.popCurrentPage();
       yield TasksState.created(newTask);
     } catch (e) {
       _showErrorCreatingTaskNotification(e.toString());
@@ -51,9 +56,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   Stream<TasksState> _mapPersonalTaskUpdatedToState(
       PersonalTaskUpdated event) async* {
     try {
-      _showUpdatingTaskNotification();
+      if (!event.silentUpdate) _showUpdatingTaskNotification();
       await _taskRepository.updatePersonalTask(event.task);
-      _showTaskUpdatedSuccessfullyNotification();
+      if (!event.silentUpdate) _showTaskUpdatedSuccessfullyNotification();
       yield TasksState.updated(event.task);
     } catch (e) {
       _showErrorUpdatingTaskNotification(e.toString());
@@ -112,7 +117,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   void _showTaskDeletedSuccessfullyNotification() {
     return _notificationCubit.showAlert(
-      "Task Updated",
+      "Task Deleted",
       type: NotificationType.Success,
     );
   }
@@ -124,7 +129,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     );
     return _notificationCubit.showSnackBar(
       message,
-      title: "Error Creating Event",
+      title: "Error Creating Task",
       type: NotificationType.Danger,
     );
   }
@@ -136,7 +141,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     );
     return _notificationCubit.showSnackBar(
       message,
-      title: "Error Updating Event",
+      title: "Error Updating Task",
       type: NotificationType.Danger,
     );
   }
