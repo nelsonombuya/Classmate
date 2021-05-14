@@ -37,6 +37,7 @@ class _ManageUnitsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+    ScrollController _scrollController = ScrollController();
 
     return FormView(
       title: "Manage Units",
@@ -72,6 +73,7 @@ class _ManageUnitsView extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView(
               shrinkWrap: true,
+              controller: _scrollController,
               children: [
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
                   buildWhen: (previous, next) => previous.school != next.school,
@@ -89,35 +91,29 @@ class _ManageUnitsView extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-                        buildWhen: (previous, next) =>
-                            previous.course != next.course,
-                        builder: (context, state) {
-                          return (state.course != null)
-                              ? YearDropdownFormField(state)
-                              : SizedBox();
-                        },
-                      ),
-                    ),
-                    SizedBox(width: _deviceQuery.safeWidth(4.0)),
-                    Expanded(
-                      child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-                        buildWhen: (previous, next) =>
-                            previous.course != next.course,
-                        builder: (context, state) {
-                          return (state.course != null)
-                              ? SessionDropdownFormField(state)
-                              : SizedBox();
-                        },
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                    buildWhen: (previous, next) =>
+                        previous.course != next.course,
+                    builder: (context, state) {
+                      return (state.course != null)
+                          ? YearDropdownFormField(state)
+                          : SizedBox();
+                    },
+                  ),
                 ),
-                SizedBox(height: _deviceQuery.safeHeight(6.0)),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) =>
+                      previous.course != next.course ||
+                      previous.session != next.session,
+                  builder: (context, state) {
+                    return (state.course != null)
+                        ? SessionDropdownFormField(state)
+                        : SizedBox();
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
                   buildWhen: (previous, next) => previous.year != next.year,
                   builder: (context, state) {

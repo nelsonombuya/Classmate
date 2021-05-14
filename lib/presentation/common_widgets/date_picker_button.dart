@@ -8,6 +8,8 @@ import '../../constants/device_query.dart';
 class DatePickerButton extends StatelessWidget {
   DatePickerButton({
     required String title,
+    String? overrideDateWithText,
+    String? overrideTimeWithText,
     IconData? icon,
     Function? onTap,
     bool allDayEvent = false,
@@ -24,6 +26,8 @@ class DatePickerButton extends StatelessWidget {
     Color? splashColor,
     Color? backgroundColor,
   })  : _title = title,
+        _overrideDateWithText = overrideDateWithText,
+        _overrideTimeWithText = overrideTimeWithText,
         _icon = icon,
         _onTap = onTap,
         _allDayEvent = allDayEvent,
@@ -41,6 +45,8 @@ class DatePickerButton extends StatelessWidget {
         _splashColor = splashColor;
 
   final String _title;
+  final String? _overrideDateWithText;
+  final String? _overrideTimeWithText;
   final IconData? _icon;
   final Function? _onTap;
   final bool _allDayEvent;
@@ -175,7 +181,9 @@ class DatePickerButton extends StatelessWidget {
           child: InkWell(
             enableFeedback: true,
             borderRadius: BorderRadius.circular(8.0),
-            onTap: () => _contextualDateTimePicker(context),
+            onTap: _onTap == null
+                ? null
+                : () => _contextualDateTimePicker(context),
             splashColor: _splashColor ?? Theme.of(context).primaryColor,
             child: Stack(
               children: [
@@ -198,7 +206,8 @@ class DatePickerButton extends StatelessWidget {
                   left: _leftPadding,
                   top: _deviceQuery.safeWidth(10),
                   child: Text(
-                    DateFormat.yMMMEd().format(_selectedDate),
+                    _overrideDateWithText ??
+                        DateFormat.yMMMEd().format(_selectedDate),
                     style: _dateStyle ??
                         (Theme.of(context).textTheme.bodyText1 == null
                             ? null
@@ -214,7 +223,8 @@ class DatePickerButton extends StatelessWidget {
                     left: _leftPadding,
                     top: _deviceQuery.safeWidth(16),
                     child: Text(
-                      DateFormat.jm().format(_selectedDate),
+                      _overrideTimeWithText ??
+                          DateFormat.jm().format(_selectedDate),
                       style: _timeStyle ??
                           (Theme.of(context).textTheme.bodyText1 == null
                               ? null

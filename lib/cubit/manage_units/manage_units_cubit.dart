@@ -97,6 +97,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
 
   void changeSelectedYear(String year) {
     return emit(ManageUnitsState.changed(
+      session: state.session,
       school: state.school,
       course: state.course,
       year: year,
