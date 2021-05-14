@@ -64,11 +64,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       firstName: firstName,
       lastName: lastName,
     );
-    await _userRepository.updateUserData(userData);
+    await _userRepository.setUserData(userData);
   }
 
   void _showSignUpLoadingNotification() {
-    return _notificationCubit.showSnackBar(
+    return _notificationCubit.showAlert(
       'Signing Up...',
       type: NotificationType.Loading,
     );
