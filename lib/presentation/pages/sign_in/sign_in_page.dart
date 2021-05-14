@@ -11,7 +11,7 @@ import '../../../data/repositories/user_repository.dart';
 import '../../common_widgets/custom_elevated_button.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
-import 'widgets/divider_with_word_at_center.dart';
+import 'widgets/divider_with_text.dart';
 import 'widgets/forgot_password_button.dart';
 import 'widgets/sign_up_button.dart';
 
@@ -100,7 +100,7 @@ class _SignInPageViewState extends State<_SignInPageView> {
             ),
           ),
           SizedBox(height: _deviceQuery.safeHeight(6.0)),
-          DividerWithWordAtCenter('OR'),
+          DividerWithText('OR'),
           SizedBox(height: _deviceQuery.safeHeight(6.0)),
           SignUpButton(),
         ],
