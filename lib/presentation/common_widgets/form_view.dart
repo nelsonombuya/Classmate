@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../constants/device_query.dart';
 import 'custom_appbar.dart';
 
+/// ## Form View
+/// Custom Template for Forms used in the app
+/// Created for consistency and ease of design
 class FormView extends StatelessWidget {
   FormView({
     String? title,
