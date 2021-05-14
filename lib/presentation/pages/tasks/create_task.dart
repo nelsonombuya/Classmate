@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/tasks/tasks_bloc.dart';
 import '../../../constants/device_query.dart';
 import '../../../constants/validator.dart';
-import '../../../cubit/create_task/create_task_cubit.dart';
 import '../../../data/models/task_model.dart';
+import '../../../logic/bloc/tasks/tasks_bloc.dart';
+import '../../../logic/cubit/create_task/create_task_cubit.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
 

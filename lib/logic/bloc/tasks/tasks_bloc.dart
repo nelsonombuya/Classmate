@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../data/models/task_model.dart';
+import '../../../data/repositories/task_repository.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import '../../data/models/task_model.dart';
-import '../../data/repositories/task_repository.dart';
 
 part 'tasks_event.dart';
 part 'tasks_state.dart';

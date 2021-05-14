@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../constants/device_query.dart';
-import '../../../../../cubit/manage_units/manage_units_cubit.dart';
+import '../../../../../logic/cubit/manage_units/manage_units_cubit.dart';
 import '../../../../common_widgets/no_data_found.dart';
 
 class ListOfUnits extends StatelessWidget {

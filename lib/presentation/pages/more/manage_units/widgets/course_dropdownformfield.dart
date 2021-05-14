@@ -1,8 +1,9 @@
-import '../../../../../cubit/manage_units/manage_units_cubit.dart';
-import '../../../../../data/models/course_model.dart';
-import '../../../../common_widgets/no_data_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../data/models/course_model.dart';
+import '../../../../../logic/cubit/manage_units/manage_units_cubit.dart';
+import '../../../../common_widgets/no_data_found.dart';
 
 class CourseDropdownFormField extends StatelessWidget {
   const CourseDropdownFormField(this._state, {Key? key}) : super(key: key);

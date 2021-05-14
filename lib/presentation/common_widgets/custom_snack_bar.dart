@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/device_query.dart';
-import '../../cubit/notification/notification_cubit.dart';
+import '../../logic/cubit/notification/notification_cubit.dart';
 
 /// ### Custom Snack Bar
 /// ! Depends on Another FlushBar

@@ -1,6 +1,6 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../../cubit/notification/notification_cubit.dart';
+import '../../logic/cubit/notification/notification_cubit.dart';
 
 /// ### Custom Alerts
 /// ! Depends on EasyLoading Package

@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import '../../cubit/navigation/navigation_cubit.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../data/models/event_model.dart';
+import '../../../data/repositories/event_repository.dart';
+import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import '../../data/models/event_model.dart';
-import '../../data/repositories/event_repository.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';

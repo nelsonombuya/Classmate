@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/authentication/authentication_bloc.dart';
-import '../cubit/navigation/navigation_cubit.dart';
-import '../cubit/notification/notification_cubit.dart';
 import '../data/repositories/authentication_repository.dart';
 import '../data/repositories/user_repository.dart';
+import '../logic/bloc/authentication/authentication_bloc.dart';
+import '../logic/cubit/navigation/navigation_cubit.dart';
+import '../logic/cubit/notification/notification_cubit.dart';
 
 /// # Global BLoC Provider
 /// Centralized widget that provides all of the necessary BLoCs to the rest of the app

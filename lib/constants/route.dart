@@ -5,7 +5,6 @@ import '../presentation/pages/sign_in/sign_in_page.dart';
 import '../presentation/pages/sign_up/sign_up_page.dart';
 import '../presentation/pages/splash/splash_page.dart';
 import '../presentation/pages/welcome/welcome_page.dart';
-import 'device_query.dart';
 
 /// This route management system can be found on:
 /// https://oflutter.com/organized-navigation-named-route-in-flutter/

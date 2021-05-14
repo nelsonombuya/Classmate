@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/events/events_bloc.dart';
-import '../../../bloc/tasks/tasks_bloc.dart';
-import '../../../cubit/navigation/navigation_cubit.dart';
-import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/event_repository.dart';
 import '../../../data/repositories/task_repository.dart';
 import '../../../data/repositories/user_repository.dart';
+import '../../../logic/bloc/events/events_bloc.dart';
+import '../../../logic/bloc/tasks/tasks_bloc.dart';
+import '../../../logic/cubit/navigation/navigation_cubit.dart';
+import '../../../logic/cubit/notification/notification_cubit.dart';
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import '../more/more_page.dart';

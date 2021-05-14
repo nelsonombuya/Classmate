@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../bloc/events/events_bloc.dart';
 import '../../../constants/device_query.dart';
-import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/event_model.dart';
+import '../../../logic/bloc/events/events_bloc.dart';
+import '../../../logic/cubit/notification/notification_cubit.dart';
 import '../../common_widgets/form_view.dart';
 import 'create_event.dart';
 

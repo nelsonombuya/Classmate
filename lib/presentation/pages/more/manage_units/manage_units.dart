@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../constants/device_query.dart';
-import '../../../../cubit/manage_units/manage_units_cubit.dart';
-import '../../../../cubit/navigation/navigation_cubit.dart';
-import '../../../../cubit/notification/notification_cubit.dart';
 import '../../../../data/repositories/school_repository.dart';
 import '../../../../data/repositories/user_repository.dart';
+import '../../../../logic/cubit/manage_units/manage_units_cubit.dart';
+import '../../../../logic/cubit/navigation/navigation_cubit.dart';
+import '../../../../logic/cubit/notification/notification_cubit.dart';
 import '../../../common_widgets/form_view.dart';
 import '../../../common_widgets/no_data_found.dart';
 import 'widgets/course_dropdownformfield.dart';

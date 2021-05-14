@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../../bloc/events/events_bloc.dart';
-import '../../../../bloc/tasks/tasks_bloc.dart';
 import '../../../../constants/device_query.dart';
+import '../../../../logic/bloc/events/events_bloc.dart';
+import '../../../../logic/bloc/tasks/tasks_bloc.dart';
 import '../../events/create_event.dart';
 import '../../tasks/create_task.dart';
 

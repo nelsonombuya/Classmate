@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../../bloc/tasks/tasks_bloc.dart';
 import '../../../constants/device_query.dart';
-import '../../../cubit/notification/notification_cubit.dart';
 import '../../../data/models/task_model.dart';
+import '../../../logic/bloc/tasks/tasks_bloc.dart';
+import '../../../logic/cubit/notification/notification_cubit.dart';
 import '../../common_widgets/no_data_found.dart';
 import 'create_task.dart';
 

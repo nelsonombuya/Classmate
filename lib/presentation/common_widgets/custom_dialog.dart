@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sweetsheet/sweetsheet.dart';
 
-import '../../cubit/notification/notification_cubit.dart';
+import '../../logic/cubit/notification/notification_cubit.dart';
 
 /// ### Custom Dialog
 /// ! Depends on sweetsheet package

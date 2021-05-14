@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/course_model.dart';
-import '../../data/models/school_model.dart';
-import '../../data/models/session_model.dart';
-import '../../data/models/user_data_model.dart';
-import '../../data/repositories/courses_repository.dart';
-import '../../data/repositories/school_repository.dart';
-import '../../data/repositories/sessions_repository.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../../data/models/course_model.dart';
+import '../../../data/models/school_model.dart';
+import '../../../data/models/session_model.dart';
+import '../../../data/models/user_data_model.dart';
+import '../../../data/repositories/courses_repository.dart';
+import '../../../data/repositories/school_repository.dart';
+import '../../../data/repositories/sessions_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../navigation/navigation_cubit.dart';
 import '../notification/notification_cubit.dart';
 

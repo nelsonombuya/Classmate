@@ -4,12 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/route.dart' as route;
+import '../../../constants/route.dart' as route;
+import '../../../data/models/user_data_model.dart';
+import '../../../data/repositories/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import '../../data/models/user_data_model.dart';
-import '../../data/repositories/authentication_repository.dart';
-import '../../data/repositories/user_repository.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';

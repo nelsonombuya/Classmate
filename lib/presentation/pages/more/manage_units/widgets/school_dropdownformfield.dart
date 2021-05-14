@@ -1,8 +1,9 @@
-import '../../../../../cubit/manage_units/manage_units_cubit.dart';
-import '../../../../../data/models/school_model.dart';
-import '../../../../common_widgets/no_data_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../data/models/school_model.dart';
+import '../../../../../logic/cubit/manage_units/manage_units_cubit.dart';
+import '../../../../common_widgets/no_data_found.dart';
 
 /// ! Needs ManageUnitsCubit provided by context
 class SchoolDropdownFormField extends StatelessWidget {

@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/route.dart' as route;
+import '../../../constants/route.dart' as route;
+import '../../../data/repositories/authentication_repository.dart';
+import '../../../data/repositories/user_repository.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import '../../data/repositories/authentication_repository.dart';
-import '../../data/repositories/user_repository.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
