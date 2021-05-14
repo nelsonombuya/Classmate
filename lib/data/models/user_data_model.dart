@@ -7,16 +7,18 @@ class UserDataModel extends Equatable {
   final String? lastName;
   final String? courseId;
   final String? schoolId;
+  final String? sessionId;
   final String? year;
-  final List<String>? registeredUnitCodes;
+  final List<String>? registeredUnitIds;
 
   const UserDataModel({
     this.firstName,
     this.lastName,
     this.courseId,
     this.schoolId,
+    this.sessionId,
     this.year,
-    this.registeredUnitCodes,
+    this.registeredUnitIds,
   });
 
   UserDataModel copyWith({
@@ -24,16 +26,18 @@ class UserDataModel extends Equatable {
     String? lastName,
     String? courseId,
     String? schoolId,
+    String? sessionId,
     String? year,
-    List<String>? registeredUnitCodes,
+    List<String>? registeredUnitIds,
   }) {
     return UserDataModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       courseId: courseId ?? this.courseId,
       schoolId: schoolId ?? this.schoolId,
+      sessionId: sessionId ?? this.sessionId,
       year: year ?? this.year,
-      registeredUnitCodes: registeredUnitCodes ?? this.registeredUnitCodes,
+      registeredUnitIds: registeredUnitIds ?? this.registeredUnitIds,
     );
   }
 
@@ -43,8 +47,9 @@ class UserDataModel extends Equatable {
       'lastName': lastName,
       'courseId': courseId,
       'schoolId': schoolId,
+      'sessionId': sessionId,
       'year': year,
-      'registeredUnitCodes': registeredUnitCodes,
+      'registeredUnitIds': registeredUnitIds,
     };
   }
 
@@ -54,8 +59,9 @@ class UserDataModel extends Equatable {
       lastName: map['lastName'],
       courseId: map['courseId'],
       schoolId: map['schoolId'],
+      sessionId: map['sessionId'],
       year: map['year'],
-      registeredUnitCodes: List<String>.from(map['registeredUnitCodes'] ?? []),
+      registeredUnitIds: List<String>.from(map['registeredUnitIds'] ?? []),
     );
   }
 
@@ -74,8 +80,9 @@ class UserDataModel extends Equatable {
       "Last Name: ${lastName ?? '-'}",
       "School ID: ${schoolId ?? '-'}",
       "Course ID: ${courseId ?? '-'}",
+      "Session ID: ${sessionId ?? '-'}",
       "Year: ${year ?? '-'}",
-      "Registered Units: ${registeredUnitCodes ?? '-'}",
+      "Registered Units: ${registeredUnitIds ?? '-'}",
     ];
   }
 }
