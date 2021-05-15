@@ -1,3 +1,4 @@
+import 'package:classmate/logic/cubit/school/school_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,6 +97,11 @@ class HomePage extends StatelessWidget {
               notificationCubit: context.read<NotificationCubit>(),
             ),
           ),
+          BlocProvider<SchoolCubit>(
+            create: (context) => SchoolCubit(
+              userRepository: context.read<UserRepository>(),
+            ),
+          )
         ],
         child: _HomeView(
           pages: _pages,

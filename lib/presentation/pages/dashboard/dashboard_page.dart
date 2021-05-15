@@ -1,5 +1,10 @@
+import 'package:classmate/data/models/lesson_model.dart';
+import 'package:classmate/logic/cubit/school/school_cubit.dart';
+import 'package:classmate/presentation/common_widgets/no_data_found.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -9,12 +14,134 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    // DeviceQuery _deviceQuery = DeviceQuery(context);
-    // ScrollController _listViewController = ScrollController();
-    // SessionCubit _sessionCubit = BlocProvider.of<SessionCubit>(context);
-    // UserModel _currentUser = AuthenticationRepository().getCurrentUser()!;
-    // String _currentUserUid = _currentUser.uid;
-    return Container();
+    return FutureBuilder<Stream<List<LessonModel>>>(
+        future: context.read<SchoolCubit>().getLessonsStream(),
+        builder: (context, futureSnapshot) {
+          if (futureSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+
+          if (futureSnapshot.hasData && futureSnapshot.data != null) {
+            return StreamBuilder<List<LessonModel>>(
+              stream: futureSnapshot.data,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+
+                if (snapshot.hasData && snapshot.data != null) {
+                  var listOfLessons = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: listOfLessons.length,
+                    itemBuilder: (context, index) {
+                      var currentLesson = listOfLessons[index];
+                      return Text('currentLesson');
+                    },
+                  );
+                }
+
+                return NoDataFound(
+                  message: 'No Lessons Found.\nKindly register your units',
+                );
+              },
+            );
+          }
+          return NoDataFound(
+            message: "No Data Found.\nKindly register your units",
+          );
+        });
+  }
+}
+//     List<UnitRepository> units = context.read<SchoolCubit>().unitRepositoryList;
+
+//     return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: units.length,
+//       controller: _unitScrollController,
+//       itemBuilder: (context, index) {
+//         if (units.isNotEmpty) {
+//           UnitRepository unitRepository = units[index];
+//           return FutureBuilder<UnitModel>(
+//             future: unitRepository.getUnitDetails(),
+//             builder: (context, unitSnapshot) {
+//               if (unitSnapshot.connectionState == ConnectionState.waiting) {
+//                 return CircularProgressIndicator.adaptive();
+//               }
+
+//               if (unitSnapshot.hasData && unitSnapshot.data != null) {
+//                 UnitModel currentUnit = unitSnapshot.data!;
+//                 return Column(
+//                   children: [
+//                     StreamBuilder<List<LessonModel>>(
+//                       stream: unitRepository.lessonRepository.lessonsDataStream,
+//                       builder: (context, lessonSnapshot) {
+//                         if (lessonSnapshot.connectionState ==
+//                             ConnectionState.waiting) {
+//                           return Center(
+//                             child: CircularProgressIndicator.adaptive(),
+//                           );
+//                         }
+
+//                         if (lessonSnapshot.hasData &&
+//                             lessonSnapshot.data != null) {
+//                           var lessons = lessonSnapshot.data;
+
+//                           return Padding(
+//                             padding: EdgeInsets.all(
+//                               _deviceQuery.safeWidth(4.0),
+//                             ),
+//                             child: ClipRRect(
+//                               borderRadius: BorderRadius.circular(8.0),
+//                               child: ListTile(
+//                                 enableFeedback: true,
+//                                 leading: Icon(
+//                                   Icons.class__rounded,
+//                                   color: CupertinoColors.activeOrange,
+//                                 ),
+//                                 contentPadding: EdgeInsets.symmetric(
+//                                   vertical: 10,
+//                                   horizontal: 16,
+//                                 ),
+//                                 onTap:
+//                                     () {}, // TODO Changing Class details for Class Reps
+//                                 tileColor: _deviceQuery.brightness ==
+//                                         Brightness.light
+//                                     ? CupertinoColors.systemGroupedBackground
+//                                     : CupertinoColors.darkBackgroundGray,
+//                                 title: Text(
+//                                   "${currentUnit.name}",
+//                                   style: Theme.of(context).textTheme.headline6,
+//                                 ),
+//                               ),
+//                             ),
+//                           );
+//                         }
+//                         return NoDataFound(
+//                           message: 'No Lessons Found',
+//                         );
+//                       },
+//                     )
+//                   ],
+//                 );
+//               }
+
+//               return NoDataFound(
+//                 message: 'Unit Details Not Found',
+//               );
+//             },
+//           );
+//         }
+//         return NoDataFound(
+//           message: 'No Registered Units Found.\nKindly register your units',
+//         );
+//       },
+//     );
+//   }
+// }
     //   return BlocBuilder<SessionCubit, SessionState>(
     //     builder: (context, state) {
     //       if (state.lessonStreamsList.isEmpty) {
@@ -177,6 +304,66 @@ class _DashboardPageState extends State<DashboardPage> {
     //       );
     //     },
     //   );
-    // }
-  }
-}
+//     // }
+//   }
+// }
+
+
+
+
+    //       StreamBuilder<List<LessonModel>>(
+    //         stream: unitRepository.lessonRepository.lessonsDataStream,
+    //         builder: (context, lessonSnapshot) {
+    //           if (lessonSnapshot.connectionState == ConnectionState.waiting) {
+    //             return Center(
+    //               child: CircularProgressIndicator.adaptive(),
+    //             );
+    //           }
+    //           if (lessonSnapshot.hasData && lessonSnapshot.data != null) {
+    //             var lessons = lessonSnapshot.data;
+    //             return Column(
+    //                   children: [
+    //                     Padding(
+    //                       padding:  EdgeInsets.all(_deviceQuery.safeWidth(4.0),),
+    //                       child: ClipRRect(
+    //                         borderRadius: BorderRadius.circular(8.0),
+    //                         child: ListTile(
+    //                           enableFeedback: true,
+    //                           leading: Icon(
+    //                             Icons.class__rounded,
+    //                             color: CupertinoColors.activeOrange,
+    //                           ),
+    //                           contentPadding: EdgeInsets.symmetric(
+    //                             vertical: 10,
+    //                             horizontal: 16,
+    //                           ),
+    //                           onTap:
+    //                               () {}, // TODO Changing Class details for Class Reps
+    //                           tileColor:
+    //                               _deviceQuery.brightness == Brightness.light
+    //                                   ? CupertinoColors.systemGroupedBackground
+    //                                   : CupertinoColors.darkBackgroundGray,
+    //                           title: Text(
+    //                             "$unit",
+    //                             style: Theme.of(context).textTheme.headline6,
+    //                           ),
+    //                           subtitle: Text(
+    //                             "On ${_formatFirebaseTimestamp('EEEE',)}",
+    // //                             style: TextStyle(
+    // //                               fontWeight: FontWeight.bold,
+    // //                             ),
+    // //                           ),
+    // //                           trailing: Column(
+    // //                             mainAxisAlignment: MainAxisAlignment.center,
+    // //                             crossAxisAlignment: CrossAxisAlignment.end,
+    // //                             children: [
+    // //                               Text(
+    // //                                   "${_formatFirebaseTimestamp('hh:mm aa', sessionData['class_start_time'])}"),
+    // //                               Text("TO"),
+    // //                               Text(
+    // //                                   "${_formatFirebaseTimestamp('hh:mm aa', sessionData['class_end_time'])}"),
+    // //                             ],
+    // //                           ),
+    // //                         ),
+    // //                       ),
+    // //                     ),
