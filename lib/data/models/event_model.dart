@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
@@ -50,31 +51,22 @@ class EventModel extends Equatable {
   }
 
   factory EventModel.fromMap(Map<String, dynamic> map) {
-    try {
-      return EventModel(
-        id: map['id'],
-        title: map['title'],
-        description: map['description'],
-        startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate']),
-        endDate: DateTime.fromMillisecondsSinceEpoch(map['endDate']),
-        isAllDayEvent: map['isAllDayEvent'],
-      );
-    } on TypeError catch (e) {
-      Logger logger = Logger();
-      logger.w("${e.toString()}");
-      logger.w(
-          "The DateTime variables used Firebase's Timestamp instead of the preferred MillisecondsSinceEpoch");
-      logger.w(
-          "NOTE: The program will still run and the value will be updated to MillisecondsSinceEpoch when this variable is updated in the database");
-      return EventModel(
-        id: map['id'],
-        title: map['title'],
-        description: map['description'],
-        startDate: map['startDate'].toDate(),
-        endDate: map['endDate'].toDate(),
-        isAllDayEvent: map['isAllDayEvent'],
-      );
-    }
+    return EventModel(
+      id: map['id'],
+      title: map['title'],
+      description: map['description'],
+      isAllDayEvent: map['isAllDayEvent'],
+      startDate: map['startDate'] == null
+          ? DateTime.now()
+          : map['startDate'] is Timestamp
+              ? map['startDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['startDate']),
+      endDate: map['endDate'] == null
+          ? DateTime.now()
+          : map['endDate'] is Timestamp
+              ? map['endDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['endDate']),
+    );
   }
 
   String toJson() => json.encode(toMap());

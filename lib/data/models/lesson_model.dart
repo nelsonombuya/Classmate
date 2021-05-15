@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
@@ -7,17 +8,17 @@ import 'package:classmate/data/models/unit_model.dart';
 
 class LessonModel extends Equatable {
   final String? id;
-  final UnitModel unit;
+  final UnitModel? unit;
   final String? description;
-  final DateTime startDate;
-  final DateTime endDate;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   const LessonModel({
     this.id,
-    required this.unit,
+    this.unit,
     this.description,
-    required this.startDate,
-    required this.endDate,
+    this.startDate,
+    this.endDate,
   });
 
   LessonModel copyWith({
@@ -39,37 +40,29 @@ class LessonModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'unit': unit.toMap(),
+      'unit': unit?.toMap(),
       'description': description,
-      'startDate': startDate.millisecondsSinceEpoch,
-      'endDate': endDate.millisecondsSinceEpoch,
+      'startDate': startDate?.millisecondsSinceEpoch,
+      'endDate': endDate?.millisecondsSinceEpoch,
     };
   }
 
   factory LessonModel.fromMap(Map<String, dynamic> map) {
-    try {
-      return LessonModel(
-        id: map['id'],
-        description: map['description'],
-        unit: UnitModel.fromMap(map['unit']),
-        startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate']),
-        endDate: DateTime.fromMillisecondsSinceEpoch(map['endDate']),
-      );
-    } on TypeError catch (e) {
-      Logger logger = Logger();
-      logger.w("${e.toString()}");
-      logger.w(
-          "The DateTime variables used Firebase's Timestamp instead of the preferred MillisecondsSinceEpoch");
-      logger.w(
-          "NOTE: The program will still run and the value will be updated to MillisecondsSinceEpoch when this variable is updated in the database");
-      return LessonModel(
-        id: map['id'],
-        description: map['description'],
-        unit: UnitModel.fromMap(map['unit']),
-        startDate: map['startDate'].toDate(),
-        endDate: map['endDate'].toDate(),
-      );
-    }
+    return LessonModel(
+      id: map['id'],
+      description: map['description'],
+      startDate: map['startDate'] == null
+          ? null
+          : map['startDate'] is Timestamp
+              ? map['startDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['startDate']),
+      endDate: map['endDate'] == null
+          ? null
+          : map['endDate'] is Timestamp
+              ? map['endDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['endDate']),
+      unit: map['unit'] == null ? UnitModel() : UnitModel.fromMap(map['unit']),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -84,10 +77,10 @@ class LessonModel extends Equatable {
   List<Object> get props {
     return [
       id ?? '-',
-      unit,
-      description ?? 'No Description',
-      startDate,
-      endDate,
+      unit ?? '-',
+      description ?? '-',
+      startDate ?? '-',
+      endDate ?? '-',
     ];
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
@@ -9,7 +10,8 @@ class UnitModel extends Equatable {
   final String? code;
   final DateTime? examStartDate;
   final DateTime? examEndDate;
-  UnitModel({
+
+  const UnitModel({
     this.id,
     this.name,
     this.code,
@@ -44,30 +46,21 @@ class UnitModel extends Equatable {
   }
 
   factory UnitModel.fromMap(Map<String, dynamic> map) {
-    try {
-      return UnitModel(
-        id: map['id'],
-        name: map['name'],
-        code: map['code'],
-        examStartDate:
-            DateTime.fromMillisecondsSinceEpoch(map['examStartDate']),
-        examEndDate: DateTime.fromMillisecondsSinceEpoch(map['examEndDate']),
-      );
-    } on TypeError catch (e) {
-      Logger logger = Logger();
-      logger.w("${e.toString()}");
-      logger.w(
-          "The DateTime variables used Firebase's Timestamp instead of the preferred MillisecondsSinceEpoch");
-      logger.w(
-          "NOTE: The program will still run and the value will be updated to MillisecondsSinceEpoch when this variable is updated in the database");
-      return UnitModel(
-        id: map['id'],
-        name: map['name'],
-        code: map['code'],
-        examStartDate: map['examStartDate'].toDate(),
-        examEndDate: map['examEndDate'].toDate(),
-      );
-    }
+    return UnitModel(
+      id: map['id'],
+      name: map['name'],
+      code: map['code'],
+      examStartDate: map['examStartDate'] == null
+          ? null
+          : map['examStartDate'] is Timestamp
+              ? map['examStartDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['examStartDate']),
+      examEndDate: map['examEndDate'] == null
+          ? null
+          : map['examEndDate'] is Timestamp
+              ? map['examEndDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['examEndDate']),
+    );
   }
 
   String toJson() => json.encode(toMap());
