@@ -22,32 +22,26 @@ class UserRepository {
     return _userDocument
         .snapshots()
         .distinct()
-        .map(_mapSnapshotToUserDataModel);
+        .map(_mapDocumentSnapshotToUserDataModel);
   }
 
   Future<UserDataModel?> getUserData() {
-    return _userDocument.get().then(_mapSnapshotToUserDataModel);
+    return _userDocument.get().then(_mapDocumentSnapshotToUserDataModel);
   }
 
   Future<void> setUserData(UserDataModel userData) {
     return _userDocument.set(userData.toMap(), SetOptions(merge: true));
   }
 
-  Future<void> updateUserData(UserDataModel userData) {
-    return _userDocument.update(userData.toMap());
-  }
-
   Future<void> deleteUserData() => _userDocument.delete();
 
-  Future<void> updateUserProfile({String? displayName, String? photoToURL}) {
+  Future<void> updateUserProfile({String? displayName, String? photoURL}) {
     return _firebaseAuth.currentUser!.updateProfile(
       displayName: displayName,
-      photoURL: photoToURL,
+      photoURL: photoURL,
     );
   }
 
-  // ## Mappers
-  // ### User
   UserModel? _mapUserToUserModel(User? rawUser) {
     return (rawUser == null)
         ? null
@@ -58,8 +52,8 @@ class UserRepository {
           );
   }
 
-  // ### User Data
-  UserDataModel? _mapSnapshotToUserDataModel(DocumentSnapshot snapshot) {
+  UserDataModel? _mapDocumentSnapshotToUserDataModel(
+      DocumentSnapshot snapshot) {
     return (snapshot.data() == null)
         ? null
         : UserDataModel.fromMap(snapshot.data()!);

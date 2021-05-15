@@ -33,12 +33,6 @@ void main() async {
   );
 }
 
-/// # App
-/// Contains initialization widgets such as:
-///   * Global Repository Provider
-///   * Global BLoC Provider
-///   * Notification Listener
-///   * First Page Redirection Widget
 class App extends StatelessWidget {
   App({
     Key? key,

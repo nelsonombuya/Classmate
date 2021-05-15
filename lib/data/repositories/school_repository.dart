@@ -18,11 +18,10 @@ class SchoolRepository {
         .then(_mapDocumentSnapshotToSchoolModel);
   }
 
-  // ### Mappers
   List<SchoolModel> _mapQuerySnapshotToSchoolModelList(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return SchoolModel.fromMap(doc.data()).copyWith(id: doc.id);
-    }).toList();
+    return snapshot.docs
+        .map((doc) => SchoolModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .toList();
   }
 
   SchoolModel _mapDocumentSnapshotToSchoolModel(DocumentSnapshot snapshot) {

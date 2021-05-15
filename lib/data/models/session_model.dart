@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:logger/logger.dart';
 
 class SessionModel extends Equatable {
   final String? id;
@@ -62,9 +63,12 @@ class SessionModel extends Equatable {
         examEndDate: DateTime.fromMillisecondsSinceEpoch(map['examEndDate']),
       );
     } on TypeError catch (e) {
-      print("Error Occurred: Timestamp instead of MillisecondsSinceEpoch used");
-      print("Error Occurred: ${e.toString()}");
-      print("Error Occurred: Recovering from error...");
+      Logger logger = Logger();
+      logger.w("${e.toString()}");
+      logger.w(
+          "The DateTime variables used Firebase's Timestamp instead of the preferred MillisecondsSinceEpoch");
+      logger.w(
+          "NOTE: The program will still run and the value will be updated to MillisecondsSinceEpoch when this variable is updated in the database");
       return SessionModel(
         id: map['id'],
         name: map['name'],

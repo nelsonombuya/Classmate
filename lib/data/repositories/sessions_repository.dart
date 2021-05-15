@@ -32,12 +32,11 @@ class SessionRepository {
         .then(_mapQuerySnapshotToSessionModel);
   }
 
-  // ### Mappers
   List<SessionModel> _mapQuerySnapshotToSessionModelList(
       QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return SessionModel.fromMap(doc.data()).copyWith(id: doc.id);
-    }).toList();
+    return snapshot.docs
+        .map((doc) => SessionModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .toList();
   }
 
   SessionModel _mapQuerySnapshotToSessionModel(DocumentSnapshot snapshot) {

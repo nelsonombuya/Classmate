@@ -33,9 +33,9 @@ class CourseRepository {
 
   // ### Mappers
   List<CourseModel> _mapQuerySnapshotToCourseModelList(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return CourseModel.fromMap(doc.data()).copyWith(id: doc.id);
-    }).toList();
+    return snapshot.docs
+        .map((doc) => CourseModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .toList();
   }
 
   CourseModel _mapQuerySnapshotToCourseModel(DocumentSnapshot snapshot) {

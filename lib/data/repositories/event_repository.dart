@@ -17,7 +17,7 @@ class EventRepository {
         .orderBy('startDate')
         .snapshots()
         .distinct()
-        .map(_mapSnapshotToEventModel);
+        .map(_mapQuerySnapshotToEventModel);
   }
 
   Future<void> createPersonalEvent(EventModel event) async {
@@ -34,13 +34,9 @@ class EventRepository {
     return _eventsSubCollection.doc(event.id).delete();
   }
 
-  // ### Mappers
-  List<EventModel> _mapSnapshotToEventModel(QuerySnapshot snapshot) {
-    return snapshot.docs.map(
-      (doc) {
-        EventModel newEvent = EventModel.fromMap(doc.data());
-        return newEvent.copyWith(id: doc.id);
-      },
-    ).toList();
+  List<EventModel> _mapQuerySnapshotToEventModel(QuerySnapshot snapshot) {
+    return snapshot.docs
+        .map((doc) => EventModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .toList();
   }
 }
