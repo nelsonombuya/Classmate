@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logger/logger.dart';
 
 import 'package:classmate/data/models/unit_model.dart';
 

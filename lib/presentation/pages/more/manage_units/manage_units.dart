@@ -91,16 +91,13 @@ class _ManageUnitsView extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                Expanded(
-                  child: BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-                    buildWhen: (previous, next) =>
-                        previous.course != next.course,
-                    builder: (context, state) {
-                      return (state.course != null)
-                          ? YearDropdownFormField(state)
-                          : SizedBox();
-                    },
-                  ),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.course != next.course,
+                  builder: (context, state) {
+                    return (state.course != null)
+                        ? YearDropdownFormField(state)
+                        : SizedBox();
+                  },
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
