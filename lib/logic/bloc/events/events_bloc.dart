@@ -25,7 +25,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final EventRepository _eventRepository;
   final NavigationCubit _navigationCubit;
   final NotificationCubit _notificationCubit;
-  late final Stream<List<EventModel>> personalEventDataStream;
+  final Stream<List<EventModel>> personalEventDataStream;
 
   @override
   Stream<EventsState> mapEventToState(EventsEvent event) async* {
