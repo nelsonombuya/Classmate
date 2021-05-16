@@ -13,7 +13,7 @@ class DeviceQuery {
   final Brightness brightness;
   final MediaQueryData mediaQueryData;
 
-  DeviceQuery(context)
+  DeviceQuery(BuildContext context)
       : mediaQueryData = MediaQuery.of(context),
         brightness = MediaQuery.of(context).platformBrightness,
         _blockSizeHorizontal = MediaQuery.of(context).size.width / 100,

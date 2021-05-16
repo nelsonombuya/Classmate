@@ -7,10 +7,10 @@ import '../presentation/common_widgets/custom_dialog.dart';
 import '../presentation/common_widgets/custom_snack_bar.dart';
 
 /// # Notification Cubit Listener
-/// Contains the presets for the different kinds of notifications used in the app
-///   Alerts
-///   SnackBar
-///   Dialog Box
+/// Contains the presets for the different kinds of notifications used in the app:
+///   - Alerts
+///   - SnackBar
+///   - Dialog Box
 /// * Check the Notifications Cubit for more info
 /// ! Make sure Notifications Cubit is in the Global BLoC Providers
 class NotificationCubitListener extends StatelessWidget {

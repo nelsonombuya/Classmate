@@ -8,10 +8,6 @@ import '../presentation/pages/splash/splash_page.dart';
 import '../presentation/pages/welcome/welcome_page.dart';
 
 /// # Redirect To First Page
-//  Contains
-///   * Device Query
-///     Used to scale widgets consistently among devices
-///     Also used to provide MediaQuery Data
 /// Uses BLoC Builder to redirect to either the
 ///   * Splash Page
 ///     When Loading

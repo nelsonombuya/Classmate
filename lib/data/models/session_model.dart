@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logger/logger.dart';
 
 class SessionModel extends Equatable {
   final String? id;
@@ -50,34 +50,30 @@ class SessionModel extends Equatable {
   }
 
   factory SessionModel.fromMap(Map<String, dynamic> map) {
-    try {
-      return SessionModel(
-        id: map['id'],
-        name: map['name'],
-        sessionStartDate:
-            DateTime.fromMillisecondsSinceEpoch(map['sessionStartDate']),
-        sessionEndDate:
-            DateTime.fromMillisecondsSinceEpoch(map['sessionEndDate']),
-        examStartDate:
-            DateTime.fromMillisecondsSinceEpoch(map['examStartDate']),
-        examEndDate: DateTime.fromMillisecondsSinceEpoch(map['examEndDate']),
-      );
-    } on TypeError catch (e) {
-      Logger logger = Logger();
-      logger.w("${e.toString()}");
-      logger.w(
-          "The DateTime variables used Firebase's Timestamp instead of the preferred MillisecondsSinceEpoch");
-      logger.w(
-          "NOTE: The program will still run and the value will be updated to MillisecondsSinceEpoch when this variable is updated in the database");
-      return SessionModel(
-        id: map['id'],
-        name: map['name'],
-        sessionStartDate: map['sessionStartDate'].toDate(),
-        sessionEndDate: map['sessionEndDate'].toDate(),
-        examStartDate: map['examStartDate'].toDate(),
-        examEndDate: map['examEndDate'].toDate(),
-      );
-    }
+    return SessionModel(
+      id: map['id'],
+      name: map['name'],
+      sessionStartDate: map['sessionStartDate'] == null
+          ? null
+          : map['sessionStartDate'] is Timestamp
+              ? map['sessionStartDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['sessionStartDate']),
+      sessionEndDate: map['sessionEndDate'] == null
+          ? null
+          : map['sessionEndDate'] is Timestamp
+              ? map['sessionEndDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['sessionEndDate']),
+      examStartDate: map['examStartDate'] == null
+          ? null
+          : map['examStartDate'] is Timestamp
+              ? map['examStartDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['examStartDate']),
+      examEndDate: map['examEndDate'] == null
+          ? null
+          : map['examEndDate'] is Timestamp
+              ? map['examEndDate'].toDate()
+              : DateTime.fromMillisecondsSinceEpoch(map['examEndDate']),
+    );
   }
 
   String toJson() => json.encode(toMap());

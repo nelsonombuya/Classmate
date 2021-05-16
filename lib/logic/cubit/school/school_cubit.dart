@@ -31,13 +31,13 @@ class SchoolCubit extends Cubit<SchoolState> {
               UnitRepository unitRepository =
                   _createUnitRepository(unitId, userData);
 
-              UnitModel unitData = await unitRepository.getUnitDetails();
+              UnitModel unitDetails = await unitRepository.getUnitDetails();
 
               List<Stream<List<LessonModel>>> lessonsStreamList =
-                  _generateLessonsStreamList(userData, unitData);
+                  _generateLessonsStreamList(userData, unitDetails);
 
               List<Stream<List<AssignmentModel>>> assignmentsStreamList =
-                  _generateAssignmentsStreamList(userData, unitData);
+                  _generateAssignmentsStreamList(userData, unitDetails);
 
               emit(SchoolState.updated(
                 lessonsStreamList: lessonsStreamList,
@@ -64,35 +64,35 @@ class SchoolCubit extends Cubit<SchoolState> {
 
   LessonRepository _createLessonRepository(
     UserDataModel userData,
-    UnitModel unitData,
+    UnitModel unitDetails,
   ) {
     var lessonRepository = LessonRepository(
       userData.schoolId!,
       userData.sessionId!,
-      unitData,
+      unitDetails,
     );
     return lessonRepository;
   }
 
   AssignmentRepository _createAssignmentRepository(
     UserDataModel userData,
-    UnitModel unitData,
+    UnitModel unitDetails,
   ) {
     var assignmentRepository = AssignmentRepository(
       userData.schoolId!,
       userData.sessionId!,
-      unitData,
+      unitDetails,
     );
     return assignmentRepository;
   }
 
   List<Stream<List<LessonModel>>> _generateLessonsStreamList(
     UserDataModel userData,
-    UnitModel unitData,
+    UnitModel unitDetails,
   ) {
     LessonRepository lessonRepository = _createLessonRepository(
       userData,
-      unitData,
+      unitDetails,
     );
 
     var lessonStream = lessonRepository.lessonsDataStream;
@@ -109,10 +109,10 @@ class SchoolCubit extends Cubit<SchoolState> {
 
   List<Stream<List<AssignmentModel>>> _generateAssignmentsStreamList(
     UserDataModel userData,
-    UnitModel unitData,
+    UnitModel unitDetails,
   ) {
     AssignmentRepository assignmentRepository =
-        _createAssignmentRepository(userData, unitData);
+        _createAssignmentRepository(userData, unitDetails);
 
     var assignmentStream = assignmentRepository.assignmentsDataStream;
 
