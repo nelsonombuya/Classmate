@@ -21,7 +21,6 @@ class AssignmentRepository {
 
   Stream<List<AssignmentModel>> get assignmentsDataStream {
     return _assignmentsSubCollection
-        .orderBy('dueDate')
         .snapshots()
         .distinct()
         .map(_mapQuerySnapshotToAssignmentModelList);

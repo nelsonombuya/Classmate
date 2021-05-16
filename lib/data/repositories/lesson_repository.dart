@@ -20,7 +20,6 @@ class LessonRepository {
 
   Stream<List<LessonModel>> get lessonsDataStream {
     return _lessonsSubCollection
-        .orderBy('startDate')
         .snapshots()
         .distinct()
         .map(_mapQuerySnapshotToLessonModelList);

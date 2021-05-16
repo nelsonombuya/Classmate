@@ -14,7 +14,6 @@ class EventRepository {
 
   Stream<List<EventModel>> get personalEventDataStream {
     return _eventsSubCollection
-        .orderBy('startDate')
         .snapshots()
         .distinct()
         .map(_mapQuerySnapshotToEventModel);
