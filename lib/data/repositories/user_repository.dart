@@ -1,22 +1,20 @@
+import 'package:classmate/data/repositories/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user_data_model.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  final FirebaseAuth _firebaseAuth;
   late final DocumentReference _userDocument;
+  final AuthenticationRepository _authenticationRepository;
 
-  UserRepository() : _firebaseAuth = FirebaseAuth.instance {
-    _userDocument = FirebaseFirestore.instance
-        .collection('users')
-        .doc(_firebaseAuth.currentUser?.uid);
-  }
+  UserRepository(AuthenticationRepository authenticationRepository)
+      : _authenticationRepository = authenticationRepository,
+        _userDocument = FirebaseFirestore.instance
+            .collection('users')
+            .doc(authenticationRepository.getCurrentUser()?.uid);
 
-  UserModel? getUser() {
-    return _mapUserToUserModel(_firebaseAuth.currentUser);
-  }
+  UserModel? getCurrentUser() => _authenticationRepository.getCurrentUser();
 
   Stream<UserDataModel?> get userDataStream {
     return _userDocument
@@ -25,7 +23,7 @@ class UserRepository {
         .map(_mapDocumentSnapshotToUserDataModel);
   }
 
-  Future<UserDataModel?> getUserData() {
+  Future<UserDataModel?> getCurrentUserData() {
     return _userDocument.get().then(_mapDocumentSnapshotToUserDataModel);
   }
 
@@ -34,23 +32,6 @@ class UserRepository {
   }
 
   Future<void> deleteUserData() => _userDocument.delete();
-
-  Future<void> updateUserProfile({String? displayName, String? photoURL}) {
-    return _firebaseAuth.currentUser!.updateProfile(
-      displayName: displayName,
-      photoURL: photoURL,
-    );
-  }
-
-  UserModel? _mapUserToUserModel(User? rawUser) {
-    return (rawUser == null)
-        ? null
-        : UserModel(
-            uid: rawUser.uid,
-            email: rawUser.email,
-            displayName: rawUser.displayName,
-          );
-  }
 
   UserDataModel? _mapDocumentSnapshotToUserDataModel(
       DocumentSnapshot snapshot) {

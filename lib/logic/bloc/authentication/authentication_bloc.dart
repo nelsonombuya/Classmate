@@ -13,10 +13,8 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    required UserRepository userRepository,
     required AuthenticationRepository authenticationRepository,
-  })   : _userRepository = userRepository,
-        _authenticationRepository = authenticationRepository,
+  })   : _authenticationRepository = authenticationRepository,
         super(AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository
         .authenticationStatusStream
@@ -24,7 +22,6 @@ class AuthenticationBloc
         .listen((status) => add(AuthenticationStatusChanged(status)));
   }
 
-  final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
   late StreamSubscription<AuthenticationStatus>
       _authenticationStatusSubscription;
@@ -65,7 +62,7 @@ class AuthenticationBloc
 
   UserModel? _tryGetUser() {
     try {
-      final user = _userRepository.getUser();
+      final user = _authenticationRepository.getCurrentUser();
       return user;
     } on Exception {
       return null;

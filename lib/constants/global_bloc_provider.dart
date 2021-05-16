@@ -20,11 +20,9 @@ class GlobalBLoCProvider extends StatelessWidget {
   const GlobalBLoCProvider({
     Key? key,
     required Widget child,
-    required UserRepository userRepository,
     required GlobalKey<NavigatorState> navigatorKey,
     required AuthenticationRepository authenticationRepository,
   })   : _child = child,
-        _userRepository = userRepository,
         _navigatorKey = navigatorKey,
         _authenticationRepository = authenticationRepository,
         super(key: key);
@@ -32,7 +30,6 @@ class GlobalBLoCProvider extends StatelessWidget {
   final Widget _child;
   final GlobalKey<NavigatorState> _navigatorKey;
 
-  final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
 
   @override
@@ -44,7 +41,6 @@ class GlobalBLoCProvider extends StatelessWidget {
         ),
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
-            userRepository: _userRepository,
             authenticationRepository: _authenticationRepository,
           ),
         ),

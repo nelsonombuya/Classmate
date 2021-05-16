@@ -22,7 +22,6 @@ class SignInPage extends StatelessWidget {
       create: (context) => SignInBloc(
         context.read<AuthenticationRepository>(),
         context.read<NotificationCubit>(),
-        context.read<UserRepository>(),
         context.read<NavigationCubit>(),
       ),
       child: _SignInPageView(),

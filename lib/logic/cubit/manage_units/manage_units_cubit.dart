@@ -36,7 +36,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   late SessionRepository _sessionRepository;
 
   Future<void> checkUserData() async {
-    return await _userRepository.getUserData().then((userData) async {
+    return await _userRepository.getCurrentUserData().then((userData) async {
       if (!state.changed &&
           userData?.schoolId != null &&
           userData?.courseId != null &&
@@ -126,7 +126,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
       _showSavingCourseDetailsNotification();
 
       await _userRepository
-          .getUserData()
+          .getCurrentUserData()
           .then((userData) => _updateUserData(userData))
           .then((newUserData) => _userRepository.setUserData(newUserData));
 
@@ -246,6 +246,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   UserDataModel _updateUserData(UserDataModel? currentUserData) {
     return currentUserData != null
         ? currentUserData.copyWith(
+            privilege: 'student',
             schoolId: state.school!.id,
             courseId: state.course!.id,
             sessionId: state.session!.id,
@@ -253,6 +254,7 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
             registeredUnitIds: _getListOfSelectedUnits(),
           )
         : UserDataModel(
+            privilege: 'student',
             schoolId: state.school!.id,
             courseId: state.course!.id,
             sessionId: state.session!.id,

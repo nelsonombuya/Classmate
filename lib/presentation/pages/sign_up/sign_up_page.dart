@@ -19,7 +19,6 @@ class SignUpPage extends StatelessWidget {
       create: (context) => SignUpBloc(
         context.read<AuthenticationRepository>(),
         context.read<NotificationCubit>(),
-        context.read<UserRepository>(),
         context.read<NavigationCubit>(),
       ),
       child: _SignUpPageView(),

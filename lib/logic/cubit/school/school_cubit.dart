@@ -19,7 +19,7 @@ class SchoolCubit extends Cubit<SchoolState> {
   SchoolCubit({required UserRepository userRepository})
       : _userRepository = userRepository,
         super(SchoolState.initial()) {
-    _userRepository.getUserData().then(
+    _userRepository.getCurrentUserData().then(
       (userData) {
         if (userData != null &&
             userData.registeredUnitIds != null &&
