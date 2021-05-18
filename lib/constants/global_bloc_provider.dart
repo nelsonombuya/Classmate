@@ -39,14 +39,14 @@ class GlobalBLoCProvider extends StatelessWidget {
             authenticationRepository: _authenticationRepository,
           ),
         ),
-        BlocProvider<NavigationCubit>(
-          create: (context) => NavigationCubit(_navigatorKey),
-        ),
         BlocProvider<NotificationCubit>(
           create: (context) => NotificationCubit(
             navigationCubit: context.read<NavigationCubit>(),
             authenticationBloc: context.read<AuthenticationBloc>(),
           ),
+        ),
+        BlocProvider<NavigationCubit>(
+          create: (context) => NavigationCubit(_navigatorKey),
         ),
       ],
       child: _child,

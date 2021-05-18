@@ -31,9 +31,8 @@ void main() async {
 class App extends StatelessWidget {
   App({Key? key}) : super(key: key);
 
+  final _authenticationRepository = AuthenticationRepository();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
 
   @override
   Widget build(BuildContext context) {

@@ -24,40 +24,6 @@ class CustomSnackBar {
   final BuildContext _context;
   final DeviceQuery _deviceQuery;
 
-  Flushbar _template({
-    IconData? icon,
-    Color? iconColor,
-    Color? titleColor,
-    Color? messageColor,
-    Color? backgroundColor,
-    bool shouldIconPulse = false,
-  }) {
-    return Flushbar(
-      title: _title,
-      message: _message,
-      titleColor: titleColor,
-      messageColor: messageColor,
-      duration: Duration(seconds: 5),
-      shouldIconPulse: shouldIconPulse,
-      messageSize: _deviceQuery.safeHeight(1.86),
-      positionOffset: _deviceQuery.safeHeight(5.0),
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      backgroundColor: backgroundColor ?? CupertinoColors.darkBackgroundGray,
-      margin: EdgeInsets.symmetric(
-        horizontal: _deviceQuery.safeWidth(3.0),
-        vertical: _deviceQuery.safeHeight(10.0),
-      ),
-      icon: Padding(
-        padding: EdgeInsets.only(left: _deviceQuery.safeWidth(2.0)),
-        child: Icon(
-          icon,
-          size: _deviceQuery.safeHeight(3.0),
-          color: iconColor ?? CupertinoColors.white,
-        ),
-      ),
-    )..show(_context); // TODO Stacking Notifications
-  }
-
   void _showSnackBar(NotificationType? type) {
     switch (type) {
       case NotificationType.Info:
@@ -91,5 +57,39 @@ class CustomSnackBar {
         _template(icon: Icons.assistant_photo_rounded);
         break;
     }
+  }
+
+  Flushbar _template({
+    IconData? icon,
+    Color? iconColor,
+    Color? titleColor,
+    Color? messageColor,
+    Color? backgroundColor,
+    bool shouldIconPulse = false,
+  }) {
+    return Flushbar(
+      title: _title,
+      message: _message,
+      titleColor: titleColor,
+      messageColor: messageColor,
+      duration: Duration(seconds: 5),
+      shouldIconPulse: shouldIconPulse,
+      borderRadius: BorderRadius.circular(8.0),
+      messageSize: _deviceQuery.safeHeight(1.86),
+      positionOffset: _deviceQuery.safeHeight(5.0),
+      backgroundColor: backgroundColor ?? CupertinoColors.darkBackgroundGray,
+      margin: EdgeInsets.symmetric(
+        horizontal: _deviceQuery.safeWidth(3.0),
+        vertical: _deviceQuery.safeHeight(10.0),
+      ),
+      icon: Padding(
+        padding: EdgeInsets.only(left: _deviceQuery.safeWidth(2.0)),
+        child: Icon(
+          icon,
+          size: _deviceQuery.safeHeight(3.0),
+          color: iconColor ?? CupertinoColors.white,
+        ),
+      ),
+    )..show(_context); // TODO Stacking Notifications
   }
 }
