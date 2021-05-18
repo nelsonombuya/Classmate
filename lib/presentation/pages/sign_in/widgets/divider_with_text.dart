@@ -49,14 +49,12 @@ class DividerWithText extends StatelessWidget {
               ),
             ),
             VerticalDivider(width: _spaceAroundWord),
-            Expanded(
-              child: Text(
-                text,
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2!
-                    .copyWith(color: Theme.of(context).dividerColor),
-              ),
+            Text(
+              text,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2!
+                  .copyWith(color: Theme.of(context).dividerColor),
             ),
             VerticalDivider(width: _spaceAroundWord),
             Expanded(
