@@ -7,42 +7,43 @@ abstract class EventsEvent extends Equatable {
   List<Object> get props => [];
 }
 
+abstract class ExistingEvent extends EventsEvent {
+  const ExistingEvent(this.event);
+
+  final Event event;
+
+  @override
+  List<Object> get props => [event];
+}
+
 class PersonalEventCreated extends EventsEvent {
   const PersonalEventCreated({
     required this.title,
-    required this.description,
+    this.description,
     required this.startDate,
     required this.endDate,
     required this.isAllDayEvent,
   });
 
-  final String title, description;
-  final DateTime startDate, endDate;
+  final String title;
   final bool isAllDayEvent;
+  final String? description;
+  final DateTime startDate, endDate;
 
   @override
   List<Object> get props => [
         "Title : $title",
-        "Description: $description",
+        "Description: ${description ?? 'No Description'}",
         "From: $startDate",
         "To: $endDate",
         "All Day Event: $isAllDayEvent",
       ];
 }
 
-abstract class ExistingEvent extends EventsEvent {
-  const ExistingEvent(this.event);
-
-  final EventModel event;
-
-  @override
-  List<Object> get props => [event];
-}
-
 class PersonalEventUpdated extends ExistingEvent {
   const PersonalEventUpdated(this.event) : super(event);
 
-  final EventModel event;
+  final Event event;
 
   @override
   List<Object> get props => [event];
@@ -52,7 +53,7 @@ class PersonalEventDeleted extends ExistingEvent {
   const PersonalEventDeleted(this.event, {this.popCurrentPage = true})
       : super(event);
 
-  final EventModel event;
+  final Event event;
   final bool popCurrentPage;
 
   @override

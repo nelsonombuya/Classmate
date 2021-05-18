@@ -3,24 +3,24 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class EventModel extends Equatable {
+class Event extends Equatable {
   final String? id;
   final String title;
-  final String description;
+  final String? description;
   final DateTime startDate;
   final DateTime endDate;
   final bool isAllDayEvent;
 
-  const EventModel({
+  const Event({
     this.id,
     required this.title,
-    required this.description,
+    this.description,
     required this.startDate,
     required this.endDate,
     required this.isAllDayEvent,
   });
 
-  EventModel copyWith({
+  Event copyWith({
     String? id,
     String? title,
     String? description,
@@ -28,7 +28,7 @@ class EventModel extends Equatable {
     DateTime? endDate,
     bool? isAllDayEvent,
   }) {
-    return EventModel(
+    return Event(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
@@ -49,8 +49,8 @@ class EventModel extends Equatable {
     };
   }
 
-  factory EventModel.fromMap(Map<String, dynamic> map) {
-    return EventModel(
+  factory Event.fromMap(Map<String, dynamic> map) {
+    return Event(
       id: map['id'],
       title: map['title'],
       description: map['description'],
@@ -70,19 +70,18 @@ class EventModel extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory EventModel.fromJson(String source) =>
-      EventModel.fromMap(json.decode(source));
+  factory Event.fromJson(String source) => Event.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'EventModel(id: $id, title: $title, description: $description, startDate: $startDate, endDate: $endDate, isAllDayEvent: $isAllDayEvent)';
+    return 'Event(id: $id, title: $title, description: $description, startDate: $startDate, endDate: $endDate, isAllDayEvent: $isAllDayEvent)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is EventModel &&
+    return other is Event &&
         other.id == id &&
         other.title == title &&
         other.description == description &&
@@ -109,7 +108,7 @@ class EventModel extends Equatable {
     return [
       id ?? '-',
       title,
-      description,
+      description ?? 'No Description',
       startDate,
       endDate,
       isAllDayEvent,

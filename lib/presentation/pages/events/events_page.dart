@@ -26,26 +26,26 @@ class _EventsPageState extends State<EventsPage> {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
     final EventsBloc _eventsBloc = context.read<EventsBloc>();
 
-    return StreamBuilder<List<EventModel>>(
-      stream: context.read<EventsBloc>().personalEventDataStream,
+    return StreamBuilder<List<Event>>(
+      stream: _eventsBloc.personalEventsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator.adaptive());
         }
 
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          List<EventModel> events = snapshot.data!;
+          List<Event> events = snapshot.data!;
           return ListView.builder(
             shrinkWrap: true,
             itemCount: events.length,
             controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: EdgeInsets.all(
-                  _deviceQuery.safeWidth(4.0),
-                ),
+                padding: EdgeInsets.all(_deviceQuery.safeWidth(4.0)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
+                  // TODO: Replace Slidable with Press and Hold
+                  // TODO: Allow for both lessons and events to show on this page
                   child: Slidable(
                     actionExtentRatio: 0.25,
                     actionPane: SlidableBehindActionPane(),
@@ -71,8 +71,6 @@ class _EventsPageState extends State<EventsPage> {
                         onTap: () =>
                             context.read<NotificationCubit>().showDeleteDialog(
                                   DialogType.DeleteEvent,
-                                  // * If the dialog is accepted
-                                  // * It will send an event deleted request
                                   () => _eventsBloc.add(
                                     PersonalEventDeleted(
                                       events[index],
@@ -89,7 +87,7 @@ class _EventsPageState extends State<EventsPage> {
                         context: context,
                         builder: (context) => EventDetailsPage(
                           event: events[index],
-                          eventsBloc: context.read<EventsBloc>(),
+                          eventsBloc: _eventsBloc,
                         ),
                       ),
                       contentPadding: EdgeInsets.symmetric(

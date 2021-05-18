@@ -8,14 +8,14 @@ part 'create_event_state.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
   CreateEventCubit()
-      : super(CreateEventInitial(
+      : super(CreateEventState(
           selectedStartingDate: DateTime.now(),
           selectedEndingDate: DateTime.now().add(Duration(minutes: 30)),
           isAllDayEvent: false,
         ));
 
-  void updateEventDetails(EventModel event) {
-    emit(EventDateChanged(
+  void updateEventDetails(Event event) {
+    emit(CreateEventState(
       selectedStartingDate: event.startDate,
       selectedEndingDate: event.endDate,
       isAllDayEvent: event.isAllDayEvent,
@@ -23,36 +23,22 @@ class CreateEventCubit extends Cubit<CreateEventState> {
   }
 
   void changeStartingDate(DateTime newDate) {
-    DateTime selectedStartingDate = newDate;
-    DateTime selectedEndingDate;
-
-    if (state.isAllDayEvent) {
-      selectedEndingDate = newDate.add(Duration(hours: 24));
-    } else if (state.selectedEndingDate.isBefore(newDate)) {
-      selectedEndingDate = newDate.add(Duration(minutes: 30));
-    } else {
-      selectedEndingDate = state.selectedEndingDate;
-    }
-
-    emit(EventDateChanged(
-      selectedStartingDate: selectedStartingDate,
-      selectedEndingDate: selectedEndingDate,
+    emit(CreateEventState(
+      selectedStartingDate: newDate,
+      selectedEndingDate: _adjustSelectedEndingDate(newDate),
       isAllDayEvent: state.isAllDayEvent,
     ));
   }
 
   void changeEndingDate(DateTime newDate) {
-    DateTime selectedEndingDate = newDate;
-
-    if (selectedEndingDate.isBefore(state.selectedStartingDate)) {
+    if (newDate.isBefore(state.selectedStartingDate))
       throw Exception(
         "The event's ending date can't come before it's starting date ⛔",
       );
-    }
 
-    emit(EventDateChanged(
+    emit(CreateEventState(
       selectedStartingDate: state.selectedStartingDate,
-      selectedEndingDate: selectedEndingDate,
+      selectedEndingDate: newDate,
       isAllDayEvent: state.isAllDayEvent,
     ));
   }
@@ -74,10 +60,19 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       selectedEndingDate = state.selectedEndingDate;
     }
 
-    emit(EventDateChanged(
+    emit(CreateEventState(
       selectedStartingDate: selectedStartingDate,
       selectedEndingDate: selectedEndingDate,
       isAllDayEvent: isAllDayEvent,
     ));
+  }
+
+  DateTime _adjustSelectedEndingDate(DateTime newDate) {
+    if (state.isAllDayEvent) return newDate.add(Duration(hours: 24));
+
+    if (state.selectedEndingDate.isBefore(newDate))
+      return newDate.add(Duration(minutes: 30));
+
+    return state.selectedEndingDate;
   }
 }

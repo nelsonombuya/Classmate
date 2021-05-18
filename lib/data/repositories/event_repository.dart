@@ -12,30 +12,30 @@ class EventRepository {
 
   final CollectionReference _eventsSubCollection;
 
-  Stream<List<EventModel>> get personalEventDataStream {
+  Stream<List<Event>> get personalEventsStream {
     return _eventsSubCollection
         .snapshots()
         .distinct()
-        .map(_mapQuerySnapshotToEventModel);
+        .map(_mapQuerySnapshotToEvent);
   }
 
-  Future<void> createPersonalEvent(EventModel event) async {
+  Future<void> createPersonalEvent(Event event) async {
     _eventsSubCollection.doc().set(event.toMap(), SetOptions(merge: true));
   }
 
-  Future<void> updatePersonalEvent(EventModel event) async {
+  Future<void> updatePersonalEvent(Event event) async {
     return _eventsSubCollection
         .doc(event.id)
         .set(event.toMap(), SetOptions(merge: true));
   }
 
-  Future<void> deletePersonalEvent(EventModel event) async {
+  Future<void> deletePersonalEvent(Event event) async {
     return _eventsSubCollection.doc(event.id).delete();
   }
 
-  List<EventModel> _mapQuerySnapshotToEventModel(QuerySnapshot snapshot) {
+  List<Event> _mapQuerySnapshotToEvent(QuerySnapshot snapshot) {
     return snapshot.docs
-        .map((doc) => EventModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .map((doc) => Event.fromMap(doc.data()).copyWith(id: doc.id))
         .toList();
   }
 }

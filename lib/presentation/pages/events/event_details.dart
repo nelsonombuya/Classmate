@@ -11,9 +11,9 @@ import '../../common_widgets/form_view.dart';
 import 'create_event.dart';
 
 class EventDetailsPage extends StatelessWidget {
-  const EventDetailsPage({required this.event, required this.eventsBloc});
+  EventDetailsPage({required this.event, required this.eventsBloc});
 
-  final EventModel event;
+  final Event event;
   final EventsBloc eventsBloc;
 
   @override
@@ -26,13 +26,15 @@ class EventDetailsPage extends StatelessWidget {
 }
 
 class EventDetailsView extends StatelessWidget {
-  const EventDetailsView(this.event);
+  EventDetailsView(this.event);
 
-  final EventModel event;
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+    final EventsBloc _bloc = context.read<EventsBloc>();
+    final _notificationCubit = context.read<NotificationCubit>();
 
     return FormView(
       title: "Event Details",
@@ -40,16 +42,12 @@ class EventDetailsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: _deviceQuery.safeHeight(4.0),
-            ),
+            SizedBox(height: _deviceQuery.safeHeight(4.0)),
             Text(
               event.title,
               style: Theme.of(context).textTheme.headline4,
             ),
-            SizedBox(
-              height: _deviceQuery.safeHeight(10.0),
-            ),
+            SizedBox(height: _deviceQuery.safeHeight(10.0)),
             Text("Date and Time"),
             event.isAllDayEvent
                 ? Text(
@@ -69,9 +67,7 @@ class EventDetailsView extends StatelessWidget {
                       ),
                     ],
                   ),
-            SizedBox(
-              height: _deviceQuery.safeHeight(20.0),
-            ),
+            SizedBox(height: _deviceQuery.safeHeight(20.0)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -82,15 +78,10 @@ class EventDetailsView extends StatelessWidget {
                         Icons.delete_rounded,
                         color: Theme.of(context).errorColor,
                       ),
-                      onPressed: () => context
-                          .read<NotificationCubit>()
-                          .showDeleteDialog(
-                              DialogType.DeleteEvent,
-                              // * If the dialog is accepted
-                              // * It will send an event deleted request
-                              () => context
-                                  .read<EventsBloc>()
-                                  .add(PersonalEventDeleted(event))),
+                      onPressed: () => _notificationCubit.showDeleteDialog(
+                        DialogType.DeleteEvent,
+                        () => _bloc.add(PersonalEventDeleted(event)),
+                      ),
                     ),
                     Text(
                       "Delete Event",
@@ -114,7 +105,7 @@ class EventDetailsView extends StatelessWidget {
                           context: context,
                           builder: (context) => CreateEvent(
                             event: event,
-                            eventsBloc: context.read<EventsBloc>(),
+                            eventsBloc: _bloc,
                           ),
                         );
                       },

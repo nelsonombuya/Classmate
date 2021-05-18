@@ -16,11 +16,11 @@ import '../../common_widgets/form_view.dart';
 /// and updating existing events
 /// (By passing the event through the widget's constructor)
 class CreateEvent extends StatelessWidget {
-  const CreateEvent({EventModel? event, required EventsBloc eventsBloc})
+  const CreateEvent({Event? event, required EventsBloc eventsBloc})
       : _event = event,
         _eventsBloc = eventsBloc;
 
-  final EventModel? _event;
+  final Event? _event;
   final EventsBloc _eventsBloc;
 
   @override
@@ -40,7 +40,7 @@ class CreateEvent extends StatelessWidget {
 class _CreateEventView extends StatefulWidget {
   const _CreateEventView(this._event);
 
-  final EventModel? _event;
+  final Event? _event;
 
   @override
   _CreateEventViewState createState() => _CreateEventViewState();
@@ -56,7 +56,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
     super.initState();
     if (widget._event != null) {
       _titleController.text = widget._event!.title;
-      _descriptionController.text = widget._event!.description;
+      _descriptionController.text = widget._event!.description ?? '';
       context.read<CreateEventCubit>().updateEventDetails(widget._event!);
     }
   }
@@ -64,6 +64,8 @@ class _CreateEventViewState extends State<_CreateEventView> {
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
+    final EventsBloc _bloc = context.read<EventsBloc>();
+    final CreateEventCubit _cubit = context.read<CreateEventCubit>();
 
     return FormView(
       title: widget._event == null ? "Create Event" : "Edit Event",
@@ -74,8 +76,17 @@ class _CreateEventViewState extends State<_CreateEventView> {
               onPressed: () {
                 FocusScope.of(context).unfocus();
                 if (_formKey.currentState!.validate()) {
-                  if (widget._event != null) {
-                    return context.read<EventsBloc>().add(
+                  return widget._event == null
+                      ? _bloc.add(
+                          PersonalEventCreated(
+                            title: _titleController.text.trim(),
+                            description: _descriptionController.text.trim(),
+                            startDate: state.selectedStartingDate,
+                            endDate: state.selectedEndingDate,
+                            isAllDayEvent: state.isAllDayEvent,
+                          ),
+                        )
+                      : _bloc.add(
                           PersonalEventUpdated(
                             widget._event!.copyWith(
                               title: _titleController.text.trim(),
@@ -86,17 +97,6 @@ class _CreateEventViewState extends State<_CreateEventView> {
                             ),
                           ),
                         );
-                  } else {
-                    return context.read<EventsBloc>().add(
-                          PersonalEventCreated(
-                            title: _titleController.text.trim(),
-                            description: _descriptionController.text.trim(),
-                            startDate: state.selectedStartingDate,
-                            endDate: state.selectedEndingDate,
-                            isAllDayEvent: state.isAllDayEvent,
-                          ),
-                        );
-                  }
                 }
               },
               child: Text(
@@ -123,12 +123,12 @@ class _CreateEventViewState extends State<_CreateEventView> {
                   validator: Validator.titleValidator,
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(2.0)),
+                // TODO Toggle Description Field
                 CustomTextFormField(
                   maxLines: null,
                   label: 'Description',
                   controller: _descriptionController,
                   keyboardType: TextInputType.multiline,
-                  validator: Validator.descriptionValidator,
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<CreateEventCubit, CreateEventState>(
@@ -150,9 +150,8 @@ class _CreateEventViewState extends State<_CreateEventView> {
                             Switch.adaptive(
                               value: state.isAllDayEvent,
                               activeColor: Theme.of(context).primaryColor,
-                              onChanged: (value) => context
-                                  .read<CreateEventCubit>()
-                                  .changeAllDayEventState(value),
+                              onChanged: (value) =>
+                                  _cubit.changeAllDayEventState(value),
                             ),
                           ],
                         ),
@@ -163,20 +162,16 @@ class _CreateEventViewState extends State<_CreateEventView> {
                               title: state.isAllDayEvent ? "On" : "From",
                               allDayEvent: state.isAllDayEvent,
                               selectedDate: state.selectedStartingDate,
-                              onTap: (date) => context
-                                  .read<CreateEventCubit>()
-                                  .changeStartingDate(date),
+                              onTap: (date) => _cubit.changeStartingDate(date),
                             ),
                             if (!state.isAllDayEvent)
                               DatePickerButton(
                                 title: "To",
                                 allDayEvent: state.isAllDayEvent,
                                 selectedDate: state.selectedEndingDate,
+                                onTap: (date) => _cubit.changeEndingDate(date),
                                 firstSelectableDate: state.selectedStartingDate
                                     .add(Duration(minutes: 5)),
-                                onTap: (date) => context
-                                    .read<CreateEventCubit>()
-                                    .changeEndingDate(date),
                               ),
                           ],
                         ),

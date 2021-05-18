@@ -9,7 +9,7 @@ class EventsState extends Equatable {
 
   const EventsState.deleted(this.event);
 
-  final EventModel? event;
+  final Event? event;
 
   @override
   List<Object> get props => [event ?? '-'];

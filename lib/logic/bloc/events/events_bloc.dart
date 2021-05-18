@@ -14,18 +14,18 @@ part 'events_state.dart';
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   EventsBloc({
     required EventRepository eventRepository,
-    required NotificationCubit notificationCubit,
     required NavigationCubit navigationCubit,
+    required NotificationCubit notificationCubit,
   })   : _eventRepository = eventRepository,
-        _notificationCubit = notificationCubit,
         _navigationCubit = navigationCubit,
-        personalEventDataStream = eventRepository.personalEventDataStream,
+        _notificationCubit = notificationCubit,
+        personalEventsStream = eventRepository.personalEventsStream,
         super(EventsState.initial());
 
   final EventRepository _eventRepository;
   final NavigationCubit _navigationCubit;
   final NotificationCubit _notificationCubit;
-  final Stream<List<EventModel>> personalEventDataStream;
+  final Stream<List<Event>> personalEventsStream;
 
   @override
   Stream<EventsState> mapEventToState(EventsEvent event) async* {
@@ -42,15 +42,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       PersonalEventCreated event) async* {
     try {
       _showCreatingEventNotification();
-
-      EventModel newEvent = EventModel(
-        title: event.title,
-        description: event.description,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        isAllDayEvent: event.isAllDayEvent,
-      );
-
+      Event newEvent = _mapEventToEventModel(event);
       await _eventRepository.createPersonalEvent(newEvent);
       _showEventCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
@@ -87,6 +79,17 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       _showErrorDeletingEventNotification(e.toString());
       this.addError(e);
     }
+  }
+
+  // ## Mappers
+  Event _mapEventToEventModel(PersonalEventCreated event) {
+    return Event(
+      title: event.title,
+      description: event.description,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      isAllDayEvent: event.isAllDayEvent,
+    );
   }
 
   // ## Notifications
