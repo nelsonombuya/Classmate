@@ -13,14 +13,14 @@ enum DialogType { DeleteEvent, DeleteTask }
 
 class NotificationCubit extends Cubit<NotificationState> {
   NotificationCubit({
-    required AuthenticationBloc authenticationBloc,
     required NavigationCubit navigationCubit,
-  })   : _authenticationBloc = authenticationBloc,
-        _navigationCubit = navigationCubit,
+    required AuthenticationBloc authenticationBloc,
+  })   : _navigationCubit = navigationCubit,
+        _authenticationBloc = authenticationBloc,
         super(NotificationInitial());
 
-  final AuthenticationBloc _authenticationBloc;
   final NavigationCubit _navigationCubit;
+  final AuthenticationBloc _authenticationBloc;
 
   void showSnackBar(String message, {String? title, NotificationType? type}) {
     emit(ShowSnackBar(
@@ -28,6 +28,8 @@ class NotificationCubit extends Cubit<NotificationState> {
       title: title,
       notificationType: type,
     ));
+    // ! Resets state to allow stacking of snack bars. DO NOT DELETE!
+    return emit(NotificationInitial());
   }
 
   void showDialogBox(
@@ -41,7 +43,7 @@ class NotificationCubit extends Cubit<NotificationState> {
     required void Function() positiveActionOnPressed,
     required void Function() negativeActionOnPressed,
   }) {
-    emit(ShowDialogBox(
+    return emit(ShowDialogBox(
       message,
       title: title,
       notificationType: type,
@@ -55,7 +57,7 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   void showAlert(String message, {NotificationType? type}) {
-    emit(ShowAlert(
+    return emit(ShowAlert(
       message,
       notificationType: type,
     ));

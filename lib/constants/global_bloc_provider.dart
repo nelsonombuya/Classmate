@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/repositories/authentication_repository.dart';
-import '../data/repositories/user_repository.dart';
 import '../logic/bloc/authentication/authentication_bloc.dart';
 import '../logic/cubit/navigation/navigation_cubit.dart';
 import '../logic/cubit/notification/notification_cubit.dart';
@@ -29,20 +28,19 @@ class GlobalBLoCProvider extends StatelessWidget {
 
   final Widget _child;
   final GlobalKey<NavigatorState> _navigatorKey;
-
   final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<NavigationCubit>(
-          create: (context) => NavigationCubit(_navigatorKey),
-        ),
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
             authenticationRepository: _authenticationRepository,
           ),
+        ),
+        BlocProvider<NavigationCubit>(
+          create: (context) => NavigationCubit(_navigatorKey),
         ),
         BlocProvider<NotificationCubit>(
           create: (context) => NotificationCubit(

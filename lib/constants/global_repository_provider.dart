@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/repositories/authentication_repository.dart';
-import '../data/repositories/user_repository.dart';
 
 /// # Global Repository Provider
 /// Used to provide the necessary repositories to the rest of the app

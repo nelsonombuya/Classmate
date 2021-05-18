@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:classmate/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/user_model.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -49,14 +50,7 @@ class AuthenticationRepository {
     return _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() {
-    _controller.close();
-    _subscription.cancel();
-  }
-
   UserModel? getCurrentUser() => _mapUserToUserModel(_firebaseAuth.currentUser);
-
-  void deleteAccount() => _firebaseAuth.currentUser?.delete();
 
   Future<void> updateUserProfile({String? displayName, String? photoURL}) {
     return _firebaseAuth.currentUser!.updateProfile(
@@ -64,6 +58,8 @@ class AuthenticationRepository {
       photoURL: photoURL,
     );
   }
+
+  void deleteUserAccount() => _firebaseAuth.currentUser?.delete();
 
   UserModel? _mapUserToUserModel(User? rawUser) {
     return (rawUser == null)
@@ -73,5 +69,10 @@ class AuthenticationRepository {
             email: rawUser.email,
             displayName: rawUser.displayName,
           );
+  }
+
+  void dispose() {
+    _controller.close();
+    _subscription.cancel();
   }
 }

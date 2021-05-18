@@ -1,4 +1,3 @@
-import 'package:classmate/data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -22,25 +21,19 @@ void main() async {
   await Firebase.initializeApp();
   Bloc.observer = Watchtower();
 
+  // ! App forced to only be used in portrait mode for now
   // TODO Restructure App for Landscape Orientation
   // TODO Restructure App for Web View
-
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(App(
-      authenticationRepository: AuthenticationRepository(),
-    )),
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(App()));
 }
 
 class App extends StatelessWidget {
-  App({
-    Key? key,
-    required AuthenticationRepository authenticationRepository,
-  })   : _authenticationRepository = authenticationRepository,
-        super(key: key);
+  App({Key? key}) : super(key: key);
 
-  final AuthenticationRepository _authenticationRepository;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final AuthenticationRepository _authenticationRepository =
+      AuthenticationRepository();
 
   @override
   Widget build(BuildContext context) {
