@@ -13,11 +13,14 @@ part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  SignInBloc(
-    this._authenticationRepository,
-    this._notificationCubit,
-    this._navigationCubit,
-  ) : super(SignInInitial());
+  SignInBloc({
+    required NavigationCubit navigationCubit,
+    required NotificationCubit notificationCubit,
+    required AuthenticationRepository authenticationRepository,
+  })   : _navigationCubit = navigationCubit,
+        _notificationCubit = notificationCubit,
+        _authenticationRepository = authenticationRepository,
+        super(SignInInitial());
 
   final AuthenticationRepository _authenticationRepository;
   final NotificationCubit _notificationCubit;
@@ -35,8 +38,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       _showSignInLoadingNotification();
       await _authenticationRepository.signIn(event.email, event.password);
       _showSignInSuccessNotification();
-      yield SignInSuccess(_authenticationRepository.getCurrentUser()!.uid);
       _navigateToDashboard();
+      yield SignInSuccess(_authenticationRepository.getCurrentUser()!.uid);
     } catch (e) {
       _showSignInUnsuccessfulNotification(e.toString());
       yield SignInFailure(e.toString());
@@ -44,6 +47,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     }
   }
 
+  // ### Notifications
   void _showSignInLoadingNotification() {
     return _notificationCubit.showAlert(
       'Signing In...',
@@ -71,9 +75,14 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     );
   }
 
+  // ### Navigation
   void _navigateToDashboard() {
     _navigationCubit.navigatorKey.currentState!.pushNamedAndRemoveUntil(
-      route.root, // Will automatically redirect to Dashboard Page
+      // Will automatically redirect to Dashboard Page
+      // and maintain Global BLoC Providers, Repository Providers
+      // Listeners and Builders in the tree.
+      // ! DO NOT DELETE OR CHANGE
+      route.root,
       (route) => false,
     );
   }

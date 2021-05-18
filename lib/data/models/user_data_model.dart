@@ -2,41 +2,45 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class UserDataModel extends Equatable {
+class UserData extends Equatable {
   final String? firstName;
   final String? lastName;
   final String? courseId;
   final String? schoolId;
   final String? sessionId;
   final String? year;
+  final String? privilege;
   final List<String>? registeredUnitIds;
 
-  const UserDataModel({
+  const UserData({
     this.firstName,
     this.lastName,
     this.courseId,
     this.schoolId,
     this.sessionId,
     this.year,
+    this.privilege,
     this.registeredUnitIds,
   });
 
-  UserDataModel copyWith({
+  UserData copyWith({
     String? firstName,
     String? lastName,
     String? courseId,
     String? schoolId,
     String? sessionId,
     String? year,
+    String? privilege,
     List<String>? registeredUnitIds,
   }) {
-    return UserDataModel(
+    return UserData(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       courseId: courseId ?? this.courseId,
       schoolId: schoolId ?? this.schoolId,
       sessionId: sessionId ?? this.sessionId,
       year: year ?? this.year,
+      privilege: privilege ?? this.privilege,
       registeredUnitIds: registeredUnitIds ?? this.registeredUnitIds,
     );
   }
@@ -49,26 +53,28 @@ class UserDataModel extends Equatable {
       'schoolId': schoolId,
       'sessionId': sessionId,
       'year': year,
+      'privilege': privilege,
       'registeredUnitIds': registeredUnitIds,
     };
   }
 
-  factory UserDataModel.fromMap(Map<String, dynamic> map) {
-    return UserDataModel(
+  factory UserData.fromMap(Map<String, dynamic> map) {
+    return UserData(
       firstName: map['firstName'],
       lastName: map['lastName'],
       courseId: map['courseId'],
       schoolId: map['schoolId'],
       sessionId: map['sessionId'],
       year: map['year'],
+      privilege: map['privilege'],
       registeredUnitIds: List<String>.from(map['registeredUnitIds'] ?? []),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserDataModel.fromJson(String source) =>
-      UserDataModel.fromMap(json.decode(source));
+  factory UserData.fromJson(String source) =>
+      UserData.fromMap(json.decode(source));
 
   @override
   bool get stringify => true;
@@ -76,13 +82,14 @@ class UserDataModel extends Equatable {
   @override
   List<Object> get props {
     return [
-      "First Name: ${firstName ?? '-'}",
-      "Last Name: ${lastName ?? '-'}",
-      "School ID: ${schoolId ?? '-'}",
-      "Course ID: ${courseId ?? '-'}",
-      "Session ID: ${sessionId ?? '-'}",
-      "Year: ${year ?? '-'}",
-      "Registered Units: ${registeredUnitIds ?? '-'}",
+      firstName ?? '-',
+      lastName ?? '-',
+      courseId ?? '-',
+      schoolId ?? '-',
+      sessionId ?? '-',
+      year ?? '-',
+      privilege ?? '-',
+      registeredUnitIds ?? '-',
     ];
   }
 }

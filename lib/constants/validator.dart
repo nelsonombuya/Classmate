@@ -45,7 +45,7 @@ abstract class Validator {
   }
 }
 
-/// ### Confirm Password Validator
+/// ### PasswordConfirmationValidator
 /// Extends the Validator Class
 /// Used when you want to confirm the user's input password
 /// Initialize this class in the form

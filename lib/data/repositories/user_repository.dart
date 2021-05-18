@@ -1,42 +1,40 @@
-import 'package:classmate/data/repositories/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/user_data_model.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  late final DocumentReference _userDocument;
-  final AuthenticationRepository _authenticationRepository;
+  final UserModel _user;
+  final DocumentReference _userDocument;
 
-  UserRepository(AuthenticationRepository authenticationRepository)
-      : _authenticationRepository = authenticationRepository,
-        _userDocument = FirebaseFirestore.instance
-            .collection('users')
-            .doc(authenticationRepository.getCurrentUser()?.uid);
+  UserRepository(UserModel user)
+      : _user = user,
+        _userDocument =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-  UserModel? getCurrentUser() => _authenticationRepository.getCurrentUser();
+  UserModel? getCurrentUser() => _user;
 
-  Stream<UserDataModel?> get userDataStream {
+  Stream<UserData> get userDataStream {
     return _userDocument
         .snapshots()
         .distinct()
-        .map(_mapDocumentSnapshotToUserDataModel);
+        .map(_mapDocumentSnapshotToUserData);
   }
 
-  Future<UserDataModel?> getCurrentUserData() {
-    return _userDocument.get().then(_mapDocumentSnapshotToUserDataModel);
+  Future<UserData> getUserData() {
+    return _userDocument.get().then(_mapDocumentSnapshotToUserData);
   }
 
-  Future<void> setUserData(UserDataModel userData) {
+  Future<void> setUserData(UserData userData) {
     return _userDocument.set(userData.toMap(), SetOptions(merge: true));
   }
 
+  // TODO Delete User's Sub-Collections too
   Future<void> deleteUserData() => _userDocument.delete();
 
-  UserDataModel? _mapDocumentSnapshotToUserDataModel(
-      DocumentSnapshot snapshot) {
+  UserData _mapDocumentSnapshotToUserData(DocumentSnapshot snapshot) {
     return (snapshot.data() == null)
-        ? null
-        : UserDataModel.fromMap(snapshot.data()!);
+        ? UserData()
+        : UserData.fromMap(snapshot.data()!);
   }
 }

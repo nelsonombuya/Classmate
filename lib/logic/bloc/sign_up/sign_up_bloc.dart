@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants/route.dart' as route;
 import '../../../data/models/user_data_model.dart';
+import '../../../data/models/user_model.dart';
 import '../../../data/repositories/authentication_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
@@ -15,15 +16,18 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final AuthenticationRepository _authenticationRepository;
-  final NotificationCubit _notificationCubit;
-  final NavigationCubit _navigationCubit;
+  SignUpBloc({
+    required NavigationCubit navigationCubit,
+    required NotificationCubit notificationCubit,
+    required AuthenticationRepository authenticationRepository,
+  })   : _navigationCubit = navigationCubit,
+        _notificationCubit = notificationCubit,
+        _authenticationRepository = authenticationRepository,
+        super(SignUpInitial());
 
-  SignUpBloc(
-    this._authenticationRepository,
-    this._notificationCubit,
-    this._navigationCubit,
-  ) : super(SignUpInitial());
+  final NavigationCubit _navigationCubit;
+  final NotificationCubit _notificationCubit;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
@@ -36,7 +40,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     try {
       _showSignUpLoadingNotification();
       await _authenticationRepository.signUp(event.email, event.password);
-      await _setNewUsersData(event.firstName, event.lastName);
+      await _setNewUsersData(
+        event.firstName,
+        event.lastName,
+        _authenticationRepository,
+      );
       _showSignUpSuccessfulNotification();
       _navigateToDashboard();
       yield SignUpSuccess(_authenticationRepository.getCurrentUser()!.uid);
@@ -47,26 +55,48 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
   }
 
-  Future<void> _setNewUsersData(String firstName, String lastName) async {
-    await _setDisplayName(firstName, lastName);
-    await _setUserDataInDatabase(firstName, lastName);
+  Future<void> _setNewUsersData(
+    String firstName,
+    String lastName,
+    AuthenticationRepository authenticationRepository,
+  ) async {
+    await _setDisplayName(
+      firstName,
+      lastName,
+      authenticationRepository,
+    );
+    return await _setUserDataInDatabase(
+      firstName,
+      lastName,
+      authenticationRepository,
+    );
   }
 
-  Future<void> _setDisplayName(String firstName, String lastName) async {
+  Future<void> _setDisplayName(
+    String firstName,
+    String lastName,
+    AuthenticationRepository authenticationRepository,
+  ) async {
     String displayName = "${firstName[0]}. $lastName";
-    await _authenticationRepository.updateUserProfile(displayName: displayName);
+    return await authenticationRepository.updateUserProfile(
+        displayName: displayName);
   }
 
-  Future<void> _setUserDataInDatabase(String firstName, String lastName) async {
-    UserDataModel userData = UserDataModel(
+  Future<void> _setUserDataInDatabase(
+    String firstName,
+    String lastName,
+    AuthenticationRepository authenticationRepository,
+  ) async {
+    UserData newUserData = UserData(
       firstName: firstName,
       lastName: lastName,
       privilege: 'user',
     );
-
-    await UserRepository(_authenticationRepository).setUserData(userData);
+    UserModel newUser = authenticationRepository.getCurrentUser()!;
+    return await UserRepository(newUser).setUserData(newUserData);
   }
 
+  // ### Notifications
   void _showSignUpLoadingNotification() {
     return _notificationCubit.showAlert(
       'Signing Up...',
@@ -93,8 +123,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     );
   }
 
+  // ### Navigation
   void _navigateToDashboard() {
     _navigationCubit.navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      // Will automatically redirect to Dashboard Page
+      // and maintain Global BLoC Providers, Repository Providers
+      // Listeners and Builders in the tree.
+      // ! DO NOT DELETE OR CHANGE
       route.root,
       (route) => false,
     );
