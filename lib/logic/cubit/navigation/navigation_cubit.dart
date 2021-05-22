@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 part 'navigation_state.dart';
 
 class NavigationCubit extends Cubit<NavigationState> {
-  NavigationCubit(this.navigatorKey) : super(NavigationInitial());
+  NavigationCubit(this.navigatorKey) : super(NavigationState());
 
   final GlobalKey<NavigatorState> navigatorKey;
 
