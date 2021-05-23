@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:classmate/data/models/unit_details_model.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/course_model.dart';
+import '../../../data/models/course_details_model.dart';
 import '../../../data/models/school_model.dart';
-import '../../../data/models/session_model.dart';
+import '../../../data/models/session_details_model.dart';
 import '../../../data/models/user_data_model.dart';
-import '../../../data/repositories/courses_repository.dart';
 import '../../../data/repositories/school_repository.dart';
-import '../../../data/repositories/sessions_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../navigation/navigation_cubit.dart';
 import '../notification/notification_cubit.dart';
+// import 'package:async/async.dart';
 
 part 'manage_units_state.dart';
 
@@ -32,63 +32,75 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   final UserRepository _userRepository;
   final SchoolRepository _schoolRepository;
 
-  late CourseRepository _courseRepository;
-  late SessionRepository _sessionRepository;
+  // final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   Future<void> checkUserData() async {
-    return await _userRepository.getCurrentUserData().then((userData) async {
+    // return this._memoizer.runOnce(() async {
+    return await _userRepository.getUserData().then((userData) async {
       if (!state.changed &&
-          userData?.schoolId != null &&
-          userData?.courseId != null &&
-          userData?.sessionId != null &&
-          userData?.year != null &&
-          userData?.registeredUnitIds != null) {
-        SchoolModel school = await _getUserSchool(userData!);
-        CourseModel course = await _getUserCourse(userData, school);
-        SessionModel session = await _getUserSession(userData, school);
+          userData.schoolId != null &&
+          userData.course != null &&
+          userData.semester != null &&
+          userData.session != null &&
+          userData.year != null &&
+          userData.registeredUnitIds != null) {
+        School school = await _getUserSchool(userData);
+        CourseDetails course = school.courses!
+            .firstWhere((element) => element.name == userData.course);
+        SessionDetails session = school.sessions!
+            .firstWhere((element) => element.name == userData.session);
         String year = _mapYearToPrettyYear(userData.year!);
+        String semester = _mapSemesterToPrettySemester(userData.semester!);
+
         emit(ManageUnitsState.changed(
           changed: false,
           school: school,
           course: course,
+          semester: semester,
           session: session,
           year: year,
         ));
       }
     });
+    // });
   }
 
-  Future<List<SchoolModel>> getListOfSchools() async {
+  Future<List<School>> getListOfSchools() async {
     return await _schoolRepository.getAllSchools();
   }
 
-  Future<List<CourseModel>> getListOfCourses() async {
-    _initializeCourseRepository(state.school!);
-    return await _courseRepository.getAllCourses();
+  List<SessionDetails>? getListOfSessions() {
+    return state.school?.sessions;
   }
 
-  Future<List<SessionModel>> getListOfSessions() async {
-    _initializeSessionRepository(state.school!);
-    return await _sessionRepository.getAllSessions();
+  List<String>? getListOfYears() {
+    return state.course?.units?.keys.map(_mapYearToPrettyYear).toList();
   }
 
-  Future<List<String>> getListOfYears() async {
-    return await _courseRepository
-        .getCourseDetails(state.course!)
-        .then((course) => course.units.keys.map(_mapYearToPrettyYear).toList());
+  List<String>? getListOfSemesters() {
+    return state.course?.units?[_mapPrettyYearToYear(state.year!)]?.keys
+        .map(_mapSemesterToPrettySemester)
+        .toList()
+        .cast<String>();
   }
 
-  Future<List> getListOfUnits() async {
-    return await _courseRepository
-        .getCourseDetails(state.course!)
-        .then((course) => course.units[_mapPrettyYearToYear(state.year!)]);
+  List<UnitDetails?> getListOfUnits() {
+    List units = state.course?.units?[_mapPrettyYearToYear(state.year!)]
+        ?[_mapPrettySemesterToSemester(state.semester!)];
+
+    List<UnitDetails?> unitDetails = units
+        .map((e) =>
+            state.school?.units?.firstWhere((unit) => unit.codes!.contains(e)))
+        .toList();
+
+    return unitDetails;
   }
 
-  void changeSelectedSchool(SchoolModel school) {
+  void changeSelectedSchool(School school) {
     return emit(ManageUnitsState.changed(school: school));
   }
 
-  void changeSelectedCourse(CourseModel course) {
+  void changeSelectedCourse(CourseDetails course) {
     return emit(ManageUnitsState.changed(
       school: state.school,
       course: course,
@@ -104,7 +116,17 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     ));
   }
 
-  void changeSelectedSession(SessionModel session) {
+  void changeSelectedSemester(String semester) {
+    return emit(ManageUnitsState.changed(
+      session: state.session,
+      school: state.school,
+      course: state.course,
+      year: state.year,
+      semester: semester,
+    ));
+  }
+
+  void changeSelectedSession(SessionDetails session) {
     return emit(ManageUnitsState.changed(
       school: state.school,
       course: state.course,
@@ -113,20 +135,12 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     ));
   }
 
-  void _initializeCourseRepository(SchoolModel school) {
-    _courseRepository = CourseRepository(school);
-  }
-
-  void _initializeSessionRepository(SchoolModel school) {
-    _sessionRepository = SessionRepository(school);
-  }
-
   Future<void> saveCourseDetailsToDatabase() async {
     try {
       _showSavingCourseDetailsNotification();
 
       await _userRepository
-          .getCurrentUserData()
+          .getUserData()
           .then((userData) => _updateUserData(userData))
           .then((newUserData) => _userRepository.setUserData(newUserData));
 
@@ -139,50 +153,33 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   }
 
   // ### Getting User Data
-  Future<SchoolModel> _getUserSchool(UserDataModel userData) async {
+  Future<School> _getUserSchool(UserData userData) async {
     return await _schoolRepository.getSchoolDetailsFromID(userData.schoolId!);
-  }
-
-  Future<CourseModel> _getUserCourse(
-    UserDataModel userData,
-    SchoolModel school,
-  ) async {
-    _initializeCourseRepository(school);
-    return await _courseRepository.getCourseDetailsFromID(userData.courseId!);
-  }
-
-  Future<SessionModel> _getUserSession(
-    UserDataModel userData,
-    SchoolModel school,
-  ) async {
-    _initializeSessionRepository(school);
-    return await _sessionRepository
-        .getSessionDetailsFromID(userData.sessionId!);
   }
 
   // ## Notifications
   void _showSavingCourseDetailsNotification() {
     return _notificationCubit.showAlert(
-      "Saving Course Details",
+      "Saving CourseDetails Details",
       type: NotificationType.Loading,
     );
   }
 
   void _showCourseDetailsSavedNotification() {
     return _notificationCubit.showAlert(
-      "Course Details Saved",
+      "CourseDetails Details Saved",
       type: NotificationType.Success,
     );
   }
 
   void _showErrorSavingCourseDetailsNotification(String message) {
     _notificationCubit.showAlert(
-      "Error Saving Course Details",
+      "Error Saving CourseDetails Details",
       type: NotificationType.Danger,
     );
     return _notificationCubit.showSnackBar(
       message,
-      title: "Error Saving Course Details",
+      title: "Error Saving CourseDetails Details",
       type: NotificationType.Danger,
     );
   }
@@ -194,17 +191,17 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   /// e.g. => year1 -> Year 1
   String _mapYearToPrettyYear(String year) {
     switch (year) {
-      case 'firstYear':
+      case 'year1':
         return 'First Year';
-      case 'secondYear':
+      case 'year2':
         return 'Second Year';
-      case 'thirdYear':
+      case 'year3':
         return 'Third Year';
-      case 'fourthYear':
+      case 'year4':
         return 'Fourth Year';
-      case 'fifthYear':
+      case 'year5':
         return 'Fifth Year';
-      case 'sixthYear':
+      case 'year6':
         return 'Sixth Year';
       default:
         this.addError(Exception("Undefined Year Found In Database"));
@@ -215,51 +212,88 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   /// ### Map Pretty Year To Year
   /// Converts the pretty year displayed to the user
   /// back to the year keys found on the firebase database
-  /// for data integrity
+  /// e.g. => Year 1 -> year1
   String _mapPrettyYearToYear(String prettyYear) {
     switch (prettyYear) {
       case 'First Year':
-        return 'firstYear';
+        return 'year1';
       case 'Second Year':
-        return 'secondYear';
+        return 'year2';
       case 'Third Year':
-        return 'thirdYear';
+        return 'year3';
       case 'Fourth Year':
-        return 'fourthYear';
+        return 'year4';
       case 'Fifth Year':
-        return 'fifthYear';
+        return 'year5';
       case 'Sixth Year':
-        return 'sixthYear';
+        return 'year6';
       default:
         this.addError(Exception("Undefined Year Found In Database"));
         throw Exception("Undefined Year Found In Database");
     }
   }
 
-  List<String> _getListOfSelectedUnits() {
-    return List<String>.from(state
-        .course!.units[_mapPrettyYearToYear(state.year!)]
-        .map((unit) => unit['id'])
-        .toList());
+  /// ### Map Semester To Pretty Semester
+  /// Converts the semester keys in the firebase database to
+  /// a prettier and more readable string
+  /// e.g. => sem1 -> First Semester
+  String _mapSemesterToPrettySemester(String semester) {
+    switch (semester) {
+      case 'sem1':
+        return 'First Semester';
+      case 'sem2':
+        return 'Second Semester';
+      case 'sem3':
+        return 'Third Semester';
+      default:
+        this.addError(Exception("Undefined Semester Found In Database"));
+        throw Exception("Undefined Semester Found In Database");
+    }
   }
 
-  UserDataModel _updateUserData(UserDataModel? currentUserData) {
+  /// ### Map Pretty Semester To Semester
+  /// Converts the pretty semester displayed to the user
+  /// back to the semester keys found on the firebase database
+  /// e.g. => First Semester -> sem1
+  String _mapPrettySemesterToSemester(String prettySemester) {
+    switch (prettySemester) {
+      case 'First Semester':
+        return 'sem1';
+      case 'Second Semester':
+        return 'sem2';
+      case 'Third Semester':
+        return 'sem3';
+      default:
+        this.addError(Exception("Undefined Year Found In Database"));
+        throw Exception("Undefined Year Found In Database");
+    }
+  }
+
+  List<String>? _getListOfSelectedUnits() {
+    return state
+        .course
+        ?.units?[_mapPrettyYearToYear(state.year!)]![
+            _mapPrettySemesterToSemester(state.semester!)]
+        .cast<String>();
+  }
+
+  UserData _updateUserData(UserData? currentUserData) {
     return currentUserData != null
         ? currentUserData.copyWith(
-            privilege: 'student',
             schoolId: state.school!.id,
-            courseId: state.course!.id,
-            sessionId: state.session!.id,
+            course: state.course!.name,
+            session: state.session!.name,
             year: _mapPrettyYearToYear(state.year!),
             registeredUnitIds: _getListOfSelectedUnits(),
+            semester: _mapPrettySemesterToSemester(state.semester!),
           )
-        : UserDataModel(
-            privilege: 'student',
+        : UserData(
             schoolId: state.school!.id,
-            courseId: state.course!.id,
-            sessionId: state.session!.id,
+            course: state.course!.name,
+            session: state.session!.name,
             year: _mapPrettyYearToYear(state.year!),
             registeredUnitIds: _getListOfSelectedUnits(),
+            semester: _mapPrettySemesterToSemester(state.semester!),
           );
   }
 }

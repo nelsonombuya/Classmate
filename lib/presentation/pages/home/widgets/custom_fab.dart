@@ -5,8 +5,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../constants/device_query.dart';
+import '../../../../data/models/user_data_model.dart';
+import '../../../../data/repositories/user_repository.dart';
 import '../../../../logic/bloc/events/events_bloc.dart';
 import '../../../../logic/bloc/tasks/tasks_bloc.dart';
+
 import '../../events/create_event.dart';
 import '../../tasks/create_task.dart';
 
@@ -28,39 +31,46 @@ class CustomFloatingActionButton extends StatelessWidget {
         ? CupertinoColors.black
         : CupertinoColors.white;
 
-    final EventsBloc _eventsBloc = context.read<EventsBloc>();
-    final TasksBloc _tasksBloc = context.read<TasksBloc>();
+    final UserRepository _userRepository = context.read<UserRepository>();
 
-    return SpeedDial(
-      tooltip: "Quick Actions",
-      backgroundColor: _fabColor,
-      foregroundColor: _labelColor,
-      curve: Curves.fastLinearToSlowEaseIn,
-      animatedIcon: AnimatedIcons.menu_close,
-      children: [
-        SpeedDialChild(
-          label: "New Event",
+    final TasksBloc _tasksBloc = context.read<TasksBloc>();
+    final EventsBloc _eventsBloc = context.read<EventsBloc>();
+
+    return FutureBuilder<UserData?>(
+      future: _userRepository.getUserData(),
+      builder: (context, snapshot) {
+        return SpeedDial(
+          tooltip: "Quick Actions",
           backgroundColor: _fabColor,
-          labelBackgroundColor: _fabColor,
-          labelStyle: TextStyle(color: _labelColor),
-          child: Icon(Icons.event, color: _labelColor),
-          onTap: () => showBarModalBottomSheet(
-            context: context,
-            builder: (context) => CreateEvent(eventsBloc: _eventsBloc),
-          ),
-        ),
-        SpeedDialChild(
-          label: "New Task",
-          backgroundColor: _fabColor,
-          labelBackgroundColor: _fabColor,
-          labelStyle: TextStyle(color: _labelColor),
-          child: Icon(Icons.list_rounded, color: _labelColor),
-          onTap: () => showBarModalBottomSheet(
-            context: context,
-            builder: (context) => CreateTaskForm(tasksBloc: _tasksBloc),
-          ),
-        ),
-      ],
+          foregroundColor: _labelColor,
+          curve: Curves.fastLinearToSlowEaseIn,
+          animatedIcon: AnimatedIcons.menu_close,
+          children: [
+            SpeedDialChild(
+              label: "New Event",
+              backgroundColor: _fabColor,
+              labelBackgroundColor: _fabColor,
+              labelStyle: TextStyle(color: _labelColor),
+              child: Icon(Icons.event, color: _labelColor),
+              onTap: () => showBarModalBottomSheet(
+                context: context,
+                builder: (context) => CreateEvent(eventsBloc: _eventsBloc),
+              ),
+            ),
+            SpeedDialChild(
+              label: "New Task",
+              backgroundColor: _fabColor,
+              labelBackgroundColor: _fabColor,
+              labelStyle: TextStyle(color: _labelColor),
+              child: Icon(Icons.list_rounded, color: _labelColor),
+              onTap: () => showBarModalBottomSheet(
+                context: context,
+                builder: (context) => CreateTaskForm(tasksBloc: _tasksBloc),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

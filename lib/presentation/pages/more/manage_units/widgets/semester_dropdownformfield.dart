@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../logic/cubit/manage_units/manage_units_cubit.dart';
 
-class YearDropdownFormField extends StatelessWidget {
-  const YearDropdownFormField(this._state, {Key? key}) : super(key: key);
+class SemesterDropdownFormField extends StatelessWidget {
+  const SemesterDropdownFormField(this._state, {Key? key}) : super(key: key);
 
   final ManageUnitsState _state;
 
@@ -14,24 +14,26 @@ class YearDropdownFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Year",
+          "Semester",
           style: Theme.of(context).textTheme.headline6,
         ),
         DropdownButtonFormField<String>(
-          hint: Text("Select a year"),
-          value: _state.year,
-          onChanged: (String? year) {
-            if (year != null) {
-              return context.read<ManageUnitsCubit>().changeSelectedYear(year);
+          hint: Text("Select a semester"),
+          value: _state.semester,
+          onChanged: (String? semester) {
+            if (semester != null) {
+              return context
+                  .read<ManageUnitsCubit>()
+                  .changeSelectedSemester(semester);
             }
           },
           items: context
               .read<ManageUnitsCubit>()
-              .getListOfYears()
+              .getListOfSemesters()
               ?.map(
-                (String year) => DropdownMenuItem(
-                  value: year,
-                  child: Text(year),
+                (String semester) => DropdownMenuItem(
+                  value: semester,
+                  child: Text(semester),
                 ),
               )
               .toList(),

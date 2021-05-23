@@ -1,9 +1,9 @@
-import 'package:classmate/logic/cubit/school/school_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/user_model.dart';
+import '../../../data/repositories/authentication_repository.dart';
 import '../../../data/repositories/event_repository.dart';
 import '../../../data/repositories/task_repository.dart';
 import '../../../data/repositories/user_repository.dart';
@@ -11,6 +11,7 @@ import '../../../logic/bloc/events/events_bloc.dart';
 import '../../../logic/bloc/tasks/tasks_bloc.dart';
 import '../../../logic/cubit/navigation/navigation_cubit.dart';
 import '../../../logic/cubit/notification/notification_cubit.dart';
+
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import '../more/more_page.dart';
@@ -71,15 +72,17 @@ class HomePage extends StatelessWidget {
       )
     ];
 
-    final UserRepository _userRepository = context.read<UserRepository>();
-    final UserModel _user = _userRepository.getUser()!;
-    final EventRepository _eventRepository = EventRepository(_user);
-    final TaskRepository _taskRepository = TaskRepository(_user);
+    final _authRepo = context.read<AuthenticationRepository>();
+    final UserModel _currentUser = _authRepo.getCurrentUser()!;
+    final UserRepository _userRepository = UserRepository(_currentUser);
+    final TaskRepository _taskRepository = TaskRepository(_currentUser);
+    final EventRepository _eventRepository = EventRepository(_currentUser);
 
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider.value(value: _eventRepository),
+        RepositoryProvider.value(value: _userRepository),
         RepositoryProvider.value(value: _taskRepository),
+        RepositoryProvider.value(value: _eventRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -97,11 +100,6 @@ class HomePage extends StatelessWidget {
               notificationCubit: context.read<NotificationCubit>(),
             ),
           ),
-          BlocProvider<SchoolCubit>(
-            create: (context) => SchoolCubit(
-              userRepository: context.read<UserRepository>(),
-            ),
-          )
         ],
         child: _HomeView(
           pages: _pages,

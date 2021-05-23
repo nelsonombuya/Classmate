@@ -20,17 +20,17 @@ class SchoolDropdownFormField extends StatelessWidget {
           "School",
           style: Theme.of(context).textTheme.headline6,
         ),
-        FutureBuilder<List<SchoolModel>>(
+        FutureBuilder<List<School>>(
           future: context.read<ManageUnitsCubit>().getListOfSchools(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator.adaptive();
             }
             if (snapshot.hasData) {
-              return DropdownButtonFormField(
+              return DropdownButtonFormField<School>(
                 value: _state.school,
                 hint: Text("Select a school to continue"),
-                onChanged: (SchoolModel? school) {
+                onChanged: (School? school) {
                   if (school != null) {
                     return context
                         .read<ManageUnitsCubit>()
@@ -38,9 +38,9 @@ class SchoolDropdownFormField extends StatelessWidget {
                   }
                 },
                 items: snapshot.data!
-                    .map((SchoolModel school) => DropdownMenuItem(
+                    .map((School school) => DropdownMenuItem(
                           value: school,
-                          child: Text(school.name),
+                          child: Text(school.name!),
                         ))
                     .toList(),
               );

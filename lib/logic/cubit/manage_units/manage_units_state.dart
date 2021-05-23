@@ -6,6 +6,7 @@ class ManageUnitsState extends Equatable {
     this.course,
     this.year,
     this.session,
+    this.semester,
     this.changed = false,
   });
 
@@ -14,20 +15,23 @@ class ManageUnitsState extends Equatable {
     this.course,
     this.year,
     this.session,
+    this.semester,
     this.changed = true,
   });
 
-  final SchoolModel? school;
-  final CourseModel? course;
-  final SessionModel? session;
+  final School? school;
+  final CourseDetails? course;
+  final SessionDetails? session;
   final String? year;
+  final String? semester;
   final bool changed;
 
   @override
   List<Object> get props => [
         school ?? 'No School Selected',
-        course ?? 'No Course Selected',
+        course ?? 'No CourseDetails Selected',
         year ?? 'No Year Selected',
+        semester ?? 'No Semester Selected',
         session ?? 'No Session Selected',
       ];
 }

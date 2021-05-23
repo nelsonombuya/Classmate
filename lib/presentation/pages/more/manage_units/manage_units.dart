@@ -13,18 +13,22 @@ import '../../../common_widgets/no_data_found.dart';
 import 'widgets/course_dropdownformfield.dart';
 import 'widgets/list_of_units.dart';
 import 'widgets/school_dropdownformfield.dart';
+import 'widgets/semester_dropdownformfield.dart';
 import 'widgets/session_dropdownformfield.dart';
 import 'widgets/year_dropdownformfield.dart';
 
 class ManageUnits extends StatelessWidget {
+  ManageUnits(UserRepository userRepository) : _userRepository = userRepository;
+
   final SchoolRepository _schoolRepository = SchoolRepository();
+  final UserRepository _userRepository;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ManageUnitsCubit>(
       create: (context) => ManageUnitsCubit(
         schoolRepository: _schoolRepository,
-        userRepository: context.read<UserRepository>(),
+        userRepository: _userRepository,
         navigationCubit: context.read<NavigationCubit>(),
         notificationCubit: context.read<NotificationCubit>(),
       ),
@@ -47,6 +51,7 @@ class _ManageUnitsView extends StatelessWidget {
             bool enabled = (state.school != null &&
                 state.course != null &&
                 state.year != null &&
+                state.semester != null &&
                 state.session != null &&
                 state.changed == true);
             return TextButton(
@@ -92,15 +97,6 @@ class _ManageUnitsView extends StatelessWidget {
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
-                  buildWhen: (previous, next) => previous.course != next.course,
-                  builder: (context, state) {
-                    return (state.course != null)
-                        ? YearDropdownFormField(state)
-                        : SizedBox();
-                  },
-                ),
-                SizedBox(height: _deviceQuery.safeHeight(3.0)),
-                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
                   buildWhen: (previous, next) =>
                       previous.course != next.course ||
                       previous.session != next.session,
@@ -112,9 +108,30 @@ class _ManageUnitsView extends StatelessWidget {
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),
                 BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) => previous.course != next.course,
+                  builder: (context, state) {
+                    return (state.course != null)
+                        ? YearDropdownFormField(state)
+                        : SizedBox();
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
                   buildWhen: (previous, next) => previous.year != next.year,
                   builder: (context, state) {
-                    return (state.year != null) ? ListOfUnits() : SizedBox();
+                    return (state.year != null)
+                        ? SemesterDropdownFormField(state)
+                        : SizedBox();
+                  },
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(3.0)),
+                BlocBuilder<ManageUnitsCubit, ManageUnitsState>(
+                  buildWhen: (previous, next) =>
+                      previous.semester != next.semester,
+                  builder: (context, state) {
+                    return (state.semester != null)
+                        ? ListOfUnits()
+                        : SizedBox();
                   },
                 ),
               ],

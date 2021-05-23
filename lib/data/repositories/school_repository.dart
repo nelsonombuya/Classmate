@@ -1,5 +1,6 @@
-import '../models/school_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../models/school_model.dart';
 
 class SchoolRepository {
   SchoolRepository()
@@ -7,24 +8,30 @@ class SchoolRepository {
 
   final CollectionReference _schoolsCollection;
 
-  Future<List<SchoolModel>> getAllSchools() {
-    return _schoolsCollection.get().then(_mapQuerySnapshotToSchoolModelList);
+  Future<List<School>> getAllSchools() {
+    return _schoolsCollection.get().then(_mapQuerySnapshotToSchoolList);
   }
 
-  Future<SchoolModel> getSchoolDetailsFromID(String schoolID) {
+  Future<School> getSchoolDetailsFromID(String schoolID) {
     return _schoolsCollection
         .doc(schoolID)
         .get()
-        .then(_mapDocumentSnapshotToSchoolModel);
+        .then(_mapDocumentSnapshotToSchool);
   }
 
-  List<SchoolModel> _mapQuerySnapshotToSchoolModelList(QuerySnapshot snapshot) {
+  Future<void> createSchool(School school) async {
+    return _schoolsCollection
+        .doc()
+        .set(school.toMap(), SetOptions(merge: true));
+  }
+
+  List<School> _mapQuerySnapshotToSchoolList(QuerySnapshot snapshot) {
     return snapshot.docs
-        .map((doc) => SchoolModel.fromMap(doc.data()).copyWith(id: doc.id))
+        .map((doc) => School.fromMap(doc.data()).copyWith(id: doc.id))
         .toList();
   }
 
-  SchoolModel _mapDocumentSnapshotToSchoolModel(DocumentSnapshot snapshot) {
-    return SchoolModel.fromMap(snapshot.data()!).copyWith(id: snapshot.id);
+  School _mapDocumentSnapshotToSchool(DocumentSnapshot snapshot) {
+    return School.fromMap(snapshot.data()!).copyWith(id: snapshot.id);
   }
 }
