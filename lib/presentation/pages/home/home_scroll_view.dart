@@ -33,8 +33,8 @@ class HomeScrollView extends StatelessWidget {
             leading: _leading,
             expandedHeight: kToolbarHeight * 3.0,
             backgroundColor: _deviceQuery.brightness == Brightness.light
-                ? CupertinoColors.systemGroupedBackground.withOpacity(0.7)
-                : CupertinoColors.darkBackgroundGray.withOpacity(0.8),
+                ? CupertinoColors.systemGroupedBackground
+                : CupertinoColors.darkBackgroundGray,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               titlePadding: EdgeInsets.only(
