@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/authentication_repository.dart';
 import '../../../data/repositories/event_repository.dart';
+import '../../../data/repositories/school_repository.dart';
 import '../../../data/repositories/task_repository.dart';
 import '../../../data/repositories/user_repository.dart';
+import '../../../logic/bloc/assignments/assignments_bloc.dart';
 import '../../../logic/bloc/events/events_bloc.dart';
 import '../../../logic/bloc/tasks/tasks_bloc.dart';
 import '../../../logic/cubit/navigation/navigation_cubit.dart';
 import '../../../logic/cubit/notification/notification_cubit.dart';
-
 import '../dashboard/dashboard_page.dart';
 import '../events/events_page.dart';
 import '../more/more_page.dart';
@@ -78,11 +79,14 @@ class HomePage extends StatelessWidget {
     final TaskRepository _taskRepository = TaskRepository(_currentUser);
     final EventRepository _eventRepository = EventRepository(_currentUser);
 
+    final SchoolRepository _schoolRepository = SchoolRepository();
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: _userRepository),
         RepositoryProvider.value(value: _taskRepository),
         RepositoryProvider.value(value: _eventRepository),
+        RepositoryProvider.value(value: _schoolRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -96,6 +100,13 @@ class HomePage extends StatelessWidget {
           BlocProvider<TasksBloc>(
             create: (context) => TasksBloc(
               taskRepository: _taskRepository,
+              navigationCubit: context.read<NavigationCubit>(),
+              notificationCubit: context.read<NotificationCubit>(),
+            ),
+          ),
+          BlocProvider<AssignmentsBloc>(
+            create: (context) => AssignmentsBloc(
+              userRepository: _userRepository,
               navigationCubit: context.read<NavigationCubit>(),
               notificationCubit: context.read<NotificationCubit>(),
             ),

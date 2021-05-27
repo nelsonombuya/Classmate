@@ -3,19 +3,23 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class UnitDetails extends Equatable {
-  final String? name;
+  final String id;
+  final String name;
   final List<String>? codes;
 
   const UnitDetails({
-    this.name,
+    required this.id,
+    required this.name,
     this.codes,
   });
 
   UnitDetails copyWith({
+    String? id,
     String? name,
     List<String>? codes,
   }) {
     return UnitDetails(
+      id: id ?? this.id,
       name: name ?? this.name,
       codes: codes ?? this.codes,
     );
@@ -23,6 +27,7 @@ class UnitDetails extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'codes': codes,
     };
@@ -30,6 +35,7 @@ class UnitDetails extends Equatable {
 
   factory UnitDetails.fromMap(Map<String, dynamic> map) {
     return UnitDetails(
+      id: map['id'],
       name: map['name'],
       codes: List<String>.from(map['codes']),
     );
@@ -44,6 +50,5 @@ class UnitDetails extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props =>
-      [name ?? 'No UnitDetails Name', codes ?? 'No UnitDetails Codes'];
+  List<Object> get props => [id, name, codes ?? 'No Unit Codes'];
 }

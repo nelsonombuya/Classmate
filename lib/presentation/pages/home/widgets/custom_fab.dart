@@ -1,3 +1,7 @@
+import '../../../../data/models/school_model.dart';
+import '../../../../data/repositories/school_repository.dart';
+import '../../../../logic/bloc/assignments/assignments_bloc.dart';
+import '../../assignments/create_assignment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +36,8 @@ class CustomFloatingActionButton extends StatelessWidget {
         : CupertinoColors.white;
 
     final UserRepository _userRepository = context.read<UserRepository>();
+    final _schoolRepository = context.read<SchoolRepository>();
+    final _assignmentsBloc = context.read<AssignmentsBloc>();
 
     final TasksBloc _tasksBloc = context.read<TasksBloc>();
     final EventsBloc _eventsBloc = context.read<EventsBloc>();
@@ -66,6 +72,21 @@ class CustomFloatingActionButton extends StatelessWidget {
               onTap: () => showBarModalBottomSheet(
                 context: context,
                 builder: (context) => CreateTaskForm(tasksBloc: _tasksBloc),
+              ),
+            ),
+            SpeedDialChild(
+              label: "New Assignment",
+              backgroundColor: _fabColor,
+              labelBackgroundColor: _fabColor,
+              labelStyle: TextStyle(color: _labelColor),
+              child: Icon(Icons.assignment_rounded, color: _labelColor),
+              onTap: () => showBarModalBottomSheet(
+                context: context,
+                builder: (context) => CreateAssignmentForm(
+                  schoolRepository: _schoolRepository,
+                  userRepository: _userRepository,
+                  assignmentsBloc: _assignmentsBloc,
+                ),
               ),
             ),
           ],

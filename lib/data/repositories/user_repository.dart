@@ -4,13 +4,13 @@ import '../models/user_data_model.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  final UserModel _user;
-  final DocumentReference _userDocument;
-
   UserRepository(UserModel user)
       : _user = user,
         _userDocument =
             FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+  final UserModel _user;
+  final DocumentReference _userDocument;
 
   UserModel? getCurrentUser() => _user;
 
@@ -29,12 +29,7 @@ class UserRepository {
     return _userDocument.set(userData.toMap(), SetOptions(merge: true));
   }
 
-  // TODO Delete User's Sub-Collections too
-  Future<void> deleteUserData() => _userDocument.delete();
-
   UserData _mapDocumentSnapshotToUserData(DocumentSnapshot snapshot) {
-    return (snapshot.data() == null)
-        ? UserData()
-        : UserData.fromMap(snapshot.data()!);
+    return UserData.fromMap(snapshot.data()!);
   }
 }

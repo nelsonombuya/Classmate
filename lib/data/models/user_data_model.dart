@@ -5,20 +5,20 @@ import 'package:equatable/equatable.dart';
 class UserData extends Equatable {
   final String? firstName;
   final String? lastName;
-  final String? course;
+  final String? courseId;
   final String? schoolId;
-  final String? session;
-  final String? semester;
+  final String? sessionId;
   final String? year;
+  final String? semester;
   final String? privilege;
   final List<String>? registeredUnitIds;
 
   const UserData({
     this.firstName,
     this.lastName,
-    this.course,
+    this.courseId,
     this.schoolId,
-    this.session,
+    this.sessionId,
     this.semester,
     this.year,
     this.privilege,
@@ -28,9 +28,9 @@ class UserData extends Equatable {
   UserData copyWith({
     String? firstName,
     String? lastName,
-    String? course,
+    String? courseId,
     String? schoolId,
-    String? session,
+    String? sessionId,
     String? semester,
     String? year,
     String? privilege,
@@ -39,9 +39,9 @@ class UserData extends Equatable {
     return UserData(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      course: course ?? this.course,
+      courseId: courseId ?? this.courseId,
       schoolId: schoolId ?? this.schoolId,
-      session: session ?? this.session,
+      sessionId: sessionId ?? this.sessionId,
       semester: semester ?? this.semester,
       year: year ?? this.year,
       privilege: privilege ?? this.privilege,
@@ -53,9 +53,9 @@ class UserData extends Equatable {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'course': course,
+      'courseId': courseId,
       'schoolId': schoolId,
-      'session': session,
+      'sessionId': sessionId,
       'semester': semester,
       'year': year,
       'privilege': privilege,
@@ -67,13 +67,13 @@ class UserData extends Equatable {
     return UserData(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      course: map['course'],
+      courseId: map['courseId'],
       schoolId: map['schoolId'],
-      session: map['session'],
+      sessionId: map['sessionId'],
       semester: map['semester'],
       year: map['year'],
       privilege: map['privilege'],
-      registeredUnitIds: List<String>.from(map['registeredUnitIds']),
+      registeredUnitIds: List<String>.from(map['registeredUnitIds'] ?? []),
     );
   }
 
@@ -90,9 +90,9 @@ class UserData extends Equatable {
     return [
       firstName ?? 'No First Name',
       lastName ?? 'No Last Name',
-      course ?? 'No Registered Course',
+      courseId ?? 'No Registered Course',
       schoolId ?? 'No Registered SchoolID',
-      session ?? 'No Registered Session',
+      sessionId ?? 'No Registered Session',
       semester ?? 'No Registered Semester',
       year ?? 'No Registered Year',
       privilege ?? 'User',

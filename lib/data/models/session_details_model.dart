@@ -4,21 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class SessionDetails extends Equatable {
+  final String? id;
   final String? name;
   final DateTime? startDate;
   final DateTime? endDate;
-  SessionDetails({
+
+  const SessionDetails({
+    this.id,
     this.name,
     this.startDate,
     this.endDate,
   });
 
   SessionDetails copyWith({
+    String? id,
     String? name,
     DateTime? startDate,
     DateTime? endDate,
   }) {
     return SessionDetails(
+      id: id ?? this.id,
       name: name ?? this.name,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -27,6 +32,7 @@ class SessionDetails extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'startDate': startDate?.millisecondsSinceEpoch,
       'endDate': endDate?.millisecondsSinceEpoch,
@@ -35,6 +41,7 @@ class SessionDetails extends Equatable {
 
   factory SessionDetails.fromMap(Map<String, dynamic> map) {
     return SessionDetails(
+      id: map['id'],
       name: map['name'],
       startDate: map['startDate'] == null
           ? DateTime.now()
@@ -59,8 +66,9 @@ class SessionDetails extends Equatable {
 
   @override
   List<Object> get props => [
-        name ?? 'No Name',
-        startDate ?? 'No Start Date',
-        endDate ?? 'No End Date',
+        id ?? 'No Session ID Set',
+        name ?? 'No Session Name Set',
+        startDate ?? 'No Start Date Set',
+        endDate ?? 'No End Date Set',
       ];
 }

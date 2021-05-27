@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:classmate/data/models/unit_details_model.dart';
+import '../../../data/models/unit_details_model.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/models/course_details_model.dart';
@@ -39,16 +39,16 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     return await _userRepository.getUserData().then((userData) async {
       if (!state.changed &&
           userData.schoolId != null &&
-          userData.course != null &&
-          userData.semester != null &&
-          userData.session != null &&
+          userData.courseId != null &&
+          userData.sessionId != null &&
           userData.year != null &&
+          userData.semester != null &&
           userData.registeredUnitIds != null) {
         School school = await _getUserSchool(userData);
         CourseDetails course = school.courses!
-            .firstWhere((element) => element.name == userData.course);
+            .firstWhere((element) => element.id == userData.courseId);
         SessionDetails session = school.sessions!
-            .firstWhere((element) => element.name == userData.session);
+            .firstWhere((element) => element.id == userData.sessionId);
         String year = _mapYearToPrettyYear(userData.year!);
         String semester = _mapSemesterToPrettySemester(userData.semester!);
 
@@ -85,12 +85,12 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
   }
 
   List<UnitDetails?> getListOfUnits() {
-    List units = state.course?.units?[_mapPrettyYearToYear(state.year!)]
+    List unitIds = state.course?.units?[_mapPrettyYearToYear(state.year!)]
         ?[_mapPrettySemesterToSemester(state.semester!)];
 
-    List<UnitDetails?> unitDetails = units
-        .map((e) =>
-            state.school?.units?.firstWhere((unit) => unit.codes!.contains(e)))
+    List<UnitDetails?> unitDetails = unitIds
+        .map((unitId) =>
+            state.school?.units?.firstWhere((unit) => unit.id == unitId))
         .toList();
 
     return unitDetails;
@@ -281,16 +281,16 @@ class ManageUnitsCubit extends Cubit<ManageUnitsState> {
     return currentUserData != null
         ? currentUserData.copyWith(
             schoolId: state.school!.id,
-            course: state.course!.name,
-            session: state.session!.name,
+            courseId: state.course!.id,
+            sessionId: state.session!.id,
             year: _mapPrettyYearToYear(state.year!),
             registeredUnitIds: _getListOfSelectedUnits(),
             semester: _mapPrettySemesterToSemester(state.semester!),
           )
         : UserData(
             schoolId: state.school!.id,
-            course: state.course!.name,
-            session: state.session!.name,
+            courseId: state.course!.id,
+            sessionId: state.session!.id,
             year: _mapPrettyYearToYear(state.year!),
             registeredUnitIds: _getListOfSelectedUnits(),
             semester: _mapPrettySemesterToSemester(state.semester!),

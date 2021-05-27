@@ -3,86 +3,68 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:classmate/data/models/unit_model.dart';
-
-class AssignmentModel extends Equatable {
-  final String? id;
-  final UnitModel? unit;
-  final String? title;
+class Assignment extends Equatable {
+  final String title;
+  final DateTime dueDate;
   final String? description;
-  final DateTime? dueDate;
-  final bool? isDone;
+  final Map<String, bool>? isDone;
 
-  const AssignmentModel({
-    this.id,
-    this.unit,
-    this.title,
+  const Assignment({
+    required this.title,
+    required this.dueDate,
+    this.isDone = const {},
     this.description,
-    this.dueDate,
-    this.isDone,
   });
 
-  AssignmentModel copyWith({
-    String? id,
-    UnitModel? unit,
+  Assignment copyWith({
     String? title,
-    String? description,
     DateTime? dueDate,
-    bool? isDone,
+    String? description,
+    Map<String, bool>? isDone,
   }) {
-    return AssignmentModel(
-      id: id ?? this.id,
-      unit: unit ?? this.unit,
+    return Assignment(
       title: title ?? this.title,
-      description: description ?? this.description,
       dueDate: dueDate ?? this.dueDate,
+      description: description ?? this.description,
       isDone: isDone ?? this.isDone,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'unit': unit?.toMap(),
       'title': title,
+      'dueDate': dueDate.millisecondsSinceEpoch,
       'description': description,
-      'dueDate': dueDate?.millisecondsSinceEpoch,
       'isDone': isDone,
     };
   }
 
-  factory AssignmentModel.fromMap(Map<String, dynamic> map) {
-    return AssignmentModel(
-      id: map['id'],
+  factory Assignment.fromMap(Map<String, dynamic> map) {
+    return Assignment(
       title: map['title'],
       description: map['description'],
-      isDone: map['isDone'],
+      isDone: Map<String, bool>.from(map['isDone'] ?? {}),
       dueDate: map['dueDate'] == null
-          ? null
+          ? throw NullThrownError()
           : map['dueDate'] is Timestamp
               ? map['dueDate'].toDate()
               : DateTime.fromMillisecondsSinceEpoch(map['dueDate']),
-      unit: map['unit'] == null ? UnitModel() : UnitModel.fromMap(map['unit']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory AssignmentModel.fromJson(String source) =>
-      AssignmentModel.fromMap(json.decode(source));
+  factory Assignment.fromJson(String source) =>
+      Assignment.fromMap(json.decode(source));
 
   @override
   bool get stringify => true;
 
   @override
-  List<Object> get props {
-    return [
-      id ?? '-',
-      unit ?? '-',
-      title ?? '-',
-      description ?? '-',
-      dueDate ?? '-',
-      isDone ?? '-',
-    ];
-  }
+  List<Object> get props => [
+        title,
+        dueDate,
+        description ?? 'No Description',
+        isDone ?? 'No one has done the assignment',
+      ];
 }

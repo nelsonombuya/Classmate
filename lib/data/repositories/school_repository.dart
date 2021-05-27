@@ -25,6 +25,12 @@ class SchoolRepository {
         .set(school.toMap(), SetOptions(merge: true));
   }
 
+  Future<void> updateSchool(School school) async {
+    _schoolsCollection
+        .doc(school.id)
+        .set(school.toMap(), SetOptions(merge: true));
+  }
+
   List<School> _mapQuerySnapshotToSchoolList(QuerySnapshot snapshot) {
     return snapshot.docs
         .map((doc) => School.fromMap(doc.data()).copyWith(id: doc.id))
