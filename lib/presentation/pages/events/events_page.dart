@@ -41,7 +41,7 @@ class _EventsPageState extends State<EventsPage> {
             controller: _listViewScrollController,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: EdgeInsets.all(_deviceQuery.safeWidth(4.0)),
+                padding: EdgeInsets.all(_deviceQuery.safeWidth(1.5)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   // TODO: Replace Slidable with Press and Hold
