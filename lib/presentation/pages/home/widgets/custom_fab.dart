@@ -1,3 +1,6 @@
+import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
+import 'package:classmate/presentation/pages/lessons/create_lessons.dart';
+
 import '../../../../data/models/school_model.dart';
 import '../../../../data/repositories/school_repository.dart';
 import '../../../../logic/bloc/assignments/assignments_bloc.dart';
@@ -38,6 +41,7 @@ class CustomFloatingActionButton extends StatelessWidget {
     final UserRepository _userRepository = context.read<UserRepository>();
     final _schoolRepository = context.read<SchoolRepository>();
     final _assignmentsBloc = context.read<AssignmentsBloc>();
+    final _lessonsBloc = context.read<LessonsBloc>();
 
     final TasksBloc _tasksBloc = context.read<TasksBloc>();
     final EventsBloc _eventsBloc = context.read<EventsBloc>();
@@ -86,6 +90,21 @@ class CustomFloatingActionButton extends StatelessWidget {
                   schoolRepository: _schoolRepository,
                   userRepository: _userRepository,
                   assignmentsBloc: _assignmentsBloc,
+                ),
+              ),
+            ),
+            SpeedDialChild(
+              label: "New Lesson",
+              backgroundColor: _fabColor,
+              labelBackgroundColor: _fabColor,
+              labelStyle: TextStyle(color: _labelColor),
+              child: Icon(Icons.assignment_rounded, color: _labelColor),
+              onTap: () => showBarModalBottomSheet(
+                context: context,
+                builder: (context) => CreateLessonForm(
+                  schoolRepository: _schoolRepository,
+                  userRepository: _userRepository,
+                  lessonsBloc: _lessonsBloc,
                 ),
               ),
             ),

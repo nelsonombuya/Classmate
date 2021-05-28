@@ -1,3 +1,4 @@
+import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,6 +112,13 @@ class HomePage extends StatelessWidget {
               notificationCubit: context.read<NotificationCubit>(),
             ),
           ),
+          BlocProvider<LessonsBloc>(
+            create: (context) => LessonsBloc(
+              userRepository: _userRepository,
+              navigationCubit: context.read<NavigationCubit>(),
+              notificationCubit: context.read<NotificationCubit>(),
+            ),
+          ),
         ],
         child: _HomeView(
           pages: _pages,
@@ -132,27 +140,27 @@ class _HomeView extends StatefulWidget {
     required List<Widget> pages,
     required List<String> titles,
     required List<BottomNavigationBarItem> bottomNavigationBarItems,
-  })   : _leading = leading,
+  })  : _leading = leading,
         _actions = actions,
         _overridePageShown = overridePageShown,
         _pages = pages,
         _titles = titles,
         _bottomNavigationBarItems = bottomNavigationBarItems;
 
+  final List<Widget>? _actions;
+  final List<BottomNavigationBarItem> _bottomNavigationBarItems;
   final Widget? _leading;
+  final HomeSubPage? _overridePageShown;
   final List<Widget> _pages;
   final List<String> _titles;
-  final List<Widget>? _actions;
-  final HomeSubPage? _overridePageShown;
-  final List<BottomNavigationBarItem> _bottomNavigationBarItems;
 
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<_HomeView> {
-  final PageController _pageController = PageController();
   int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   void _onPageSwiped(int index) => setState(() => _currentIndex = index);
 

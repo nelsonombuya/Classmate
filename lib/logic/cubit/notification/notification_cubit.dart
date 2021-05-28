@@ -9,7 +9,7 @@ import '../navigation/navigation_cubit.dart';
 part 'notification_state.dart';
 
 enum NotificationType { Loading, Info, Warning, Danger, Success }
-enum DialogType { DeleteEvent, DeleteTask, DeleteAssignment }
+enum DialogType { DeleteEvent, DeleteTask, DeleteAssignment, DeleteLesson }
 
 class NotificationCubit extends Cubit<NotificationState> {
   NotificationCubit({
@@ -19,17 +19,52 @@ class NotificationCubit extends Cubit<NotificationState> {
         _authenticationBloc = authenticationBloc,
         super(NotificationInitial());
 
-  final NavigationCubit _navigationCubit;
   final AuthenticationBloc _authenticationBloc;
+  final NavigationCubit _navigationCubit;
 
-  void showSnackBar(String message, {String? title, NotificationType? type}) {
-    emit(ShowSnackBar(
+  void showAlert(String message, {NotificationType? type}) {
+    return emit(ShowAlert(
       message,
-      title: title,
       notificationType: type,
     ));
-    // ! Resets state to allow stacking of snack bars. DO NOT DELETE!
-    return emit(NotificationInitial());
+  }
+
+  void showDeleteDialog(DialogType type, Function deleteFunction) {
+    String objectToBeDeleted;
+    switch (type) {
+      case DialogType.DeleteEvent:
+        objectToBeDeleted = "event";
+        break;
+      case DialogType.DeleteTask:
+        objectToBeDeleted = "task";
+        break;
+      case DialogType.DeleteAssignment:
+        objectToBeDeleted = "assignment";
+        break;
+      case DialogType.DeleteLesson:
+        objectToBeDeleted = "lesson";
+        break;
+      default:
+        objectToBeDeleted = "";
+        break;
+    }
+
+    return showDialogBox(
+      "Are you sure you want to delete this $objectToBeDeleted?",
+      title: "Delete $objectToBeDeleted",
+      positiveActionLabel: "DELETE ${objectToBeDeleted.toUpperCase()}",
+      negativeActionLabel: "CANCEL",
+      descriptionIcon: Icons.delete_rounded,
+      positiveActionIcon: Icons.delete_rounded,
+      type: NotificationType.Danger,
+      positiveActionOnPressed: () {
+        _navigationCubit.popCurrentPage();
+        return deleteFunction();
+      },
+      negativeActionOnPressed: () {
+        return _navigationCubit.popCurrentPage();
+      },
+    );
   }
 
   void showDialogBox(
@@ -56,13 +91,6 @@ class NotificationCubit extends Cubit<NotificationState> {
     ));
   }
 
-  void showAlert(String message, {NotificationType? type}) {
-    return emit(ShowAlert(
-      message,
-      notificationType: type,
-    ));
-  }
-
   void showSignOutDialog() {
     return showDialogBox(
       "Are you sure you want to sign out?",
@@ -82,38 +110,13 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
   }
 
-  void showDeleteDialog(DialogType type, Function deleteFunction) {
-    String objectToBeDeleted;
-    switch (type) {
-      case DialogType.DeleteEvent:
-        objectToBeDeleted = "event";
-        break;
-      case DialogType.DeleteTask:
-        objectToBeDeleted = "task";
-        break;
-      case DialogType.DeleteAssignment:
-        objectToBeDeleted = "assignment";
-        break;
-      default:
-        objectToBeDeleted = "";
-        break;
-    }
-
-    return showDialogBox(
-      "Are you sure you want to delete this $objectToBeDeleted?",
-      title: "Delete $objectToBeDeleted",
-      positiveActionLabel: "DELETE ${objectToBeDeleted.toUpperCase()}",
-      negativeActionLabel: "CANCEL",
-      descriptionIcon: Icons.delete_rounded,
-      positiveActionIcon: Icons.delete_rounded,
-      type: NotificationType.Danger,
-      positiveActionOnPressed: () {
-        _navigationCubit.popCurrentPage();
-        return deleteFunction();
-      },
-      negativeActionOnPressed: () {
-        return _navigationCubit.popCurrentPage();
-      },
-    );
+  void showSnackBar(String message, {String? title, NotificationType? type}) {
+    emit(ShowSnackBar(
+      message,
+      title: title,
+      notificationType: type,
+    ));
+    // ! Resets state to allow stacking of snack bars. DO NOT DELETE!
+    return emit(NotificationInitial());
   }
 }
