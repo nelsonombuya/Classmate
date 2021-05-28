@@ -38,6 +38,30 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     }
   }
 
+  Future<Unit> _getUnitDetails(
+    UnitRepository unitRepository,
+    AssignmentCreated event,
+    String sessionID,
+  ) async {
+    return await unitRepository.getUnit(event.unit.id) ??
+        Unit(
+          id: event.unit.id,
+          unitDetails: event.unit,
+          sessionId: sessionID,
+          assignments: [],
+          lessons: [],
+        );
+  }
+
+  Future<UnitRepository> _getUnitRepository() async {
+    var userData = await _userRepository.getUserData();
+    var unitRepository = UnitRepository(
+      schoolID: userData.schoolId!,
+      sessionID: userData.sessionId!,
+    );
+    return unitRepository;
+  }
+
   Stream<AssignmentsState> _mapAssignmentCreatedToState(
     AssignmentCreated event,
   ) async* {
@@ -65,6 +89,21 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     }
   }
 
+  Stream<AssignmentsState> _mapAssignmentDeletedToState(
+    AssignmentDeleted event,
+  ) async* {
+    try {
+      _showDeletingAssignmentNotification();
+      UnitRepository unitRepository = await _getUnitRepository();
+      await unitRepository.updateUnit(event.unit);
+      _showAssignmentDeletedSuccessfullyNotification();
+      yield AssignmentsState.deleted(assignment: event.assignment);
+    } catch (e) {
+      _showErrorDeletingAssignmentNotification(e.toString());
+      this.addError(e);
+    }
+  }
+
   Stream<AssignmentsState> _mapAssignmentUpdatedToState(
     AssignmentUpdated event,
   ) async* {
@@ -81,44 +120,6 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     }
   }
 
-  Stream<AssignmentsState> _mapAssignmentDeletedToState(
-    AssignmentDeleted event,
-  ) async* {
-    try {
-      _showDeletingAssignmentNotification();
-      UnitRepository unitRepository = await _getUnitRepository();
-      await unitRepository.updateUnit(event.unit);
-      _showAssignmentDeletedSuccessfullyNotification();
-      yield AssignmentsState.deleted(assignment: event.assignment);
-    } catch (e) {
-      _showErrorDeletingAssignmentNotification(e.toString());
-      this.addError(e);
-    }
-  }
-
-  Future<UnitRepository> _getUnitRepository() async {
-    var userData = await _userRepository.getUserData();
-    var unitRepository = UnitRepository(
-      schoolID: userData.schoolId!,
-      sessionID: userData.sessionId!,
-    );
-    return unitRepository;
-  }
-
-  Future<Unit> _getUnitDetails(
-    UnitRepository unitRepository,
-    AssignmentCreated event,
-    String sessionID,
-  ) async {
-    return await unitRepository.getUnit(event.unit.id) ??
-        Unit(
-          id: event.unit.id,
-          unitDetails: event.unit,
-          sessionId: sessionID,
-          assignments: [],
-        );
-  }
-
   Assignment _mapEventToAssignment(AssignmentCreated event) {
     return Assignment(
       description: event.description,
@@ -127,38 +128,9 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     );
   }
 
-  // ## Notifications
-  void _showCreatingAssignmentNotification() {
-    return _notificationCubit.showAlert(
-      "Creating Assignment",
-      type: NotificationType.Loading,
-    );
-  }
-
-  void _showUpdatingAssignmentNotification() {
-    return _notificationCubit.showAlert(
-      "Updating Assignment",
-      type: NotificationType.Loading,
-    );
-  }
-
-  void _showDeletingAssignmentNotification() {
-    return _notificationCubit.showAlert(
-      "Deleting Assignment",
-      type: NotificationType.Loading,
-    );
-  }
-
   void _showAssignmentCreatedSuccessfullyNotification() {
     return _notificationCubit.showAlert(
       "Assignment Created",
-      type: NotificationType.Success,
-    );
-  }
-
-  void _showAssignmentUpdatedSuccessfullyNotification() {
-    return _notificationCubit.showAlert(
-      "Assignment Updated",
       type: NotificationType.Success,
     );
   }
@@ -170,6 +142,28 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     );
   }
 
+  void _showAssignmentUpdatedSuccessfullyNotification() {
+    return _notificationCubit.showAlert(
+      "Assignment Updated",
+      type: NotificationType.Success,
+    );
+  }
+
+  // ## Notifications
+  void _showCreatingAssignmentNotification() {
+    return _notificationCubit.showAlert(
+      "Creating Assignment",
+      type: NotificationType.Loading,
+    );
+  }
+
+  void _showDeletingAssignmentNotification() {
+    return _notificationCubit.showAlert(
+      "Deleting Assignment",
+      type: NotificationType.Loading,
+    );
+  }
+
   void _showErrorCreatingAssignmentNotification(String message) {
     _notificationCubit.showAlert(
       "Error Creating Assignment",
@@ -178,6 +172,18 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     return _notificationCubit.showSnackBar(
       message,
       title: "Error Creating Assignment",
+      type: NotificationType.Danger,
+    );
+  }
+
+  void _showErrorDeletingAssignmentNotification(String message) {
+    _notificationCubit.showAlert(
+      "Error Deleting Assignment",
+      type: NotificationType.Danger,
+    );
+    return _notificationCubit.showSnackBar(
+      message,
+      title: "Error Deleting Assignment",
       type: NotificationType.Danger,
     );
   }
@@ -194,15 +200,10 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
     );
   }
 
-  void _showErrorDeletingAssignmentNotification(String message) {
-    _notificationCubit.showAlert(
-      "Error Deleting Assignment",
-      type: NotificationType.Danger,
-    );
-    return _notificationCubit.showSnackBar(
-      message,
-      title: "Error Deleting Assignment",
-      type: NotificationType.Danger,
+  void _showUpdatingAssignmentNotification() {
+    return _notificationCubit.showAlert(
+      "Updating Assignment",
+      type: NotificationType.Loading,
     );
   }
 }
