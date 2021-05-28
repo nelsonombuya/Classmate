@@ -157,6 +157,31 @@ class _CreateLessonFormViewState extends State<CreateLessonFormView> {
               controller: _cubit.descriptionController,
             ),
             SizedBox(height: _deviceQuery.safeHeight(3.0)),
+            if (widget._lesson == null)
+              Row(
+                children: [
+                  SizedBox(width: _deviceQuery.safeWidth(2.0)),
+                  Text(
+                    "Set time for all lessons",
+                    style: TextStyle(
+                      fontSize: _deviceQuery.safeHeight(2.1),
+                      fontWeight: _cubit.state.setForAllLessons
+                          ? FontWeight.bold
+                          : null,
+                    ),
+                  ),
+                  Switch.adaptive(
+                    value: _cubit.state.setForAllLessons,
+                    activeColor: Theme.of(context).primaryColor,
+                    onChanged: (value) => _cubit.changeSetForAllLessons(value),
+                  ),
+                ],
+              ),
+            if (_cubit.state.setForAllLessons)
+              Text(
+                "Please select the date and time the first class for this unit begins and ends.",
+              ),
+            SizedBox(height: _deviceQuery.safeHeight(2.0)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

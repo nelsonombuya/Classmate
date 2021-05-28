@@ -13,10 +13,12 @@ class LessonCreated extends LessonsEvent {
     required this.startDate,
     required this.endDate,
     required this.unit,
+    required this.duplicate,
     this.description,
   });
 
   final String? description;
+  final bool duplicate;
   final DateTime endDate;
   final DateTime startDate;
   final String title;

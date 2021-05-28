@@ -89,16 +89,6 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           SizedBox(height: 10),
-                          if (lessons!.isNotEmpty)
-                            LessonsListView(
-                              lessons: lessons,
-                              cubit: _cubit,
-                              deviceQuery: _deviceQuery,
-                              unit: unit,
-                              lessonsBloc: _lessonsBloc,
-                              schoolRepository: _schoolRepository,
-                              userRepository: _userRepository,
-                            ),
                           if (assignments!.isNotEmpty)
                             AssignmentsListView(
                               assignments: assignments,
@@ -109,6 +99,16 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                               userRepository: _userRepository,
                               cubit: _cubit,
                               uid: _uid,
+                            ),
+                          if (lessons!.isNotEmpty)
+                            LessonsListView(
+                              lessons: lessons,
+                              cubit: _cubit,
+                              deviceQuery: _deviceQuery,
+                              unit: unit,
+                              lessonsBloc: _lessonsBloc,
+                              schoolRepository: _schoolRepository,
+                              userRepository: _userRepository,
                             ),
                         ],
                       );

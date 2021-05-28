@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:classmate/data/models/lesson_model.dart';
+import 'package:classmate/data/models/user_data_model.dart';
+import 'package:classmate/data/repositories/school_repository.dart';
 import '../../../data/models/lesson_model.dart';
 import '../../../data/models/unit_details_model.dart';
 import '../../../data/models/unit_model.dart';
@@ -36,6 +38,30 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
       yield* _mapLessonUpdatedToState(event);
     } else if (event is LessonDeleted) {
       yield* _mapLessonDeletedToState(event);
+    }
+  }
+
+  Future<void> _addDuplicatedLessons(
+    UserData userData,
+    Unit currentUnitDetails,
+    Lesson lesson,
+  ) async {
+    var schoolDetails =
+        await SchoolRepository().getSchoolDetailsFromID(userData.schoolId!);
+    var sessionDetails = schoolDetails.sessions!
+        .firstWhere((element) => element.id == userData.sessionId!);
+
+    final numberOfWeeks = _weeksBetween(
+      sessionDetails.startDate!,
+      sessionDetails.endDate!,
+    );
+
+    for (int i = 0; i < numberOfWeeks; ++i) {
+      currentUnitDetails.lessons!.add(lesson);
+      lesson = lesson.copyWith(
+        startDate: lesson.startDate.add(Duration(days: 7)),
+        endDate: lesson.endDate.add(Duration(days: 7)),
+      );
     }
   }
 
@@ -86,7 +112,13 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
         event,
         userData.sessionId!,
       );
-      currentUnitDetails.lessons!.add(lesson);
+
+      if (event.duplicate) {
+        await _addDuplicatedLessons(userData, currentUnitDetails, lesson);
+      } else {
+        currentUnitDetails.lessons!.add(lesson);
+      }
+
       await unitRepository.updateUnit(currentUnitDetails);
       _showLessonCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
@@ -201,5 +233,11 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
       "Updating Lesson",
       type: NotificationType.Loading,
     );
+  }
+
+  int _weeksBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inDays / 7).round();
   }
 }

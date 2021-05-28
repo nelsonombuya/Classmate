@@ -23,6 +23,7 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
         _lessonsBloc = lessonsBloc,
         _schoolRepository = schoolRepository,
         super(CreateLessonState.initial(
+            setForAllLessons: true,
             selectedStartDate: DateTime.now(),
             selectedEndDate: DateTime.now().add(Duration(hours: 2))));
 
@@ -55,6 +56,7 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
 
   void changeSelectedEndDate(DateTime selectedEndDate) {
     return emit(CreateLessonState.changed(
+      setForAllLessons: state.setForAllLessons,
       selectedStartDate: state.selectedStartDate,
       selectedEndDate: selectedEndDate,
       unit: state.unit,
@@ -63,6 +65,7 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
 
   void changeSelectedStartDate(DateTime selectedStartDate) {
     return emit(CreateLessonState.changed(
+      setForAllLessons: state.setForAllLessons,
       selectedStartDate: selectedStartDate,
       selectedEndDate: state.selectedEndDate,
       unit: state.unit,
@@ -71,9 +74,19 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
 
   void changeSelectedUnit(UnitDetails unit) {
     return emit(CreateLessonState.changed(
+      setForAllLessons: state.setForAllLessons,
       selectedStartDate: state.selectedStartDate,
       selectedEndDate: state.selectedEndDate,
       unit: unit,
+    ));
+  }
+
+  void changeSetForAllLessons(bool value) {
+    return emit(CreateLessonState.changed(
+      selectedStartDate: state.selectedStartDate,
+      selectedEndDate: state.selectedEndDate,
+      setForAllLessons: value,
+      unit: state.unit,
     ));
   }
 
@@ -84,6 +97,7 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
   void saveLesson() {
     if (formKey.currentState?.validate() ?? false) {
       _lessonsBloc.add(LessonCreated(
+        duplicate: state.setForAllLessons,
         description: descriptionController.text,
         startDate: state.selectedStartDate,
         endDate: state.selectedEndDate,
@@ -99,6 +113,7 @@ class CreateLessonCubit extends Cubit<CreateLessonState> {
       descriptionController.text = lesson.description!;
 
     return emit(CreateLessonState.changed(
+      setForAllLessons: false,
       selectedStartDate: lesson.startDate,
       selectedEndDate: lesson.endDate,
       unit: unit.unitDetails,
