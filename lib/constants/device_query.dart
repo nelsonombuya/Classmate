@@ -27,11 +27,15 @@ class DeviceQuery {
                     MediaQuery.of(context).padding.bottom)) /
             100;
 
-  // * Calculate height and width with relation to the available safe area
+  /// * Calculate width with relation to the available safe area
   double safeWidth(double width) => _safeBlockHorizontal * width;
+
+  /// * Calculate height with relation to the available safe area
   double safeHeight(double height) => _safeBlockVertical * height;
 
-  // * Calculate height and width with relation to the entire screen area
+  /// * Calculate width with relation to the entire screen area
   double absoluteWidth(double width) => _blockSizeHorizontal * width;
+
+  /// * Calculate height with relation to the entire screen area
   double absoluteHeight(double height) => _blockSizeVertical * height;
 }
