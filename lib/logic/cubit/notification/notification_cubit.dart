@@ -9,13 +9,13 @@ import '../navigation/navigation_cubit.dart';
 part 'notification_state.dart';
 
 enum NotificationType { Loading, Info, Warning, Danger, Success }
-enum DialogType { DeleteEvent, DeleteTask }
+enum DialogType { DeleteEvent, DeleteTask, DeleteAssignment }
 
 class NotificationCubit extends Cubit<NotificationState> {
   NotificationCubit({
     required NavigationCubit navigationCubit,
     required AuthenticationBloc authenticationBloc,
-  })   : _navigationCubit = navigationCubit,
+  })  : _navigationCubit = navigationCubit,
         _authenticationBloc = authenticationBloc,
         super(NotificationInitial());
 
@@ -90,6 +90,9 @@ class NotificationCubit extends Cubit<NotificationState> {
         break;
       case DialogType.DeleteTask:
         objectToBeDeleted = "task";
+        break;
+      case DialogType.DeleteAssignment:
+        objectToBeDeleted = "assignment";
         break;
       default:
         objectToBeDeleted = "";

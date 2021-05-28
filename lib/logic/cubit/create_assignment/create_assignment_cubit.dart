@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:classmate/data/models/assignment_model.dart';
+import 'package:classmate/data/models/unit_model.dart';
 import '../../../constants/validator.dart';
 import '../../../data/models/unit_details_model.dart';
 import '../../../data/repositories/school_repository.dart';
@@ -15,7 +17,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
     required UserRepository userRepository,
     required AssignmentsBloc assignmentsBloc,
     required SchoolRepository schoolRepository,
-  })   : _userRepository = userRepository,
+  })  : _userRepository = userRepository,
         _assignmentsBloc = assignmentsBloc,
         _schoolRepository = schoolRepository,
         super(CreateAssignmentState.initial(selectedDueDate: DateTime.now()));
@@ -74,5 +76,29 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
         unit: state.unit!,
       ));
     }
+  }
+
+  void updateAssignment(Unit unit, Assignment assignment, int index) {
+    if (formKey.currentState?.validate() ?? false) {
+      var newAssignment = assignment.copyWith(
+        description: descriptionController.text,
+        dueDate: state.selectedDueDate,
+        title: titleController.text,
+      );
+      unit.assignments![index] = newAssignment;
+      _assignmentsBloc
+          .add(AssignmentUpdated(assignment: assignment, unit: unit));
+    }
+  }
+
+  void setAssignmentDetails(Assignment assignment, Unit unit) {
+    titleController.text = assignment.title;
+    if (assignment.description != null)
+      descriptionController.text = assignment.description!;
+
+    return emit(CreateAssignmentState.changed(
+      selectedDueDate: assignment.dueDate,
+      unit: unit.unitDetails,
+    ));
   }
 }

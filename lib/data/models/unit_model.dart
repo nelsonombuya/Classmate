@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:classmate/data/models/lesson_model.dart';
+
 import 'assignment_model.dart';
 import 'unit_details_model.dart';
 
@@ -10,12 +12,14 @@ class Unit extends Equatable {
   final String? sessionId;
   final UnitDetails? unitDetails;
   final List<Assignment>? assignments;
+  final List<Lesson>? lessons;
 
   const Unit({
     this.id,
-    this.assignments,
     required this.sessionId,
     required this.unitDetails,
+    this.assignments,
+    this.lessons,
   });
 
   Unit copyWith({
@@ -23,12 +27,14 @@ class Unit extends Equatable {
     String? sessionId,
     UnitDetails? unitDetails,
     List<Assignment>? assignments,
+    List<Lesson>? lessons,
   }) {
     return Unit(
       id: id ?? this.id,
       sessionId: sessionId ?? this.sessionId,
       unitDetails: unitDetails ?? this.unitDetails,
       assignments: assignments ?? this.assignments,
+      lessons: lessons ?? this.lessons,
     );
   }
 
@@ -38,6 +44,7 @@ class Unit extends Equatable {
       'sessionId': sessionId,
       'unitDetails': unitDetails?.toMap(),
       'assignments': assignments?.map((x) => x.toMap()).toList(),
+      'lessons': lessons?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -47,7 +54,9 @@ class Unit extends Equatable {
       sessionId: map['sessionId'],
       unitDetails: UnitDetails.fromMap(map['unitDetails'] ?? {}),
       assignments: List<Assignment>.from(
-          map['assignments']?.map((x) => Assignment.fromMap(x))),
+          map['assignments'].map((x) => Assignment.fromMap(x)) ?? {}),
+      lessons: List<Lesson>.from(
+          map['lessons']?.map((x) => Lesson.fromMap(x)) ?? {}),
     );
   }
 
@@ -59,10 +68,13 @@ class Unit extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [
-        id ?? 'No Unit ID',
-        unitDetails ?? 'No Unit Details',
-        sessionId ?? 'No Session ID',
-        assignments ?? 'No Assignments',
-      ];
+  List<Object> get props {
+    return [
+      id ?? 'No ID',
+      sessionId ?? 'No Session Set',
+      unitDetails ?? 'No Unit Details',
+      assignments ?? 'No Added Assignments',
+      lessons ?? 'No Added Lessons',
+    ];
+  }
 }

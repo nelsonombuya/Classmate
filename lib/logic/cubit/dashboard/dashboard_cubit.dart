@@ -56,8 +56,16 @@ class DashboardCubit extends Cubit<DashboardState> {
     } finally {
       _assignmentsBloc.add(AssignmentUpdated(
         assignment: assignment.copyWith(isDone: {uid: isDone}),
+        silentUpdate: true,
         unit: unit,
       ));
     }
+  }
+
+  deleteAssignment({required Unit unit, required int index}) {
+    return _assignmentsBloc.add(AssignmentDeleted(
+      assignment: unit.assignments!.removeAt(index),
+      unit: unit,
+    ));
   }
 }

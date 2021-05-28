@@ -1,3 +1,6 @@
+import 'package:classmate/data/models/assignment_model.dart';
+import 'package:classmate/data/models/unit_model.dart';
+
 import '../../../constants/device_query.dart';
 import '../../../data/models/unit_details_model.dart';
 import '../../../data/repositories/school_repository.dart';
@@ -16,13 +19,22 @@ class CreateAssignmentForm extends StatelessWidget {
     required SchoolRepository schoolRepository,
     required AssignmentsBloc assignmentsBloc,
     required UserRepository userRepository,
+    Assignment? assignment,
+    Unit? unit,
+    int? index,
   })  : _assignmentsBloc = assignmentsBloc,
         _schoolRepository = schoolRepository,
-        _userRepository = userRepository;
+        _userRepository = userRepository,
+        _assignment = assignment,
+        _unit = unit,
+        _index = index;
 
   final SchoolRepository _schoolRepository;
   final AssignmentsBloc _assignmentsBloc;
   final UserRepository _userRepository;
+  final Assignment? _assignment;
+  final Unit? _unit;
+  final int? _index;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +44,36 @@ class CreateAssignmentForm extends StatelessWidget {
         assignmentsBloc: _assignmentsBloc,
         userRepository: _userRepository,
       ),
-      child: CreateAssignmentFormView(),
+      child: CreateAssignmentFormView(_unit, _assignment, _index),
     );
   }
 }
 
-class CreateAssignmentFormView extends StatelessWidget {
+class CreateAssignmentFormView extends StatefulWidget {
+  CreateAssignmentFormView(this._unit, this._assignment, this._index);
+
+  final Assignment? _assignment;
+  final Unit? _unit;
+  final int? _index;
+
+  @override
+  _CreateAssignmentFormViewState createState() =>
+      _CreateAssignmentFormViewState();
+}
+
+class _CreateAssignmentFormViewState extends State<CreateAssignmentFormView> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget._assignment != null &&
+        widget._unit != null &&
+        widget._index != null) {
+      context
+          .read<CreateAssignmentCubit>()
+          .setAssignmentDetails(widget._assignment!, widget._unit!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _deviceQuery = DeviceQuery(context);
@@ -51,7 +87,13 @@ class CreateAssignmentFormView extends StatelessWidget {
               ? null
               : () {
                   FocusScope.of(context).unfocus();
-                  _cubit.saveAssignment();
+                  widget._unit != null && widget._assignment != null
+                      ? _cubit.updateAssignment(
+                          widget._unit!,
+                          widget._assignment!,
+                          widget._index!,
+                        )
+                      : _cubit.saveAssignment();
                 },
           child: Text(
             "SAVE",

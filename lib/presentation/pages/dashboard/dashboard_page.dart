@@ -1,8 +1,14 @@
+import 'package:classmate/data/repositories/school_repository.dart';
 import 'package:classmate/logic/bloc/assignments/assignments_bloc.dart';
+import 'package:classmate/logic/cubit/notification/notification_cubit.dart';
+import 'package:classmate/presentation/pages/assignments/create_assignment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../constants/device_query.dart';
 import '../../../data/models/unit_model.dart';
@@ -32,6 +38,9 @@ class _DashboardPageViewState extends State<DashboardPageView> {
   @override
   Widget build(BuildContext context) {
     final _uid = context.read<UserRepository>().getCurrentUser()!.uid;
+    final _assignmentsBloc = context.read<AssignmentsBloc>();
+    final _schoolRepository = context.read<SchoolRepository>();
+    final _userRepository = context.read<UserRepository>();
     final _cubit = context.read<DashboardCubit>();
     final _deviceQuery = DeviceQuery(context);
 
@@ -63,65 +72,176 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                     if (snapshot.hasData) {
                       Unit unit = snapshot.data!;
                       var assignments = unit.assignments;
-                      if (assignments!.isNotEmpty) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 10),
-                            Text(
-                              unit.unitDetails!.name,
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            SizedBox(height: 10),
+                      var lessons = unit.lessons;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10),
+                          Text(
+                            unit.unitDetails!.name,
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          SizedBox(height: 10),
+                          if (lessons!.isNotEmpty)
                             ListView.builder(
                               shrinkWrap: true,
-                              itemCount: assignments.length,
+                              itemCount: lessons.length,
                               itemBuilder: (context, index) {
-                                return CheckboxListTile(
-                                  value:
-                                      assignments[index].isDone?[_uid] ?? false,
-                                  activeColor: CupertinoColors.activeBlue,
-                                  onChanged: (value) =>
-                                      _cubit.toggleAssignmentAsDone(
-                                    uid: _uid,
-                                    unit: unit,
-                                    isDone: value!,
-                                    assignment: assignments[index],
-                                    index: index,
-                                  ),
-                                  tileColor: _deviceQuery.brightness ==
-                                          Brightness.light
-                                      ? CupertinoColors.systemGroupedBackground
-                                      : CupertinoColors.darkBackgroundGray,
-                                  title: Text(
-                                    "${assignments[index].title}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6!
-                                        .copyWith(
-                                          decoration: assignments[index]
-                                                      .isDone?[_uid] ??
-                                                  false
-                                              ? TextDecoration.lineThrough
-                                              : null,
-                                          color: assignments[index]
-                                                      .isDone?[_uid] ??
-                                                  false
-                                              ? Theme.of(context).disabledColor
-                                              : null,
-                                        ),
+                                return Padding(
+                                  padding: EdgeInsets.all(
+                                      _deviceQuery.safeWidth(2.0)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: ListTile(
+                                      isThreeLine: true,
+                                      enableFeedback: true,
+                                      leading: Icon(
+                                        Icons.class__rounded,
+                                        color: CupertinoColors.activeOrange,
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: _deviceQuery.safeWidth(4.0),
+                                        vertical: _deviceQuery.safeHeight(2.0),
+                                      ),
+                                      tileColor: _deviceQuery.brightness ==
+                                              Brightness.light
+                                          ? CupertinoColors
+                                              .systemGroupedBackground
+                                          : CupertinoColors.darkBackgroundGray,
+                                      title: Text(
+                                        "${lessons[index].title}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                      subtitle: Text(
+                                        "On: ${DateFormat('EEEE dd MMMM').format(lessons[index].startDate)}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      trailing: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                              "${DateFormat('hh:mm aa').format(lessons[index].startDate)}"),
+                                          Text("TO"),
+                                          Text(
+                                              "${DateFormat('hh:mm aa').format(lessons[index].endDate)}")
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 );
                               },
                             ),
-                          ],
-                        );
-                      }
-                      // ### No Assignments
-                      return NoDataFound(message: "No Assignments Found");
+                          if (assignments!.isNotEmpty)
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: assignments.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.all(
+                                    _deviceQuery.safeWidth(1.5),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Slidable(
+                                      actionPane: SlidableBehindActionPane(),
+                                      actionExtentRatio: 0.25,
+                                      actions: <Widget>[
+                                        IconSlideAction(
+                                          caption: 'Edit',
+                                          icon: Icons.edit_rounded,
+                                          color: CupertinoColors.activeBlue,
+                                          onTap: () => showBarModalBottomSheet(
+                                            context: context,
+                                            builder: (context) =>
+                                                CreateAssignmentForm(
+                                              unit: unit,
+                                              index: index,
+                                              assignment: assignments[index],
+                                              assignmentsBloc: _assignmentsBloc,
+                                              schoolRepository:
+                                                  _schoolRepository,
+                                              userRepository: _userRepository,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      secondaryActions: <Widget>[
+                                        IconSlideAction(
+                                          caption: 'Delete',
+                                          icon: Icons.delete_rounded,
+                                          color: Theme.of(context).errorColor,
+                                          onTap: () => context
+                                              .read<NotificationCubit>()
+                                              .showDeleteDialog(
+                                                DialogType.DeleteAssignment,
+                                                () => _cubit.deleteAssignment(
+                                                  unit: unit,
+                                                  index: index,
+                                                ),
+                                              ),
+                                        ),
+                                      ],
+                                      child: CheckboxListTile(
+                                        isThreeLine: true,
+                                        value:
+                                            assignments[index].isDone?[_uid] ??
+                                                false,
+                                        activeColor: CupertinoColors.activeBlue,
+                                        onChanged: (value) =>
+                                            _cubit.toggleAssignmentAsDone(
+                                          uid: _uid,
+                                          unit: unit,
+                                          isDone: value!,
+                                          assignment: assignments[index],
+                                          index: index,
+                                        ),
+                                        tileColor: _deviceQuery.brightness ==
+                                                Brightness.light
+                                            ? CupertinoColors
+                                                .systemGroupedBackground
+                                            : CupertinoColors
+                                                .darkBackgroundGray,
+                                        title: Text(
+                                          "${assignments[index].title}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6!
+                                              .copyWith(
+                                                decoration: assignments[index]
+                                                            .isDone?[_uid] ??
+                                                        false
+                                                    ? TextDecoration.lineThrough
+                                                    : null,
+                                                color: assignments[index]
+                                                            .isDone?[_uid] ??
+                                                        false
+                                                    ? Theme.of(context)
+                                                        .disabledColor
+                                                    : null,
+                                              ),
+                                        ),
+                                        subtitle: Text(
+                                            "${assignments[index].description}\nDue : ${DateFormat('EEEE dd MMMM hh:mm aa').format(assignments[index].dueDate)}"),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
+                      );
                     }
-                    // ### No Classes nor Assignments
-                    return NoDataFound(message: "You're Free");
+                    // ### No Assignments
+                    return NoDataFound(
+                      message: "No Assignments or Classes Found",
+                    );
                   },
                 );
               },
@@ -131,100 +251,5 @@ class _DashboardPageViewState extends State<DashboardPageView> {
         },
       ),
     );
-    // return BlocBuilder<SchoolCubit, SchoolState>(
-    //   builder: (context, state) {
-    //     return StreamBuilder<List>(
-    //       stream: context.read<SchoolCubit>().getCombinedStreams(),
-    //       builder: (context, snapshot) {
-    //         if (snapshot.connectionState == ConnectionState.waiting) {
-    //           return Center(
-    //             child: CircularProgressIndicator.adaptive(),
-    //           );
-    //         }
-
-    //         if (snapshot.hasData && snapshot.data != null) {
-    //           var combinedList = [];
-    //           snapshot.data!.forEach((element) => combinedList.addAll(element));
-    //           return ListView.builder(
-    //             shrinkWrap: true,
-    //             controller: _controller,
-    //             itemCount: combinedList.length,
-    //             itemBuilder: (context, index) {
-    //               if (combinedList[index] is LessonModel) {
-    //                 LessonModel lesson = combinedList[index];
-    //                 return Padding(
-    //                   padding: EdgeInsets.all(_deviceQuery.safeWidth(2.0)),
-    //                   child: ClipRRect(
-    //                     borderRadius: BorderRadius.circular(8.0),
-    //                     child: ListTile(
-    //                       isThreeLine: true,
-    //                       enableFeedback: true,
-    //                       leading: Icon(
-    //                         Icons.class__rounded,
-    //                         color: CupertinoColors.activeOrange,
-    //                       ),
-    //                       contentPadding: EdgeInsets.symmetric(
-    //                         horizontal: _deviceQuery.safeWidth(4.0),
-    //                         vertical: _deviceQuery.safeHeight(2.0),
-    //                       ),
-    //                       tileColor: _deviceQuery.brightness == Brightness.light
-    //                           ? CupertinoColors.systemGroupedBackground
-    //                           : CupertinoColors.darkBackgroundGray,
-    //                       title: Text(
-    //                         "${lesson.unitName}",
-    //                         style: Theme.of(context).textTheme.headline6,
-    //                       ),
-    //                       subtitle: Text(
-    //                         "On: ${DateFormat('EEEE dd MMMM').format(lesson.startDate)}",
-    //                         style: TextStyle(fontWeight: FontWeight.bold),
-    //                       ),
-    //                       trailing: Column(
-    //                         mainAxisAlignment: MainAxisAlignment.center,
-    //                         crossAxisAlignment: CrossAxisAlignment.end,
-    //                         children: [
-    //                           Text(
-    //                               "${DateFormat('hh:mm aa').format(lesson.startDate)}"),
-    //                           Text("TO"),
-    //                           Text(
-    //                               "${DateFormat('hh:mm aa').format(lesson.endDate)}")
-    //                         ],
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 );
-    //               }
-    //               if (combinedList[index] is AssignmentModel) {
-    //                 AssignmentModel assignment = combinedList[index];
-    //                 return CheckboxListTile(
-    //                   value: false,
-    //                   activeColor: CupertinoColors.activeBlue,
-    //                   onChanged: (value) {},
-    //                   tileColor: _deviceQuery.brightness == Brightness.light
-    //                       ? CupertinoColors.systemGroupedBackground
-    //                       : CupertinoColors.darkBackgroundGray,
-    //                   title: Text(
-    //                     "${assignment.description}",
-    //                     style: Theme.of(context).textTheme.headline6!.copyWith(
-    //                           decoration: assignment.isDone?[_uid] ?? false
-    //                               ? TextDecoration.lineThrough
-    //                               : null,
-    //                           color: assignment.isDone?[_uid] ?? false
-    //                               ? Theme.of(context).disabledColor
-    //                               : null,
-    //                         ),
-    //                   ),
-    //                 );
-    //               }
-    //               return NoDataFound(
-    //                 message: 'No Lessons or Assignments Found',
-    //               );
-    //             },
-    //           );
-    //         }
-    //         return NoDataFound(message: 'No Data Found');
-    //       },
-    //     );
-    //   },
-    // );
   }
 }

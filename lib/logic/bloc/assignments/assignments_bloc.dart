@@ -33,6 +33,8 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
       yield* _mapAssignmentCreatedToState(event);
     } else if (event is AssignmentUpdated) {
       yield* _mapAssignmentUpdatedToState(event);
+    } else if (event is AssignmentDeleted) {
+      yield* _mapAssignmentDeletedToState(event);
     }
   }
 
@@ -71,9 +73,25 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
       UnitRepository unitRepository = await _getUnitRepository();
       await unitRepository.updateUnit(event.unit);
       if (!event.silentUpdate) _showAssignmentUpdatedSuccessfullyNotification();
+      if (!event.silentUpdate) _navigationCubit.popCurrentPage();
       yield AssignmentsState.updated(assignment: event.assignment);
     } catch (e) {
       _showErrorUpdatingAssignmentNotification(e.toString());
+      this.addError(e);
+    }
+  }
+
+  Stream<AssignmentsState> _mapAssignmentDeletedToState(
+    AssignmentDeleted event,
+  ) async* {
+    try {
+      _showDeletingAssignmentNotification();
+      UnitRepository unitRepository = await _getUnitRepository();
+      await unitRepository.updateUnit(event.unit);
+      _showAssignmentDeletedSuccessfullyNotification();
+      yield AssignmentsState.deleted(assignment: event.assignment);
+    } catch (e) {
+      _showErrorDeletingAssignmentNotification(e.toString());
       this.addError(e);
     }
   }
