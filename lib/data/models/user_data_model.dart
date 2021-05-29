@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:classmate/data/models/message_model.dart';
+
 class UserData extends Equatable {
   final String? firstName;
   final String? lastName;
@@ -12,6 +14,8 @@ class UserData extends Equatable {
   final String? semester;
   final String? privilege;
   final List<String>? registeredUnitIds;
+  final List<NotificationMessage>? notifications;
+  final String? deviceToken;
 
   const UserData({
     this.firstName,
@@ -19,10 +23,12 @@ class UserData extends Equatable {
     this.courseId,
     this.schoolId,
     this.sessionId,
-    this.semester,
     this.year,
+    this.semester,
     this.privilege,
     this.registeredUnitIds,
+    this.notifications,
+    this.deviceToken,
   });
 
   UserData copyWith({
@@ -31,10 +37,12 @@ class UserData extends Equatable {
     String? courseId,
     String? schoolId,
     String? sessionId,
-    String? semester,
     String? year,
+    String? semester,
     String? privilege,
     List<String>? registeredUnitIds,
+    List<NotificationMessage>? notifications,
+    String? deviceToken,
   }) {
     return UserData(
       firstName: firstName ?? this.firstName,
@@ -42,10 +50,12 @@ class UserData extends Equatable {
       courseId: courseId ?? this.courseId,
       schoolId: schoolId ?? this.schoolId,
       sessionId: sessionId ?? this.sessionId,
-      semester: semester ?? this.semester,
       year: year ?? this.year,
+      semester: semester ?? this.semester,
       privilege: privilege ?? this.privilege,
       registeredUnitIds: registeredUnitIds ?? this.registeredUnitIds,
+      notifications: notifications ?? this.notifications,
+      deviceToken: deviceToken ?? this.deviceToken,
     );
   }
 
@@ -56,10 +66,12 @@ class UserData extends Equatable {
       'courseId': courseId,
       'schoolId': schoolId,
       'sessionId': sessionId,
-      'semester': semester,
       'year': year,
+      'semester': semester,
       'privilege': privilege,
       'registeredUnitIds': registeredUnitIds,
+      'notifications': notifications?.map((x) => x.toMap()).toList(),
+      'deviceToken': deviceToken,
     };
   }
 
@@ -70,10 +82,14 @@ class UserData extends Equatable {
       courseId: map['courseId'],
       schoolId: map['schoolId'],
       sessionId: map['sessionId'],
-      semester: map['semester'],
       year: map['year'],
+      semester: map['semester'],
       privilege: map['privilege'],
+      deviceToken: map['deviceToken'],
       registeredUnitIds: List<String>.from(map['registeredUnitIds'] ?? []),
+      notifications: List<NotificationMessage>.from(
+        map['notifications']?.map((x) => NotificationMessage.fromMap(x)) ?? [],
+      ),
     );
   }
 
@@ -96,7 +112,9 @@ class UserData extends Equatable {
       semester ?? 'No Registered Semester',
       year ?? 'No Registered Year',
       privilege ?? 'User',
+      deviceToken ?? 'No Device Token',
       registeredUnitIds ?? 'No Registered Units',
+      notifications ?? 'No Notifications',
     ];
   }
 }
