@@ -27,11 +27,15 @@ abstract class ExistingTask extends TasksEvent {
 }
 
 class PersonalTaskUpdated extends ExistingTask {
-  const PersonalTaskUpdated(this.task, {this.silentUpdate = false})
-      : super(task);
+  const PersonalTaskUpdated(
+    this.task, {
+    this.silentUpdate = false,
+    this.popCurrentPage = false,
+  }) : super(task);
 
   final TaskModel task;
   final bool silentUpdate;
+  final bool popCurrentPage;
 
   @override
   List<Object> get props => [task];

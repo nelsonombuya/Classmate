@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -13,7 +13,6 @@ import '../../../data/models/task_model.dart';
 import '../../../logic/bloc/tasks/tasks_bloc.dart';
 import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/form_view.dart';
-import 'add_location.dart';
 
 /// # Create Task Form
 /// The page can be used for both creating new tasks
@@ -59,6 +58,14 @@ class _CreateTaskFormViewState extends State<CreateTaskFormView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget._task != null) {
+      _taskTitleController.text = widget._task!.title;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
@@ -75,6 +82,7 @@ class _CreateTaskFormViewState extends State<CreateTaskFormView> {
                         widget._task!.copyWith(
                           title: _taskTitleController.text,
                         ),
+                        popCurrentPage: true,
                       ),
                     );
               } else {

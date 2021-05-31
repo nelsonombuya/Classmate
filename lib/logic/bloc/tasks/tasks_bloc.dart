@@ -16,7 +16,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     required TaskRepository taskRepository,
     required NotificationCubit notificationCubit,
     required NavigationCubit navigationCubit,
-  })   : _taskRepository = taskRepository,
+  })  : _taskRepository = taskRepository,
         _navigationCubit = navigationCubit,
         _notificationCubit = notificationCubit,
         personalTaskDataStream = taskRepository.personalTaskDataStream,
@@ -59,6 +59,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       if (!event.silentUpdate) _showUpdatingTaskNotification();
       await _taskRepository.updatePersonalTask(event.task);
       if (!event.silentUpdate) _showTaskUpdatedSuccessfullyNotification();
+      if (event.popCurrentPage) _navigationCubit.popCurrentPage();
       yield TasksState.updated(event.task);
     } catch (e) {
       _showErrorUpdatingTaskNotification(e.toString());
