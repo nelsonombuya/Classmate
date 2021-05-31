@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:classmate/data/models/message_model.dart';
+import 'message_model.dart';
 
 class UserData extends Equatable {
   final String? firstName;

@@ -1,13 +1,14 @@
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
-import 'package:classmate/data/models/assignment_model.dart';
-import 'package:classmate/logic/bloc/assignments/assignments_bloc.dart';
-import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+import '../../../data/models/assignment_model.dart';
 import '../../../data/models/unit_model.dart';
 import '../../../data/models/user_data_model.dart';
 import '../../../data/repositories/unit_repository.dart';
 import '../../../data/repositories/user_repository.dart';
-import 'package:equatable/equatable.dart';
-import 'package:async/async.dart';
+import '../../bloc/assignments/assignments_bloc.dart';
+import '../../bloc/lessons/lessons_bloc.dart';
 
 part 'dashboard_state.dart';
 

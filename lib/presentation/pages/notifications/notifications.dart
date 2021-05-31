@@ -1,8 +1,9 @@
-import 'package:classmate/data/models/message_model.dart';
-import 'package:classmate/presentation/common_widgets/form_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+
+import '../../../data/models/message_model.dart';
+import '../../common_widgets/form_view.dart';
 
 class NotificationsForm extends StatefulWidget {
   @override

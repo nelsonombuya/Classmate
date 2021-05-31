@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:classmate/data/models/lesson_model.dart';
-import 'package:classmate/data/models/user_data_model.dart';
-import 'package:classmate/data/repositories/school_repository.dart';
+import 'package:equatable/equatable.dart';
+
 import '../../../data/models/lesson_model.dart';
 import '../../../data/models/unit_details_model.dart';
 import '../../../data/models/unit_model.dart';
+import '../../../data/models/user_data_model.dart';
+import '../../../data/repositories/school_repository.dart';
 import '../../../data/repositories/unit_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
 import '../../cubit/notification/notification_cubit.dart';
-import 'package:equatable/equatable.dart';
 
 part 'lessons_event.dart';
 part 'lessons_state.dart';

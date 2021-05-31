@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/authentication_repository.dart';
-import '../../../data/repositories/user_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -14,7 +13,7 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-  })   : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository
         .authenticationStatusStream

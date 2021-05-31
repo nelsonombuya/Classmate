@@ -1,4 +1,3 @@
-import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ import '../../../data/repositories/task_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../../logic/bloc/assignments/assignments_bloc.dart';
 import '../../../logic/bloc/events/events_bloc.dart';
+import '../../../logic/bloc/lessons/lessons_bloc.dart';
 import '../../../logic/bloc/tasks/tasks_bloc.dart';
 import '../../../logic/cubit/navigation/navigation_cubit.dart';
 import '../../../logic/cubit/notification/notification_cubit.dart';

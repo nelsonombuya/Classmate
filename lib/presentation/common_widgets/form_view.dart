@@ -12,7 +12,7 @@ class FormView extends StatelessWidget {
     List<Widget>? actions,
     bool overridePadding = false,
     required Widget child,
-  })   : _child = child,
+  })  : _child = child,
         _title = title,
         _actions = actions,
         _overridePadding = overridePadding;

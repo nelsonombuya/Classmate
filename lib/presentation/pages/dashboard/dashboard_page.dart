@@ -1,24 +1,23 @@
-import 'package:classmate/data/models/assignment_model.dart';
-import 'package:classmate/data/models/lesson_model.dart';
-import 'package:classmate/data/repositories/school_repository.dart';
-import 'package:classmate/logic/bloc/assignments/assignments_bloc.dart';
-import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
-import 'package:classmate/logic/cubit/notification/notification_cubit.dart';
-import 'package:classmate/presentation/pages/assignments/create_assignment.dart';
-import 'package:classmate/presentation/pages/lessons/create_lessons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../constants/device_query.dart';
+import '../../../data/models/assignment_model.dart';
+import '../../../data/models/lesson_model.dart';
 import '../../../data/models/unit_model.dart';
+import '../../../data/repositories/school_repository.dart';
 import '../../../data/repositories/user_repository.dart';
+import '../../../logic/bloc/assignments/assignments_bloc.dart';
+import '../../../logic/bloc/lessons/lessons_bloc.dart';
 import '../../../logic/cubit/dashboard/dashboard_cubit.dart';
+import '../../../logic/cubit/notification/notification_cubit.dart';
 import '../../common_widgets/no_data_found.dart';
+import '../assignments/create_assignment.dart';
+import '../lessons/create_lessons.dart';
 
 class DashboardPage extends StatelessWidget {
   @override

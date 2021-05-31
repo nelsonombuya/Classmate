@@ -1,16 +1,15 @@
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
-import 'package:classmate/data/models/lesson_model.dart';
-import 'package:classmate/data/models/lesson_model.dart';
-import 'package:classmate/data/models/unit_model.dart';
-import 'package:classmate/logic/bloc/lessons/lessons_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+
 import '../../../constants/validator.dart';
+import '../../../data/models/lesson_model.dart';
 import '../../../data/models/unit_details_model.dart';
+import '../../../data/models/unit_model.dart';
 import '../../../data/repositories/school_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../bloc/lessons/lessons_bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:async/async.dart';
 
 part 'create_lesson_state.dart';
 

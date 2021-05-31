@@ -1,8 +1,10 @@
-import 'package:classmate/data/models/assignment_model.dart';
-import 'package:classmate/data/models/unit_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants/device_query.dart';
+import '../../../data/models/assignment_model.dart';
 import '../../../data/models/unit_details_model.dart';
+import '../../../data/models/unit_model.dart';
 import '../../../data/repositories/school_repository.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../../logic/bloc/assignments/assignments_bloc.dart';
@@ -11,8 +13,6 @@ import '../../common_widgets/custom_textFormField.dart';
 import '../../common_widgets/date_picker_button.dart';
 import '../../common_widgets/form_view.dart';
 import '../../common_widgets/no_data_found.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateAssignmentForm extends StatelessWidget {
   const CreateAssignmentForm({

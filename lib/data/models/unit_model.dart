@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:classmate/data/models/lesson_model.dart';
-
 import 'assignment_model.dart';
+import 'lesson_model.dart';
 import 'unit_details_model.dart';
 
 class Unit extends Equatable {
