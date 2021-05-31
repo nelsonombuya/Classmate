@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -161,47 +162,66 @@ class LessonsListView extends StatelessWidget {
       itemCount: lessons!.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: EdgeInsets.all(
-            _deviceQuery.safeWidth(2.0),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Slidable(
-              actionExtentRatio: 0.25,
-              actionPane: SlidableBehindActionPane(),
-              actions: <Widget>[
-                IconSlideAction(
-                  caption: 'Edit',
-                  icon: Icons.edit_rounded,
+          padding: EdgeInsets.all(_deviceQuery.safeWidth(2.0)),
+          child: FocusedMenuHolder(
+            blurSize: 5.0,
+            menuOffset: 10.0,
+            menuItemExtent: 45,
+            animateMenuItems: true,
+            bottomOffsetHeight: 80.0,
+            blurBackgroundColor: Colors.black54,
+            duration: Duration(milliseconds: 100),
+            menuWidth: MediaQuery.of(context).size.width * 0.50,
+            menuBoxDecoration: BoxDecoration(
+              color: _deviceQuery.brightness == Brightness.light
+                  ? CupertinoColors.systemGroupedBackground
+                  : CupertinoColors.darkBackgroundGray,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            menuItems: <FocusedMenuItem>[
+              FocusedMenuItem(
+                title: Text(
+                  "Edit Lesson Details",
+                  style: TextStyle(color: CupertinoColors.activeBlue),
+                ),
+                trailingIcon: Icon(
+                  Icons.edit_rounded,
                   color: CupertinoColors.activeBlue,
-                  onTap: () => showBarModalBottomSheet(
-                    context: context,
-                    builder: (context) => CreateLessonForm(
-                      unit: unit,
-                      index: index,
-                      lesson: lessons![index],
-                      lessonsBloc: _lessonsBloc,
-                      schoolRepository: _schoolRepository,
-                      userRepository: _userRepository,
-                    ),
+                ),
+                onPressed: () => showBarModalBottomSheet(
+                  context: context,
+                  builder: (context) => CreateLessonForm(
+                    unit: unit,
+                    index: index,
+                    lesson: lessons![index],
+                    lessonsBloc: _lessonsBloc,
+                    userRepository: _userRepository,
+                    schoolRepository: _schoolRepository,
                   ),
                 ),
-              ],
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: 'Delete',
-                  icon: Icons.delete_rounded,
-                  color: Theme.of(context).errorColor,
-                  onTap: () =>
-                      context.read<NotificationCubit>().showDeleteDialog(
-                            DialogType.DeleteLesson,
-                            () => _cubit.deleteLesson(
-                              unit: unit,
-                              index: index,
-                            ),
-                          ),
+              ),
+              FocusedMenuItem(
+                title: Text(
+                  "Delete Lesson",
+                  style: TextStyle(color: Theme.of(context).errorColor),
                 ),
-              ],
+                trailingIcon: Icon(
+                  Icons.delete_rounded,
+                  color: Theme.of(context).errorColor,
+                ),
+                onPressed: () =>
+                    context.read<NotificationCubit>().showDeleteDialog(
+                          DialogType.DeleteLesson,
+                          () => _cubit.deleteLesson(
+                            unit: unit,
+                            index: index,
+                          ),
+                        ),
+              ),
+            ],
+            onPressed: () {}, // TODO Lesson Details Page
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
               child: ListTile(
                 isThreeLine: true,
                 enableFeedback: true,
@@ -210,8 +230,8 @@ class LessonsListView extends StatelessWidget {
                   color: CupertinoColors.activeOrange,
                 ),
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: _deviceQuery.safeWidth(4.0),
                   vertical: _deviceQuery.safeHeight(2.0),
+                  horizontal: _deviceQuery.safeWidth(4.0),
                 ),
                 tileColor: _deviceQuery.brightness == Brightness.light
                     ? CupertinoColors.systemGroupedBackground
@@ -222,19 +242,19 @@ class LessonsListView extends StatelessWidget {
                 ),
                 subtitle: Text(
                   "On: ${DateFormat('EEEE dd MMMM').format(lessons![index].startDate)}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                        "${DateFormat('hh:mm aa').format(lessons![index].startDate)}"),
+                      "${DateFormat('hh:mm aa').format(lessons![index].startDate)}",
+                    ),
                     Text("TO"),
                     Text(
-                        "${DateFormat('hh:mm aa').format(lessons![index].endDate)}")
+                      "${DateFormat('hh:mm aa').format(lessons![index].endDate)}",
+                    )
                   ],
                 ),
               ),
@@ -249,20 +269,20 @@ class LessonsListView extends StatelessWidget {
 class AssignmentsListView extends StatelessWidget {
   const AssignmentsListView({
     Key? key,
-    required this.assignments,
-    required DeviceQuery deviceQuery,
     required this.unit,
+    required String uid,
+    required this.assignments,
+    required DashboardCubit cubit,
+    required DeviceQuery deviceQuery,
+    required UserRepository userRepository,
     required AssignmentsBloc assignmentsBloc,
     required SchoolRepository schoolRepository,
-    required UserRepository userRepository,
-    required DashboardCubit cubit,
-    required String uid,
-  })  : _deviceQuery = deviceQuery,
+  })  : _uid = uid,
+        _cubit = cubit,
+        _deviceQuery = deviceQuery,
+        _userRepository = userRepository,
         _assignmentsBloc = assignmentsBloc,
         _schoolRepository = schoolRepository,
-        _userRepository = userRepository,
-        _cubit = cubit,
-        _uid = uid,
         super(key: key);
 
   final List<Assignment>? assignments;
@@ -282,47 +302,66 @@ class AssignmentsListView extends StatelessWidget {
       itemCount: assignments!.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: EdgeInsets.all(
-            _deviceQuery.safeWidth(1.5),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Slidable(
-              actionPane: SlidableBehindActionPane(),
-              actionExtentRatio: 0.25,
-              actions: <Widget>[
-                IconSlideAction(
-                  caption: 'Edit',
-                  icon: Icons.edit_rounded,
+          padding: EdgeInsets.all(_deviceQuery.safeWidth(1.5)),
+          child: FocusedMenuHolder(
+            blurSize: 5.0,
+            menuOffset: 10.0,
+            menuItemExtent: 45,
+            animateMenuItems: true,
+            bottomOffsetHeight: 80.0,
+            blurBackgroundColor: Colors.black54,
+            duration: Duration(milliseconds: 100),
+            menuWidth: MediaQuery.of(context).size.width * 0.50,
+            menuBoxDecoration: BoxDecoration(
+              color: _deviceQuery.brightness == Brightness.light
+                  ? CupertinoColors.systemGroupedBackground
+                  : CupertinoColors.darkBackgroundGray,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            menuItems: <FocusedMenuItem>[
+              FocusedMenuItem(
+                title: Text(
+                  "Edit Assignment Details",
+                  style: TextStyle(color: CupertinoColors.activeBlue),
+                ),
+                trailingIcon: Icon(
+                  Icons.edit_rounded,
                   color: CupertinoColors.activeBlue,
-                  onTap: () => showBarModalBottomSheet(
-                    context: context,
-                    builder: (context) => CreateAssignmentForm(
-                      unit: unit,
-                      index: index,
-                      assignment: assignments![index],
-                      assignmentsBloc: _assignmentsBloc,
-                      schoolRepository: _schoolRepository,
-                      userRepository: _userRepository,
-                    ),
+                ),
+                onPressed: () => showBarModalBottomSheet(
+                  context: context,
+                  builder: (context) => CreateAssignmentForm(
+                    unit: unit,
+                    index: index,
+                    assignment: assignments![index],
+                    userRepository: _userRepository,
+                    assignmentsBloc: _assignmentsBloc,
+                    schoolRepository: _schoolRepository,
                   ),
                 ),
-              ],
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: 'Delete',
-                  icon: Icons.delete_rounded,
-                  color: Theme.of(context).errorColor,
-                  onTap: () =>
-                      context.read<NotificationCubit>().showDeleteDialog(
-                            DialogType.DeleteAssignment,
-                            () => _cubit.deleteAssignment(
-                              unit: unit,
-                              index: index,
-                            ),
-                          ),
+              ),
+              FocusedMenuItem(
+                title: Text(
+                  "Delete Assignment",
+                  style: TextStyle(color: Theme.of(context).errorColor),
                 ),
-              ],
+                trailingIcon: Icon(
+                  Icons.delete_rounded,
+                  color: Theme.of(context).errorColor,
+                ),
+                onPressed: () =>
+                    context.read<NotificationCubit>().showDeleteDialog(
+                          DialogType.DeleteLesson,
+                          () => _cubit.deleteAssignment(
+                            unit: unit,
+                            index: index,
+                          ),
+                        ),
+              ),
+            ],
+            onPressed: () {},
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
               child: CheckboxListTile(
                 isThreeLine: true,
                 value: assignments![index].isDone?[_uid] ?? false,

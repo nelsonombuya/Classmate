@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -42,44 +43,63 @@ class _EventsPageState extends State<EventsPage> {
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: EdgeInsets.all(_deviceQuery.safeWidth(1.5)),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  // TODO: Replace Slidable with Press and Hold
-                  // TODO: Allow for both lessons and events to show on this page
-                  child: Slidable(
-                    actionExtentRatio: 0.25,
-                    actionPane: SlidableBehindActionPane(),
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Edit',
-                        icon: Icons.edit_rounded,
+                child: FocusedMenuHolder(
+                  blurSize: 5.0,
+                  menuOffset: 10.0,
+                  onPressed: () {},
+                  menuItemExtent: 45,
+                  animateMenuItems: true,
+                  bottomOffsetHeight: 80.0,
+                  blurBackgroundColor: Colors.black54,
+                  duration: Duration(milliseconds: 100),
+                  menuWidth: MediaQuery.of(context).size.width * 0.50,
+                  menuBoxDecoration: BoxDecoration(
+                    color: _deviceQuery.brightness == Brightness.light
+                        ? CupertinoColors.systemGroupedBackground
+                        : CupertinoColors.darkBackgroundGray,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  menuItems: <FocusedMenuItem>[
+                    FocusedMenuItem(
+                      title: Text(
+                        "Edit Event Details",
+                        style: TextStyle(color: CupertinoColors.activeBlue),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.edit_rounded,
                         color: CupertinoColors.activeBlue,
-                        onTap: () => showBarModalBottomSheet(
-                          context: context,
-                          builder: (context) => CreateEvent(
-                            event: events[index],
-                            eventsBloc: _eventsBloc,
-                          ),
+                      ),
+                      onPressed: () => showBarModalBottomSheet(
+                        context: context,
+                        builder: (context) => CreateEvent(
+                          event: events[index],
+                          eventsBloc: _eventsBloc,
                         ),
                       ),
-                    ],
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Delete',
-                        icon: Icons.delete_rounded,
+                    ),
+                    FocusedMenuItem(
+                      title: Text(
+                        "Delete Event",
+                        style: TextStyle(color: Theme.of(context).errorColor),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.delete_rounded,
                         color: Theme.of(context).errorColor,
-                        onTap: () =>
-                            context.read<NotificationCubit>().showDeleteDialog(
-                                  DialogType.DeleteEvent,
-                                  () => _eventsBloc.add(
-                                    PersonalEventDeleted(
-                                      events[index],
-                                      popCurrentPage: false,
-                                    ),
+                      ),
+                      onPressed: () =>
+                          context.read<NotificationCubit>().showDeleteDialog(
+                                DialogType.DeleteEvent,
+                                () => _eventsBloc.add(
+                                  PersonalEventDeleted(
+                                    events[index],
+                                    popCurrentPage: false,
                                   ),
                                 ),
-                      ),
-                    ],
+                              ),
+                    ),
+                  ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
                     child: ListTile(
                       isThreeLine: true,
                       enableFeedback: true,

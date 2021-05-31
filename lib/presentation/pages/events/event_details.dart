@@ -47,7 +47,7 @@ class EventDetailsView extends StatelessWidget {
               event.title,
               style: Theme.of(context).textTheme.headline4,
             ),
-            SizedBox(height: _deviceQuery.safeHeight(10.0)),
+            SizedBox(height: _deviceQuery.safeHeight(6.0)),
             Text("Date and Time"),
             event.isAllDayEvent
                 ? Text(
@@ -67,7 +67,7 @@ class EventDetailsView extends StatelessWidget {
                       ),
                     ],
                   ),
-            SizedBox(height: _deviceQuery.safeHeight(20.0)),
+            SizedBox(height: _deviceQuery.safeHeight(10.0)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

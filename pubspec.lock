@@ -244,13 +244,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
-  flutter_slidable:
-    dependency: "direct main"
-    description:
-      name: flutter_slidable
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.0"
   flutter_snake_navigationbar:
     dependency: "direct main"
     description:
@@ -282,6 +275,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  focused_menu:
+    dependency: "direct main"
+    description:
+      name: focused_menu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   geocoding:
     dependency: "direct main"
     description:
