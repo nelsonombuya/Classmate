@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../constants/device_query.dart';
@@ -19,6 +20,19 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   final ScrollController _listViewScrollController = ScrollController();
+
+  Color? _taskTypeColorSelector(String type) {
+    switch (type) {
+      case 'Personal':
+        return Theme.of(context).primaryColor;
+      case 'School':
+        return CupertinoColors.activeOrange;
+      case 'Work':
+        return CupertinoColors.activeGreen;
+      default:
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +133,28 @@ class _TasksPageState extends State<TasksPage> {
                                   ? Theme.of(context).disabledColor
                                   : null,
                             ),
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Text(
+                            tasks[index].type,
+                            style: TextStyle(
+                              color: _taskTypeColorSelector(tasks[index].type),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          if (tasks[index].dueDate != null)
+                            Text(
+                              "Due: ${DateFormat('EEE dd MMM').format(tasks[index].dueDate!)}",
+                              style: TextStyle(
+                                color: tasks[index]
+                                        .dueDate!
+                                        .isBefore(DateTime.now())
+                                    ? Theme.of(context).errorColor
+                                    : null,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),

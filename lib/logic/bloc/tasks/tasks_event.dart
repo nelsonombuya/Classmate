@@ -8,13 +8,25 @@ abstract class TasksEvent extends Equatable {
 }
 
 class PersonalTaskCreated extends TasksEvent {
-  const PersonalTaskCreated({required this.title, this.isDone = false});
+  const PersonalTaskCreated({
+    this.dueDate,
+    this.isDone = false,
+    required this.title,
+    required this.taskType,
+  });
 
-  final String title;
+  final DateTime? dueDate;
   final bool isDone;
+  final String taskType;
+  final String title;
 
   @override
-  List<Object> get props => ["Title : $title", "Is Done: $isDone"];
+  List<Object> get props => [
+        "Title : $title",
+        "Is Done: $isDone",
+        "Due Date: $dueDate",
+        "Task Type: $taskType",
+      ];
 }
 
 abstract class ExistingTask extends TasksEvent {
@@ -33,9 +45,9 @@ class PersonalTaskUpdated extends ExistingTask {
     this.popCurrentPage = false,
   }) : super(task);
 
-  final TaskModel task;
-  final bool silentUpdate;
   final bool popCurrentPage;
+  final bool silentUpdate;
+  final TaskModel task;
 
   @override
   List<Object> get props => [task];

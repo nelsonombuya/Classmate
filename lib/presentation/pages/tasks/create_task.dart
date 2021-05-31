@@ -1,8 +1,9 @@
+import 'package:classmate/logic/cubit/create_task/create_task_cubit.dart';
+import 'package:classmate/presentation/common_widgets/date_picker_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -28,8 +29,8 @@ class CreateTaskForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _tasksBloc,
+    return BlocProvider(
+      create: (context) => CreateTaskCubit(tasksBloc: _tasksBloc),
       child: CreateTaskFormView(_task),
     );
   }
@@ -45,28 +46,17 @@ class CreateTaskFormView extends StatefulWidget {
 }
 
 class _CreateTaskFormViewState extends State<CreateTaskFormView> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _taskTitleController = TextEditingController();
-  final LatLng nakuru = LatLng(0, 0);
-
-  Future<LatLng> _getCurrentLocation() async {
-    Position currentPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
-      forceAndroidLocationManager: true,
-    ).then((Position position) => position);
-    return LatLng(currentPosition.latitude, currentPosition.longitude);
-  }
-
   @override
   void initState() {
     super.initState();
     if (widget._task != null) {
-      _taskTitleController.text = widget._task!.title;
+      context.read<CreateTaskCubit>().setTaskDetails(widget._task!);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final _cubit = context.read<CreateTaskCubit>();
     final DeviceQuery _deviceQuery = DeviceQuery(context);
 
     return FormView(
@@ -75,24 +65,7 @@ class _CreateTaskFormViewState extends State<CreateTaskFormView> {
         TextButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
-            if (_formKey.currentState!.validate()) {
-              if (widget._task != null) {
-                context.read<TasksBloc>().add(
-                      PersonalTaskUpdated(
-                        widget._task!.copyWith(
-                          title: _taskTitleController.text,
-                        ),
-                        popCurrentPage: true,
-                      ),
-                    );
-              } else {
-                context.read<TasksBloc>().add(
-                      PersonalTaskCreated(
-                        title: _taskTitleController.text.trim(),
-                      ),
-                    );
-              }
-            }
+            _cubit.saveTask(widget._task);
           },
           child: Text(
             widget._task == null ? "SAVE" : "UPDATE",
@@ -101,32 +74,59 @@ class _CreateTaskFormViewState extends State<CreateTaskFormView> {
         ),
       ],
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: _deviceQuery.safeHeight(2.0)),
           Form(
-            key: _formKey,
+            key: _cubit.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: CustomTextFormField(
               size: 2.8,
               label: 'Task',
-              controller: _taskTitleController,
               keyboardType: TextInputType.text,
               validator: Validator.titleValidator,
+              controller: _cubit.taskTitleController,
             ),
           ),
+          SizedBox(height: _deviceQuery.safeHeight(2.0)),
+          DropdownButtonFormField<String>(
+            value: _cubit.state.taskType,
+            onChanged: (type) => _cubit.changeSelectedTaskType(type!),
+            items: _cubit.taskTypes
+                .map((type) => DropdownMenuItem<String>(
+                      value: type,
+                      child: Text(type),
+                    ))
+                .toList(),
+          ),
+          SizedBox(height: _deviceQuery.safeHeight(3.0)),
+          BlocBuilder<CreateTaskCubit, CreateTaskState>(
+            builder: (context, state) {
+              return DatePickerButton(
+                title: 'Due Date',
+                overrideDateWithText:
+                    state.dueDate != null ? null : 'Tap to add',
+                overrideTimeWithText: state.dueDate != null ? null : '',
+                onTap: (date) => _cubit.changeSelectedDueDate(date),
+                selectedDate: _cubit.state.dueDate ?? DateTime.now(),
+              );
+            },
+          ),
+          SizedBox(height: _deviceQuery.safeHeight(2.0)),
           TextButton.icon(
             label: Text('Add a location'),
             icon: Icon(Icons.add_location_rounded),
             onPressed: () => showBarModalBottomSheet(
               context: context,
               builder: (context) => PlacePicker(
+                // TODO Remove Later
                 apiKey: 'AIzaSyDmSoiXC2GHaQLpI_tcZaH2ArdRw2MlsG0',
                 onPlacePicked: (result) {
                   Logger().wtf(result);
                   Navigator.of(context).pop();
                 },
-                initialPosition: nakuru,
                 useCurrentLocation: true,
+                initialPosition: _cubit.nakuru,
               ),
             ),
           ),

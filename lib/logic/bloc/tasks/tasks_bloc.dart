@@ -42,8 +42,13 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       PersonalTaskCreated event) async* {
     try {
       _showCreatingTaskNotification();
-      TaskModel newTask = TaskModel(title: event.title, isDone: false);
-      await _taskRepository.createPersonalTask(newTask);
+      TaskModel newTask = TaskModel(
+        isDone: false,
+        title: event.title,
+        type: event.taskType,
+        dueDate: event.dueDate,
+      );
+      _taskRepository.createPersonalTask(newTask);
       _showTaskCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield TasksState.created(newTask);
@@ -57,7 +62,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       PersonalTaskUpdated event) async* {
     try {
       if (!event.silentUpdate) _showUpdatingTaskNotification();
-      await _taskRepository.updatePersonalTask(event.task);
+      _taskRepository.updatePersonalTask(event.task);
       if (!event.silentUpdate) _showTaskUpdatedSuccessfullyNotification();
       if (event.popCurrentPage) _navigationCubit.popCurrentPage();
       yield TasksState.updated(event.task);
@@ -71,7 +76,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       PersonalTaskDeleted event) async* {
     try {
       _showDeletingTaskNotification();
-      await _taskRepository.deletePersonalTask(event.task);
+      _taskRepository.deletePersonalTask(event.task);
       _showTaskDeletedSuccessfullyNotification();
       yield TasksState.deleted(event.task);
     } on Exception catch (e) {

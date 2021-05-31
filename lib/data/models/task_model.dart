@@ -5,23 +5,31 @@ import 'package:equatable/equatable.dart';
 class TaskModel extends Equatable {
   final String? id;
   final String title;
+  final String type;
   final bool isDone;
+  final DateTime? dueDate;
 
   const TaskModel({
     this.id,
     required this.title,
+    required this.type,
     required this.isDone,
+    this.dueDate,
   });
 
   TaskModel copyWith({
     String? id,
     String? title,
+    String? type,
     bool? isDone,
+    DateTime? dueDate,
   }) {
     return TaskModel(
       id: id ?? this.id,
       title: title ?? this.title,
+      type: type ?? this.type,
       isDone: isDone ?? this.isDone,
+      dueDate: dueDate ?? this.dueDate,
     );
   }
 
@@ -29,7 +37,9 @@ class TaskModel extends Equatable {
     return {
       'id': id,
       'title': title,
+      'type': type,
       'isDone': isDone,
+      'dueDate': dueDate?.millisecondsSinceEpoch,
     };
   }
 
@@ -38,6 +48,10 @@ class TaskModel extends Equatable {
       id: map['id'],
       title: map['title'],
       isDone: map['isDone'],
+      type: map['type'] ?? 'Personal',
+      dueDate: map['dueDate'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(map['dueDate']),
     );
   }
 
@@ -65,11 +79,20 @@ class TaskModel extends Equatable {
   static const empty = TaskModel(
     title: '-',
     isDone: false,
+    type: 'Personal',
   );
 
   @override
   bool get stringify => true;
 
   @override
-  List<Object> get props => [id ?? '-', title, isDone];
+  List<Object> get props {
+    return [
+      id ?? 'No ID',
+      title,
+      type,
+      isDone,
+      dueDate ?? 'No Due Date',
+    ];
+  }
 }
