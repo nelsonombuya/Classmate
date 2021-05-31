@@ -311,7 +311,7 @@ class AssignmentsListView extends StatelessWidget {
             bottomOffsetHeight: 80.0,
             blurBackgroundColor: Colors.black54,
             duration: Duration(milliseconds: 100),
-            menuWidth: MediaQuery.of(context).size.width * 0.50,
+            menuWidth: MediaQuery.of(context).size.width * 0.55,
             menuBoxDecoration: BoxDecoration(
               color: _deviceQuery.brightness == Brightness.light
                   ? CupertinoColors.systemGroupedBackground
