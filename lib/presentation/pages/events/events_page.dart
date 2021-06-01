@@ -22,6 +22,19 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   final ScrollController _listViewScrollController = ScrollController();
 
+  Color? _eventTypeColorSelector(String type) {
+    switch (type) {
+      case 'Personal':
+        return Theme.of(context).primaryColor;
+      case 'School':
+        return CupertinoColors.activeOrange;
+      case 'Work':
+        return CupertinoColors.activeGreen;
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
@@ -36,6 +49,7 @@ class _EventsPageState extends State<EventsPage> {
 
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           List<Event> events = snapshot.data!;
+          events.sort((a, b) => a.startDate.compareTo(b.startDate));
           return ListView.builder(
             shrinkWrap: true,
             itemCount: events.length,
@@ -111,16 +125,12 @@ class _EventsPageState extends State<EventsPage> {
                         ),
                       ),
                       contentPadding: EdgeInsets.symmetric(
-                        horizontal: _deviceQuery.safeWidth(4.0),
                         vertical: _deviceQuery.safeHeight(2.0),
+                        horizontal: _deviceQuery.safeWidth(4.0),
                       ),
                       tileColor: _deviceQuery.brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
                           : CupertinoColors.darkBackgroundGray,
-                      leading: Icon(
-                        Icons.person_rounded,
-                        color: CupertinoColors.activeBlue,
-                      ),
                       title: Text(
                         "${events[index].title}",
                         style: Theme.of(context).textTheme.headline6,
@@ -129,22 +139,66 @@ class _EventsPageState extends State<EventsPage> {
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${events[index].description}"),
-                                SizedBox(height: _deviceQuery.safeHeight(2.0)),
+                                if (events[index].description != null)
+                                  Text("${events[index].description}"),
+                                SizedBox(height: _deviceQuery.safeHeight(0.5)),
                                 Text(
-                                    "All Day: ${DateFormat('EEE dd MMM').format(events[index].startDate)}"),
+                                  "${events[index].eventType}",
+                                  style: TextStyle(
+                                    color: _eventTypeColorSelector(
+                                      events[index].eventType,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: _deviceQuery.safeHeight(0.5)),
+                                Text(
+                                  "All Day: ${DateFormat('EEE dd MMM').format(events[index].startDate)}",
+                                  style: TextStyle(
+                                    color: events[index]
+                                            .startDate
+                                            .isBefore(DateTime.now())
+                                        ? Theme.of(context).errorColor
+                                        : null,
+                                  ),
+                                ),
                               ],
                             )
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${events[index].description}"),
-                                SizedBox(height: _deviceQuery.safeHeight(2.0)),
+                                if (events[index].description != null)
+                                  Text("${events[index].description}"),
+                                SizedBox(height: _deviceQuery.safeHeight(0.5)),
                                 Text(
-                                    "From: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].startDate)}"),
-                                SizedBox(height: _deviceQuery.safeHeight(1.0)),
+                                  "${events[index].eventType}",
+                                  style: TextStyle(
+                                    color: _eventTypeColorSelector(
+                                      events[index].eventType,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: _deviceQuery.safeHeight(0.5)),
                                 Text(
-                                    "To: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].endDate)}"),
+                                  "From: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].startDate)}",
+                                  style: TextStyle(
+                                    color: events[index]
+                                            .startDate
+                                            .isBefore(DateTime.now())
+                                        ? Theme.of(context).errorColor
+                                        : null,
+                                  ),
+                                ),
+                                SizedBox(height: _deviceQuery.safeHeight(0.5)),
+                                Text(
+                                  "To: ${DateFormat('EEE dd MMM hh:mm aa').format(events[index].endDate)}",
+                                  style: TextStyle(
+                                    color: events[index]
+                                            .endDate
+                                            .isBefore(DateTime.now())
+                                        ? Theme.of(context).errorColor
+                                        : null,
+                                  ),
+                                ),
                               ],
                             ),
                     ),

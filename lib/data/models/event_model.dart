@@ -10,6 +10,7 @@ class Event extends Equatable {
   final DateTime startDate;
   final DateTime endDate;
   final bool isAllDayEvent;
+  final String eventType;
 
   const Event({
     this.id,
@@ -18,6 +19,7 @@ class Event extends Equatable {
     required this.startDate,
     required this.endDate,
     required this.isAllDayEvent,
+    required this.eventType,
   });
 
   Event copyWith({
@@ -27,6 +29,7 @@ class Event extends Equatable {
     DateTime? startDate,
     DateTime? endDate,
     bool? isAllDayEvent,
+    String? eventType,
   }) {
     return Event(
       id: id ?? this.id,
@@ -35,6 +38,7 @@ class Event extends Equatable {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       isAllDayEvent: isAllDayEvent ?? this.isAllDayEvent,
+      eventType: eventType ?? this.eventType,
     );
   }
 
@@ -46,6 +50,7 @@ class Event extends Equatable {
       'startDate': startDate.millisecondsSinceEpoch,
       'endDate': endDate.millisecondsSinceEpoch,
       'isAllDayEvent': isAllDayEvent,
+      'eventType': eventType,
     };
   }
 
@@ -55,6 +60,7 @@ class Event extends Equatable {
       title: map['title'],
       description: map['description'],
       isAllDayEvent: map['isAllDayEvent'],
+      eventType: map['eventType'] ?? 'Personal',
       startDate: map['startDate'] == null
           ? DateTime.now()
           : map['startDate'] is Timestamp
@@ -106,12 +112,13 @@ class Event extends Equatable {
   @override
   List<Object> get props {
     return [
-      id ?? '-',
+      id ?? 'No ID',
       title,
       description ?? 'No Description',
       startDate,
       endDate,
       isAllDayEvent,
+      eventType,
     ];
   }
 }

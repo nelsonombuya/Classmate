@@ -16,7 +16,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     required EventRepository eventRepository,
     required NavigationCubit navigationCubit,
     required NotificationCubit notificationCubit,
-  })   : _eventRepository = eventRepository,
+  })  : _eventRepository = eventRepository,
         _navigationCubit = navigationCubit,
         _notificationCubit = notificationCubit,
         personalEventsStream = eventRepository.personalEventsStream,
@@ -43,7 +43,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     try {
       _showCreatingEventNotification();
       Event newEvent = _mapEventToEventModel(event);
-      await _eventRepository.createPersonalEvent(newEvent);
+      _eventRepository.createPersonalEvent(newEvent);
       _showEventCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield EventsState.created(newEvent);
@@ -57,7 +57,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       PersonalEventUpdated event) async* {
     try {
       _showUpdatingEventNotification();
-      await _eventRepository.updatePersonalEvent(event.event);
+      _eventRepository.updatePersonalEvent(event.event);
       _showEventUpdatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield EventsState.updated(event.event);
@@ -71,7 +71,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       PersonalEventDeleted event) async* {
     try {
       _showDeletingEventNotification();
-      await _eventRepository.deletePersonalEvent(event.event);
+      _eventRepository.deletePersonalEvent(event.event);
       _showEventDeletedSuccessfullyNotification();
       if (event.popCurrentPage) _navigationCubit.popCurrentPage();
       yield EventsState.deleted(event.event);
@@ -88,6 +88,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       description: event.description,
       startDate: event.startDate,
       endDate: event.endDate,
+      eventType: event.eventType,
       isAllDayEvent: event.isAllDayEvent,
     );
   }

@@ -25,13 +25,8 @@ class CreateEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: _eventsBloc),
-        BlocProvider<CreateEventCubit>(
-          create: (context) => CreateEventCubit(),
-        ),
-      ],
+    return BlocProvider<CreateEventCubit>(
+      create: (context) => CreateEventCubit(eventsBloc: _eventsBloc),
       child: _CreateEventView(_event),
     );
   }
@@ -47,25 +42,18 @@ class _CreateEventView extends StatefulWidget {
 }
 
 class _CreateEventViewState extends State<_CreateEventView> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     if (widget._event != null) {
-      _titleController.text = widget._event!.title;
-      _descriptionController.text = widget._event!.description ?? '';
-      context.read<CreateEventCubit>().updateEventDetails(widget._event!);
+      context.read<CreateEventCubit>().initializeEventDetails(widget._event!);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final DeviceQuery _deviceQuery = DeviceQuery(context);
-    final EventsBloc _bloc = context.read<EventsBloc>();
-    final CreateEventCubit _cubit = context.read<CreateEventCubit>();
+    final CreateEventCubit _cubit = context.watch<CreateEventCubit>();
 
     return FormView(
       title: widget._event == null ? "Create Event" : "Edit Event",
@@ -75,29 +63,7 @@ class _CreateEventViewState extends State<_CreateEventView> {
             return TextButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
-                if (_formKey.currentState!.validate()) {
-                  return widget._event == null
-                      ? _bloc.add(
-                          PersonalEventCreated(
-                            title: _titleController.text.trim(),
-                            description: _descriptionController.text.trim(),
-                            startDate: state.selectedStartingDate,
-                            endDate: state.selectedEndingDate,
-                            isAllDayEvent: state.isAllDayEvent,
-                          ),
-                        )
-                      : _bloc.add(
-                          PersonalEventUpdated(
-                            widget._event!.copyWith(
-                              title: _titleController.text.trim(),
-                              description: _descriptionController.text.trim(),
-                              startDate: state.selectedStartingDate,
-                              endDate: state.selectedEndingDate,
-                              isAllDayEvent: state.isAllDayEvent,
-                            ),
-                          ),
-                        );
-                }
+                return _cubit.saveEvent(widget._event);
               },
               child: Text(
                 widget._event == null ? "SAVE" : "UPDATE",
@@ -111,23 +77,35 @@ class _CreateEventViewState extends State<_CreateEventView> {
         children: [
           SizedBox(height: _deviceQuery.safeHeight(2.0)),
           Form(
-            key: _formKey,
+            key: _cubit.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
                 CustomTextFormField(
                   size: 3.0,
                   label: 'Title',
-                  controller: _titleController,
+                  controller: _cubit.titleController,
                   keyboardType: TextInputType.text,
                   validator: Validator.titleValidator,
+                ),
+                SizedBox(height: _deviceQuery.safeHeight(2.0)),
+
+                DropdownButtonFormField<String>(
+                  value: _cubit.state.eventType,
+                  onChanged: (type) => _cubit.changeEventType(type!),
+                  items: _cubit.eventTypes
+                      .map((type) => DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          ))
+                      .toList(),
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(2.0)),
                 // TODO Toggle Description Field
                 CustomTextFormField(
                   maxLines: null,
                   label: 'Description',
-                  controller: _descriptionController,
+                  controller: _cubit.descriptionController,
                   keyboardType: TextInputType.multiline,
                 ),
                 SizedBox(height: _deviceQuery.safeHeight(3.0)),

@@ -23,12 +23,14 @@ class PersonalEventCreated extends EventsEvent {
     required this.startDate,
     required this.endDate,
     required this.isAllDayEvent,
+    required this.eventType,
   });
 
   final String title;
   final bool isAllDayEvent;
   final String? description;
   final DateTime startDate, endDate;
+  final String eventType;
 
   @override
   List<Object> get props => [

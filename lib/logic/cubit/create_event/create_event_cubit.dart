@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:classmate/logic/bloc/events/events_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/event_model.dart';
@@ -7,40 +9,59 @@ import '../../../data/models/event_model.dart';
 part 'create_event_state.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
-  CreateEventCubit()
-      : super(CreateEventState(
+  CreateEventCubit({required EventsBloc eventsBloc})
+      : _eventsBloc = eventsBloc,
+        super(CreateEventState(
           selectedStartingDate: DateTime.now(),
           selectedEndingDate: DateTime.now().add(Duration(minutes: 30)),
           isAllDayEvent: false,
         ));
 
-  void updateEventDetails(Event event) {
-    emit(CreateEventState(
-      selectedStartingDate: event.startDate,
-      selectedEndingDate: event.endDate,
-      isAllDayEvent: event.isAllDayEvent,
-    ));
+  final descriptionController = TextEditingController();
+  final eventTypes = <String>['Personal', 'Work', 'School'];
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+
+  final EventsBloc _eventsBloc;
+
+  DateTime _adjustSelectedEndingDate(DateTime newDate) {
+    if (state.isAllDayEvent) {
+      return newDate.add(Duration(hours: 24));
+    }
+
+    if (state.selectedEndingDate.isBefore(newDate)) {
+      return newDate.add(Duration(minutes: 30));
+    }
+
+    return state.selectedEndingDate;
   }
 
-  void changeStartingDate(DateTime newDate) {
-    emit(CreateEventState(
-      selectedStartingDate: newDate,
-      selectedEndingDate: _adjustSelectedEndingDate(newDate),
-      isAllDayEvent: state.isAllDayEvent,
-    ));
+  void _createNewEvent() {
+    return _eventsBloc.add(
+      PersonalEventCreated(
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
+        startDate: state.selectedStartingDate,
+        endDate: state.selectedEndingDate,
+        isAllDayEvent: state.isAllDayEvent,
+        eventType: state.eventType,
+      ),
+    );
   }
 
-  void changeEndingDate(DateTime newDate) {
-    if (newDate.isBefore(state.selectedStartingDate))
-      throw Exception(
-        "The event's ending date can't come before it's starting date ⛔",
-      );
-
-    emit(CreateEventState(
-      selectedStartingDate: state.selectedStartingDate,
-      selectedEndingDate: newDate,
-      isAllDayEvent: state.isAllDayEvent,
-    ));
+  void _updateExistingEvent(Event event) {
+    return _eventsBloc.add(
+      PersonalEventUpdated(
+        event.copyWith(
+          title: titleController.text.trim(),
+          description: descriptionController.text.trim(),
+          startDate: state.selectedStartingDate,
+          endDate: state.selectedEndingDate,
+          isAllDayEvent: state.isAllDayEvent,
+          eventType: state.eventType,
+        ),
+      ),
+    );
   }
 
   void changeAllDayEventState(bool isAllDayEvent) {
@@ -64,15 +85,60 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       selectedStartingDate: selectedStartingDate,
       selectedEndingDate: selectedEndingDate,
       isAllDayEvent: isAllDayEvent,
+      eventType: state.eventType,
     ));
   }
 
-  DateTime _adjustSelectedEndingDate(DateTime newDate) {
-    if (state.isAllDayEvent) return newDate.add(Duration(hours: 24));
+  void changeEndingDate(DateTime newDate) {
+    if (newDate.isBefore(state.selectedStartingDate))
+      throw Exception(
+        "The event's ending date can't come before it's starting date ⛔",
+      );
 
-    if (state.selectedEndingDate.isBefore(newDate))
-      return newDate.add(Duration(minutes: 30));
+    emit(CreateEventState(
+      selectedStartingDate: state.selectedStartingDate,
+      selectedEndingDate: newDate,
+      isAllDayEvent: state.isAllDayEvent,
+      eventType: state.eventType,
+    ));
+  }
 
-    return state.selectedEndingDate;
+  void changeEventType(String type) {
+    return emit(CreateEventState(
+      selectedStartingDate: state.selectedStartingDate,
+      selectedEndingDate: state.selectedEndingDate,
+      isAllDayEvent: state.isAllDayEvent,
+      eventType: type,
+    ));
+  }
+
+  void changeStartingDate(DateTime newDate) {
+    emit(CreateEventState(
+      selectedStartingDate: newDate,
+      selectedEndingDate: _adjustSelectedEndingDate(newDate),
+      isAllDayEvent: state.isAllDayEvent,
+      eventType: state.eventType,
+    ));
+  }
+
+  void initializeEventDetails(Event event) {
+    titleController.text = event.title;
+
+    if (event.description != null) {
+      descriptionController.text = event.description!;
+    }
+
+    emit(CreateEventState(
+      selectedStartingDate: event.startDate,
+      selectedEndingDate: event.endDate,
+      isAllDayEvent: event.isAllDayEvent,
+      eventType: state.eventType,
+    ));
+  }
+
+  void saveEvent(Event? event) {
+    if (formKey.currentState!.validate()) {
+      return event == null ? _createNewEvent() : _updateExistingEvent(event);
+    }
   }
 }
