@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class Lesson extends Equatable {
   final String title;

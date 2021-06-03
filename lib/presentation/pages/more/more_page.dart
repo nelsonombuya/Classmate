@@ -8,8 +8,6 @@ import '../../common_widgets/custom_list_tile.dart';
 import 'manage_units/manage_units.dart';
 
 class MorePage extends StatelessWidget {
-  final ScrollController _listViewScrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     final UserRepository _userRepository = context.read<UserRepository>();
@@ -18,7 +16,6 @@ class MorePage extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListView(
         shrinkWrap: true,
-        controller: _listViewScrollController,
         children: [
           CustomListTile(
             icon: Icons.book_rounded,

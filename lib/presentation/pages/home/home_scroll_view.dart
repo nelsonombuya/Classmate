@@ -9,15 +9,15 @@ class HomeScrollView extends StatelessWidget {
     Widget? leading,
     List<Widget>? actions,
     required PageView child,
-  })   : _child = child,
+  })  : _child = child,
         _title = title,
         _leading = leading,
         _actions = actions;
 
-  final PageView _child;
-  final String? _title;
-  final Widget? _leading;
   final List<Widget>? _actions;
+  final PageView _child;
+  final Widget? _leading;
+  final String? _title;
 
   @override
   Widget build(BuildContext context) {
