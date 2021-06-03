@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import '../../../data/models/message_model.dart';
+import '../../../data/repositories/message_repository.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/models/lesson_model.dart';
@@ -120,6 +122,11 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
       }
 
       await unitRepository.updateUnit(currentUnitDetails);
+      MessageRepository().createMessage(NotificationMessage(
+        title: "New Lesson",
+        body:
+            "A lesson has been added for ${currentUnitDetails.unitDetails!.name}",
+      ));
       _showLessonCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield LessonsState.updated(lesson: lesson);
@@ -134,6 +141,10 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
       _showDeletingLessonNotification();
       UnitRepository unitRepository = await _getUnitRepository();
       await unitRepository.updateUnit(event.unit);
+      MessageRepository().createMessage(NotificationMessage(
+        title: "Lesson Removed",
+        body: "A lesson has been removed for ${event.unit.unitDetails!.name}",
+      ));
       _showLessonDeletedSuccessfullyNotification();
       yield LessonsState.deleted(lesson: event.lesson);
     } catch (e) {
@@ -147,6 +158,10 @@ class LessonsBloc extends Bloc<LessonsEvent, LessonsState> {
       _showUpdatingLessonNotification();
       UnitRepository unitRepository = await _getUnitRepository();
       await unitRepository.updateUnit(event.unit);
+      MessageRepository().createMessage(NotificationMessage(
+        title: "Lesson Updated",
+        body: "A lesson has been updated for ${event.unit.unitDetails!.name}",
+      ));
       _showLessonUpdatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield LessonsState.updated(lesson: event.lesson);

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import '../../../data/models/message_model.dart';
+import '../../../data/repositories/message_repository.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/models/assignment_model.dart';
@@ -81,6 +83,11 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
       );
       currentUnitDetails.assignments!.add(assignment);
       await unitRepository.updateUnit(currentUnitDetails);
+      MessageRepository().createMessage(NotificationMessage(
+        title: "New Assignment",
+        body:
+            "An assignment has been added for ${currentUnitDetails.unitDetails!.name}",
+      ));
       _showAssignmentCreatedSuccessfullyNotification();
       _navigationCubit.popCurrentPage();
       yield AssignmentsState.updated(assignment: assignment);
@@ -98,6 +105,11 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
       UnitRepository unitRepository = await _getUnitRepository();
       await unitRepository.updateUnit(event.unit);
       _showAssignmentDeletedSuccessfullyNotification();
+      MessageRepository().createMessage(NotificationMessage(
+        title: "Assignment Removed",
+        body:
+            "An assignment has been removed for ${event.unit.unitDetails!.name}",
+      ));
       yield AssignmentsState.deleted(assignment: event.assignment);
     } catch (e) {
       _showErrorDeletingAssignmentNotification(e.toString());
@@ -114,6 +126,11 @@ class AssignmentsBloc extends Bloc<AssignmentsEvent, AssignmentsState> {
       await unitRepository.updateUnit(event.unit);
       if (!event.silentUpdate) _showAssignmentUpdatedSuccessfullyNotification();
       if (!event.silentUpdate) _navigationCubit.popCurrentPage();
+      MessageRepository().createMessage(NotificationMessage(
+        title: "Assignment Updated",
+        body:
+            "An assignment has been updated for ${event.unit.unitDetails!.name}",
+      ));
       yield AssignmentsState.updated(assignment: event.assignment);
     } catch (e) {
       _showErrorUpdatingAssignmentNotification(e.toString());

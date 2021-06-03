@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../data/models/message_model.dart';
 import '../../common_widgets/form_view.dart';
@@ -27,17 +28,28 @@ class _NotificationsFormState extends State<NotificationsForm> {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(15.0),
-        child: Text(
-          _messages[index].title,
-          style: Theme.of(context).textTheme.headline6,
+        child: ListTile(
+          title: Text(
+            _messages[index].title,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          subtitle: Text(_messages[index].body),
         ),
       ),
     );
   }
 
+  _goToNotificationsPage(RemoteMessage message) {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) => NotificationsForm(),
+    );
+    _addMessageToList(message);
+  }
+
   _configureListeners() {
     FirebaseMessaging.onMessage.listen(_addMessageToList);
-    FirebaseMessaging.onMessageOpenedApp.listen(_addMessageToList);
+    FirebaseMessaging.onMessageOpenedApp.listen(_goToNotificationsPage);
   }
 
   _getDeviceToken() => FirebaseMessaging.instance.getToken().then(Logger().d);
