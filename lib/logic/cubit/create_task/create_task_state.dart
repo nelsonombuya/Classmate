@@ -1,18 +1,32 @@
 part of 'create_task_cubit.dart';
 
 class CreateTaskState extends Equatable {
-  const CreateTaskState._({this.dueDate, this.taskType = 'Personal'});
+  const CreateTaskState._({
+    this.taskType = 'Personal',
+    this.locationName,
+    this.dueDate,
+    this.latLng,
+  });
 
-  const CreateTaskState.changed({this.dueDate, required this.taskType});
+  const CreateTaskState.changed({
+    required this.taskType,
+    this.locationName,
+    this.dueDate,
+    this.latLng,
+  });
 
   const CreateTaskState.initial() : this._();
 
-  final DateTime? dueDate;
   final String taskType;
+  final DateTime? dueDate;
+  final LatLng? latLng;
+  final String? locationName;
 
   @override
   List<Object> get props => [
         dueDate ?? 'No Due Date Set',
-        'Task Type: $taskType',
+        "$taskType task",
+        locationName ?? "No Location Set",
+        latLng ?? "No Location Co-ordinates Set"
       ];
 }

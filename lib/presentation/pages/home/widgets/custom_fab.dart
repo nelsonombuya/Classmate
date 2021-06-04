@@ -1,3 +1,5 @@
+import '../../../../logic/cubit/navigation/navigation_cubit.dart';
+import '../../../../logic/cubit/notification/notification_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +74,11 @@ class CustomFloatingActionButton extends StatelessWidget {
               child: Icon(Icons.list_rounded, color: _labelColor),
               onTap: () => showBarModalBottomSheet(
                 context: context,
-                builder: (context) => CreateTaskForm(tasksBloc: _tasksBloc),
+                builder: (context) => CreateTaskForm(
+                  tasksBloc: _tasksBloc,
+                  navigationCubit: context.read<NavigationCubit>(),
+                  notificationCubit: context.read<NotificationCubit>(),
+                ),
               ),
             ),
             SpeedDialChild(

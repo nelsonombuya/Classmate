@@ -8,6 +8,9 @@ class TaskModel extends Equatable {
   final String type;
   final bool isDone;
   final DateTime? dueDate;
+  final String? locationName;
+  final double? locationLongitude;
+  final double? locationLatitude;
 
   const TaskModel({
     this.id,
@@ -15,6 +18,9 @@ class TaskModel extends Equatable {
     required this.type,
     required this.isDone,
     this.dueDate,
+    this.locationName,
+    this.locationLongitude,
+    this.locationLatitude,
   });
 
   TaskModel copyWith({
@@ -23,6 +29,9 @@ class TaskModel extends Equatable {
     String? type,
     bool? isDone,
     DateTime? dueDate,
+    String? locationName,
+    double? locationLongitude,
+    double? locationLatitude,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -30,6 +39,9 @@ class TaskModel extends Equatable {
       type: type ?? this.type,
       isDone: isDone ?? this.isDone,
       dueDate: dueDate ?? this.dueDate,
+      locationName: locationName ?? this.locationName,
+      locationLongitude: locationLongitude ?? this.locationLongitude,
+      locationLatitude: locationLatitude ?? this.locationLatitude,
     );
   }
 
@@ -39,6 +51,9 @@ class TaskModel extends Equatable {
       'title': title,
       'type': type,
       'isDone': isDone,
+      'locationName': locationName,
+      'locationLongitude': locationLongitude,
+      'locationLatitude': locationLatitude,
       'dueDate': dueDate?.millisecondsSinceEpoch,
     };
   }
@@ -47,8 +62,11 @@ class TaskModel extends Equatable {
     return TaskModel(
       id: map['id'],
       title: map['title'],
+      type: map['type'],
       isDone: map['isDone'],
-      type: map['type'] ?? 'Personal',
+      locationName: map['locationName'],
+      locationLatitude: map['locationLatitude'],
+      locationLongitude: map['locationLongitude'],
       dueDate: map['dueDate'] == null
           ? null
           : DateTime.fromMillisecondsSinceEpoch(map['dueDate']),
@@ -88,11 +106,12 @@ class TaskModel extends Equatable {
   @override
   List<Object> get props {
     return [
-      id ?? 'No ID',
+      id ?? 'No Task ID',
       title,
       type,
       isDone,
       dueDate ?? 'No Due Date',
+      locationName ?? 'No Location Details Set',
     ];
   }
 }

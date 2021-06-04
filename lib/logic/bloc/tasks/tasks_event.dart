@@ -9,6 +9,9 @@ abstract class TasksEvent extends Equatable {
 
 class PersonalTaskCreated extends TasksEvent {
   const PersonalTaskCreated({
+    this.locationName,
+    this.locationLatitude,
+    this.locationLongitude,
     this.dueDate,
     this.isDone = false,
     required this.title,
@@ -19,6 +22,9 @@ class PersonalTaskCreated extends TasksEvent {
   final bool isDone;
   final String taskType;
   final String title;
+  final String? locationName;
+  final double? locationLatitude;
+  final double? locationLongitude;
 
   @override
   List<Object> get props => [

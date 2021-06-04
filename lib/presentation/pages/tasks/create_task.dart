@@ -1,18 +1,16 @@
-import 'package:classmate/logic/cubit/create_task/create_task_cubit.dart';
-import 'package:classmate/presentation/common_widgets/date_picker_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
-import 'package:logger/logger.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../constants/device_query.dart';
 import '../../../constants/validator.dart';
 import '../../../data/models/task_model.dart';
 import '../../../logic/bloc/tasks/tasks_bloc.dart';
+import '../../../logic/cubit/create_task/create_task_cubit.dart';
+import '../../../logic/cubit/navigation/navigation_cubit.dart';
+import '../../../logic/cubit/notification/notification_cubit.dart';
 import '../../common_widgets/custom_textFormField.dart';
+import '../../common_widgets/date_picker_button.dart';
 import '../../common_widgets/form_view.dart';
 
 /// # Create Task Form
@@ -20,17 +18,29 @@ import '../../common_widgets/form_view.dart';
 /// and updating existing tasks
 /// (By passing the task through the widget's constructor)
 class CreateTaskForm extends StatelessWidget {
-  const CreateTaskForm({TaskModel? task, required TasksBloc tasksBloc})
-      : _task = task,
-        _tasksBloc = tasksBloc;
+  const CreateTaskForm({
+    TaskModel? task,
+    required TasksBloc tasksBloc,
+    required NavigationCubit navigationCubit,
+    required NotificationCubit notificationCubit,
+  })  : _task = task,
+        _tasksBloc = tasksBloc,
+        _navigationCubit = navigationCubit,
+        _notificationCubit = notificationCubit;
 
   final TaskModel? _task;
   final TasksBloc _tasksBloc;
+  final NavigationCubit _navigationCubit;
+  final NotificationCubit _notificationCubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CreateTaskCubit(tasksBloc: _tasksBloc),
+      create: (context) => CreateTaskCubit(
+        tasksBloc: _tasksBloc,
+        navigationCubit: _navigationCubit,
+        notificationCubit: _notificationCubit,
+      ),
       child: CreateTaskFormView(_task),
     );
   }
@@ -113,22 +123,15 @@ class _CreateTaskFormViewState extends State<CreateTaskFormView> {
             },
           ),
           SizedBox(height: _deviceQuery.safeHeight(2.0)),
-          TextButton.icon(
-            label: Text('Add a location'),
-            icon: Icon(Icons.add_location_rounded),
-            onPressed: () => showBarModalBottomSheet(
-              context: context,
-              builder: (context) => PlacePicker(
-                // TODO Remove Later
-                apiKey: 'AIzaSyDmSoiXC2GHaQLpI_tcZaH2ArdRw2MlsG0',
-                onPlacePicked: (result) {
-                  Logger().wtf(result);
-                  Navigator.of(context).pop();
-                },
-                useCurrentLocation: true,
-                initialPosition: _cubit.nakuru,
-              ),
-            ),
+          BlocBuilder<CreateTaskCubit, CreateTaskState>(
+            builder: (context, state) {
+              return TextButton.icon(
+                label: Text(state.locationName ?? 'Add a location'),
+                onPressed: () => _cubit.addLocation(context),
+                onLongPress: () => _cubit.addLocation2(context),
+                icon: Icon(Icons.add_location_rounded),
+              );
+            },
           ),
         ],
       ),

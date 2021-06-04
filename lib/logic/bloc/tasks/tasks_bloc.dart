@@ -47,6 +47,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         title: event.title,
         type: event.taskType,
         dueDate: event.dueDate,
+        locationName: event.locationName,
+        locationLatitude: event.locationLatitude,
+        locationLongitude: event.locationLongitude,
       );
       _taskRepository.createPersonalTask(newTask);
       _showTaskCreatedSuccessfullyNotification();
